@@ -1,4 +1,4 @@
-package de.unidue.palaver;
+package de.unidue.palaver.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -10,6 +10,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import de.unidue.palaver.Palaver;
+import de.unidue.palaver.R;
 import de.unidue.palaver.engine.PalaverEngine;
 import de.unidue.palaver.model.User;
 import de.unidue.palaver.model.UserData;

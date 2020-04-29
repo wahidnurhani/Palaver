@@ -1,10 +1,13 @@
-package de.unidue.palaver;
+package de.unidue.palaver.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+
+import de.unidue.palaver.Palaver;
+import de.unidue.palaver.R;
 
 public class MainActivity extends AppCompatActivity {
 

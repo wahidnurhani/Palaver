@@ -2,6 +2,10 @@ package de.unidue.palaver;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.view.Gravity;
+import android.widget.Toast;
+
+import de.unidue.palaver.ui.ChatManagerActivity;
 
 public class UIController {
 
@@ -26,4 +30,11 @@ public class UIController {
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
     }
+
+    public void showToast(Context context, String message) {
+        Toast toast = Toast.makeText(context,message,Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.CENTER_VERTICAL,0,0);
+        toast.show();
+    }
+
 }

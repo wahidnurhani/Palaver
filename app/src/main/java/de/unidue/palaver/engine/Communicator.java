@@ -1,6 +1,10 @@
 package de.unidue.palaver.engine;
 
-import android.util.Log;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -11,8 +15,10 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 import de.unidue.palaver.Palaver;
+import de.unidue.palaver.model.Friend;
 import de.unidue.palaver.model.User;
 
 public class Communicator {
@@ -20,20 +26,28 @@ public class Communicator {
     private Palaver palaver;
 
     private URL url;
+    private String baseUrl = "http://palaver.se.paluno.uni-due.de";
     private HttpURLConnection urlConnection;
     private BufferedReader bufferedReader;
     private String resultJSONString = null;
-    private JSONBuilder jsonBuilder=new JSONBuilder();
-    private Parser parser= new Parser();
+    private JSONBuilder jsonBuilder;
+    private Parser parser;
 
     public Communicator(Palaver palaver) {
         this.palaver = palaver;
+        this.jsonBuilder = new JSONBuilder();
+        this.parser = new Parser();
+    }
+
+    public boolean checkConnectivity(Context contex){
+        ConnectivityManager connectivityManager = (ConnectivityManager) contex.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        return networkInfo != null && networkInfo.isConnectedOrConnecting();
     }
 
     public String[] registerAndValidate(User user, String cmd) {
         String[] resultValue=new String[]{};
         try {
-            String baseUrl = "http://palaver.se.paluno.uni-due.de";
             url = new URL( baseUrl + cmd);
 
             JSONObject body = jsonBuilder.formatBodyUserDataToJSON(user.getUserData().getUserName(), user.getUserData().getPassword());
@@ -54,18 +68,16 @@ public class Communicator {
 
             InputStream inputStream = urlConnection.getInputStream();
             bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-            StringBuffer stringBuffer = new StringBuffer();
+            StringBuilder stringBuilder = new StringBuilder();
             String line;
 
             while ((line = bufferedReader.readLine()) != null) {
-                stringBuffer.append(line + "\n");
+                stringBuilder.append(line).append("\n");
             }
 
-            resultJSONString = stringBuffer.toString();
+            resultJSONString = stringBuilder.toString();
 
-            String[] resultReportArray = parser.validateAndRegisterReportParser(resultJSONString);
-
-            resultValue=resultReportArray;
+            resultValue= parser.validateAndRegisterReportParser(resultJSONString);
 
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -86,7 +98,122 @@ public class Communicator {
         return resultValue;
     }
 
-    public void fetchAllContact() {
 
+    public String[] fetchFriend(User user) {
+        String[] resultValue=new String[]{};
+        String cmd = "/api/friends/get";
+
+        try {
+            JSONObject body = jsonBuilder.formatBodyUserDataToJSON(user.getUserData().getUserName(), user.getUserData().getPassword());
+
+            url = new URL(baseUrl + cmd);
+            urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setRequestMethod("POST");
+            urlConnection.setRequestProperty("Content-Type","application/json");
+            urlConnection.setDoInput(true);
+            urlConnection.setDoOutput(true);
+
+            OutputStream outputStream = urlConnection.getOutputStream();
+            PrintWriter printWriter = new PrintWriter(outputStream);
+            printWriter.print(body.toString());
+
+            printWriter.flush();
+            printWriter.close();
+
+            urlConnection.connect();
+
+            InputStream inputStream = urlConnection.getInputStream();
+            bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+            StringBuilder stringBuilder = new StringBuilder();
+            String line;
+
+            while ((line=bufferedReader.readLine())!=null){
+                stringBuilder.append(line).append("\n");
+            }
+
+            resultJSONString = stringBuilder.toString();
+            resultValue = parser.fetchFriendFeedback(resultJSONString);
+            Friend[] resultContacts= parser.getFriendParser(resultJSONString);
+
+            if(resultContacts.length>0){
+                //TODO save result to SQLite
+            }
+
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if ( urlConnection!= null){
+                urlConnection.disconnect();
+            }
+            if (bufferedReader!=null){
+                try {
+                    bufferedReader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return resultValue;
+    }
+
+    public String[] addContact(User user, String friendUserName) {
+        String[] resultValue = new String[]{};
+        String cmd = "/api/friends/add";
+        try {
+            JSONObject body = jsonBuilder.formatBodyAddOrRemoveFriendtToJSON(user.getUserData().getUserName(), user.getUserData().getPassword(), friendUserName);
+            url = new URL(baseUrl+cmd);
+            urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setRequestMethod("POST");
+            urlConnection.setRequestProperty("Content-Type", "application/json");
+            urlConnection.setDoInput(true);
+            urlConnection.setDoOutput(true);
+
+            OutputStream outputStream = urlConnection.getOutputStream();
+            PrintWriter printWriter = new PrintWriter(outputStream);
+            printWriter.print(body.toString());
+
+            printWriter.flush();
+            printWriter.close();
+
+            urlConnection.connect();
+
+            InputStream inputStream = urlConnection.getInputStream();
+            bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+            StringBuilder stringBuilder = new StringBuilder();
+            String line;
+
+            while ((line = bufferedReader.readLine()) != null) {
+                stringBuilder.append(line).append("\n");
+            }
+
+            resultJSONString = stringBuilder.toString();
+            String[] resultReportArray = parser.addContactReportParser(resultJSONString);
+
+            if (resultReportArray[0].equals("1")) {
+                //TODO save result to SQLite
+            }
+            resultValue = resultReportArray;
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+            if (bufferedReader != null) {
+                try {
+                    bufferedReader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return resultValue;
     }
 }

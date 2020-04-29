@@ -1,5 +1,6 @@
 package de.unidue.palaver;
 
+import de.unidue.palaver.model.Preference;
 import de.unidue.palaver.model.User;
 
 public class SessionManager {

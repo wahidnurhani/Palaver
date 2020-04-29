@@ -1,4 +1,4 @@
-package de.unidue.palaver;
+package de.unidue.palaver.model;
 
 public class Preference {
 

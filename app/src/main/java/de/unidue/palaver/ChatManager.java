@@ -1,19 +1,25 @@
 package de.unidue.palaver;
 
 
+import android.content.Context;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import de.unidue.palaver.model.Chat;
 import de.unidue.palaver.model.Friend;
+import de.unidue.palaver.ui.ChatManagerActivity;
 
 public class ChatManager {
 
     private List<Chat> chats;
+    private Palaver palaver;
+
 
     public ChatManager(Palaver palaver) {
         this.chats = new ArrayList<>();
+        this.palaver = palaver;
     }
 
     public Chat getChat(Friend friend) {
@@ -58,8 +64,8 @@ public class ChatManager {
         return result;
     }
 
-    public void openChatListActivity(){
-
+    public void openChatListActivity(Context context){
+        ChatManagerActivity.startIntent(context);
     }
 
     public void refreshView(){

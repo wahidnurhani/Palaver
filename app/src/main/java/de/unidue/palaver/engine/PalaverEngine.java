@@ -37,13 +37,14 @@ public class PalaverEngine implements IPalaverEngine {
 
     @Override
     public void handleRegisterRequest(Context context, User user) {
-        authentificator.authentificate(context, user.getUserData().getUserName(),
+        authentificator.register(context, user.getUserData().getUserName(),
                 user.getUserData().getPassword());
     }
 
     @Override
     public void handleLoginRequest(Context context, User user) {
-        authentificator.authentificate(context, user.getUserData().getUserName(), user.getUserData().getPassword());
+        authentificator.authentificate(context, user.getUserData().getUserName(),
+                user.getUserData().getPassword());
     }
 
     public void handleIncommingMessage(Friend friend, String message){

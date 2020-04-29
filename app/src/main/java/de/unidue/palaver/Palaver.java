@@ -5,6 +5,7 @@ import android.content.Context;
 import de.unidue.palaver.database.PalaverDB;
 import de.unidue.palaver.engine.PalaverEngine;
 import de.unidue.palaver.model.User;
+import de.unidue.palaver.ui.LoginActivity;
 
 public class Palaver {
     private SessionManager sessionManager;
