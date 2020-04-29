@@ -1,0 +1,11 @@
+package de.unidue.palaver;
+
+import org.junit.Test;
+
+
+import static org.junit.Assert.*;
+
+public class PalaverTest {
+
+
+}

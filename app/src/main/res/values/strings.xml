@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Palaver</string>
+    <string name="username">username</string>
+    <string name="re_password">re-password</string>
+    <string name="password">password</string>
+    <string name="register">Register</string>
+    <string name="back_to_login">Back to Login</string>
+    <string name="palaver_logo">Palaver Logo</string>
+</resources>
