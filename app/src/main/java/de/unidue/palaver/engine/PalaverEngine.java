@@ -1,25 +1,18 @@
 package de.unidue.palaver.engine;
 
 import android.content.Context;
-
-import de.unidue.palaver.Palaver;
 import de.unidue.palaver.model.Friend;
 import de.unidue.palaver.model.User;
 
 public class PalaverEngine implements IPalaverEngine {
 
     private Communicator communicator;
-    private Parser parser;
-    private Palaver palaver;
     private Authentificator authentificator;
 
-    public PalaverEngine(Palaver palaver) {
-        this.communicator = new Communicator(palaver);
-        this.authentificator = new Authentificator(palaver);
-        this.parser = new Parser();
-        this.palaver = palaver;
+    public PalaverEngine() {
+        this.communicator = new Communicator();
+        this.authentificator = new Authentificator();
     }
-
 
     public Communicator getCommunicator() {
         return communicator;
@@ -31,8 +24,8 @@ public class PalaverEngine implements IPalaverEngine {
     }
 
     @Override
-    public void handleAddFriendRequest(User user) {
-        //TODO
+    public void handleFetchAllFriendRequest(User user) {
+        communicator.fetchFriends(user);
     }
 
     @Override

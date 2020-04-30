@@ -6,4 +6,6 @@
     <string name="register">Register</string>
     <string name="back_to_login">Back to Login</string>
     <string name="palaver_logo">Palaver Logo</string>
+    <string name="palaver_sharedPreferences">PalaverSharedPreference</string>>
+    <string name="is_log_in">isLogin</string>
 </resources>

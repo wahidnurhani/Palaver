@@ -1,21 +1,27 @@
 package de.unidue.palaver.model;
 
 import java.util.Date;
+import de.unidue.palaver.engine.Parser;
 
 public class ChatItem implements Comparable<ChatItem>{
 
-    private final Friend friend;
+    private final String sender;
+    private final String recipient;
     private final String message;
+    private String mimeType;
     private final ChatItemType chatItemType;
     private final ChatItemAlignment chatItemAlignment;
     private boolean isRead;
     private Date date;
 
-    public ChatItem(Friend friend, ChatItemType chatItemType, String message, Date date) {
-        this.friend = friend;
+    public ChatItem(String sender, String recipient, ChatItemType chatItemType, String message, Date date) {
+        this.sender = sender;
+        this.recipient = recipient;
         this.chatItemType = chatItemType;
+        this.mimeType="text/plain";
         this.message = message;
         this.date = date;
+
         if(chatItemType == ChatItemType.INCOMMING){
             chatItemAlignment = ChatItemAlignment.LEFT;
         } else{
@@ -24,8 +30,32 @@ public class ChatItem implements Comparable<ChatItem>{
         this.isRead = chatItemType == ChatItemType.OUT;
     }
 
-    public Friend getFriend() {
-        return friend;
+    public ChatItem(String sender, String recipient, ChatItemType chatItemType, String message, String isReadStatus, String date) {
+        this.sender = sender;
+        this.recipient = recipient;
+        this.chatItemType = chatItemType;
+        this.mimeType="text/plain";
+        this.message = message;
+        this.isRead = Boolean.parseBoolean(isReadStatus);
+        if(chatItemType == ChatItemType.INCOMMING){
+            chatItemAlignment = ChatItemAlignment.LEFT;
+        } else{
+            chatItemAlignment = ChatItemAlignment.RIGHT;
+        }
+        Parser parser = new Parser();
+        this.date = parser.stringToDate(date);
+    }
+
+    public String getSender() {
+        return sender;
+    }
+
+    public String getRecipient() {
+        return recipient;
+    }
+
+    public String getMimeType() {
+        return mimeType;
     }
 
     public ChatItemType getChatItemType() {
@@ -50,10 +80,6 @@ public class ChatItem implements Comparable<ChatItem>{
 
     public Date getDate() {
         return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
     }
 
     @Override

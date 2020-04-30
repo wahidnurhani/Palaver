@@ -4,7 +4,6 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -17,13 +16,14 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+
 import de.unidue.palaver.Palaver;
+import de.unidue.palaver.database.PalaverDBManager;
 import de.unidue.palaver.model.Friend;
 import de.unidue.palaver.model.User;
 
 public class Communicator {
     private static final String TAG=Communicator.class.getSimpleName();
-    private Palaver palaver;
 
     private URL url;
     private String baseUrl = "http://palaver.se.paluno.uni-due.de";
@@ -33,8 +33,7 @@ public class Communicator {
     private JSONBuilder jsonBuilder;
     private Parser parser;
 
-    public Communicator(Palaver palaver) {
-        this.palaver = palaver;
+    Communicator() {
         this.jsonBuilder = new JSONBuilder();
         this.parser = new Parser();
     }
@@ -99,7 +98,7 @@ public class Communicator {
     }
 
 
-    public String[] fetchFriend(User user) {
+    public String[] fetchFriends(User user) {
         String[] resultValue=new String[]{};
         String cmd = "/api/friends/get";
 
@@ -136,7 +135,12 @@ public class Communicator {
             Friend[] resultContacts= parser.getFriendParser(resultJSONString);
 
             if(resultContacts.length>0){
-                //TODO save result to SQLite
+                PalaverDBManager palaverDBManager = Palaver.getInstance().getPalaverDBManager();
+                if(palaverDBManager.deleteAllContact()){
+                    for(int i=0; i<resultContacts.length;i++){
+                        palaverDBManager.insertContact(resultContacts[i]);
+                    }
+                }
             }
 
         } catch (ProtocolException e) {
@@ -193,8 +197,10 @@ public class Communicator {
             resultJSONString = stringBuilder.toString();
             String[] resultReportArray = parser.addContactReportParser(resultJSONString);
 
+            PalaverDBManager palaverDBManager = Palaver.getInstance().getPalaverDBManager();
             if (resultReportArray[0].equals("1")) {
-                //TODO save result to SQLite
+                Friend newFriend = new Friend(friendUserName);
+                palaverDBManager.insertContact(newFriend);
             }
             resultValue = resultReportArray;
 

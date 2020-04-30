@@ -9,7 +9,7 @@ public interface IPalaverEngine {
 
     void handleSendMessage(Friend friend, String message);
 
-    void handleAddFriendRequest(User user);
+    void handleFetchAllFriendRequest(User user);
 
     void handleRegisterRequest(Context context, User user);
 

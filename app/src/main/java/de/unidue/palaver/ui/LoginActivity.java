@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -41,13 +39,14 @@ public class LoginActivity extends AppCompatActivity {
             if(communicator.checkConnectivity(getApplicationContext())){
                 intent = new Intent(getApplicationContext(), ServiceFetchFriend.class);
                 startService(intent);
-                palaver.getChatManager().openChatListActivity(LoginActivity.this);
+
             }
         }
     };
 
     public static void startIntent(Context context){
         Intent intent = new Intent(context, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
 
@@ -65,22 +64,17 @@ public class LoginActivity extends AppCompatActivity {
 
         userNameEditText = findViewById(R.id.login_userName_editText);
         passwordEditText = findViewById(R.id.login_password_editText);
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View e) {
-                if(validateUserInput()){
-                    User user = new User(new UserData(userNameEditText.getText().toString(),
-                            passwordEditText.getText().toString()));
-                    palaverEngine.handleLoginRequest(LoginActivity.this, user);
-                }
+        loginButton.setOnClickListener(v -> {
+            if(validateUserInput()){
+                User user = new User(new UserData(userNameEditText.getText().toString(),
+                        passwordEditText.getText().toString()));
+                palaverEngine.handleLoginRequest(LoginActivity.this, user);
             }
         });
 
-        toRegisterTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                RegisterActivity.startIntent(LoginActivity.this);
-            }
+        toRegisterTextView.setOnClickListener(v -> {
+            RegisterActivity.startIntent(LoginActivity.this);
+            overridePendingTransition(0,0);
         });
     }
 

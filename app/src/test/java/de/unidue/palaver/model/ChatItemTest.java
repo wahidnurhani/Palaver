@@ -16,35 +16,35 @@ public class ChatItemTest {
     @Test
     public void getFriend() {
         Friend friend = new Friend("Test");
-        ChatItem chatItem = new ChatItem(friend, ChatItemType.INCOMMING, "Hallo World", new Date());
-        assertTrue(chatItem.getFriend().getUsername().equals("Test"));
+        ChatItem chatItem = new ChatItem(friend.getUsername(), "saya", ChatItemType.INCOMMING, "Hallo World", new Date());
+        assertTrue(chatItem.getSender().equals("Test"));
     }
 
     @Test
     public void getChatItemType() {
         Friend friend = new Friend("Test");
-        ChatItem chatItem = new ChatItem(friend, ChatItemType.INCOMMING, "Hallo World", new Date());
+        ChatItem chatItem = new ChatItem(friend.getUsername(), "saya", ChatItemType.INCOMMING, "Hallo World", new Date());
         assertTrue(chatItem.getChatItemType()==ChatItemType.INCOMMING);
     }
 
     @Test
     public void getMessage() {
         Friend friend = new Friend("Test");
-        ChatItem chatItem = new ChatItem(friend, ChatItemType.INCOMMING, "Hallo World", new Date());
+        ChatItem chatItem = new ChatItem(friend.getUsername(), "saya", ChatItemType.INCOMMING, "Hallo World", new Date());
         assertTrue(chatItem.getMessage().equals("Hallo World"));
     }
 
     @Test
     public void getChatItemAlignment() {
         Friend friend = new Friend("Test");
-        ChatItem chatItem = new ChatItem(friend, ChatItemType.INCOMMING, "Hallo World", new Date());
+        ChatItem chatItem = new ChatItem(friend.getUsername(), "saya", ChatItemType.INCOMMING, "Hallo World", new Date());
         assertTrue(chatItem.getChatItemAlignment()== ChatItemAlignment.LEFT);
     }
 
     @Test
     public void getIsReadStatus() {
         Friend friend = new Friend("Test");
-        ChatItem chatItem = new ChatItem(friend, ChatItemType.INCOMMING, "Hallo World", new Date());
+        ChatItem chatItem = new ChatItem(friend.getUsername(), "saya", ChatItemType.INCOMMING, "Hallo World", new Date());
         assertTrue(chatItem.getIsReadStatus()==false);
         chatItem.setIsReadStatus(true);
         assertTrue(chatItem.getIsReadStatus()==true);
@@ -53,7 +53,7 @@ public class ChatItemTest {
     @Test
     public void getDate() {
         Friend friend = new Friend("Test");
-        ChatItem chatItem = new ChatItem(friend, ChatItemType.INCOMMING, "Hallo World", new Date());
+        ChatItem chatItem = new ChatItem(friend.getUsername(), "saya", ChatItemType.INCOMMING, "Hallo World", new Date());
         assertTrue(chatItem.getDate()!=null);
         System.out.println(chatItem.getDate());
     }

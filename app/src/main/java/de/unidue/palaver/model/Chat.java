@@ -70,4 +70,8 @@ public class Chat implements Comparable<Chat>, IChat {
     public void refreshView(){
         //TODO
     }
+
+    public void setChatItems(List<ChatItem> chatItems) {
+        this.chatItemList = chatItems;
+    }
 }

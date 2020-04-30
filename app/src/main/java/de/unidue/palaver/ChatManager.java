@@ -10,16 +10,14 @@ import java.util.List;
 import de.unidue.palaver.model.Chat;
 import de.unidue.palaver.model.Friend;
 import de.unidue.palaver.ui.ChatManagerActivity;
+import de.unidue.palaver.ui.ChatRoomActivity;
 
 public class ChatManager {
 
     private List<Chat> chats;
-    private Palaver palaver;
 
-
-    public ChatManager(Palaver palaver) {
+    public ChatManager() {
         this.chats = new ArrayList<>();
-        this.palaver = palaver;
     }
 
     public Chat getChat(Friend friend) {
@@ -32,7 +30,20 @@ public class ChatManager {
     }
 
     public void addChat(Chat chat) {
-        this.chats.add(chat);
+        String friendUserName = chat.getFriend().getUsername();
+        if(!chatExist(friendUserName)){
+            chats.add(chat);
+        }
+    }
+
+    public boolean chatExist(String userName) {
+
+        for(Chat tmp : chats){
+            if(tmp.getFriend().getUsername().equals(userName)){
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean removeChat(Chat chat){
@@ -64,11 +75,19 @@ public class ChatManager {
         return result;
     }
 
-    public void openChatListActivity(Context context){
+    public void openChatManagerActivity(Context context){
         ChatManagerActivity.startIntent(context);
     }
 
     public void refreshView(){
 
+    }
+
+    public void openChat(Context context, Friend friend) {
+        ChatRoomActivity.startIntent(context, friend);
+    }
+
+    public List<Chat> getChatList() {
+        return chats;
     }
 }

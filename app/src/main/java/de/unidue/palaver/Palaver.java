@@ -2,19 +2,17 @@ package de.unidue.palaver;
 
 import android.content.Context;
 
-import de.unidue.palaver.database.PalaverDB;
+import de.unidue.palaver.database.PalaverDBManager;
 import de.unidue.palaver.engine.PalaverEngine;
-import de.unidue.palaver.model.User;
-import de.unidue.palaver.ui.LoginActivity;
 
 public class Palaver {
-    private SessionManager sessionManager;
     private PalaverEngine palaverEngine;
-    private PalaverDB palaverDB;
+    private PalaverDBManager palaverDBManager;
     private ChatManager chatManager;
     private FriendManager friendManager;
     private UIController uiController;
     private static Palaver palaverInstance;
+    private Context context;
 
     public static Palaver getInstance(){
         if(palaverInstance==null){
@@ -27,14 +25,16 @@ public class Palaver {
         init();
     }
 
+    public void setContext(Context applicationContext) {
+        this.context=applicationContext;
+    }
+
     public void init(){
-        this.palaverEngine = new PalaverEngine(this);
-        this.palaverDB = new PalaverDB(this);
-        this.sessionManager = new SessionManager(this);
-        this.chatManager = new ChatManager(this);
-        this.friendManager = new FriendManager(this);
-        this.uiController = new UIController(this);
         palaverInstance =this;
+        this.palaverEngine = new PalaverEngine();
+        this.chatManager = new ChatManager();
+        this.friendManager = new FriendManager();
+        this.uiController = new UIController();
     }
 
     public UIController getUiController() {
@@ -49,28 +49,19 @@ public class Palaver {
         return chatManager;
     }
 
-    public SessionManager getSessionManager() {
-        return sessionManager;
-    }
-
     public PalaverEngine getPalaverEngine() {
         return palaverEngine;
     }
 
-    public void logout(){
-        deleteDatabase();
-        sessionManager.endSession();
+    private void deleteDBManager() {
+        this.palaverDBManager=null;
     }
 
-    private void deleteDatabase() {
-
+    public PalaverDBManager getPalaverDBManager() {
+        return palaverDBManager;
     }
 
-    public User getUser(){
-        return this.sessionManager.getUser();
-    }
-
-    public void openLoginActivity(Context context) {
-        LoginActivity.startIntent(context);
+    public void setDBManager(PalaverDBManager palaverDBManager) {
+        this.palaverDBManager = palaverDBManager;
     }
 }

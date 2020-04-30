@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import de.unidue.palaver.Palaver;
 import de.unidue.palaver.R;
+import de.unidue.palaver.UIController;
 import de.unidue.palaver.engine.PalaverEngine;
 import de.unidue.palaver.model.User;
 import de.unidue.palaver.model.UserData;
@@ -55,21 +56,37 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
-        backToLoginTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                LoginActivity.startIntent(RegisterActivity.this);
-            }
+        backToLoginTextView.setOnClickListener(v -> {
+            LoginActivity.startIntent(RegisterActivity.this);
+            overridePendingTransition(0,0);
         });
     }
 
     private boolean validateUserInput() {
-        if (userNameEditText.getText().toString().equals("") || passwordEditText.getText().toString().equals("")
-                || rePasswordEditText.getText().toString().equals("")){
-            palaver.getUiController().showErrorDialog(RegisterActivity.this, "The Username and Password cannot be blank");
+        String username = userNameEditText.getText().toString();
+        String password = passwordEditText.getText().toString();
+        String rePassword = rePasswordEditText.getText().toString();
+        UIController uiController = palaver.getUiController();
+        if (username.equals("") || password.equals("") || rePassword.equals("")){
+            uiController.showErrorDialog(RegisterActivity.this, "The Username and Password cannot be blank");
+            return false;
+        } else if(!validString(username)){
+            uiController.showErrorDialog(RegisterActivity.this, "Please input valid username-format");
+            return false;
+        }else if (!password.equals(rePassword)) {
+            uiController.showErrorDialog(RegisterActivity.this, "Password don't match each other");
             return false;
         }
         return true;
+    }
+
+    private boolean validString(String username) {
+        char[] c = username.toCharArray();
+
+        if (Character.isDigit(c[0])) {
+            return true;
+        }
+        return false;
     }
 
     @Override

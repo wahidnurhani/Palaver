@@ -14,30 +14,25 @@ public class ChatManagerTest {
 
     @Test
     public void getChat() {
-        Palaver palaver = new Palaver();
-        ChatManager chatManager = new ChatManager(palaver);
-        Friend friend0 = new Friend("Satu");
-        ChatItem chatItem0 = new ChatItem(friend0, ChatItemType.INCOMMING, "Hallo World", new Date());
-        Chat chat0 = new Chat(friend0);
-        chat0.addChatItem(chatItem0);
-        chatManager.addChat(chat0);
-
-        assertTrue(chatManager.getChat(friend0)==chat0);
-
+        ChatManager chatManager = new ChatManager();
+        chatManager.addChat(new Chat(new Friend("wahid")));
+        chatManager.addChat(new Chat(new Friend("jimmy")));
+        chatManager.addChat(new Chat(new Friend("wahid")));
+        chatManager.addChat(new Chat(new Friend("nico")));
+        assertEquals(3, chatManager.getChatList().size());
     }
 
     @Test
     public void removeChat() {
-        Palaver palaver = new Palaver();
-        ChatManager chatManager = new ChatManager(  palaver);
-        Friend friend0 = new Friend("Satu");
-        ChatItem chatItem0 = new ChatItem(friend0, ChatItemType.INCOMMING, "Hallo World", new Date());
+        Palaver.getInstance();
+        ChatManager chatManager = new ChatManager();
+        Friend friend0 = new Friend("Teman");
+        ChatItem chatItem0 = new ChatItem(friend0.getUsername(), "saya", ChatItemType.INCOMMING, "Hallo World", new Date());
         Chat chat0 = new Chat(friend0);
         chat0.addChatItem(chatItem0);
         chatManager.addChat(chat0);
         chatManager.removeChat(chat0);
-
-        assertTrue(chatManager.getChat(friend0)==null);
+        assertNull(chatManager.getChat(friend0));
     }
 
     @Test
@@ -46,5 +41,17 @@ public class ChatManagerTest {
 
     @Test
     public void search() {
+    }
+
+    @Test
+    public void testGetChat() {
+    }
+
+    @Test
+    public void addChat() {
+        ChatManager chatManager = new ChatManager();
+        chatManager.addChat(new Chat(new Friend("wahid")));
+        chatManager.addChat(new Chat(new Friend("jimmy")));
+        assertEquals(2, chatManager.getChatList().size());
     }
 }

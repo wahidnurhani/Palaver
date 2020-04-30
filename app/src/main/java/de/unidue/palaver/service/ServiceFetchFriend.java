@@ -9,6 +9,7 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import de.unidue.palaver.Palaver;
+import de.unidue.palaver.SessionManager;
 import de.unidue.palaver.engine.Communicator;
 
 public class ServiceFetchFriend extends Service {
@@ -38,7 +39,7 @@ public class ServiceFetchFriend extends Service {
 
         @Override
         protected Void doInBackground(String... strings) {
-            String[] resultValue = communicator.fetchFriend(palaver.getUser());
+            String[] resultValue = communicator.fetchFriends(SessionManager.getSessionManagerInstance(getApplicationContext()).getUser());
             if(resultValue[0].equals("1")){
                 Intent intent = new Intent("friendfetched_broadcast");
                 LocalBroadcastManager.getInstance(ServiceFetchFriend.this).sendBroadcast(intent);
