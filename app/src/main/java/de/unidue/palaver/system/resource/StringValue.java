@@ -52,5 +52,6 @@ public class StringValue {
         public static final String VALIDATE = "/api/user/validate";
         public static final String GET_ALL_FRIENDS = "/api/friends/get";
         public static final String ADD_FRIEND = "/api/friends/add";
+        public static final String CHANGE_PASSWORD = "/api/user/password";
     }
 }

@@ -32,4 +32,18 @@ class JSONBuilder {
         }
         return null;
     }
+
+    public JSONObject formatBodyChangePasswordDataToJSON(String username, String password, String newPassword) {
+        final JSONObject root = new JSONObject();
+        try {
+            root.put("Username",username);
+            root.put("Password",password);
+            root.put("NewPassword", newPassword);
+            return root;
+        }
+        catch (JSONException e){
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

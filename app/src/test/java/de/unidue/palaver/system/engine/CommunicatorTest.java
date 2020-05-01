@@ -52,4 +52,21 @@ public class CommunicatorTest {
         assertNull(communicatorResult.getData());
         System.out.println(communicatorResult);
     }
+
+    @Test
+    public void changePassword(){
+        Communicator communicator = new Communicator();
+
+        //For not correct oldPassword
+        User user = new User(new UserData("test1993", "test1992"));
+        CommunicatorResult<String> communicatorResult = communicator.changePassword(user, "test1993");
+        assertEquals(0, communicatorResult.getResponseValue());
+        System.out.println(communicatorResult);
+
+        //For Correct oldPassword
+        User user1 = new User(new UserData("test1993", "test1993"));
+        CommunicatorResult<String> communicatorResult2 = communicator.changePassword(user1, "test1993");
+        assertEquals(1, communicatorResult2.getResponseValue());
+        System.out.println(communicatorResult2);
+    }
 }

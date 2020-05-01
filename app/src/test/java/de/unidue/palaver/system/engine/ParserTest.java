@@ -41,4 +41,14 @@ public class ParserTest {
         CommunicatorResult<Friend> communicatorResult = parser.addContactReportParser(respose);
         System.out.println(communicatorResult.toString());
     }
+
+    @Test
+    public void changePasswordParser() {
+        Parser parser = new Parser();
+        String newPassword= "Test";
+        String respose = "{\"MsgType\":1,\"Info\":\"Passwort erfolgreich aktualisiert\", \"Data\":null}";
+        CommunicatorResult<String> communicatorResult = parser.changePasswordResultParser(respose, newPassword);
+        System.out.println(communicatorResult.toString());
+
+    }
 }

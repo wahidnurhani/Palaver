@@ -1,7 +1,5 @@
 package de.unidue.palaver;
 
-import android.widget.Toast;
-
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.AndroidJUnit4;

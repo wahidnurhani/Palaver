@@ -46,13 +46,13 @@ public class LoginActivityTest {
                 perform(closeSoftKeyboard());
         onView(withId(R.id.login_password_editText)).
                 perform(typeText("test1991")).
-                perform(closeSoftKeyboard());;
-        onView(withId(R.id.login_login_button)).
+                perform(closeSoftKeyboard());
+
+        Thread.sleep(1000 /*Or any other time*/);
+
+        onView(withId(R.id.login_register_textView)).
                 perform(click());
 
         Thread.sleep(3000 /*Or any other time*/);
-
-        onView(withId(R.id.chatManager_addChatFloatingButton)).
-                check(matches(isDisplayed()));
     }
 }

@@ -3,7 +3,6 @@ package de.unidue.palaver.system.engine;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -20,6 +19,7 @@ import de.unidue.palaver.system.model.CommunicatorResult;
 import de.unidue.palaver.system.resource.StringValue;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.User;
+
 
 public class Communicator {
 
@@ -188,6 +188,66 @@ public class Communicator {
             resultJSONString = stringBuilder.toString();
 
             result = parser.addContactReportParser(resultJSONString);
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+            if (bufferedReader != null) {
+                try {
+                    bufferedReader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return result;
+    }
+
+
+    public CommunicatorResult<String> changePassword(User user, String newPassword) {
+        CommunicatorResult<String> result = null;
+        String cmd = StringValue.APICmd.CHANGE_PASSWORD;
+        try {
+
+            JSONObject body = jsonBuilder.formatBodyChangePasswordDataToJSON(user.getUserData().getUserName(),
+                    user.getUserData().getPassword(),
+                    newPassword);
+
+
+            url = new URL(baseUrl + cmd);
+            urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setRequestMethod("POST");
+            urlConnection.setRequestProperty("Content-Type", "application/json");
+            urlConnection.setDoInput(true);
+            urlConnection.setDoOutput(true);
+
+
+            OutputStream outputStream = urlConnection.getOutputStream();
+            PrintWriter printWriter = new PrintWriter(outputStream);
+            printWriter.print(body.toString());
+
+            printWriter.flush();
+            printWriter.close();
+
+            urlConnection.connect();
+
+            InputStream inputStream = urlConnection.getInputStream();
+            bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+            StringBuilder stringBuilder = new StringBuilder();
+            String line;
+
+            while ((line = bufferedReader.readLine()) != null) {
+                stringBuilder.append(line).append("\n");
+            }
+
+            resultJSONString = stringBuilder.toString();
+
+            result = parser.changePasswordResultParser(resultJSONString, newPassword);
 
         } catch (MalformedURLException e) {
             e.printStackTrace();

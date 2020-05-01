@@ -76,26 +76,6 @@ public class Parser {
     }
 
 
-    String[] fetchFriendFeedback(String result) {
-        try {
-            JSONObject jsonObject = new JSONObject(result);
-            int msgType = jsonObject.getInt(StringValue.JSONKeyName.MSG_TYPE);
-            String info = jsonObject.getString(StringValue.JSONKeyName.INFO);
-            String data;
-            if(jsonObject.get(StringValue.JSONKeyName.DATA) instanceof String){
-                data = jsonObject.getString(StringValue.JSONKeyName.DATA);
-            } else {
-                data = null;
-            }
-
-            return new String[]{msgType+"",info, data};
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-
     public Date stringToDate(String date) {
         String[] dateTime = date.split("T");
         String datum = dateTime[0];
@@ -123,5 +103,25 @@ public class Parser {
     }
 
 
+    public CommunicatorResult<String> changePasswordResultParser(String result, String newPassWord) {
+        CommunicatorResult<String> communicatorResult=null;
+        try {
+            JSONObject jsonObject = new JSONObject(result);
+            int msgType = jsonObject.getInt(StringValue.JSONKeyName.MSG_TYPE);
+            String info = jsonObject.getString(StringValue.JSONKeyName.INFO);
+            if(msgType==1){
+                List<String> pass = new ArrayList<>();
+                pass.add(newPassWord);
+                communicatorResult = new CommunicatorResult<>(msgType, info, pass);
+            } else {
+                communicatorResult = new CommunicatorResult<>(msgType, info, null);
+            }
 
+            return communicatorResult;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return communicatorResult;
+    }
 }
