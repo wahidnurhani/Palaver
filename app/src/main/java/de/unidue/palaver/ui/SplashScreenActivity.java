@@ -2,10 +2,11 @@ package de.unidue.palaver.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+
+import java.util.Objects;
 
 import de.unidue.palaver.Palaver;
 import de.unidue.palaver.R;
@@ -27,7 +28,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         palaver.setContext(getApplicationContext());
         PalaverDBManager palaverDBManager = new PalaverDBManager(getApplicationContext());
         palaver.setDBManager(palaverDBManager);
-        getSupportActionBar().hide();
+        Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.activity_splash_screen);
         SplashAction splashAction = new SplashAction();
         splashAction.start();

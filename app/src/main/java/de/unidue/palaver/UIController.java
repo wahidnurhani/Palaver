@@ -5,6 +5,7 @@ import android.content.Context;
 import android.view.Gravity;
 import android.widget.Toast;
 
+import de.unidue.palaver.ui.AddFriendDialog;
 import de.unidue.palaver.ui.ChatManagerActivity;
 
 public class UIController {
@@ -17,7 +18,7 @@ public class UIController {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
         alertDialogBuilder.setMessage(message);
 
-        alertDialogBuilder.setNegativeButton("Close",
+        alertDialogBuilder.setNegativeButton(StringValue.TextAndLabel.CLOSE,
                 (dialog, which) -> dialog.cancel());
 
         AlertDialog alertDialog = alertDialogBuilder.create();
@@ -32,5 +33,10 @@ public class UIController {
 
     public void openChatManagerActivity(Context context) {
         ChatManagerActivity.startIntent(context);
+    }
+
+    public void openAddFriendDDialog(Context applicationContext, Activity activity) {
+        AddFriendDialog addFriendDialog = new AddFriendDialog(applicationContext, activity);
+        addFriendDialog.startDialog();
     }
 }

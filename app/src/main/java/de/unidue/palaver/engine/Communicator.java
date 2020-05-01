@@ -18,6 +18,7 @@ import java.net.ProtocolException;
 import java.net.URL;
 
 import de.unidue.palaver.Palaver;
+import de.unidue.palaver.StringValue;
 import de.unidue.palaver.database.PalaverDBManager;
 import de.unidue.palaver.model.Friend;
 import de.unidue.palaver.model.User;
@@ -26,7 +27,7 @@ public class Communicator {
     private static final String TAG=Communicator.class.getSimpleName();
 
     private URL url;
-    private String baseUrl = "http://palaver.se.paluno.uni-due.de";
+    private String baseUrl = StringValue.System.BASE_URL;
     private HttpURLConnection urlConnection;
     private BufferedReader bufferedReader;
     private String resultJSONString = null;
@@ -100,7 +101,7 @@ public class Communicator {
 
     public String[] fetchFriends(User user) {
         String[] resultValue=new String[]{};
-        String cmd = "/api/friends/get";
+        String cmd = StringValue.APICmd.GET_ALL_FRIENDS;
 
         try {
             JSONObject body = jsonBuilder.formatBodyUserDataToJSON(user.getUserData().getUserName(), user.getUserData().getPassword());
@@ -166,7 +167,7 @@ public class Communicator {
 
     public String[] addContact(User user, String friendUserName) {
         String[] resultValue = new String[]{};
-        String cmd = "/api/friends/add";
+        String cmd = StringValue.APICmd.ADD_FRIEND;
         try {
             JSONObject body = jsonBuilder.formatBodyAddOrRemoveFriendtToJSON(user.getUserData().getUserName(), user.getUserData().getPassword(), friendUserName);
             url = new URL(baseUrl+cmd);

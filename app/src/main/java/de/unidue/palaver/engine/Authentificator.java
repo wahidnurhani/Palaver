@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import de.unidue.palaver.SessionManager;
+import de.unidue.palaver.StringValue;
 import de.unidue.palaver.ui.LoginActivity;
 import de.unidue.palaver.Palaver;
 import de.unidue.palaver.model.User;
@@ -33,7 +34,7 @@ class Authentificator {
         this.method = 2;
         this.context = context;
         User user = new User(new UserData(userName, password));
-        String cmd = "/api/user/register";
+        String cmd = StringValue.APICmd.REGISTER;
         MyParam myParam = new MyParam(user, cmd);
         FetchAuthentification fetchAuthentification = new FetchAuthentification();
         fetchAuthentification.execute(myParam);
@@ -45,7 +46,7 @@ class Authentificator {
         this.method = 1;
         this.context = context;
         User user = new User(new UserData(userName, password));
-        String cmd = "/api/user/validate";
+        String cmd = StringValue.APICmd.VALIDATE;
         MyParam myParam = new MyParam(user, cmd);
         FetchAuthentification fetchAuthentification = new FetchAuthentification();
         fetchAuthentification.execute(myParam);
@@ -85,11 +86,11 @@ class Authentificator {
                 e.printStackTrace();
             }
             if(returnValue[0].equals("1")){
-                if(myParams[0].getCmd().equals("/api/user/validate")){
+                if(myParams[0].getCmd().equals(StringValue.APICmd.VALIDATE)){
                     SessionManager.getSessionManagerInstance(context).setUser(user);
                     SessionManager.getSessionManagerInstance(context).startSession(user.getUserData().getUserName(),
                             user.getUserData().getPassword());
-                    Intent intent = new Intent("authentificated_broadcast");
+                    Intent intent = new Intent(StringValue.IntentAction.BROADCAST_AUTHENTIFICATED);
                     LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
                     try {
                         palaver.getPalaverEngine().handleFetchAllFriendRequest(myParams[0].getUser());
@@ -97,7 +98,7 @@ class Authentificator {
                         e.printStackTrace();
                     }
                 } else {
-                    Intent intent = new Intent("registered_broadcast");
+                    Intent intent = new Intent(StringValue.IntentAction.BROADCAST_USER_REGISTERED);
                     LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
                 }
             }

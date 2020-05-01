@@ -23,6 +23,7 @@ import de.unidue.palaver.ChatManager;
 import de.unidue.palaver.FriendManager;
 import de.unidue.palaver.Palaver;
 import de.unidue.palaver.R;
+import de.unidue.palaver.StringValue;
 import de.unidue.palaver.UIController;
 import de.unidue.palaver.engine.Communicator;
 import de.unidue.palaver.engine.PalaverEngine;
@@ -39,7 +40,7 @@ public class FriendManagerActivity extends AppCompatActivity {
     private BroadcastReceiver friendAddeddMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            String addFriendResult = intent.getCharSequenceExtra("INTENT_ADDFRIEND_RESULT").toString();
+            String addFriendResult = intent.getCharSequenceExtra(StringValue.IntentKeyName.BROADCAST_FRIENDADDED_RESULT).toString();
             if(communicator.checkConnectivity(getApplicationContext())){
                 uiController.showToast(FriendManagerActivity.this, addFriendResult);
                 friendManager.updateFriends();
@@ -96,12 +97,12 @@ public class FriendManagerActivity extends AppCompatActivity {
         chatManager = palaver.getChatManager();
 
         LocalBroadcastManager.getInstance(this).registerReceiver(friendAddeddMessageReceiver,
-                new IntentFilter("friendadded_broadcast"));
+                new IntentFilter(StringValue.IntentAction.BROADCAST_FRIENDADDED));
 
         setContentView(R.layout.activity_friend_manager);
 
 
-        Objects.requireNonNull(getSupportActionBar()).setTitle("Select Friend");
+        Objects.requireNonNull(getSupportActionBar()).setTitle(StringValue.TextAndLabel.SELECT_FRIEND);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
@@ -123,8 +124,6 @@ public class FriendManagerActivity extends AppCompatActivity {
             chatManager.openChat(FriendManagerActivity.this,friendManager.getFriendArrayAdapter().getItem(position));
         });
     }
-
-
 
     @Override
     protected void onResume() {

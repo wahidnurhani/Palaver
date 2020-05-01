@@ -40,15 +40,12 @@ public class ChatManagerActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         if (item.getItemId()==R.id.menu_logout){
-            //SQLiteDBAdapter.getPalaverDBOpenHelperInstanz(getApplicationContext()).deleteAllDataOnDataBase();
-            SessionManager.getSessionManagerInstance(getApplicationContext()).endSession();
-        }else if(item.getItemId()==R.id.menu_setting){
+            palaver.getPalaverEngine().handleLogoutRequest(getApplicationContext());
+        } else if(item.getItemId()==R.id.menu_setting){
             //AppPrefererence.startIntent(MainActivity.this);
         } else if(item.getItemId()==R.id.menu_addFriend){
-            AddFriendDialog addFriendDialog = new AddFriendDialog(getApplicationContext(), ChatManagerActivity.this);
-            addFriendDialog.startDialog();
+            palaver.getUiController().openAddFriendDDialog(getApplicationContext(), ChatManagerActivity.this);
         }
-
         return super.onOptionsItemSelected(item);
     }
 

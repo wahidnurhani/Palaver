@@ -4,11 +4,6 @@ import org.junit.Test;
 
 import java.util.Date;
 
-import de.unidue.palaver.model.Chat;
-import de.unidue.palaver.model.ChatItem;
-import de.unidue.palaver.model.ChatItemType;
-import de.unidue.palaver.model.Friend;
-
 import static org.junit.Assert.*;
 
 public class ChatTest {
@@ -17,7 +12,7 @@ public class ChatTest {
     public void getFriend() {
         Friend friend = new Friend("Jimmy");
         Chat chat = new Chat(friend);
-        assertTrue(chat.getFriend().getUsername().equals("Jimmy"));
+        assertEquals("Jimmy", chat.getFriend().getUsername());
     }
 
     @Test
@@ -26,9 +21,9 @@ public class ChatTest {
         ChatItem chatItem = new ChatItem("saya", friend.getUsername(), ChatItemType.INCOMMING, "Hallo World", new Date());
         Chat chat = new Chat(friend);
         chat.addChatItem(chatItem);
-        assertTrue(chat.getChatItemList()!=null);
-        assertTrue(chat.getChatItemList().get(0).getChatItemType()== ChatItemType.INCOMMING);
-        assertTrue(chat.getChatItemList().get(0).getMessage().equals("Hallo World"));
+        assertNotNull(chat.getChatItemList());
+        assertSame(chat.getChatItemList().get(0).getChatItemType(), ChatItemType.INCOMMING);
+        assertEquals("Hallo World", chat.getChatItemList().get(0).getMessage());
     }
 
     @Test
@@ -66,7 +61,7 @@ public class ChatTest {
         chat.addChatItem(chatItem1);
         chat.addChatItem(chatItem0);
         chat.sort();
-        assertTrue(chat.getChatItemList().get(0).getMessage().equals("Hallo World"));
+        assertEquals("Hallo World", chat.getChatItemList().get(0).getMessage());
     }
 
     @Test
@@ -85,6 +80,6 @@ public class ChatTest {
         chat.addChatItem(chatItem0);
         chat.addChatItem(chatItem2);
         chat.addChatItem(chatItem1);
-        assertTrue(chat.getLatestMessage().getMessage().equals("third"));
+        assertEquals("third", chat.getLatestMessage().getMessage());
     }
 }

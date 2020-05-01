@@ -5,13 +5,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.util.Objects;
+
 import de.unidue.palaver.Palaver;
 import de.unidue.palaver.R;
+import de.unidue.palaver.StringValue;
 import de.unidue.palaver.UIController;
 import de.unidue.palaver.engine.PalaverEngine;
 import de.unidue.palaver.model.User;
@@ -36,7 +38,7 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar().hide();
+        Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.activity_register);
 
         Button registerButton = findViewById(R.id.register_register_button);
@@ -45,14 +47,11 @@ public class RegisterActivity extends AppCompatActivity {
         rePasswordEditText = findViewById(R.id.register_repassword_editText);
         TextView backToLoginTextView = findViewById(R.id.register_backToLogin_textView);
 
-        registerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View e) {
-                if(validateUserInput()){
-                    User user = new User(new UserData(userNameEditText.getText().toString(),
-                            passwordEditText.getText().toString()));
-                    palaverEngine.handleRegisterRequest(RegisterActivity.this, user);
-                }
+        registerButton.setOnClickListener(e -> {
+            if(validateUserInput()){
+                User user = new User(new UserData(userNameEditText.getText().toString(),
+                        passwordEditText.getText().toString()));
+                palaverEngine.handleRegisterRequest(RegisterActivity.this, user);
             }
         });
 
@@ -68,13 +67,13 @@ public class RegisterActivity extends AppCompatActivity {
         String rePassword = rePasswordEditText.getText().toString();
         UIController uiController = palaver.getUiController();
         if (username.equals("") || password.equals("") || rePassword.equals("")){
-            uiController.showErrorDialog(RegisterActivity.this, "The Username and Password cannot be blank");
+            uiController.showErrorDialog(RegisterActivity.this, StringValue.ErrorMessage.USERNAME_PASSWORD_BLANK);
             return false;
         } else if(!validString(username)){
-            uiController.showErrorDialog(RegisterActivity.this, "Please input valid username-format");
+            uiController.showErrorDialog(RegisterActivity.this, StringValue.ErrorMessage.PLEASE_INPUT_VALID_USERNAME_FORMAT);
             return false;
         }else if (!password.equals(rePassword)) {
-            uiController.showErrorDialog(RegisterActivity.this, "Password don't match each other");
+            uiController.showErrorDialog(RegisterActivity.this, StringValue.ErrorMessage.PASSWORD_DON_T_MATCH_EACH_OTHER);
             return false;
         }
         return true;

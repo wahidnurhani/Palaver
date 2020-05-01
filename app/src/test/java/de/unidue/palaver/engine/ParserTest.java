@@ -1,11 +1,6 @@
 package de.unidue.palaver.engine;
 
 import org.junit.Test;
-
-import java.util.Date;
-
-import de.unidue.palaver.model.Friend;
-
 import static org.junit.Assert.*;
 
 public class ParserTest {
@@ -16,7 +11,7 @@ public class ParserTest {
         Parser parser = new Parser();
         String respose = "{\"MsgType\":1,\"Info\":\"Benutzer erfolgreich validiert\", \"Data\":null}";
         assertEquals("1", parser.validateAndRegisterReportParser(respose)[0]);
-        assertEquals(null, parser.validateAndRegisterReportParser(respose)[2]);
+        assertNull(parser.validateAndRegisterReportParser(respose)[2]);
     }
 
     @Test

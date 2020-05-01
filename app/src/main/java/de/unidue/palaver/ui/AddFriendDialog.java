@@ -1,5 +1,6 @@
 package de.unidue.palaver.ui;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -12,6 +13,7 @@ import android.widget.EditText;
 import de.unidue.palaver.Palaver;
 import de.unidue.palaver.R;
 import de.unidue.palaver.SessionManager;
+import de.unidue.palaver.StringValue;
 import de.unidue.palaver.UIController;
 
 public class AddFriendDialog {
@@ -36,7 +38,7 @@ public class AddFriendDialog {
     public void startDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         LayoutInflater inflater = (activity).getLayoutInflater();
-        View view = inflater.inflate(R.layout.dialog_add_friend, null);
+        @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.dialog_add_friend, null);
         builder.setView(view);
         builder.setCancelable(false);
 
@@ -57,9 +59,7 @@ public class AddFriendDialog {
             }
         });
 
-        closeButton.setOnClickListener(v -> {
-            dismiss();
-        });
+        closeButton.setOnClickListener(v -> dismiss());
 
         alertDialog = builder.create();
         alertDialog.show();
@@ -68,10 +68,10 @@ public class AddFriendDialog {
     private boolean inputValid() {
         String username = userNameEditText.getText().toString().trim();
         if(username.equals("") || userNameEditText.getText()==null){
-            uiController.showToast(applicationContext, "The Username cannot be blank");
+            uiController.showToast(applicationContext, StringValue.ErrorMessage.USERNAME_BLANK);
             return false;
         } else if (username.equals(sessionManager.getUser().getUserData().getUserName())){
-            palaver.getUiController().showToast(applicationContext, "you can't add your own account");
+            palaver.getUiController().showToast(applicationContext, StringValue.ErrorMessage.ADD_OWN_ACCOUNT);
             return false;
         }
         return true;

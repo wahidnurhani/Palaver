@@ -6,6 +6,7 @@ import org.json.JSONObject;
 
 import java.util.Date;
 
+import de.unidue.palaver.StringValue;
 import de.unidue.palaver.model.Friend;
 
 public class Parser {
@@ -16,11 +17,11 @@ public class Parser {
     String[] validateAndRegisterReportParser(String result){
         try {
             JSONObject jsonObject = new JSONObject(result);
-            int msgType = jsonObject.getInt("MsgType");
-            String info = jsonObject.getString("Info");
+            int msgType = jsonObject.getInt(StringValue.JSONKeyName.MSG_TYPE);
+            String info = jsonObject.getString(StringValue.JSONKeyName.INFO);
             String data;
-            if(jsonObject.get("Data") instanceof String){
-                data = jsonObject.getString("Data");
+            if(jsonObject.get(StringValue.JSONKeyName.DATA) instanceof String){
+                data = jsonObject.getString(StringValue.JSONKeyName.DATA);
             } else {
                 data = null;
             }
@@ -35,7 +36,7 @@ public class Parser {
     Friend[] getFriendParser(String result) {
         try {
             JSONObject jsonObject = new JSONObject(result);
-            JSONArray contactJSONArray = jsonObject.getJSONArray("Data");
+            JSONArray contactJSONArray = jsonObject.getJSONArray(StringValue.JSONKeyName.DATA);
             Friend[] friends = new Friend[contactJSONArray.length()];
 
             for (int i=0; i<contactJSONArray.length();i++){
@@ -52,11 +53,11 @@ public class Parser {
     String[] fetchFriendFeedback(String result) {
         try {
             JSONObject jsonObject = new JSONObject(result);
-            int msgType = jsonObject.getInt("MsgType");
-            String info = jsonObject.getString("Info");
+            int msgType = jsonObject.getInt(StringValue.JSONKeyName.MSG_TYPE);
+            String info = jsonObject.getString(StringValue.JSONKeyName.INFO);
             String data;
-            if(jsonObject.get("Data") instanceof String){
-                data = jsonObject.getString("Data");
+            if(jsonObject.get(StringValue.JSONKeyName.DATA) instanceof String){
+                data = jsonObject.getString(StringValue.JSONKeyName.DATA);
             } else {
                 data = null;
             }
@@ -71,11 +72,11 @@ public class Parser {
     String[] addContactReportParser(String result){
         try {
             JSONObject jsonObject = new JSONObject(result);
-            int msgType = jsonObject.getInt("MsgType");
-            String info = jsonObject.getString("Info");
+            int msgType = jsonObject.getInt(StringValue.JSONKeyName.MSG_TYPE);
+            String info = jsonObject.getString(StringValue.JSONKeyName.INFO);
             String data;
-            if(jsonObject.get("Data") instanceof String){
-                data = jsonObject.getString("Data");
+            if(jsonObject.get(StringValue.JSONKeyName.DATA) instanceof String){
+                data = jsonObject.getString(StringValue.JSONKeyName.DATA);
             } else {
                 data = null;
             }

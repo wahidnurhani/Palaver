@@ -15,4 +15,5 @@ public interface IPalaverEngine {
 
     void handleLoginRequest(Context context, User user);
 
+    void handleLogoutRequest(Context applicationContext);
 }

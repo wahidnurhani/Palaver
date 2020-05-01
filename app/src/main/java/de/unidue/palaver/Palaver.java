@@ -1,5 +1,6 @@
 package de.unidue.palaver;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 
 import de.unidue.palaver.database.PalaverDBManager;
@@ -11,6 +12,7 @@ public class Palaver {
     private ChatManager chatManager;
     private FriendManager friendManager;
     private UIController uiController;
+    @SuppressLint("StaticFieldLeak")
     private static Palaver palaverInstance;
     private Context context;
 
@@ -21,6 +23,10 @@ public class Palaver {
         return palaverInstance;
     }
 
+    public Context getContext() {
+        return context;
+    }
+
     public Palaver() {
         init();
     }
@@ -29,7 +35,7 @@ public class Palaver {
         this.context=applicationContext;
     }
 
-    public void init(){
+    private void init(){
         palaverInstance =this;
         this.palaverEngine = new PalaverEngine();
         this.chatManager = new ChatManager();

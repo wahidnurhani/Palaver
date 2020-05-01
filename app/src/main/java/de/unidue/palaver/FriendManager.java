@@ -20,7 +20,7 @@ public class FriendManager {
     private List<Friend> friendList;
     private FriendArrayAdapter friendArrayAdapter;
 
-    public FriendManager() {
+    FriendManager() {
         this.friendList = new ArrayList<>();
     }
 

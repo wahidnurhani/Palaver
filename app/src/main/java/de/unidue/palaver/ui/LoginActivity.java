@@ -12,8 +12,11 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import java.util.Objects;
+
 import de.unidue.palaver.Palaver;
 import de.unidue.palaver.R;
+import de.unidue.palaver.StringValue;
 import de.unidue.palaver.UIController;
 import de.unidue.palaver.engine.Communicator;
 import de.unidue.palaver.engine.PalaverEngine;
@@ -53,11 +56,11 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar().hide();
+        Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.activity_login);
 
         LocalBroadcastManager.getInstance(this).registerReceiver(authentificationMessageReceiver,
-                new IntentFilter("authentificated_broadcast"));
+                new IntentFilter(StringValue.IntentAction.BROADCAST_AUTHENTIFICATED));
 
         Button loginButton = findViewById(R.id.login_login_button);
         TextView toRegisterTextView = findViewById(R.id.login_register_textView);
@@ -80,7 +83,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private boolean validateUserInput() {
         if (userNameEditText.getText().toString().equals("") || passwordEditText.getText().toString().equals("")){
-            uiController.showErrorDialog(LoginActivity.this, "The Username and Password cannot be blank");
+            uiController.showErrorDialog(LoginActivity.this, StringValue.ErrorMessage.USERNAME_PASSWORD_BLANK);
             return false;
         }
         return true;

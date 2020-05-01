@@ -16,7 +16,7 @@ public class ChatManager {
 
     private List<Chat> chats;
 
-    public ChatManager() {
+    ChatManager() {
         this.chats = new ArrayList<>();
     }
 
@@ -36,7 +36,7 @@ public class ChatManager {
         }
     }
 
-    public boolean chatExist(String userName) {
+    private boolean chatExist(String userName) {
 
         for(Chat tmp : chats){
             if(tmp.getFriend().getUsername().equals(userName)){
