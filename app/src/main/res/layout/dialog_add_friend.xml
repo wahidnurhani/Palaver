@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/dialog_add_friend"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="#FFFFFF">
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/addFriend_closeButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
@@ -17,18 +16,18 @@
         android:layout_marginBottom="20dp"
         android:background="#00FFFFFF"
         android:shadowColor="#003E0000"
-        android:text="CLOSE"
+        android:text="@string/close"
         android:textColor="@color/colorPrimaryDark"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/button2"
+        app:layout_constraintEnd_toStartOf="@+id/addFriend_addButton"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText"
+        app:layout_constraintTop_toBottomOf="@+id/addFriend_editText"
         app:layout_constraintVertical_bias="1.0"
         style="?android:attr/borderlessButtonStyle"/>
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/addFriend_addButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
@@ -36,14 +35,14 @@
         android:layout_marginRight="36dp"
         android:background="#00FFFFFF"
         android:shadowColor="#00FFFFFF"
-        android:text="ADD"
+        android:text="@string/add"
         android:textColor="@color/colorPrimaryDark"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText"
+        app:layout_constraintTop_toBottomOf="@+id/addFriend_editText"
         style="?android:attr/borderlessButtonStyle"/>
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/addFriend_editText"
         android:layout_width="343dp"
         android:layout_height="50dp"
         android:layout_marginTop="28dp"
@@ -55,14 +54,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        android:importantForAutofill="no" />
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
-        android:text="Add Friend"
+        android:text="@string/add_friend"
         android:textColor="@color/colorPrimaryDark"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"

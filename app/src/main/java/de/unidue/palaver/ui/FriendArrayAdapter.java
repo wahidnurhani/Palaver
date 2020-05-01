@@ -1,4 +1,4 @@
-package de.unidue.palaver;
+package de.unidue.palaver.ui;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import de.unidue.palaver.R;
 import de.unidue.palaver.model.Friend;
 
 public class FriendArrayAdapter extends ArrayAdapter<Friend> {

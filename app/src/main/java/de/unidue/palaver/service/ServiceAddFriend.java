@@ -1,6 +1,8 @@
 package de.unidue.palaver.service;
 
+import android.app.Activity;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.IBinder;
@@ -17,9 +19,16 @@ import de.unidue.palaver.model.User;
 
 public class ServiceAddFriend extends Service {
     private static final String TAG= ServiceAddFriend.class.getSimpleName();
-    private Palaver palaver = Palaver.getInstance();
+    private Palaver palaver;
     private SessionManager sessionManager;
-    private Communicator communicator = palaver.getPalaverEngine().getCommunicator();
+    private Communicator communicator;
+
+    public static void startIntent(Context applicationContext, Activity activity, String username) {
+        Intent intent = new Intent(applicationContext, ServiceAddFriend.class);
+        intent.putExtra("INTENT_FRIEND_USERNAME", username.trim());
+        activity.startService(intent);
+    }
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -28,7 +37,9 @@ public class ServiceAddFriend extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        palaver = Palaver.getInstance();
         sessionManager = SessionManager.getSessionManagerInstance(getApplicationContext());
+        communicator = palaver.getPalaverEngine().getCommunicator();
         String friendUsername = intent.getCharSequenceExtra("INTENT_FRIEND_USERNAME").toString();
         FetchAddFriend fetchAddFriend= new FetchAddFriend();
         fetchAddFriend.execute(new Friend(friendUsername));
@@ -41,10 +52,10 @@ public class ServiceAddFriend extends Service {
         Log.i(TAG, "service destroyed");
     }
 
-    private class FetchAddFriend extends AsyncTask<Friend, Void, Void> {
+    private class FetchAddFriend extends AsyncTask<Friend, Void, String[]> {
 
         @Override
-        protected Void doInBackground(Friend... friends) {
+        protected String[] doInBackground(Friend... friends) {
             User user = sessionManager.getUser();
             String[] resultValue = communicator.addContact(user, friends[0].getUsername());
             if(resultValue[0].equals("1")){
@@ -52,8 +63,16 @@ public class ServiceAddFriend extends Service {
                 intent.putExtra("INTENT_ADDFRIEND_RESULT",resultValue[1]);
                 LocalBroadcastManager.getInstance(ServiceAddFriend.this).sendBroadcast(intent);
             }
-            onDestroy();
-            return null;
+            return resultValue;
+        }
+
+        @Override
+        protected void onPostExecute(String[] s) {
+            super.onPostExecute(s);
+            if(s[0].equals("1")) {
+                palaver.getUiController().showToast(getApplicationContext(), "friend added");
+            }
+            palaver.getUiController().showToast(getApplicationContext(), "user doesn't exist");
         }
     }
 }

@@ -84,9 +84,9 @@ public class RegisterActivity extends AppCompatActivity {
         char[] c = username.toCharArray();
 
         if (Character.isDigit(c[0])) {
-            return true;
+            return false;
         }
-        return false;
+        return true;
     }
 
     @Override

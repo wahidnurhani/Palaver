@@ -44,6 +44,9 @@ public class ChatManagerActivity extends AppCompatActivity {
             SessionManager.getSessionManagerInstance(getApplicationContext()).endSession();
         }else if(item.getItemId()==R.id.menu_setting){
             //AppPrefererence.startIntent(MainActivity.this);
+        } else if(item.getItemId()==R.id.menu_addFriend){
+            AddFriendDialog addFriendDialog = new AddFriendDialog(getApplicationContext(), ChatManagerActivity.this);
+            addFriendDialog.startDialog();
         }
 
         return super.onOptionsItemSelected(item);
@@ -67,6 +70,10 @@ public class ChatManagerActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         visibility=true;
+    }
+
+    @Override
+    public void onBackPressed() {
     }
 
     @Override

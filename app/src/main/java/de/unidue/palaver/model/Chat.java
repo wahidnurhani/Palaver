@@ -29,7 +29,7 @@ public class Chat implements Comparable<Chat>, IChat {
     @Override
     public boolean isUnReadMessageExist(){
         for (ChatItem chatItem : chatItemList) {
-            if(chatItem.getIsReadStatus()==false){
+            if(!chatItem.getIsReadStatus()){
                 return true;
             }
         }

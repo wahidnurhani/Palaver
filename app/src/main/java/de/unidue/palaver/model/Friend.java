@@ -16,8 +16,4 @@ public class Friend implements Comparable<Friend>{
     public int compareTo(Friend o) {
         return username.compareTo(o.getUsername());
     }
-    
-    public void openChat() {
-        //Open Chat Activity
-    }
 }

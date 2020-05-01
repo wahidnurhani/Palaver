@@ -34,4 +34,9 @@ public class ChatRoomActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
+
+    @Override
+    public void onBackPressed() {
+        ChatManagerActivity.startIntent(this);
+    }
 }

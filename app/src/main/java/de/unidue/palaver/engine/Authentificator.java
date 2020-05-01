@@ -16,20 +16,20 @@ import de.unidue.palaver.model.UserData;
 import de.unidue.palaver.ui.ProgressDialog;
 import de.unidue.palaver.ui.SplashScreenActivity;
 
-public class Authentificator {
+class Authentificator {
     private static final String TAG= LoginActivity.class.getSimpleName();
 
     private Palaver palaver;
     private Context context;
-    int method;
-    ProgressDialog progressDialog;
+    private int method;
+    private ProgressDialog progressDialog;
 
-    public Authentificator() {
+    Authentificator() {
         this.palaver = Palaver.getInstance();
 
     }
 
-    public void register(Context context, String userName, String password) {
+    void register(Context context, String userName, String password) {
         this.method = 2;
         this.context = context;
         User user = new User(new UserData(userName, password));
@@ -37,9 +37,11 @@ public class Authentificator {
         MyParam myParam = new MyParam(user, cmd);
         FetchAuthentification fetchAuthentification = new FetchAuthentification();
         fetchAuthentification.execute(myParam);
+        progressDialog = new ProgressDialog((Activity) context);
+        progressDialog.startDialog();
     }
 
-    public void authentificate(Context context, String userName, String password) {
+    void authentificate(Context context, String userName, String password) {
         this.method = 1;
         this.context = context;
         User user = new User(new UserData(userName, password));
@@ -55,7 +57,7 @@ public class Authentificator {
         private User user;
         private String cmd;
 
-        public MyParam(User user, String cmd) {
+        MyParam(User user, String cmd) {
             this.user=user;
             this.cmd=cmd;
         }
@@ -64,7 +66,7 @@ public class Authentificator {
             return user;
         }
 
-        public String getCmd() {
+        String getCmd() {
             return cmd;
         }
     }

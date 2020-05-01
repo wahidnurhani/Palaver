@@ -1,65 +1,85 @@
 package de.unidue.palaver.ui;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.Intent;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 
 import de.unidue.palaver.Palaver;
+import de.unidue.palaver.R;
 import de.unidue.palaver.SessionManager;
-import de.unidue.palaver.engine.Communicator;
-import de.unidue.palaver.service.ServiceAddFriend;
+import de.unidue.palaver.UIController;
 
-public class AddFriendDialog extends AlertDialog.Builder {
-    private Palaver palaver = Palaver.getInstance();
-    private Communicator communicator = palaver.getPalaverEngine().getCommunicator();
+public class AddFriendDialog {
+
+    private AlertDialog alertDialog;
+    private Context applicationContext;
+    private Activity activity;
+    private Palaver palaver;
+    private UIController uiController;
     private SessionManager sessionManager;
+
     private EditText userNameEditText;
 
-    public AddFriendDialog(Context appContext, Context context) {
-        super(context);
-        setTitle("Add Friend");
-        sessionManager = SessionManager.getSessionManagerInstance(appContext);
-        initElement();
+    public AddFriendDialog(Context applicationContext, Activity activity) {
+        this.applicationContext =applicationContext;
+        this.activity = activity;
+        this.palaver = Palaver.getInstance();
+        this.uiController = palaver.getUiController();
+        this.sessionManager = SessionManager.getSessionManagerInstance(activity);
     }
 
-    private void initElement() {
-        userNameEditText = new EditText(getContext());
-        userNameEditText.setHint("username");
-        userNameEditText.setPadding(55,50,10,30);
+    public void startDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        LayoutInflater inflater = (activity).getLayoutInflater();
+        View view = inflater.inflate(R.layout.dialog_add_friend, null);
+        builder.setView(view);
+        builder.setCancelable(false);
+
+        userNameEditText = view.findViewById(R.id.addFriend_editText);
         userNameEditText.setImeOptions(EditorInfo.IME_ACTION_NEXT);
         userNameEditText.setSingleLine(true);
         userNameEditText.setMaxLines(1);
 
-        setNegativeButton("CLOSE", null);
-        setPositiveButton("ADD", null);
-        setView(userNameEditText);
+        Button addButton = view.findViewById(R.id.addFriend_addButton);
+        Button closeButton = view.findViewById(R.id.addFriend_closeButton);
 
-        AlertDialog mAlertDialog = this.create();
-        mAlertDialog.setOnShowListener(dialog -> {
-            Button b = mAlertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
-            b.setOnClickListener(view -> {
-                if(userNameEditText.getText().toString().equals("")){
-                    palaver.getUiController().showToast(getContext(), "The Username cannot be blank");
-                }
-                else{
-                    if(communicator.checkConnectivity(getContext())) {
-                        if (userNameEditText.getText().toString().equals(sessionManager.getUser().getUserData().getUserName()))
-                            palaver.getUiController().showToast(getContext(), "you can't add your own account");
-                        else {
-                            Intent intent = new Intent(getContext(), ServiceAddFriend.class);
-                            intent.putExtra("INTENT_FRIEND_USERNAME", userNameEditText.getText().toString().trim());
-                            getContext().startService(intent);
-                            dialog.dismiss();
-                        }
-                    }else{
-                        palaver.getUiController().showToast(getContext(), "No Internet Connection");
-                    }
-                }
-            });
+
+        addButton.setOnClickListener(v -> {
+            if(inputValid()){
+                String username = userNameEditText.getText().toString().trim();
+                palaver.getPalaverEngine().handleAddFriendRequest(applicationContext, activity, username);
+                dismiss();
+            }
         });
-        mAlertDialog.show();
+
+        closeButton.setOnClickListener(v -> {
+            dismiss();
+        });
+
+        alertDialog = builder.create();
+        alertDialog.show();
     }
+
+    private boolean inputValid() {
+        String username = userNameEditText.getText().toString().trim();
+        if(username.equals("") || userNameEditText.getText()==null){
+            uiController.showToast(applicationContext, "The Username cannot be blank");
+            return false;
+        } else if (username.equals(sessionManager.getUser().getUserData().getUserName())){
+            palaver.getUiController().showToast(applicationContext, "you can't add your own account");
+            return false;
+        }
+        return true;
+    }
+
+    private void dismiss(){
+        alertDialog.dismiss();
+    }
+
+
 }

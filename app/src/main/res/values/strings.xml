@@ -8,4 +8,9 @@
     <string name="palaver_logo">Palaver Logo</string>
     <string name="palaver_sharedPreferences">PalaverSharedPreference</string>>
     <string name="is_log_in">isLogin</string>
+    <string name="close">CLOSE</string>
+    <string name="add">ADD</string>
+    <string name="add_friend">Add Friend</string>
+    <string name="setting">Setting</string>
+    <string name="logout">Logout</string>
 </resources>

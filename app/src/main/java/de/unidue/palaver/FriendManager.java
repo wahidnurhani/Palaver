@@ -1,6 +1,7 @@
 package de.unidue.palaver;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -11,7 +12,7 @@ import java.util.List;
 import de.unidue.palaver.database.PalaverDBManager;
 import de.unidue.palaver.model.Friend;
 import de.unidue.palaver.ui.AddFriendDialog;
-import de.unidue.palaver.ui.ChatManagerActivity;
+import de.unidue.palaver.ui.FriendArrayAdapter;
 import de.unidue.palaver.ui.FriendManagerActivity;
 
 public class FriendManager {
@@ -55,8 +56,9 @@ public class FriendManager {
         FriendManagerActivity.startIntent(context);
     }
 
-    public void openAddFriendDialog(Context appContext, Context context){
-        new AddFriendDialog(appContext, context);
+    public void openAddFriendDialog(Context appContext, Activity context){
+        AddFriendDialog addFriendDialog= new AddFriendDialog(appContext, context);
+        addFriendDialog.startDialog();
     }
 
     public void updateFriends() {

@@ -71,6 +71,7 @@ public class SessionManager {
 
         editor.clear();
         editor.commit();
+        Palaver.getInstance().getPalaverDBManager().deleteAllDataOnDataBase();
         LoginActivity.startIntent(context);
     }
 

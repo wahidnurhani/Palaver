@@ -9,6 +9,7 @@ public class JSONBuilderTest {
     @Test
     public void formatBodyUserDataToJSON() {
         JSONBuilder jsonBuilder = new JSONBuilder();
-        System.out.println(jsonBuilder.formatBodyUserDataToJSON("Test", "Pass").toString());
+        assertEquals("{\"Username\":\"Test\",\"Password\":\"Pass\"}",
+                jsonBuilder.formatBodyUserDataToJSON("Test", "Pass").toString());
     }
 }
