@@ -24,8 +24,8 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".service.ServiceFetchFriend" />
-        <service android:name=".service.ServiceAddFriend" />
+        <service android:name=".system.service.ServiceFetchFriend" />
+        <service android:name=".system.service.ServiceAddFriend" />
     </application>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 

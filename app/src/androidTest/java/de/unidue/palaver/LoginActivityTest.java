@@ -41,16 +41,18 @@ public class LoginActivityTest {
         onView(withId(R.id.login_register_textView)).
                 check(matches(isDisplayed()));
 
+        onView(withId(R.id.login_userName_editText)).
+                perform(typeText("test1991")).
+                perform(closeSoftKeyboard());
+        onView(withId(R.id.login_password_editText)).
+                perform(typeText("test1991")).
+                perform(closeSoftKeyboard());;
+        onView(withId(R.id.login_login_button)).
+                perform(click());
 
         Thread.sleep(3000 /*Or any other time*/);
-//
-//        onView(withId(R.id.login_userName_editText)).
-//                perform(typeText("test1991")).
-//                perform(closeSoftKeyboard());
-//        onView(withId(R.id.login_password_editText)).
-//                perform(typeText("test1991")).
-//                perform(closeSoftKeyboard());;
-//        onView(withId(R.id.login_login_button)).
-//                perform(click());
+
+        onView(withId(R.id.chatManager_addChatFloatingButton)).
+                check(matches(isDisplayed()));
     }
 }

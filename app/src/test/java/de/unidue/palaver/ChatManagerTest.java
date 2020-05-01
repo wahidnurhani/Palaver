@@ -4,10 +4,13 @@ import org.junit.Test;
 
 import java.util.Date;
 
-import de.unidue.palaver.model.Chat;
-import de.unidue.palaver.model.ChatItem;
-import de.unidue.palaver.model.ChatItemType;
-import de.unidue.palaver.model.Friend;
+import de.unidue.palaver.system.model.Chat;
+import de.unidue.palaver.system.model.ChatItem;
+import de.unidue.palaver.system.resource.ChatItemType;
+import de.unidue.palaver.system.model.Friend;
+import de.unidue.palaver.system.ChatManager;
+import de.unidue.palaver.system.Palaver;
+
 import static org.junit.Assert.*;
 
 public class ChatManagerTest {
@@ -24,7 +27,6 @@ public class ChatManagerTest {
 
     @Test
     public void removeChat() {
-        Palaver.getInstance();
         ChatManager chatManager = new ChatManager();
         Friend friend0 = new Friend("Teman");
         ChatItem chatItem0 = new ChatItem(friend0.getUsername(), "saya", ChatItemType.INCOMMING, "Hallo World", new Date());

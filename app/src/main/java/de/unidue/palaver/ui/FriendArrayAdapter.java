@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import de.unidue.palaver.R;
-import de.unidue.palaver.model.Friend;
+import de.unidue.palaver.system.model.Friend;
 
 public class FriendArrayAdapter extends ArrayAdapter<Friend> {
 

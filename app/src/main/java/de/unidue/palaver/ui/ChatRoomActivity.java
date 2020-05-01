@@ -2,27 +2,24 @@ package de.unidue.palaver.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
 import java.util.Objects;
 
+import de.unidue.palaver.system.Palaver;
 import de.unidue.palaver.R;
-import de.unidue.palaver.model.Friend;
+import de.unidue.palaver.system.UIManager;
 
 public class ChatRoomActivity extends AppCompatActivity {
 
-    public static void startIntent(Context context, Friend friend){
-        Intent intent = new Intent(context, ChatRoomActivity.class);
-        context.startActivity(intent);
-    }
+    private Palaver palaver = Palaver.getInstance();
+    private UIManager uiManager;
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == android.R.id.home){
-            ChatManagerActivity.startIntent(ChatRoomActivity.this);
+           uiManager.openChatManagerActivity(ChatRoomActivity.this);
         }
 
         return super.onOptionsItemSelected(item);
@@ -32,6 +29,7 @@ public class ChatRoomActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_room);
+        uiManager = palaver.getUiManager();
 
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -39,6 +37,6 @@ public class ChatRoomActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        ChatManagerActivity.startIntent(this);
+        uiManager.openChatManagerActivity(ChatRoomActivity.this);
     }
 }

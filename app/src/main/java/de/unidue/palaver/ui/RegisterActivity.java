@@ -2,8 +2,6 @@ package de.unidue.palaver.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -11,35 +9,33 @@ import android.widget.TextView;
 
 import java.util.Objects;
 
-import de.unidue.palaver.Palaver;
+import de.unidue.palaver.system.Palaver;
 import de.unidue.palaver.R;
-import de.unidue.palaver.StringValue;
-import de.unidue.palaver.UIController;
-import de.unidue.palaver.engine.PalaverEngine;
-import de.unidue.palaver.model.User;
-import de.unidue.palaver.model.UserData;
+import de.unidue.palaver.system.resource.StringValue;
+import de.unidue.palaver.system.UIManager;
+import de.unidue.palaver.system.engine.PalaverEngine;
+import de.unidue.palaver.system.model.User;
+import de.unidue.palaver.system.model.UserData;
 
 public class RegisterActivity extends AppCompatActivity {
 
     private static final String TAG= RegisterActivity.class.getSimpleName();
     private static boolean visibility;
-    Palaver palaver = Palaver.getInstance();
-    PalaverEngine palaverEngine = palaver.getPalaverEngine();
+    private Palaver palaver = Palaver.getInstance();
+    private PalaverEngine palaverEngine;
+    private UIManager uiManager;
 
     private EditText userNameEditText;
     private EditText passwordEditText;
     private EditText rePasswordEditText;
-
-    public static void startIntent(Context context) {
-        Intent intent = new Intent(context, RegisterActivity.class);
-        context.startActivity(intent);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.activity_register);
+        palaverEngine = palaver.getPalaverEngine();
+        uiManager = palaver.getUiManager();
 
         Button registerButton = findViewById(R.id.register_register_button);
         userNameEditText = findViewById(R.id.register_userName_editText);
@@ -56,7 +52,7 @@ public class RegisterActivity extends AppCompatActivity {
         });
 
         backToLoginTextView.setOnClickListener(v -> {
-            LoginActivity.startIntent(RegisterActivity.this);
+            uiManager.openLoginActivity(RegisterActivity.this);
             overridePendingTransition(0,0);
         });
     }
@@ -65,15 +61,14 @@ public class RegisterActivity extends AppCompatActivity {
         String username = userNameEditText.getText().toString();
         String password = passwordEditText.getText().toString();
         String rePassword = rePasswordEditText.getText().toString();
-        UIController uiController = palaver.getUiController();
         if (username.equals("") || password.equals("") || rePassword.equals("")){
-            uiController.showErrorDialog(RegisterActivity.this, StringValue.ErrorMessage.USERNAME_PASSWORD_BLANK);
+            uiManager.showErrorDialog(RegisterActivity.this, StringValue.ErrorMessage.USERNAME_PASSWORD_BLANK);
             return false;
         } else if(!validString(username)){
-            uiController.showErrorDialog(RegisterActivity.this, StringValue.ErrorMessage.PLEASE_INPUT_VALID_USERNAME_FORMAT);
+            uiManager.showErrorDialog(RegisterActivity.this, StringValue.ErrorMessage.PLEASE_INPUT_VALID_USERNAME_FORMAT);
             return false;
         }else if (!password.equals(rePassword)) {
-            uiController.showErrorDialog(RegisterActivity.this, StringValue.ErrorMessage.PASSWORD_DON_T_MATCH_EACH_OTHER);
+            uiManager.showErrorDialog(RegisterActivity.this, StringValue.ErrorMessage.PASSWORD_DON_T_MATCH_EACH_OTHER);
             return false;
         }
         return true;

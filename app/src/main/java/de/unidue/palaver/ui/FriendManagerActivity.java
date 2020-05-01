@@ -10,8 +10,6 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SearchView;
 
@@ -19,20 +17,20 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.Objects;
 
-import de.unidue.palaver.ChatManager;
-import de.unidue.palaver.FriendManager;
-import de.unidue.palaver.Palaver;
+import de.unidue.palaver.system.ChatManager;
+import de.unidue.palaver.system.FriendManager;
+import de.unidue.palaver.system.Palaver;
 import de.unidue.palaver.R;
-import de.unidue.palaver.StringValue;
-import de.unidue.palaver.UIController;
-import de.unidue.palaver.engine.Communicator;
-import de.unidue.palaver.engine.PalaverEngine;
-import de.unidue.palaver.model.Chat;
+import de.unidue.palaver.system.resource.StringValue;
+import de.unidue.palaver.system.UIManager;
+import de.unidue.palaver.system.engine.Communicator;
+import de.unidue.palaver.system.engine.PalaverEngine;
+import de.unidue.palaver.system.model.Chat;
 
 public class FriendManagerActivity extends AppCompatActivity {
     private static boolean visibility;
 
-    private UIController uiController;
+    private UIManager uiManager;
     private Communicator communicator;
     private FriendManager friendManager;
     private ChatManager chatManager;
@@ -42,17 +40,11 @@ public class FriendManagerActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             String addFriendResult = intent.getCharSequenceExtra(StringValue.IntentKeyName.BROADCAST_FRIENDADDED_RESULT).toString();
             if(communicator.checkConnectivity(getApplicationContext())){
-                uiController.showToast(FriendManagerActivity.this, addFriendResult);
+                uiManager.showToast(FriendManagerActivity.this, addFriendResult);
                 friendManager.updateFriends();
             }
         }
     };
-
-
-    public static void startIntent(Context context){
-        Intent intent = new Intent(context, FriendManagerActivity.class);
-        context.startActivity(intent);
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -79,7 +71,7 @@ public class FriendManagerActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == android.R.id.home){
-            ChatManagerActivity.startIntent(FriendManagerActivity.this);
+            uiManager.openChatManagerActivity(FriendManagerActivity.this);
             overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_rigt);
         }
 
@@ -91,7 +83,7 @@ public class FriendManagerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Palaver palaver = Palaver.getInstance();
         PalaverEngine palaverEngine = palaver.getPalaverEngine();
-        uiController = palaver.getUiController();
+        uiManager = palaver.getUiManager();
         communicator = palaverEngine.getCommunicator();
         friendManager = palaver.getFriendManager();
         chatManager = palaver.getChatManager();
@@ -101,16 +93,14 @@ public class FriendManagerActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_friend_manager);
 
-
         Objects.requireNonNull(getSupportActionBar()).setTitle(StringValue.TextAndLabel.SELECT_FRIEND);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
 
         FloatingActionButton floatingActionButton = findViewById(R.id.friendManager_addChatFloatingButton);
-        floatingActionButton.setOnClickListener(v -> {
-            friendManager.openAddFriendDialog(getApplicationContext(), FriendManagerActivity.this);
-        });
+        floatingActionButton.setOnClickListener(v -> uiManager.openAddFriendDDialog(getApplicationContext(),
+                FriendManagerActivity.this));
 
         ListView friendsListView = findViewById(R.id.friendManager_recycleView);
         friendManager.initArrayAdapter(FriendManagerActivity.this,
@@ -121,7 +111,8 @@ public class FriendManagerActivity extends AppCompatActivity {
 
         friendsListView.setOnItemClickListener((parent, view, position, id) -> {
             chatManager.addChat(new Chat(friendManager.getFriendArrayAdapter().getItem(position)));
-            chatManager.openChat(FriendManagerActivity.this,friendManager.getFriendArrayAdapter().getItem(position));
+            uiManager.openChat(FriendManagerActivity.this,
+                    Objects.requireNonNull(friendManager.getFriendArrayAdapter().getItem(position)));
         });
     }
 
@@ -131,7 +122,6 @@ public class FriendManagerActivity extends AppCompatActivity {
         visibility=true;
         friendManager.updateFriends();
     }
-
 
     @Override
     protected void onDestroy() {

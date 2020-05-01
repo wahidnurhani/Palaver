@@ -10,11 +10,11 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 
-import de.unidue.palaver.Palaver;
+import de.unidue.palaver.system.Palaver;
 import de.unidue.palaver.R;
-import de.unidue.palaver.SessionManager;
-import de.unidue.palaver.StringValue;
-import de.unidue.palaver.UIController;
+import de.unidue.palaver.system.SessionManager;
+import de.unidue.palaver.system.resource.StringValue;
+import de.unidue.palaver.system.UIManager;
 
 public class AddFriendDialog {
 
@@ -22,7 +22,7 @@ public class AddFriendDialog {
     private Context applicationContext;
     private Activity activity;
     private Palaver palaver;
-    private UIController uiController;
+    private UIManager uiManager;
     private SessionManager sessionManager;
 
     private EditText userNameEditText;
@@ -31,7 +31,7 @@ public class AddFriendDialog {
         this.applicationContext =applicationContext;
         this.activity = activity;
         this.palaver = Palaver.getInstance();
-        this.uiController = palaver.getUiController();
+        this.uiManager = palaver.getUiManager();
         this.sessionManager = SessionManager.getSessionManagerInstance(activity);
     }
 
@@ -68,10 +68,10 @@ public class AddFriendDialog {
     private boolean inputValid() {
         String username = userNameEditText.getText().toString().trim();
         if(username.equals("") || userNameEditText.getText()==null){
-            uiController.showToast(applicationContext, StringValue.ErrorMessage.USERNAME_BLANK);
+            uiManager.showToast(applicationContext, StringValue.ErrorMessage.USERNAME_BLANK);
             return false;
         } else if (username.equals(sessionManager.getUser().getUserData().getUserName())){
-            palaver.getUiController().showToast(applicationContext, StringValue.ErrorMessage.ADD_OWN_ACCOUNT);
+            palaver.getUiManager().showToast(applicationContext, StringValue.ErrorMessage.ADD_OWN_ACCOUNT);
             return false;
         }
         return true;

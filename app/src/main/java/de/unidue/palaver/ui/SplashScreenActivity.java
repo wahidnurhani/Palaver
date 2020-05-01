@@ -2,32 +2,23 @@ package de.unidue.palaver.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 
 import java.util.Objects;
 
-import de.unidue.palaver.Palaver;
+import de.unidue.palaver.system.Palaver;
 import de.unidue.palaver.R;
-import de.unidue.palaver.database.PalaverDBManager;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
     private static final String TAG = SplashScreenActivity.class.getSimpleName();
-    private Palaver palaver= Palaver.getInstance();
-
-    public static void startIntent(Context context){
-        Intent intent = new Intent(context, SplashScreenActivity.class);
-        context.startActivity(intent);
-    }
+    private Palaver palaver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        palaver.setContext(getApplicationContext());
-        PalaverDBManager palaverDBManager = new PalaverDBManager(getApplicationContext());
-        palaver.setDBManager(palaverDBManager);
+        palaver = Palaver.getInstance();
+        palaver.startPalaver(getApplicationContext());
         Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.activity_splash_screen);
         SplashAction splashAction = new SplashAction();
@@ -42,7 +33,7 @@ public class SplashScreenActivity extends AppCompatActivity {
             }catch(InterruptedException e){
                 e.printStackTrace();
             }
-            palaver.getUiController().openChatManagerActivity(SplashScreenActivity.this);
+            palaver.getUiManager().openChatManagerActivity(SplashScreenActivity.this);
             SplashScreenActivity.this.finish();
         }
     }

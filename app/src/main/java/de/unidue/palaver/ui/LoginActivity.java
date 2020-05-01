@@ -14,15 +14,14 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import java.util.Objects;
 
-import de.unidue.palaver.Palaver;
+import de.unidue.palaver.system.Palaver;
 import de.unidue.palaver.R;
-import de.unidue.palaver.StringValue;
-import de.unidue.palaver.UIController;
-import de.unidue.palaver.engine.Communicator;
-import de.unidue.palaver.engine.PalaverEngine;
-import de.unidue.palaver.model.User;
-import de.unidue.palaver.model.UserData;
-import de.unidue.palaver.service.ServiceFetchFriend;
+import de.unidue.palaver.system.resource.StringValue;
+import de.unidue.palaver.system.UIManager;
+import de.unidue.palaver.system.engine.PalaverEngine;
+import de.unidue.palaver.system.model.User;
+import de.unidue.palaver.system.model.UserData;
+import de.unidue.palaver.system.service.ServiceFetchFriend;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -30,34 +29,27 @@ public class LoginActivity extends AppCompatActivity {
     private static boolean visibility;
 
     private EditText userNameEditText, passwordEditText;
-    private Palaver palaver=Palaver.getInstance();
-    private PalaverEngine palaverEngine = palaver.getPalaverEngine();
-    private UIController uiController = palaver.getUiController();
-    private Communicator communicator = palaverEngine.getCommunicator();
+    private PalaverEngine palaverEngine;
+    private UIManager uiManager;
 
     private
     BroadcastReceiver authentificationMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(communicator.checkConnectivity(getApplicationContext())){
-                intent = new Intent(getApplicationContext(), ServiceFetchFriend.class);
-                startService(intent);
+            intent = new Intent(getApplicationContext(), ServiceFetchFriend.class);
+            startService(intent);
 
-            }
         }
     };
-
-    public static void startIntent(Context context){
-        Intent intent = new Intent(context, LoginActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(intent);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.activity_login);
+        palaverEngine = Palaver.getInstance().getPalaverEngine();
+        uiManager = Palaver.getInstance().getUiManager();
+
 
         LocalBroadcastManager.getInstance(this).registerReceiver(authentificationMessageReceiver,
                 new IntentFilter(StringValue.IntentAction.BROADCAST_AUTHENTIFICATED));
@@ -76,14 +68,14 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         toRegisterTextView.setOnClickListener(v -> {
-            RegisterActivity.startIntent(LoginActivity.this);
+            uiManager.openRegisterActivity(LoginActivity.this);
             overridePendingTransition(0,0);
         });
     }
 
     private boolean validateUserInput() {
         if (userNameEditText.getText().toString().equals("") || passwordEditText.getText().toString().equals("")){
-            uiController.showErrorDialog(LoginActivity.this, StringValue.ErrorMessage.USERNAME_PASSWORD_BLANK);
+            uiManager.showErrorDialog(LoginActivity.this, StringValue.ErrorMessage.USERNAME_PASSWORD_BLANK);
             return false;
         }
         return true;
