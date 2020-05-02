@@ -45,7 +45,7 @@ public class ChatItem implements Comparable<ChatItem>{
             chatItemAlignment = ChatItemAlignment.RIGHT;
         }
         Parser parser = new Parser();
-        this.date = parser.stringToDate(date);
+        this.date = parser.stringToDateFromServer(date);
     }
 
     public String getSender() {

@@ -2,10 +2,14 @@ package de.unidue.palaver.system.engine;
 
 import org.junit.Test;
 
+import java.util.Date;
+
+import de.unidue.palaver.system.model.ChatItem;
 import de.unidue.palaver.system.model.CommunicatorResult;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.User;
 import de.unidue.palaver.system.model.UserData;
+import de.unidue.palaver.system.resource.ChatItemType;
 
 import static org.junit.Assert.*;
 
@@ -64,9 +68,28 @@ public class CommunicatorTest {
         System.out.println(communicatorResult);
 
         //For Correct oldPassword
-        User user1 = new User(new UserData("test1993", "test1993"));
-        CommunicatorResult<String> communicatorResult2 = communicator.changePassword(user1, "test1993");
+        User user1 = new User(new UserData("test1991", "test1991"));
+        CommunicatorResult<String> communicatorResult2 = communicator.changePassword(user1, "test1991");
         assertEquals(1, communicatorResult2.getResponseValue());
         System.out.println(communicatorResult2);
+    }
+
+    @Test
+    public void pushToken(){
+        Communicator communicator = new Communicator();
+        User user = new User(new UserData("test1991", "test1991"));
+        CommunicatorResult<String> communicatorResult = communicator.pushToken(user, "testToken");
+        System.out.println(communicatorResult.toString());
+    }
+
+    @Test
+    public void sendMessage(){
+        Communicator communicator = new Communicator();
+        User user = new User(new UserData("test1991", "test1991"));
+        Friend friend = new Friend("test1992");
+        ChatItem chatItem = new ChatItem(user.getUserData().getUserName(), friend.getUsername()
+                , ChatItemType.OUT, "Hallo World1", new Date());
+        CommunicatorResult<Date> communicatorResult = communicator.sendMessage(user, friend, chatItem);
+        System.out.println(communicatorResult.toString());
     }
 }

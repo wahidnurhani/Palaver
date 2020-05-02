@@ -2,7 +2,10 @@ package de.unidue.palaver.system.model;
 
 import androidx.annotation.NonNull;
 
+import java.util.Date;
 import java.util.List;
+
+import de.unidue.palaver.system.engine.Parser;
 
 public class CommunicatorResult<T> {
     private int responseValue;
@@ -50,7 +53,21 @@ public class CommunicatorResult<T> {
                 stringBuilder.append(" @ignoreLast]");
                 return "Msg Type :"+responseValue+" , "+"message : "+message+" , data : "+stringBuilder.toString();
             }
+
+            if(data.get(0) instanceof Date){
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append("[ ");
+                for (T s : data){
+                    Parser parser = new Parser();
+                    String dateString = parser.dateToString((Date)s);
+                    stringBuilder.append(dateString).append(", ");
+                }
+                stringBuilder.append(" @ignoreLast]");
+                return "Msg Type :"+responseValue+" , "+"message : "+message+" , data : "+stringBuilder.toString();
+            }
+
         }
+
         return "Msg Type :"+responseValue+" , "+"message : "+message;
     }
 }

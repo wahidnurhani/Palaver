@@ -36,9 +36,39 @@ class JSONBuilder {
     public JSONObject formatBodyChangePasswordDataToJSON(String username, String password, String newPassword) {
         final JSONObject root = new JSONObject();
         try {
-            root.put("Username",username);
-            root.put("Password",password);
-            root.put("NewPassword", newPassword);
+            root.put(StringValue.JSONKeyName.USERNAME,username);
+            root.put(StringValue.JSONKeyName.PASSWORD,password);
+            root.put(StringValue.JSONKeyName.NEWPASSWORD, newPassword);
+            return root;
+        }
+        catch (JSONException e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public JSONObject formatBodyPushTokenDataToJSON(String username, String password, String token) {
+        final JSONObject root = new JSONObject();
+        try {
+            root.put(StringValue.JSONKeyName.USERNAME,username);
+            root.put(StringValue.JSONKeyName.PASSWORD,password);
+            root.put(StringValue.JSONKeyName.PUSH_TOKEN, token);
+            return root;
+        }
+        catch (JSONException e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public JSONObject formatBodySendMessageToJSON(String username, String password, String recipient, String data) {
+        final JSONObject root = new JSONObject();
+        try {
+            root.put(StringValue.JSONKeyName.USERNAME,username);
+            root.put(StringValue.JSONKeyName.PASSWORD,password);
+            root.put(StringValue.JSONKeyName.RECIPIENT, recipient);
+            root.put(StringValue.JSONKeyName.MIME_TYPE, StringValue.JSONKeyName.MIME_TYPE_VALUE);
+            root.put(StringValue.JSONKeyName.DATA, data);
             return root;
         }
         catch (JSONException e){

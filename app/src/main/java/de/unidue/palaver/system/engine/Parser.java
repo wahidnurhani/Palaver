@@ -4,6 +4,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -37,7 +39,7 @@ public class Parser {
     }
 
     public CommunicatorResult<Friend> getFriendParser(String result) {
-        CommunicatorResult<Friend> communicatorResult=null;
+        CommunicatorResult<Friend> communicatorResult;
 
         try {
             JSONObject jsonObject = new JSONObject(result);
@@ -54,7 +56,7 @@ public class Parser {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return communicatorResult;
+        return null;
     }
 
     public CommunicatorResult<Friend> addContactReportParser(String result) {
@@ -76,11 +78,37 @@ public class Parser {
     }
 
 
-    public Date stringToDate(String date) {
+    public Date stringToDateFromServer(String date) {
+
         String[] dateTime = date.split("T");
         String datum = dateTime[0];
         String zeit = dateTime[1];
-        System.out.println(datum);
+
+        String[] ymd= datum.split("-");
+        String year= ymd[0];
+        String month= ymd[1];
+        String day= ymd[2];
+
+        String[] hms = zeit.split(":");
+        String hour = hms[0] ;
+        String minute = hms[1];
+        String second = hms[2];
+
+        Date date1 = new Date();
+        date1.setYear(Integer.parseInt(year)-1900);
+        date1.setMonth(Integer.parseInt(month)-1);
+        date1.setDate(Integer.parseInt(day));
+        date1.setHours(Integer.parseInt(hour));
+        date1.setMinutes(Integer.parseInt(minute));
+        date1.setSeconds(Integer.parseInt(String.valueOf(Math.round(Double.parseDouble(second)))));
+        return date1;
+    }
+
+    public Date stringToDateFromDataBase(String date) {
+
+        String[] dateTime = date.split(" ");
+        String datum = dateTime[0];
+        String zeit = dateTime[1];
 
         String[] ymd= datum.split("-");
         String year= ymd[0];
@@ -103,6 +131,13 @@ public class Parser {
     }
 
 
+    public String dateToString(Date date){
+        String pattern = "yyyy-mm-dd HH:mm:ss";
+        DateFormat dateFormat = new SimpleDateFormat(pattern);
+        return dateFormat.format(date);
+    }
+
+
     public CommunicatorResult<String> changePasswordResultParser(String result, String newPassWord) {
         CommunicatorResult<String> communicatorResult=null;
         try {
@@ -122,6 +157,45 @@ public class Parser {
             e.printStackTrace();
         }
 
+        return communicatorResult;
+    }
+
+    public CommunicatorResult<String> pushTokenParser(String result) {
+        CommunicatorResult<String> communicatorResult=null;
+        try {
+            JSONObject jsonObject = new JSONObject(result);
+            int msgType = jsonObject.getInt(StringValue.JSONKeyName.MSG_TYPE);
+            String info = jsonObject.getString(StringValue.JSONKeyName.INFO);
+
+            communicatorResult = new CommunicatorResult<>(msgType, info, null);
+
+            return communicatorResult;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return communicatorResult;
+    }
+
+    public CommunicatorResult<Date> sendMessageReport (String result) {
+        CommunicatorResult<Date> communicatorResult = null;
+
+        try {
+            JSONObject jsonObject = new JSONObject(result);
+            int msgType = jsonObject.getInt(StringValue.JSONKeyName.MSG_TYPE);
+            String info = jsonObject.getString(StringValue.JSONKeyName.INFO);
+            JSONObject data = jsonObject.getJSONObject(StringValue.JSONKeyName.DATA);
+            String dateTime = data.getString(StringValue.JSONKeyName.DATE_TIME);
+            Date date = stringToDateFromServer(dateTime.split("\\.")[0]);
+
+            List<Date> dateList = new ArrayList<>();
+            dateList.add(date);
+            communicatorResult = new CommunicatorResult<>(msgType, info, dateList);
+
+            return communicatorResult;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         return communicatorResult;
     }
 }
