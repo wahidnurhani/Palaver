@@ -160,7 +160,7 @@ public class Communicator {
         return null;
     }
 
-    public CommunicatorResult<Friend> addContact(User user, String friendUserName) {
+    public CommunicatorResult<Friend> addFriend(User user, String friendUserName) {
         CommunicatorResult<Friend> result = null;
         String cmd = StringValue.APICmd.ADD_FRIEND;
         try {
@@ -192,7 +192,60 @@ public class Communicator {
 
             resultJSONString = stringBuilder.toString();
 
-            result = parser.addContactReportParser(resultJSONString);
+            result = parser.addAndRemoveFriendReportParser(resultJSONString);
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+            if (bufferedReader != null) {
+                try {
+                    bufferedReader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return result;
+    }
+
+    public CommunicatorResult<Friend> removeFriend(User user, String friendUserName) {
+        CommunicatorResult<Friend> result = null;
+        String cmd = StringValue.APICmd.REMOVE_FRIEND;
+        try {
+            JSONObject body = jsonBuilder.formatBodyAddOrRemoveFriendtToJSON(user.getUserData().getUserName(), user.getUserData().getPassword(), friendUserName);
+            url = new URL(baseUrl+cmd);
+            urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setRequestMethod("POST");
+            urlConnection.setRequestProperty("Content-Type", "application/json");
+            urlConnection.setDoInput(true);
+            urlConnection.setDoOutput(true);
+
+            OutputStream outputStream = urlConnection.getOutputStream();
+            PrintWriter printWriter = new PrintWriter(outputStream);
+            printWriter.print(body.toString());
+
+            printWriter.flush();
+            printWriter.close();
+
+            urlConnection.connect();
+
+            InputStream inputStream = urlConnection.getInputStream();
+            bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+            StringBuilder stringBuilder = new StringBuilder();
+            String line;
+
+            while ((line = bufferedReader.readLine()) != null) {
+                stringBuilder.append(line).append("\n");
+            }
+
+            resultJSONString = stringBuilder.toString();
+
+            result = parser.addAndRemoveFriendReportParser(resultJSONString);
 
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -333,7 +386,7 @@ public class Communicator {
 
 
     public CommunicatorResult<Date> sendMessage(User user, Friend friend, ChatItem chatItem) {
-        CommunicatorResult<Date> resultValue;
+        CommunicatorResult<Date> resultValue=null;
         try {
             String cmd = StringValue.APICmd.SEND_MESSAGE;
             JSONObject body = jsonBuilder.formatBodySendMessageToJSON(user.getUserData().getUserName(),
@@ -369,8 +422,6 @@ public class Communicator {
 
             resultValue = parser.sendMessageReport(resultJSONString);
 
-            return resultValue;
-
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -387,6 +438,65 @@ public class Communicator {
                 }
             }
         }
-        return null;
+        return resultValue;
+    }
+
+    public CommunicatorResult<ChatItem> getMessage(User user, Friend friend) {
+        CommunicatorResult<ChatItem> result=null;
+        String cmd = StringValue.APICmd.GET_MESSAGE;
+        try {
+            JSONObject body = jsonBuilder.formatBodyGetChatToJSON(user.getUserData().getUserName(),
+                    user.getUserData().getPassword(), friend.getUsername());
+
+            url = new URL(baseUrl+cmd);
+            urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setRequestMethod("POST");
+            urlConnection.setRequestProperty("Content-Type","application/json");
+            urlConnection.setDoInput(true);
+            urlConnection.setDoOutput(true);
+
+
+            OutputStream outputStream = urlConnection.getOutputStream();
+            PrintWriter printWriter = new PrintWriter(outputStream);
+            printWriter.print(body.toString());
+
+            printWriter.flush();
+            printWriter.close();
+
+            urlConnection.connect();
+
+            InputStream inputStream = urlConnection.getInputStream();
+            bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+            StringBuilder stringBuilder = new StringBuilder();
+            String line;
+
+            while ((line=bufferedReader.readLine())!=null){
+                stringBuilder.append(line).append("\n");
+            }
+            resultJSONString = stringBuilder.toString();
+
+            result= parser.getChatDataParser(resultJSONString, "true", friend.getUsername());
+
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } finally {
+            if ( urlConnection!= null){
+                urlConnection.disconnect();
+            }
+            if (bufferedReader!=null){
+                try {
+                    bufferedReader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return result;
     }
 }

@@ -63,7 +63,7 @@ public class ServiceAddFriend extends Service {
         @Override
         protected CommunicatorResult<Friend> doInBackground(Friend... friends) {
             User user = sessionManager.getUser();
-            CommunicatorResult<Friend> resultValue = communicator.addContact(user, friends[0].getUsername());
+            CommunicatorResult<Friend> resultValue = communicator.addFriend(user, friends[0].getUsername());
             if(resultValue.getResponseValue()==1){
                 palaverDB.insertContact(friends[0]);
                 Intent intent = new Intent(StringValue.IntentAction.BROADCAST_FRIENDADDED);

@@ -1,7 +1,5 @@
 package de.unidue.palaver;
 
-import androidx.test.espresso.Espresso;
-import androidx.test.espresso.action.TypeTextAction;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.AndroidJUnit4;
 
@@ -23,7 +21,7 @@ public class RegisterActivityTest {
     public ActivityTestRule<RegisterActivity> mRegisterActivityActivityTestRule = new ActivityTestRule<>(RegisterActivity.class);
 
     @Test
-    public void registerDataInputScenarioTest() throws Exception {
+    public void registerDataInputScenarioTest() {
         onView(withId(R.id.register_userName_editText)).
                 perform(typeText("test1991")).perform(closeSoftKeyboard());
 

@@ -40,7 +40,7 @@ public class CommunicatorResult<T> {
                 for (T friend : data){
                     stringBuilder.append(((Friend)friend).getUsername()).append(", ");
                 }
-                stringBuilder.append(" @ignoreLast]");
+                stringBuilder.append(" ]");
                 return "Msg Type :"+responseValue+" , "+"message : "+message+" , data : "+stringBuilder.toString();
             }
 
@@ -50,7 +50,7 @@ public class CommunicatorResult<T> {
                 for (T s : data){
                     stringBuilder.append((String)s).append(", ");
                 }
-                stringBuilder.append(" @ignoreLast]");
+                stringBuilder.append(" ]");
                 return "Msg Type :"+responseValue+" , "+"message : "+message+" , data : "+stringBuilder.toString();
             }
 
@@ -62,11 +62,21 @@ public class CommunicatorResult<T> {
                     String dateString = parser.dateToString((Date)s);
                     stringBuilder.append(dateString).append(", ");
                 }
-                stringBuilder.append(" @ignoreLast]");
+                stringBuilder.append(" ]");
                 return "Msg Type :"+responseValue+" , "+"message : "+message+" , data : "+stringBuilder.toString();
             }
 
+            if (data.get(0) instanceof ChatItem){
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append("[ ");
+                for (T chatItem : data){
+                    stringBuilder.append(((ChatItem)chatItem).getMessage()).append(", ");
+                }
+                stringBuilder.append(" ]");
+                return "Msg Type :"+responseValue+" , "+"message : "+message+" , data : "+stringBuilder.toString();
+            }
         }
+
 
         return "Msg Type :"+responseValue+" , "+"message : "+message;
     }

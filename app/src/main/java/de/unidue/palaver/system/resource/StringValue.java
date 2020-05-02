@@ -47,6 +47,7 @@ public class StringValue {
         public static final String MIME_TYPE = "Mimetype";
         public static final String MIME_TYPE_VALUE = "text/plain";
         public static final String DATE_TIME = "DateTime";
+        public static final String SENDER = "Sender";
     }
 
     public static class System {
@@ -58,8 +59,11 @@ public class StringValue {
         public static final String VALIDATE = "/api/user/validate";
         public static final String GET_ALL_FRIENDS = "/api/friends/get";
         public static final String ADD_FRIEND = "/api/friends/add";
+        public static final String REMOVE_FRIEND = "/api/friends/remove";
         public static final String CHANGE_PASSWORD = "/api/user/password";
         public static final String PUSHTOKEN = "/api/user/pushtoken";
         public static final String SEND_MESSAGE = "/api/message/send";
+        public static final String GET_MESSAGE = "/api/message/get";
+
     }
 }

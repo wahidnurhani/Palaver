@@ -76,4 +76,18 @@ class JSONBuilder {
         }
         return null;
     }
+
+    public JSONObject formatBodyGetChatToJSON(String username, String password, String recipient) {
+        final JSONObject root = new JSONObject();
+        try {
+            root.put(StringValue.JSONKeyName.USERNAME,username);
+            root.put(StringValue.JSONKeyName.PASSWORD,password);
+            root.put(StringValue.JSONKeyName.RECIPIENT, recipient);
+            return root;
+        }
+        catch (JSONException e){
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

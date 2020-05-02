@@ -1,9 +1,11 @@
 package de.unidue.palaver.system.engine;
 
+import org.json.JSONException;
 import org.junit.Test;
 
 import java.util.Date;
 
+import de.unidue.palaver.system.model.ChatItem;
 import de.unidue.palaver.system.model.CommunicatorResult;
 import de.unidue.palaver.system.model.Friend;
 
@@ -40,7 +42,7 @@ public class ParserTest {
     public void addFriendParser() {
         Parser parser = new Parser();
         String respose = "{\"MsgType\":1,\"Info\":\"Freunde aufgelistet\",\"Data\":[\"marc\"]}";
-        CommunicatorResult<Friend> communicatorResult = parser.addContactReportParser(respose);
+        CommunicatorResult<Friend> communicatorResult = parser.addAndRemoveFriendReportParser(respose);
         System.out.println(communicatorResult.toString());
     }
 
@@ -64,8 +66,26 @@ public class ParserTest {
     @Test
     public void sendMessageParser() {
         Parser parser = new Parser();
-        String respose = "{\"MsgType\":1, \"Info\":\"Nachricht verschickt\", \"Data\":{\"DateTime\":\"2016-02-12T17:01:44.6224075+01:00\"}}";
+        String respose = "{\"MsgType\":1, \"Info\":\"Nachricht verschickt\", " +
+                "\"Data\":{\"DateTime\":\"2016-02-12T17:01:44.6224075+01:00\"}}";
         CommunicatorResult<Date> communicatorResult = parser.sendMessageReport(respose);
+        System.out.println(communicatorResult.toString());
+    }
+
+    @Test
+    public void getChatDataParser(){
+        Parser parser = new Parser();
+        String respose = "{\"MsgType\":1,\"Info\":\"Nachrichten abgerufen\"," +
+                "\"Data\":[{ \"Sender\":\"marc\", \"Recipient\": \"stefan\", \"Mimetype\":\"text/plain\", " +
+                "\"Data\":\"Blubber!\", \"DateTime\":\"2016-02-12T17:02:38.663\"}]}";
+        CommunicatorResult<ChatItem> communicatorResult = null;
+        try {
+            communicatorResult = parser.getChatDataParser(respose, "false", "stefan");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        assert communicatorResult != null;
+        assertEquals(1, communicatorResult.getResponseValue());
         System.out.println(communicatorResult.toString());
     }
 }

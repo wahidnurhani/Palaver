@@ -1,5 +1,7 @@
 package de.unidue.palaver.system.engine;
 
+import android.annotation.SuppressLint;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -10,7 +12,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import de.unidue.palaver.system.SessionManager;
+import de.unidue.palaver.system.model.ChatItem;
 import de.unidue.palaver.system.model.CommunicatorResult;
+import de.unidue.palaver.system.resource.ChatItemType;
 import de.unidue.palaver.system.resource.StringValue;
 import de.unidue.palaver.system.model.Friend;
 
@@ -59,7 +64,7 @@ public class Parser {
         return null;
     }
 
-    public CommunicatorResult<Friend> addContactReportParser(String result) {
+    public CommunicatorResult<Friend> addAndRemoveFriendReportParser(String result) {
 
         CommunicatorResult<Friend> communicatorResult=null;
         try {
@@ -133,7 +138,7 @@ public class Parser {
 
     public String dateToString(Date date){
         String pattern = "yyyy-mm-dd HH:mm:ss";
-        DateFormat dateFormat = new SimpleDateFormat(pattern);
+        @SuppressLint("SimpleDateFormat") DateFormat dateFormat = new SimpleDateFormat(pattern);
         return dateFormat.format(date);
     }
 
@@ -195,6 +200,37 @@ public class Parser {
             return communicatorResult;
         } catch (JSONException e) {
             e.printStackTrace();
+        }
+        return communicatorResult;
+    }
+
+    public CommunicatorResult<ChatItem> getChatDataParser(String result, String isMessageRead, String friendUserName)throws JSONException{
+        CommunicatorResult<ChatItem> communicatorResult;
+        JSONObject jsonObject = new JSONObject(result);
+        int msgType = jsonObject.getInt(StringValue.JSONKeyName.MSG_TYPE);
+        String info = jsonObject.getString(StringValue.JSONKeyName.INFO);
+        JSONArray jsonArray = jsonObject.getJSONArray(StringValue.JSONKeyName.DATA);
+        List<ChatItem> chatItemList = new ArrayList<>();
+
+        if(msgType==1){
+            for (int i =0 ; i<jsonArray.length();i++){
+                JSONObject oneChat = jsonArray.getJSONObject(i);
+                String sender = oneChat.getString(StringValue.JSONKeyName.SENDER);
+                String recipient = oneChat.getString(StringValue.JSONKeyName.RECIPIENT);
+                String data = oneChat.getString(StringValue.JSONKeyName.DATA);
+                String dateTime = oneChat.getString(StringValue.JSONKeyName.DATE_TIME);
+                String[] dateTimeValid= dateTime.split("\\.");
+                ChatItemType chatItemType;
+                if (sender.equals(friendUserName)){
+                    chatItemType = ChatItemType.INCOMMING;
+                } else {
+                    chatItemType = ChatItemType.OUT;
+                }
+                chatItemList.add(new ChatItem(sender, recipient, chatItemType, data, isMessageRead, dateTimeValid[0]));
+            }
+            communicatorResult = new CommunicatorResult<>(msgType, info, chatItemList);
+        } else {
+            communicatorResult = new CommunicatorResult<>(msgType, info, null);
         }
         return communicatorResult;
     }
