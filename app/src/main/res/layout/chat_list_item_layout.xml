@@ -20,19 +20,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:layout_marginLeft="5dp"
             android:padding="5dp"
-            android:textSize="7pt" />
+            android:textColor="#FFFEFE"
+            android:textSize="5pt" />
 
         <TextView
             android:id="@+id/chat_list_message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+
             android:layout_marginBottom="5dp"
-            android:layout_marginLeft="5dp"
             android:padding="5dp"
-            android:textSize="5pt"
-            android:layout_marginStart="5dp" />
+            android:textColor="#FFFFFF"
+            android:textSize="4pt" />
 
     </LinearLayout>
 

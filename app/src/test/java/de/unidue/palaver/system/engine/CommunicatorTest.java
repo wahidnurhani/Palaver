@@ -94,10 +94,10 @@ public class CommunicatorTest {
     @Test
     public void sendMessage(){
         Communicator communicator = new Communicator();
-        User user = new User(new UserData("test1991", "test1991"));
-        Friend friend = new Friend("test1992");
+        User user = new User(new UserData("test1992", "test1992"));
+        Friend friend = new Friend("test1991");
         Message message = new Message(user.getUserData().getUserName(), friend.getUsername()
-                , MessageType.OUT, "Hallo World1", "true", new Date());
+                , MessageType.OUT, "test send ", "true", new Date());
         CommunicatorResult<Date> communicatorResult = communicator.sendMessage(user, friend, message);
         System.out.println(communicatorResult.toString());
     }

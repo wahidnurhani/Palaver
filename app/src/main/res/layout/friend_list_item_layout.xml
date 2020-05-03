@@ -10,9 +10,9 @@
         android:layout_height="match_parent"
         android:id="@+id/friend_list_item_textview"
         android:paddingTop="15dp"
-        android:textSize="7pt"
-        android:paddingBottom="15dp"
-        android:paddingLeft="20dp">
+        android:textSize="5pt"
+        android:textColor="#FFFEFE"
+        android:paddingBottom="15dp">
     </TextView>
 
 

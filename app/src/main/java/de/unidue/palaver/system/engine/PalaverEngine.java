@@ -14,6 +14,7 @@ import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.User;
 import de.unidue.palaver.system.service.ServiceAddFriend;
 import de.unidue.palaver.system.service.ServiceFetchAllChat;
+import de.unidue.palaver.system.service.ServiceSendMessage;
 import de.unidue.palaver.ui.LoginActivity;
 
 public class PalaverEngine implements IPalaverEngine {
@@ -33,9 +34,9 @@ public class PalaverEngine implements IPalaverEngine {
     }
 
     @Override
-    public void handleSendMessage(Context applicationContext, Friend friend, Message message) {
+    public void handleSendMessage(Context applicationContext, Activity activity, Friend friend, Message message) {
         Palaver.getInstance().getPalaverDB().insertChatItem(friend, message);
-        //ServiceSendMessage.startIntent(applicationContext, )
+        ServiceSendMessage.startIntent(applicationContext, activity, friend, message);
     }
 
     @Override

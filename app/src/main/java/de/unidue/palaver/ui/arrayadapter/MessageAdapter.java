@@ -16,7 +16,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
+import java.text.SimpleDateFormat;
+
 import de.unidue.palaver.R;
+import de.unidue.palaver.system.engine.Parser;
 import de.unidue.palaver.system.model.Message;
 import de.unidue.palaver.system.resource.MessageType;
 
@@ -25,7 +28,7 @@ public class MessageAdapter extends ArrayAdapter<Message> {
         super(context, resource);
     }
 
-    @SuppressLint("ResourceAsColor")
+    @SuppressLint({"ResourceAsColor", "SetTextI18n"})
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     @NonNull
     @Override
@@ -40,32 +43,26 @@ public class MessageAdapter extends ArrayAdapter<Message> {
         LinearLayout containerLinearLayout = convertView.findViewById(R.id.message_container);
         TextView chatItemTextView = convertView.findViewById(R.id.message_textView);
 
-
         RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)containerLinearLayout.getLayoutParams();
 
+        assert message != null;
         if (message.getMessageType()== MessageType.OUT){
             params.removeRule(RelativeLayout.ALIGN_PARENT_END);
-            params.removeRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-            params.addRule(RelativeLayout.ALIGN_PARENT_END);
             params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
             containerLinearLayout.setLayoutParams(params);
 
-            chatItemTextView.setTextColor(Color.BLACK);
-            chatItemTextView.setBackgroundResource(R.drawable.shape_round);
+            chatItemTextView.setTextColor(Color.WHITE);
+            containerLinearLayout.setBackgroundResource(R.drawable.shape_round_message_out);
 
         }else{
-            params.removeRule(RelativeLayout.ALIGN_PARENT_END);
             params.removeRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-            params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-            params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
             containerLinearLayout.setLayoutParams(params);
 
             chatItemTextView.setTextColor(Color.WHITE);
-            chatItemTextView.setBackgroundResource(R.drawable.shape_round_message_in);
+            containerLinearLayout.setBackgroundResource(R.drawable.shape_round_message_in);
         }
 
-        //set Text in TextView
-        chatItemTextView.setText(message.getMessage() + message.getDate());
+        chatItemTextView.setText(message.getMessage().trim());
         return convertView;
     }
 }

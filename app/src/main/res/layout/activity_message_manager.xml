@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/ic_palaver_launcher_background"
     tools:context=".ui.ChatRoomActivity">
 
     <LinearLayout
@@ -18,48 +18,54 @@
         <ListView
             android:id="@+id/chatRoom_listView"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="100"
-            android:stackFromBottom="true"
-            android:transcriptMode="normal"
-            android:divider="@null"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
-            />
+            android:layout_weight="100"
+            android:divider="@null"
+            android:scrollbars="none"
+            android:stackFromBottom="true"
+            android:transcriptMode="normal" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
             android:weightSum="100">
 
             <EditText
                 android:id="@+id/chatRoom_editText_message"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="15dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="15dp"
-                android:layout_weight="90"
-                android:paddingLeft="15dp"
+                android:layout_weight="88"
+                android:background="@drawable/shape_round"
                 android:ems="10"
                 android:hint="message"
-                android:background="@drawable/shape_round"
-                android:paddingRight="10dp"
+                android:imeOptions="actionNext"
                 android:inputType="textMultiLine"
-                android:imeOptions="actionNext"/>
+                android:paddingStart="15dp"
+                android:paddingLeft="15dp"
+                android:paddingEnd="10dp"
+                android:paddingRight="10dp"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#6DFFFFFF"
+                android:textSize="14sp" />
 
             <Button
                 android:id="@+id/chatRoom_button_send"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="10dp"
+                android:layout_marginStart="5dp"
                 android:layout_marginLeft="5dp"
-                android:layout_marginBottom="15dp"
-                android:layout_weight="10"
-                android:background="@drawable/ic_action_name"
-                style="?android:attr/borderlessButtonStyle"/>
+                android:layout_weight="12"
+                android:background="@drawable/shape_round_button"
+                android:text="send"
+                android:textColor="#FFFFFF"
+                android:textSize="12sp" />
         </LinearLayout>
 
     </LinearLayout>

@@ -1,5 +1,6 @@
 package de.unidue.palaver.system;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -100,10 +101,10 @@ public class MessageManager implements Comparable<MessageManager>, IChat, Serial
         fectchChatFromDB.execute();
     }
 
-    public void sendMessage(Context applicationContext, Message message) {
+    public void sendMessage(Context applicationContext, Activity activity, Message message) {
         addChatItem(message);
         messageAdapter.add(message);
-        Palaver.getInstance().getPalaverEngine().handleSendMessage(applicationContext, friend, message);
+        Palaver.getInstance().getPalaverEngine().handleSendMessage(applicationContext, activity, friend, message);
     }
 
     public void initArrayAdapter(Context context, int layout) {

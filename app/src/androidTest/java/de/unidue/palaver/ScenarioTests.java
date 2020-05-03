@@ -40,7 +40,7 @@ public class ScenarioTests {
                 check(matches(isDisplayed()));
         onView(withId(R.id.login_password_editText)).
                 check(matches(isDisplayed()));
-        onView(withId(R.id.login_register_textView)).
+        onView(withId(R.id.login_register_button)).
                 check(matches(isDisplayed()));
 
         onView(withId(R.id.login_userName_editText)).
@@ -67,7 +67,7 @@ public class ScenarioTests {
 
         Thread.sleep(5000 /*Or any other time*/);
 
-        onView(withId(R.id.login_register_textView)).
+        onView(withId(R.id.login_register_button)).
                 perform(click());
 
         Thread.sleep(500 /*Or any other time*/);
@@ -97,7 +97,7 @@ public class ScenarioTests {
                 check(matches(isDisplayed()));
         onView(withId(R.id.login_password_editText)).
                 check(matches(isDisplayed()));
-        onView(withId(R.id.login_register_textView)).
+        onView(withId(R.id.login_register_button)).
                 check(matches(isDisplayed()));
 
         onView(withId(R.id.login_userName_editText)).

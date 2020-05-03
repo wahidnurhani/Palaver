@@ -8,6 +8,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.util.Date;
 import java.util.Objects;
 
@@ -58,7 +60,7 @@ public class ChatRoomActivity extends AppCompatActivity {
                 String message = messageEditText.getText().toString();
                 Message chatItem = new Message(SessionManager.getSessionManagerInstance(getApplicationContext()).getUser().getUserData().getUserName(),
                         messageManager.getFriend().getUsername(), MessageType.OUT, message, "true", new Date());
-                messageManager.sendMessage(getApplicationContext(), chatItem);
+                messageManager.sendMessage(getApplicationContext(), ChatRoomActivity.this, chatItem);
                 messageEditText.setText("");
             }
         });

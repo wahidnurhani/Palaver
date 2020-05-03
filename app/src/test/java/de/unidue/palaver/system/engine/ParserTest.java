@@ -3,6 +3,8 @@ package de.unidue.palaver.system.engine;
 import org.json.JSONException;
 import org.junit.Test;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.util.Date;
 
 import de.unidue.palaver.system.model.Message;
@@ -32,7 +34,7 @@ public class ParserTest {
     }
 
     @Test
-    public void stringToDate() {
+    public void stringToDate() throws ParseException {
         Parser parser = new Parser();
         String date = "2016-02-12T17:01:44.623";
         System.out.println(parser.stringToDateFromServer(date).toGMTString());
@@ -81,11 +83,24 @@ public class ParserTest {
         CommunicatorResult<Message> communicatorResult = null;
         try {
             communicatorResult = parser.getChatDataParser(respose, "false", "stefan");
-        } catch (JSONException e) {
+        } catch (JSONException | ParseException e) {
             e.printStackTrace();
         }
         assert communicatorResult != null;
         assertEquals(1, communicatorResult.getResponseValue());
         System.out.println(communicatorResult.toString());
+    }
+
+    @Test
+    public void dateToString() throws ParseException {
+        Parser parser = new Parser();
+        Date date = new Date();
+        System.out.println(date.toString());
+        String dateString = parser.dateToString(date);
+        System.out.println(dateString);
+        Date date1 = parser.stringToDateFromDataBase(dateString);
+        System.out.println(date1);
+
+
     }
 }

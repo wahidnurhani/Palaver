@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Build;
 import android.util.Log;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -245,12 +246,17 @@ public class PalaverDB implements IPalaverDB{
                 }else {
                     messageType = MessageType.INCOMMING;
                 }
-                Message message = new Message(cursor.getString(1),
-                        cursor.getString(2),
-                        messageType,
-                        cursor.getString(4),
-                        cursor.getString(5),
-                        cursor.getString(6));
+                Message message = null;
+                try {
+                    message = new Message(cursor.getString(1),
+                            cursor.getString(2),
+                            messageType,
+                            cursor.getString(4),
+                            cursor.getString(5),
+                            cursor.getString(6));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
                 messageList.add(message);
             }
             Log.i(TAG, "get All ChatData from: "+friend);
@@ -271,5 +277,9 @@ public class PalaverDB implements IPalaverDB{
     @Override
     public synchronized boolean updateDateTimeValue(Friend friend, Message message, String newDate) {
         return false;
+    }
+
+    public void deleteMessage(Message message) {
+        //TODO
     }
 }

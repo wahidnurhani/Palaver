@@ -58,6 +58,7 @@ public class ChatManagerActivity extends AppCompatActivity {
         uiManager = palaver.getUiManager();
         chatManager = palaver.getChatManager();
 
+
         if(!SessionManager.getSessionManagerInstance(getApplicationContext()).chekLogin()){
             uiManager.openLoginActivity(ChatManagerActivity.this);
         }

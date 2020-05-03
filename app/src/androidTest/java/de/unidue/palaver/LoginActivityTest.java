@@ -38,7 +38,7 @@ public class LoginActivityTest {
                 check(matches(isDisplayed()));
         onView(withId(R.id.login_password_editText)).
                 check(matches(isDisplayed()));
-        onView(withId(R.id.login_register_textView)).
+        onView(withId(R.id.login_register_button)).
                 check(matches(isDisplayed()));
 
         onView(withId(R.id.login_userName_editText)).
@@ -50,7 +50,7 @@ public class LoginActivityTest {
 
         Thread.sleep(1000 /*Or any other time*/);
 
-        onView(withId(R.id.login_register_textView)).
+        onView(withId(R.id.login_register_button)).
                 perform(click());
 
         Thread.sleep(3000 /*Or any other time*/);

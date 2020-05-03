@@ -2,6 +2,7 @@ package de.unidue.palaver.system.model;
 
 
 import java.io.Serializable;
+import java.text.ParseException;
 import java.util.Date;
 import de.unidue.palaver.system.engine.Parser;
 import de.unidue.palaver.system.resource.MessageType;
@@ -16,7 +17,7 @@ public class Message implements Comparable<Message>, Serializable {
     private boolean isRead;
     private Date date;
 
-    public Message(String sender, String recipient, MessageType messageType, String message, String isReadStatus, String date) {
+    public Message(String sender, String recipient, MessageType messageType, String message, String isReadStatus, String date) throws ParseException {
         this.sender = sender;
         this.recipient = recipient;
         this.messageType = messageType;

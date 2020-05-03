@@ -37,7 +37,7 @@ public class LoginActivity extends AppCompatActivity {
         uiManager = Palaver.getInstance().getUiManager();
 
         Button loginButton = findViewById(R.id.login_login_button);
-        TextView toRegisterTextView = findViewById(R.id.login_register_textView);
+        TextView toRegisterTextView = findViewById(R.id.login_register_button);
 
         userNameEditText = findViewById(R.id.login_userName_editText);
         passwordEditText = findViewById(R.id.login_password_editText);

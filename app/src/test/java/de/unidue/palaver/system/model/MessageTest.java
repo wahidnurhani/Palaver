@@ -2,6 +2,7 @@ package de.unidue.palaver.system.model;
 
 import org.junit.Test;
 
+import java.text.ParseException;
 import java.util.Date;
 
 import de.unidue.palaver.system.resource.MessageType;
@@ -32,13 +33,6 @@ public class MessageTest {
     }
 
     @Test
-    public void getChatItemAlignment() {
-        Friend friend = new Friend("Test");
-        Message message = new Message(friend.getUsername(), "saya", MessageType.INCOMMING, "Hallo World", "true", new Date());
-        assertSame(message.getChatItemAlignment(), ChatItemAlignment.LEFT);
-    }
-
-    @Test
     public void getIsReadStatus() {
         Friend friend = new Friend("Test");
         Message message = new Message(friend.getUsername(), "saya", MessageType.INCOMMING, "Hallo World", "false", new Date());
@@ -50,7 +44,7 @@ public class MessageTest {
     }
 
     @Test
-    public void getDate() {
+    public void getDate() throws ParseException {
         Friend friend = new Friend("Test");
         Message message = new Message(friend.getUsername(), "saya", MessageType.INCOMMING, "Hallo World", "true", "2016-02-12 17:02:38.663");
         assertNotNull(message.getDate());

@@ -11,11 +11,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.ChatRoomActivity"/>
+        <activity android:name=".ui.ChatRoomActivity"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden"
+            />
         <activity android:name=".ui.FriendManagerActivity" />
         <activity android:name=".ui.ChatManagerActivity" />
-        <activity android:name=".ui.RegisterActivity" />
-        <activity android:name=".ui.LoginActivity" />
+        <activity android:name=".ui.RegisterActivity"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".ui.LoginActivity"
+            android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".ui.SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,6 +30,7 @@
         <service android:name=".system.service.ServiceFetchFriend" />
         <service android:name=".system.service.ServiceAddFriend" />
         <service android:name=".system.service.ServiceFetchAllChat"/>
+        <service android:name=".system.service.ServiceSendMessage"/>
     </application>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 

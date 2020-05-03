@@ -1,5 +1,7 @@
 package de.unidue.palaver.system.resource;
 
+import android.content.Intent;
+
 public class StringValue {
 
     public static class ErrorMessage {
@@ -21,6 +23,7 @@ public class StringValue {
     public static class IntentKeyName {
         public static final String FRIEND = "INTENT_FRIEND";
         public static final String BROADCAST_FRIENDADDED_MESSAGE_RESULT = "INTENT_ADDFRIEND_RESULT";
+        public static final String MESSAGE = "INTENT_MESSAGE";
     }
 
     public static class IntentAction {
