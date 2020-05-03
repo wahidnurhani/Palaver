@@ -3,6 +3,7 @@ package de.unidue.palaver.ui;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -29,6 +30,7 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText passwordEditText;
     private EditText rePasswordEditText;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,7 +43,7 @@ public class RegisterActivity extends AppCompatActivity {
         userNameEditText = findViewById(R.id.register_userName_editText);
         passwordEditText = findViewById(R.id.register_password_editText);
         rePasswordEditText = findViewById(R.id.register_repassword_editText);
-        TextView backToLoginTextView = findViewById(R.id.register_backToLogin_textView);
+        TextView backToLoginTextView = findViewById(R.id.register_backToLogin);
 
         registerButton.setOnClickListener(e -> {
             if(validateUserInput()){
@@ -93,5 +95,11 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         visibility=false;
+    }
+
+    @Override
+    public void onBackPressed() {
+        uiManager.openLoginActivity(RegisterActivity.this);
+        overridePendingTransition(0,0);
     }
 }

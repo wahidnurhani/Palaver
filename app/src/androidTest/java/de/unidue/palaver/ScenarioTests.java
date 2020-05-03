@@ -84,7 +84,7 @@ public class ScenarioTests {
         onView(withId(R.id.register_register_button)).
                 perform(click());
 
-        onView(withId(R.id.register_backToLogin_textView)).
+        onView(withId(R.id.register_backToLogin)).
                 perform(click());
 
         Thread.sleep(3000 /*Or any other time*/);

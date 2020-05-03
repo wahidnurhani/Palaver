@@ -19,7 +19,7 @@
         <activity android:name=".ui.RegisterActivity"
             android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".ui.LoginActivity"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
         <activity android:name=".ui.SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
