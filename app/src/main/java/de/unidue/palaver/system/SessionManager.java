@@ -9,7 +9,6 @@ import de.unidue.palaver.system.model.UserData;
 
 public class SessionManager {
 
-    private String status = "inactive";
     private SharedPreferences pref;
     private Context context;
     private SharedPreferences.Editor editor;
@@ -58,7 +57,6 @@ public class SessionManager {
     }
 
     public void startSession(String userName, String password){
-        this.status="active";
         createLoginSession(userName,password);
     }
 
@@ -68,11 +66,9 @@ public class SessionManager {
     }
 
     public void endSession(){
-        this.status="inactive";
-
         editor.clear();
         editor.commit();
-        Palaver.getInstance().getPalaverDB().deleteAllDataOnDataBase();
+        sessionManagerInstance=null;
     }
 
     public boolean chekLogin(){

@@ -31,6 +31,7 @@ public class Palaver implements IPalaver{
 
     @Override
     public void destroy() {
+        palaverDB.deleteAllDataOnDataBase();
         palaverInstance = null;
     }
 
