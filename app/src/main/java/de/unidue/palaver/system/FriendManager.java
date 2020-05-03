@@ -36,17 +36,22 @@ public class FriendManager {
         }
     }
 
-    public void search(String string){
+    public List<Friend> search(String string){
+        List<Friend> result = new ArrayList<>();
         friendArrayAdapter.clear();
-        for (Friend friend: friendList ) {
-            if(friend.getUsername().contains(string)){
-                friendArrayAdapter.add(friend);
-            }
-        }
         if(string.equals("")){
-            friendArrayAdapter.clear();
             friendArrayAdapter.addAll(friendList);
+            result = friendList;
+        } else {
+            friendArrayAdapter.clear();
+            for (Friend friend: friendList ) {
+                if(friend.getUsername().contains(string)){
+                    result.add(friend);
+                }
+            }
+            friendArrayAdapter.addAll(result);
         }
+        return result;
     }
 
     public void updateFriends() {

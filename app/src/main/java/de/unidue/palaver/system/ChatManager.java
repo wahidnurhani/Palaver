@@ -57,11 +57,18 @@ public class ChatManager {
 
     public List<MessageManager> search(String string){
         List<MessageManager> result = new ArrayList<>();
-        for (MessageManager messageManager : messageManagers
-        ) {
-            if(messageManager.getFriend().getUsername().contains(string)){
-                result.add(messageManager);
+        chatArrayAdapter.clear();
+        if(string.equals("")){
+            chatArrayAdapter.addAll(messageManagers);
+            result = messageManagers;
+        } else {
+            for (MessageManager messageManager : messageManagers
+            ) {
+                if(messageManager.getFriend().getUsername().contains(string)){
+                    result.add(messageManager);
+                }
             }
+            chatArrayAdapter.addAll(result);
         }
         return result;
     }
