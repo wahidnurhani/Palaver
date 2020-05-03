@@ -3,12 +3,18 @@ package de.unidue.palaver.system.engine;
 import android.app.Activity;
 import android.content.Context;
 
+import java.util.List;
+
 import de.unidue.palaver.system.Palaver;
 import de.unidue.palaver.system.SessionManager;
+import de.unidue.palaver.system.model.Message;
+import de.unidue.palaver.system.model.CommunicatorResult;
 import de.unidue.palaver.system.resource.StringValue;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.User;
 import de.unidue.palaver.system.service.ServiceAddFriend;
+import de.unidue.palaver.system.service.ServiceFetchAllChat;
+import de.unidue.palaver.ui.LoginActivity;
 
 public class PalaverEngine implements IPalaverEngine {
 
@@ -27,19 +33,23 @@ public class PalaverEngine implements IPalaverEngine {
     }
 
     @Override
-    public void handleSendMessage(Friend friend, String message) {
-        //TODO
+    public void handleSendMessage(Context applicationContext, Friend friend, Message message) {
+        Palaver.getInstance().getPalaverDB().insertChatItem(friend, message);
+        //ServiceSendMessage.startIntent(applicationContext, )
     }
 
     @Override
-    public void handleFetchAllFriendRequest(User user) {
-        communicator.fetchFriends(user);
+    public void handleFetchAllFriendRequestWithNoService(User user) {
+        List<Friend> friends = communicator.fetchFriends(user).getData();
+        for (Friend friend : friends){
+            palaver.getPalaverDB().insertFriend(friend);
+        }
     }
 
     @Override
     public void handleRegisterRequest(Context context, User user) {
         if(communicator.checkConnectivity(context)){
-            authentificator.register(context, user.getUserData().getUserName(),
+            authentificator.register((Activity) context, user.getUserData().getUserName(),
                     user.getUserData().getPassword());
         } else{
             palaver.getUiManager().showToast(context, StringValue.ErrorMessage.NO_INTERNET);
@@ -47,12 +57,12 @@ public class PalaverEngine implements IPalaverEngine {
     }
 
     @Override
-    public void handleLoginRequest(Context context, User user) {
-        if(communicator.checkConnectivity(context)){
-            authentificator.authentificate(context, user.getUserData().getUserName(),
+    public void handleLoginRequest(Context applicationContext, LoginActivity loginActivity, User user) {
+        if(communicator.checkConnectivity(applicationContext)){
+            authentificator.authentificate(applicationContext, loginActivity,  user.getUserData().getUserName(),
                     user.getUserData().getPassword());
         } else{
-            palaver.getUiManager().showToast(context, StringValue.ErrorMessage.NO_INTERNET);
+            palaver.getUiManager().showToast(applicationContext, StringValue.ErrorMessage.NO_INTERNET);
         }
     }
 
@@ -69,5 +79,20 @@ public class PalaverEngine implements IPalaverEngine {
 
     public void handleAddFriendRequest(Context applicationContext, Activity activity, String username) {
         ServiceAddFriend.startIntent(applicationContext, activity, username);
+    }
+
+    public void handleFetchAllChatRequestWithNoService(Context applicationContext) {
+        List<Friend> friends = palaver.getPalaverDB().getAllFriends();
+
+        for(Friend friend : friends){
+            CommunicatorResult<Message> communicatorResult = communicator.getMessage(SessionManager.getSessionManagerInstance(applicationContext).getUser(), friend);
+            for(Message message : communicatorResult.getData()){
+                palaver.getPalaverDB().insertChatItem(friend, message);
+            }
+        }
+    }
+
+    public void handleFetchAllChatRequestWithService(Context applicationContext, Activity activity) {
+        ServiceFetchAllChat.startIntent(applicationContext, activity);
     }
 }

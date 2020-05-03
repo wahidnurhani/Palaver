@@ -22,7 +22,8 @@ class Authentificator {
 
     private Palaver palaver;
     private UIManager uiManager;
-    private Context context;
+    private Context applicationContext;
+    private Activity activity;
     private int method;
     private ProgressDialog progressDialog;
 
@@ -31,27 +32,28 @@ class Authentificator {
         uiManager = palaver.getUiManager();
     }
 
-    void register(Context context, String userName, String password) {
+    void register(Activity activity, String userName, String password) {
         this.method = 2;
-        this.context = context;
+        this.activity = activity;
         User user = new User(new UserData(userName, password));
         String cmd = StringValue.APICmd.REGISTER;
         MyParam myParam = new MyParam(user, cmd);
         FetchAuthentification fetchAuthentification = new FetchAuthentification();
         fetchAuthentification.execute(myParam);
-        progressDialog = new ProgressDialog((Activity) context);
+        progressDialog = new ProgressDialog(activity);
         progressDialog.startDialog();
     }
 
-    void authentificate(Context context, String userName, String password) {
+    void authentificate(Context applicationContext, Activity activity, String userName, String password) {
         this.method = 1;
-        this.context = context;
+        this.applicationContext = applicationContext;
+        this.activity = activity;
         User user = new User(new UserData(userName, password));
         String cmd = StringValue.APICmd.VALIDATE;
         MyParam myParam = new MyParam(user, cmd);
         FetchAuthentification fetchAuthentification = new FetchAuthentification();
         fetchAuthentification.execute(myParam);
-        progressDialog = new ProgressDialog((Activity) context);
+        progressDialog = new ProgressDialog(activity);
         progressDialog.startDialog();
     }
 
@@ -88,19 +90,23 @@ class Authentificator {
             }
             if(returnValue[0].equals("1")){
                 if(myParams[0].getCmd().equals(StringValue.APICmd.VALIDATE)){
-                    SessionManager.getSessionManagerInstance(context).setUser(user);
-                    SessionManager.getSessionManagerInstance(context).startSession(user.getUserData().getUserName(),
+                    SessionManager.getSessionManagerInstance(applicationContext).setUser(user);
+                    SessionManager.getSessionManagerInstance(applicationContext).startSession(user.getUserData().getUserName(),
                             user.getUserData().getPassword());
                     Intent intent = new Intent(StringValue.IntentAction.BROADCAST_AUTHENTIFICATED);
-                    LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+                    LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent);
                     try {
-                        palaver.getPalaverEngine().handleFetchAllFriendRequest(myParams[0].getUser());
+
+                        palaver.getPalaverEngine().handleFetchAllFriendRequestWithNoService(myParams[0].getUser());
+
+                        palaver.getPalaverEngine().handleFetchAllChatRequestWithNoService(applicationContext);
+
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 } else {
                     Intent intent = new Intent(StringValue.IntentAction.BROADCAST_USER_REGISTERED);
-                    LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+                    LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent);
                 }
             }
             return returnValue;
@@ -108,22 +114,21 @@ class Authentificator {
 
         @Override
         protected void onProgressUpdate(Void... values) {
-            //showDialog("Loging in ...");
         }
 
         @Override
         protected void onPostExecute(String[] objects) {
             progressDialog.dismissDialog();
             if (!objects[0].equals("1")) {
-                palaver.getUiManager().showToast(context, objects[1]);
+                palaver.getUiManager().showToast(applicationContext, objects[1]);
             } else {
                 if(method==1){
-                    Palaver.getInstance().getUiManager().openSplashScreenActivity(context);
-                    ((Activity)context).overridePendingTransition(0,0);
+                    Palaver.getInstance().getUiManager().openSplashScreenActivity(activity);
+                    activity.overridePendingTransition(0,0);
                 } else {
-                    uiManager.showToast(context, objects[1]);
-                    uiManager.openLoginActivity(context);
-                    ((Activity)context).overridePendingTransition(0,0);
+                    uiManager.showToast(applicationContext, objects[1]);
+                    uiManager.openLoginActivity(activity);
+                    activity.overridePendingTransition(0,0);
                 }
 
             }

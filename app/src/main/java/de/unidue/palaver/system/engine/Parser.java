@@ -12,10 +12,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import de.unidue.palaver.system.SessionManager;
-import de.unidue.palaver.system.model.ChatItem;
+import de.unidue.palaver.system.model.Message;
 import de.unidue.palaver.system.model.CommunicatorResult;
-import de.unidue.palaver.system.resource.ChatItemType;
+import de.unidue.palaver.system.resource.MessageType;
 import de.unidue.palaver.system.resource.StringValue;
 import de.unidue.palaver.system.model.Friend;
 
@@ -204,13 +203,13 @@ public class Parser {
         return communicatorResult;
     }
 
-    public CommunicatorResult<ChatItem> getChatDataParser(String result, String isMessageRead, String friendUserName)throws JSONException{
-        CommunicatorResult<ChatItem> communicatorResult;
+    public CommunicatorResult<Message> getChatDataParser(String result, String isMessageRead, String friendUserName)throws JSONException{
+        CommunicatorResult<Message> communicatorResult;
         JSONObject jsonObject = new JSONObject(result);
         int msgType = jsonObject.getInt(StringValue.JSONKeyName.MSG_TYPE);
         String info = jsonObject.getString(StringValue.JSONKeyName.INFO);
         JSONArray jsonArray = jsonObject.getJSONArray(StringValue.JSONKeyName.DATA);
-        List<ChatItem> chatItemList = new ArrayList<>();
+        List<Message> messageList = new ArrayList<>();
 
         if(msgType==1){
             for (int i =0 ; i<jsonArray.length();i++){
@@ -218,17 +217,18 @@ public class Parser {
                 String sender = oneChat.getString(StringValue.JSONKeyName.SENDER);
                 String recipient = oneChat.getString(StringValue.JSONKeyName.RECIPIENT);
                 String data = oneChat.getString(StringValue.JSONKeyName.DATA);
+                String mimeType = oneChat.getString((StringValue.JSONKeyName.MIME_TYPE));
                 String dateTime = oneChat.getString(StringValue.JSONKeyName.DATE_TIME);
                 String[] dateTimeValid= dateTime.split("\\.");
-                ChatItemType chatItemType;
+                MessageType messageType;
                 if (sender.equals(friendUserName)){
-                    chatItemType = ChatItemType.INCOMMING;
+                    messageType = MessageType.INCOMMING;
                 } else {
-                    chatItemType = ChatItemType.OUT;
+                    messageType = MessageType.OUT;
                 }
-                chatItemList.add(new ChatItem(sender, recipient, chatItemType, data, isMessageRead, dateTimeValid[0]));
+                messageList.add(new Message(sender, recipient, messageType, data, isMessageRead, stringToDateFromServer(dateTimeValid[0])));
             }
-            communicatorResult = new CommunicatorResult<>(msgType, info, chatItemList);
+            communicatorResult = new CommunicatorResult<>(msgType, info, messageList);
         } else {
             communicatorResult = new CommunicatorResult<>(msgType, info, null);
         }

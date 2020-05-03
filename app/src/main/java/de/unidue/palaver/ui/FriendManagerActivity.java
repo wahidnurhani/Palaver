@@ -25,7 +25,7 @@ import de.unidue.palaver.system.resource.StringValue;
 import de.unidue.palaver.system.UIManager;
 import de.unidue.palaver.system.engine.Communicator;
 import de.unidue.palaver.system.engine.PalaverEngine;
-import de.unidue.palaver.system.model.Chat;
+import de.unidue.palaver.system.MessageManager;
 
 public class FriendManagerActivity extends AppCompatActivity {
     private static boolean visibility;
@@ -38,7 +38,7 @@ public class FriendManagerActivity extends AppCompatActivity {
     private BroadcastReceiver friendAddeddMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            String addFriendResult = intent.getCharSequenceExtra(StringValue.IntentKeyName.BROADCAST_FRIENDADDED_RESULT).toString();
+            String addFriendResult = intent.getCharSequenceExtra(StringValue.IntentKeyName.BROADCAST_FRIENDADDED_MESSAGE_RESULT).toString();
             if(communicator.checkConnectivity(getApplicationContext())){
                 uiManager.showToast(FriendManagerActivity.this, addFriendResult);
                 friendManager.updateFriends();
@@ -104,15 +104,17 @@ public class FriendManagerActivity extends AppCompatActivity {
 
         ListView friendsListView = findViewById(R.id.friendManager_recycleView);
         friendManager.initArrayAdapter(FriendManagerActivity.this,
-                R.id.friend_list_item_textview,
                 R.layout.friend_list_item_layout);
 
         friendsListView.setAdapter(friendManager.getFriendArrayAdapter());
 
         friendsListView.setOnItemClickListener((parent, view, position, id) -> {
-            chatManager.addChat(new Chat(friendManager.getFriendArrayAdapter().getItem(position)));
-            uiManager.openChat(FriendManagerActivity.this,
-                    Objects.requireNonNull(friendManager.getFriendArrayAdapter().getItem(position)));
+            MessageManager messageManager = chatManager.getChat(friendManager.getFriendArrayAdapter().getItem(position));
+            if(messageManager ==null){
+                messageManager = new MessageManager(friendManager.getFriendArrayAdapter().getItem(position));
+                chatManager.addChat(messageManager);
+            }
+            uiManager.openChat(FriendManagerActivity.this, messageManager);
         });
     }
 
@@ -121,6 +123,12 @@ public class FriendManagerActivity extends AppCompatActivity {
         super.onResume();
         visibility=true;
         friendManager.updateFriends();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        visibility = false;
     }
 
     @Override

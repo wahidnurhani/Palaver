@@ -66,14 +66,14 @@ public class CommunicatorResult<T> {
                 return "Msg Type :"+responseValue+" , "+"message : "+message+" , data : "+stringBuilder.toString();
             }
 
-            if (data.get(0) instanceof ChatItem){
+            if (data.get(0) instanceof Message){
                 StringBuilder stringBuilder = new StringBuilder();
                 stringBuilder.append("[ ");
                 for (T chatItem : data){
-                    stringBuilder.append(((ChatItem)chatItem).getMessage()).append(", ");
+                    stringBuilder.append(((Message)chatItem).getMessage()).append("  "+((Message) chatItem).getDate().toString()).append(", ");
                 }
                 stringBuilder.append(" ]");
-                return "Msg Type :"+responseValue+" , "+"message : "+message+" , data : "+stringBuilder.toString();
+                return "Msg Type :"+responseValue+" , "+"message : "+message+" , data : "+stringBuilder.toString() ;
             }
         }
 

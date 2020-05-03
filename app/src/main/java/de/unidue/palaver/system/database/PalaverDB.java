@@ -13,9 +13,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import de.unidue.palaver.system.model.Chat;
-import de.unidue.palaver.system.model.ChatItem;
-import de.unidue.palaver.system.resource.ChatItemType;
+import de.unidue.palaver.system.MessageManager;
+import de.unidue.palaver.system.SessionManager;
+import de.unidue.palaver.system.model.Message;
+import de.unidue.palaver.system.resource.MessageType;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.User;
 import de.unidue.palaver.system.resource.DBContract;
@@ -64,12 +65,12 @@ public class PalaverDB implements IPalaverDB{
     }
 
     @Override
-    public Chat getChat(Friend friend) {
+    public MessageManager getChat(Friend friend) {
         return null;
     }
 
     @Override
-    public synchronized boolean insertContact(Friend friend) {
+    public synchronized boolean insertFriend(Friend friend) {
         boolean returnValue=false;
         ContentValues contentValues = new ContentValues();
         contentValues.put(DBContract.TableContact.COLUMN_FRIEND_NAME, friend.getUsername());
@@ -82,15 +83,15 @@ public class PalaverDB implements IPalaverDB{
     }
 
     @Override
-    public synchronized boolean insertChatData(Friend friend, ChatItem chatItem) {
+    public synchronized boolean insertChatItem(Friend friend, Message message) {
         boolean returnValue= false;
         String contactString = friend.getUsername();
-        String sender = chatItem.getSender();
-        String recipient = chatItem.getRecipient();
-        String mimeType = chatItem.getMimeType();
-        String data = chatItem.getMessage();
-        String isRead = Boolean.toString(chatItem.getIsReadStatus());
-        String dateTime = chatItem.getDate().toString();
+        String sender = message.getSender();
+        String recipient = message.getRecipient();
+        String mimeType = message.getMimeType();
+        String data = message.getMessage();
+        String isRead = Boolean.toString(message.getIsReadStatus());
+        String dateTime = message.getDateToString();
         ContentValues contentValues = new ContentValues();
         contentValues.put(DBContract.TableChatData.COLUMN_FKCHAT, contactString);
         contentValues.put(DBContract.TableChatData.COLUMN_CHAT_SENDER, sender);
@@ -187,26 +188,25 @@ public class PalaverDB implements IPalaverDB{
     }
 
     @Override
-    public synchronized List<Chat> getAllChat( User user ) {
-        List<Chat> chatList = new ArrayList<>();
+    public List<MessageManager> getAllChat() {
         List<Friend> friendsList = getAllFriends();
+        List<MessageManager> messageManagerList = new ArrayList<>();
 
         for(Friend friend:friendsList){
-            List<ChatItem>chatItems= getAllChatData(user, friend.getUsername());
-            if(chatItems.size()>0){
-
-                Chat tmp= new Chat(friend);
-                tmp.setChatItems(chatItems);
-                chatList.add(tmp);
+            List<Message> messages = getAllChatData(friend);
+            if(messages.size()>0){
+                MessageManager tmp= new MessageManager(friend);
+                tmp.setChatItems(messages);
+                messageManagerList.add(tmp);
             }
         }
-        Collections.sort(chatList);
-        return chatList;
+        Collections.sort(messageManagerList);
+        return messageManagerList;
     }
 
     @Override
-    public synchronized List<Friend> getAllFriends() {
-        List<Friend> contactList = new ArrayList<>();
+    public List<Friend> getAllFriends() {
+        List<Friend> friendList = new ArrayList<>();
         @SuppressLint("Recycle") Cursor cursor = sqLiteDatabase.query(
                 DBContract.TableContact.TABLE_FFRIEND_NAME,
                 new String[]{DBContract.TableContact.COLUMN_FRIEND_NAME},null, null,
@@ -215,15 +215,15 @@ public class PalaverDB implements IPalaverDB{
         if (cursor!=null && cursor.getCount()>0){
             while (cursor.moveToNext()){
                 Friend friend = new Friend(cursor.getString(0));
-                contactList.add(friend);
+                friendList.add(friend);
             }
         }
-        return contactList;
+        return friendList;
     }
 
     @Override
-    public synchronized List<ChatItem> getAllChatData(User user, String friend) {
-        List<ChatItem> chatDataList= new ArrayList<>();
+    public List<Message> getAllChatData(Friend friend) {
+        List<Message> messageList= new ArrayList<>();
         @SuppressLint("Recycle") Cursor cursor = sqLiteDatabase.query(
                 DBContract.TableChatData.TABLE_CHAT_DATA_NAME,
                 new String[]{DBContract.TableChatData.COLUMN_FKCHAT,
@@ -233,32 +233,33 @@ public class PalaverDB implements IPalaverDB{
                         DBContract.TableChatData.COLUMN_CHAT_DATA,
                         DBContract.TableChatData.COLUMN_CHAT_DATA_ISREAD,
                         DBContract.TableChatData.COLUMN_CHAT_DATETIME},
-                DBContract.TableChatData.COLUMN_FKCHAT+"=?", new String[]{friend},
+                DBContract.TableChatData.COLUMN_FKCHAT+"=?", new String[]{friend.getUsername()},
                 null,null, DBContract.TableChatData.COLUMN_CHAT_DATETIME);
 
         if (cursor!=null && cursor.getCount()>0){
             while (cursor.moveToNext()){
-                ChatItemType chatItemType;
+                MessageType messageType;
+                User user = SessionManager.getSessionManagerInstance(contex).getUser();
                 if(cursor.getString(1).equals(user.getUserData().getUserName())){
-                    chatItemType = ChatItemType.OUT;
+                    messageType = MessageType.OUT;
                 }else {
-                    chatItemType = ChatItemType.INCOMMING;
+                    messageType = MessageType.INCOMMING;
                 }
-                ChatItem chatItem = new ChatItem(cursor.getString(1),
+                Message message = new Message(cursor.getString(1),
                         cursor.getString(2),
-                        chatItemType,
+                        messageType,
                         cursor.getString(4),
                         cursor.getString(5),
                         cursor.getString(6));
-                chatDataList.add(chatItem);
+                messageList.add(message);
             }
             Log.i(TAG, "get All ChatData from: "+friend);
         }
-        return chatDataList;
+        return messageList;
     }
 
     @Override
-    public synchronized boolean checkContact(String friend) {
+    public boolean checkContact(String friend) {
         @SuppressLint("Recycle") Cursor cursor = sqLiteDatabase.rawQuery(
                 DBContract.Query.checkContactExistenceBaseQuery+friend+")",null);
         if (cursor.getCount() == 1){
@@ -268,7 +269,7 @@ public class PalaverDB implements IPalaverDB{
     }
 
     @Override
-    public synchronized boolean updateDateTimeValue(Friend friend, ChatItem chatItem, String newDate) {
+    public synchronized boolean updateDateTimeValue(Friend friend, Message message, String newDate) {
         return false;
     }
 }

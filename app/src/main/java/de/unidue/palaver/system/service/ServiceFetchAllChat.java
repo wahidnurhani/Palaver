@@ -12,25 +12,28 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import java.util.List;
+
 import de.unidue.palaver.system.Palaver;
 import de.unidue.palaver.system.SessionManager;
 import de.unidue.palaver.system.database.PalaverDB;
-import de.unidue.palaver.system.model.CommunicatorResult;
-import de.unidue.palaver.system.resource.StringValue;
 import de.unidue.palaver.system.engine.Communicator;
+import de.unidue.palaver.system.model.Message;
+import de.unidue.palaver.system.model.CommunicatorResult;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.User;
+import de.unidue.palaver.system.resource.StringValue;
 
-public class ServiceAddFriend extends Service {
-    private static final String TAG= ServiceAddFriend.class.getSimpleName();
+public class ServiceFetchAllChat extends Service {
+    private static final String TAG= ServiceFetchAllChat.class.getSimpleName();
+
     private Palaver palaver;
-    private SessionManager sessionManager;
     private Communicator communicator;
     private PalaverDB palaverDB;
+    private SessionManager sessionManager;
 
-    public static void startIntent(Context applicationContext, Activity activity, String username) {
-        Intent intent = new Intent(applicationContext, ServiceAddFriend.class);
-        intent.putExtra(StringValue.IntentKeyName.FRIEND, username.trim());
+    public static void startIntent(Context applicationContext, Activity activity) {
+        Intent intent = new Intent(applicationContext, ServiceFetchAllChat.class);
         activity.startService(intent);
     }
 
@@ -46,36 +49,40 @@ public class ServiceAddFriend extends Service {
         sessionManager = SessionManager.getSessionManagerInstance(getApplicationContext());
         communicator = Palaver.getInstance().getPalaverEngine().getCommunicator();
         palaverDB = Palaver.getInstance().getPalaverDB();
-        String friendUsername = intent.getCharSequenceExtra(StringValue.IntentKeyName.FRIEND).toString();
-        FetchAddFriend fetchAddFriend= new FetchAddFriend();
-        fetchAddFriend.execute(new Friend(friendUsername));
+        FetchAllChat fetchAllChat = new FetchAllChat();
+        fetchAllChat.execute("all");
         return START_STICKY;
     }
 
-    @Override
     public void onDestroy() {
         super.onDestroy();
         Log.i(TAG, StringValue.LogMessage.SERVICE_DESTROYED);
     }
 
     @SuppressLint("StaticFieldLeak")
-    private class FetchAddFriend extends AsyncTask<Friend, Void, CommunicatorResult<Friend>> {
+    private class FetchAllChat extends AsyncTask<String, Void, CommunicatorResult<Message>> {
 
         @Override
-        protected CommunicatorResult<Friend> doInBackground(Friend... friends) {
+        protected CommunicatorResult<Message> doInBackground(String... strings) {
+            CommunicatorResult<Message> result = null;
             User user = sessionManager.getUser();
-            CommunicatorResult<Friend> resultValue = communicator.addFriend(user, friends[0].getUsername());
-            if(resultValue.getResponseValue()==1){
-                palaverDB.insertFriend(friends[0]);
-                Intent intent = new Intent(StringValue.IntentAction.BROADCAST_FRIENDADDED);
-                intent.putExtra(StringValue.IntentKeyName.BROADCAST_FRIENDADDED_MESSAGE_RESULT, resultValue.getMessage());
-                LocalBroadcastManager.getInstance(ServiceAddFriend.this).sendBroadcast(intent);
+            List<Friend> friends = palaverDB.getAllFriends();
+            for(Friend friend : friends){
+                result = communicator.getMessage(user, friend);
+                if(result.getResponseValue()==1){
+                    for (Message message : result.getData()){
+                        palaverDB.insertChatItem(friend, message);
+                    }
+                }
             }
-            return resultValue;
+
+            Intent intent = new Intent(StringValue.IntentAction.BROADCAST_ALL_CHAT_FETCHED);
+            LocalBroadcastManager.getInstance(ServiceFetchAllChat.this).sendBroadcast(intent);
+            return result;
         }
 
         @Override
-        protected void onPostExecute(CommunicatorResult<Friend> s) {
+        protected void onPostExecute(CommunicatorResult<Message> s) {
             super.onPostExecute(s);
             palaver.getUiManager().showToast(getApplicationContext(), s.getMessage());
 

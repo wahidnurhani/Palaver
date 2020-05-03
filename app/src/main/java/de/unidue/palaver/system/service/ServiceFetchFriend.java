@@ -10,8 +10,6 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-import java.util.List;
-
 import de.unidue.palaver.system.Palaver;
 import de.unidue.palaver.system.SessionManager;
 import de.unidue.palaver.system.database.PalaverDB;
@@ -57,7 +55,7 @@ public class ServiceFetchFriend extends Service {
             if(communicatorResult.getData().size()>0){
                 if(palaverDB.deleteAllContact()){
                     for(Friend friend : communicatorResult.getData()) {
-                        palaverDB.insertContact(friend);
+                        palaverDB.insertFriend(friend);
                     }
                 }
                 Intent intent = new Intent(StringValue.IntentAction.BROADCAST_ALL_FRIENDS_FETCHED);

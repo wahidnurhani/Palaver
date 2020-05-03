@@ -1,16 +1,12 @@
 package de.unidue.palaver.ui;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import java.util.Objects;
 
@@ -21,7 +17,6 @@ import de.unidue.palaver.system.UIManager;
 import de.unidue.palaver.system.engine.PalaverEngine;
 import de.unidue.palaver.system.model.User;
 import de.unidue.palaver.system.model.UserData;
-import de.unidue.palaver.system.service.ServiceFetchFriend;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -32,15 +27,6 @@ public class LoginActivity extends AppCompatActivity {
     private PalaverEngine palaverEngine;
     private UIManager uiManager;
 
-    private
-    BroadcastReceiver authentificationMessageReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            intent = new Intent(getApplicationContext(), ServiceFetchFriend.class);
-            startService(intent);
-
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,10 +35,6 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         palaverEngine = Palaver.getInstance().getPalaverEngine();
         uiManager = Palaver.getInstance().getUiManager();
-
-
-        LocalBroadcastManager.getInstance(this).registerReceiver(authentificationMessageReceiver,
-                new IntentFilter(StringValue.IntentAction.BROADCAST_AUTHENTIFICATED));
 
         Button loginButton = findViewById(R.id.login_login_button);
         TextView toRegisterTextView = findViewById(R.id.login_register_textView);
@@ -63,7 +45,7 @@ public class LoginActivity extends AppCompatActivity {
             if(validateUserInput()){
                 User user = new User(new UserData(userNameEditText.getText().toString(),
                         passwordEditText.getText().toString()));
-                palaverEngine.handleLoginRequest(LoginActivity.this, user);
+                palaverEngine.handleLoginRequest(getApplicationContext(), LoginActivity.this, user);
             }
         });
 
@@ -104,6 +86,5 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(authentificationMessageReceiver);
     }
 }

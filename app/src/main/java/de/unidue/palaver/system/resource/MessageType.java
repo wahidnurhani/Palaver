@@ -1,5 +1,5 @@
 package de.unidue.palaver.system.resource;
 
-public enum ChatItemType {
+public enum MessageType {
     INCOMMING, OUT;
 }

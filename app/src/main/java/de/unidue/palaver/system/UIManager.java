@@ -3,10 +3,10 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.Gravity;
 import android.widget.Toast;
 
-import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.resource.StringValue;
 import de.unidue.palaver.ui.AddFriendDialog;
 import de.unidue.palaver.ui.ChatManagerActivity;
@@ -69,9 +69,11 @@ public class UIManager {
         context.startActivity(intent);
     }
 
-    public void openChat(Context context, Friend item) {
+    public void openChat(Context context, MessageManager messageManager) {
         Intent intent = new Intent(context, ChatRoomActivity.class);
-        intent.putExtra(StringValue.IntentKeyName.FRIEND_USERNAME, item.getUsername());
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(StringValue.IntentKeyName.FRIEND, messageManager);
+        intent.putExtras(bundle);
         context.startActivity(intent);
     }
 }

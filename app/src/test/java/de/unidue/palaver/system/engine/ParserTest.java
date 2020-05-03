@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import java.util.Date;
 
-import de.unidue.palaver.system.model.ChatItem;
+import de.unidue.palaver.system.model.Message;
 import de.unidue.palaver.system.model.CommunicatorResult;
 import de.unidue.palaver.system.model.Friend;
 
@@ -78,7 +78,7 @@ public class ParserTest {
         String respose = "{\"MsgType\":1,\"Info\":\"Nachrichten abgerufen\"," +
                 "\"Data\":[{ \"Sender\":\"marc\", \"Recipient\": \"stefan\", \"Mimetype\":\"text/plain\", " +
                 "\"Data\":\"Blubber!\", \"DateTime\":\"2016-02-12T17:02:38.663\"}]}";
-        CommunicatorResult<ChatItem> communicatorResult = null;
+        CommunicatorResult<Message> communicatorResult = null;
         try {
             communicatorResult = parser.getChatDataParser(respose, "false", "stefan");
         } catch (JSONException e) {

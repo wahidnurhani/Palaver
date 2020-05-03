@@ -1,6 +1,8 @@
 package de.unidue.palaver.system.model;
 
-public class Friend implements Comparable<Friend>{
+import java.io.Serializable;
+
+public class Friend implements Comparable<Friend>, Serializable {
 
     private String username;
 

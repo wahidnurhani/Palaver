@@ -19,8 +19,8 @@ public class StringValue {
     }
 
     public static class IntentKeyName {
-        public static final String FRIEND_USERNAME = "INTENT_FRIEND_USERNAME";
-        public static final String BROADCAST_FRIENDADDED_RESULT = "INTENT_ADDFRIEND_RESULT";
+        public static final String FRIEND = "INTENT_FRIEND";
+        public static final String BROADCAST_FRIENDADDED_MESSAGE_RESULT = "INTENT_ADDFRIEND_RESULT";
     }
 
     public static class IntentAction {
@@ -28,6 +28,7 @@ public class StringValue {
         public static final String BROADCAST_AUTHENTIFICATED = "authentificated_broadcast";
         public static final String BROADCAST_ALL_FRIENDS_FETCHED = "friendfetched_broadcast";
         public static final String BROADCAST_USER_REGISTERED = "registered_broadcast";
+        public static final String BROADCAST_ALL_CHAT_FETCHED = "allChatfetched_broadcast";
     }
 
     public static class LogMessage {

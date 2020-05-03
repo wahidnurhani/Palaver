@@ -1,10 +1,14 @@
 package de.unidue.palaver.system.model;
 
+import android.content.Context;
+
+import de.unidue.palaver.system.MessageManager;
+
 public interface IChat {
 
-    void openChat();
+    void openChat(Context context, MessageManager messageManager);
 
-    ChatItem getLatestMessage();
+    Message getLatestMessage();
 
     void sort();
 

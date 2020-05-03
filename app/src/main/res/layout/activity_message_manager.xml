@@ -16,10 +16,13 @@
         >
 
         <ListView
-            android:id="@+id/chatRoom_chat_listView"
+            android:id="@+id/chatRoom_listView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="100"
+            android:stackFromBottom="true"
+            android:transcriptMode="normal"
+            android:divider="@null"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
             />
@@ -41,9 +44,10 @@
                 android:paddingLeft="15dp"
                 android:ems="10"
                 android:hint="message"
-                android:inputType="textPersonName"
                 android:background="@drawable/shape_round"
-                android:paddingRight="10dp" />
+                android:paddingRight="10dp"
+                android:inputType="textMultiLine"
+                android:imeOptions="actionNext"/>
 
             <Button
                 android:id="@+id/chatRoom_button_send"

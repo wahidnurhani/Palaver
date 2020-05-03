@@ -1,40 +1,45 @@
 package de.unidue.palaver.system;
 
 
+import android.content.Context;
+import android.os.AsyncTask;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import de.unidue.palaver.system.model.Chat;
+import de.unidue.palaver.system.database.PalaverDB;
 import de.unidue.palaver.system.model.Friend;
+import de.unidue.palaver.ui.arrayadapter.ChatArrayAdapter;
 
 public class ChatManager {
 
-    private List<Chat> chats;
+    private List<MessageManager> messageManagers;
+    private ChatArrayAdapter chatArrayAdapter;
 
     public ChatManager() {
-        this.chats = new ArrayList<>();
+        this.messageManagers = new ArrayList<>();
     }
 
-    public Chat getChat(Friend friend) {
-        for(Chat chat : chats){
-            if(chat.getFriend()==friend){
-                return chat;
+    public MessageManager getChat(Friend friend) {
+        for(MessageManager messageManager : messageManagers){
+            if(messageManager.getFriend()==friend){
+                return messageManager;
             }
         }
         return null;
     }
 
-    public void addChat(Chat chat) {
-        String friendUserName = chat.getFriend().getUsername();
+    public void addChat(MessageManager messageManager) {
+        String friendUserName = messageManager.getFriend().getUsername();
         if(!chatExist(friendUserName)){
-            chats.add(chat);
+            messageManagers.add(messageManager);
         }
     }
 
     private boolean chatExist(String userName) {
 
-        for(Chat tmp : chats){
+        for(MessageManager tmp : messageManagers){
             if(tmp.getFriend().getUsername().equals(userName)){
                 return true;
             }
@@ -42,40 +47,56 @@ public class ChatManager {
         return false;
     }
 
-    public boolean removeChat(Chat chat){
-        return chats.remove(chat);
+    public boolean removeChat(MessageManager messageManager){
+        return messageManagers.remove(messageManager);
     }
 
     public void sort(){
-        Collections.sort(chats);
+        Collections.sort(messageManagers);
     }
 
-    public void makeNewChat(Friend friend){
-        if(getChat(friend)==null){
-            Chat chat = new Chat(friend);
-            addChat(chat);
-            chat.openChat();
-        } else {
-            getChat(friend).openChat();
-        }
-    }
-
-    public List<Chat> search(String string){
-        List<Chat> result = new ArrayList<>();
-        for (Chat chat: chats
+    public List<MessageManager> search(String string){
+        List<MessageManager> result = new ArrayList<>();
+        for (MessageManager messageManager : messageManagers
         ) {
-            if(chat.getFriend().getUsername().contains(string)){
-                result.add(chat);
+            if(messageManager.getFriend().getUsername().contains(string)){
+                result.add(messageManager);
             }
         }
         return result;
     }
 
-    public void refreshView(){
-
+    public void initArrayAdapter(Context context, int layout) {
+        this.chatArrayAdapter = new ChatArrayAdapter(context, layout);
     }
 
-    public List<Chat> getChatList() {
-        return chats;
+    public ChatArrayAdapter getChatArrayAdapter() {
+        return chatArrayAdapter;
+    }
+
+    public void updateChatList() {
+        FectchChatListFromDB fectchChatListFromDB = new FectchChatListFromDB();
+        fectchChatListFromDB.execute();
+    }
+
+    public List<MessageManager> getChatList() {
+        return messageManagers;
+    }
+
+    private class FectchChatListFromDB extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            PalaverDB palaverDB = Palaver.getInstance().getPalaverDB();
+            messageManagers.clear();
+            messageManagers.addAll(palaverDB.getAllChat());
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            chatArrayAdapter.clear();
+            chatArrayAdapter.addAll(messageManagers);
+        }
     }
 }

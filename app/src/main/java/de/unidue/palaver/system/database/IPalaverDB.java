@@ -3,19 +3,18 @@ package de.unidue.palaver.system.database;
 import java.sql.SQLException;
 import java.util.List;
 
-import de.unidue.palaver.system.model.Chat;
-import de.unidue.palaver.system.model.ChatItem;
+import de.unidue.palaver.system.MessageManager;
+import de.unidue.palaver.system.model.Message;
 import de.unidue.palaver.system.model.Friend;
-import de.unidue.palaver.system.model.User;
 
 public interface IPalaverDB {
 
 
-    Chat getChat(Friend friend);
+    MessageManager getChat(Friend friend);
 
-    public boolean insertContact(Friend friend);
+    public boolean insertFriend(Friend friend);
 
-    public boolean insertChatData(Friend friend, ChatItem chatItem);
+    public boolean insertChatItem(Friend friend, Message message);
 
 
     //public boolean deleteUserData();
@@ -36,13 +35,13 @@ public interface IPalaverDB {
     //Update
     boolean updateIsReadValue(Friend friend);
 
-    public List<Chat> getAllChat(User user);
+    public List<MessageManager> getAllChat();
 
     public List<Friend> getAllFriends();
 
-    public List<ChatItem> getAllChatData(User user, String friend);
+    public List<Message> getAllChatData(Friend friend);
 
     public boolean checkContact(String friend);
 
-    boolean updateDateTimeValue(Friend friend, ChatItem chatItem, String newDate);
+    boolean updateDateTimeValue(Friend friend, Message message, String newDate);
 }

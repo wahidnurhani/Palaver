@@ -10,7 +10,7 @@ import java.util.List;
 
 import de.unidue.palaver.system.database.PalaverDB;
 import de.unidue.palaver.system.model.Friend;
-import de.unidue.palaver.ui.FriendArrayAdapter;
+import de.unidue.palaver.ui.arrayadapter.FriendArrayAdapter;
 
 public class FriendManager {
 
@@ -54,8 +54,8 @@ public class FriendManager {
         fetchFriendFromDB.execute();
     }
 
-    public void initArrayAdapter(Context context, int textViewID, int layout) {
-        this.friendArrayAdapter = new FriendArrayAdapter(context, textViewID, layout);
+    public void initArrayAdapter(Context context, int layout) {
+        this.friendArrayAdapter = new FriendArrayAdapter(context, layout);
     }
 
     @SuppressLint("StaticFieldLeak")

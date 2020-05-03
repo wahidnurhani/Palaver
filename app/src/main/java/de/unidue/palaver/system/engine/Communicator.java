@@ -19,7 +19,7 @@ import java.net.ProtocolException;
 import java.net.URL;
 import java.util.Date;
 
-import de.unidue.palaver.system.model.ChatItem;
+import de.unidue.palaver.system.model.Message;
 import de.unidue.palaver.system.model.CommunicatorResult;
 import de.unidue.palaver.system.resource.StringValue;
 import de.unidue.palaver.system.model.Friend;
@@ -385,13 +385,13 @@ public class Communicator {
     }
 
 
-    public CommunicatorResult<Date> sendMessage(User user, Friend friend, ChatItem chatItem) {
+    public CommunicatorResult<Date> sendMessage(User user, Friend friend, Message message) {
         CommunicatorResult<Date> resultValue=null;
         try {
             String cmd = StringValue.APICmd.SEND_MESSAGE;
             JSONObject body = jsonBuilder.formatBodySendMessageToJSON(user.getUserData().getUserName(),
                     user.getUserData().getPassword(), friend.getUsername(),
-                    chatItem.getMessage());
+                    message.getMessage());
 
             url = new URL(baseUrl+cmd);
             urlConnection = (HttpURLConnection) url.openConnection();
@@ -441,8 +441,8 @@ public class Communicator {
         return resultValue;
     }
 
-    public CommunicatorResult<ChatItem> getMessage(User user, Friend friend) {
-        CommunicatorResult<ChatItem> result=null;
+    public CommunicatorResult<Message> getMessage(User user, Friend friend) {
+        CommunicatorResult<Message> result=null;
         String cmd = StringValue.APICmd.GET_MESSAGE;
         try {
             JSONObject body = jsonBuilder.formatBodyGetChatToJSON(user.getUserData().getUserName(),

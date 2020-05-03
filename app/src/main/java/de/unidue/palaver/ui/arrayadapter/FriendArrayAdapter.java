@@ -1,4 +1,4 @@
-package de.unidue.palaver.ui;
+package de.unidue.palaver.ui.arrayadapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -15,8 +15,11 @@ import de.unidue.palaver.system.model.Friend;
 
 public class FriendArrayAdapter extends ArrayAdapter<Friend> {
 
-    public FriendArrayAdapter(@NonNull Context context, int resource, int textViewResourceId) {
-        super(context, resource, textViewResourceId);
+
+
+
+    public FriendArrayAdapter(@NonNull Context context, int resource) {
+        super(context, resource);
     }
 
     @Override

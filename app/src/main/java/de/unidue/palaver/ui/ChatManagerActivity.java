@@ -5,10 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
 import android.widget.SearchView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import de.unidue.palaver.system.ChatManager;
 import de.unidue.palaver.system.Palaver;
 import de.unidue.palaver.R;
 import de.unidue.palaver.system.SessionManager;
@@ -18,6 +20,7 @@ public class ChatManagerActivity extends AppCompatActivity {
     private static final String TAG= ChatManagerActivity.class.getSimpleName();
     private Palaver palaver;
     private UIManager uiManager;
+    private ChatManager chatManager;
     private static boolean visibility;
 
     public static boolean isVisibility() {
@@ -53,6 +56,7 @@ public class ChatManagerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat_manager);
         palaver = Palaver.getInstance();
         uiManager = palaver.getUiManager();
+        chatManager = palaver.getChatManager();
 
         if(!SessionManager.getSessionManagerInstance(getApplicationContext()).chekLogin()){
             uiManager.openLoginActivity(ChatManagerActivity.this);
@@ -64,11 +68,19 @@ public class ChatManagerActivity extends AppCompatActivity {
             uiManager.openFriendManagerActivity(ChatManagerActivity.this);
             overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
         });
+
+        ListView listView = findViewById(R.id.chatManager_listView);
+        chatManager.initArrayAdapter(ChatManagerActivity.this, R.layout.chat_list_item_layout);
+        listView.setAdapter(chatManager.getChatArrayAdapter());
+
+        listView.setOnItemClickListener((parent, view, position, id)->
+                uiManager.openChat(ChatManagerActivity.this, chatManager.getChatArrayAdapter().getItem(position)));
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        chatManager.updateChatList();
         visibility=true;
     }
 

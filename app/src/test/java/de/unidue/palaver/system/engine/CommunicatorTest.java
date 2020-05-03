@@ -3,12 +3,12 @@ package de.unidue.palaver.system.engine;
 import org.junit.Test;
 import java.util.Date;
 
-import de.unidue.palaver.system.model.ChatItem;
+import de.unidue.palaver.system.model.Message;
 import de.unidue.palaver.system.model.CommunicatorResult;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.User;
 import de.unidue.palaver.system.model.UserData;
-import de.unidue.palaver.system.resource.ChatItemType;
+import de.unidue.palaver.system.resource.MessageType;
 
 import static org.junit.Assert.*;
 
@@ -96,9 +96,9 @@ public class CommunicatorTest {
         Communicator communicator = new Communicator();
         User user = new User(new UserData("test1991", "test1991"));
         Friend friend = new Friend("test1992");
-        ChatItem chatItem = new ChatItem(user.getUserData().getUserName(), friend.getUsername()
-                , ChatItemType.OUT, "Hallo World1", new Date());
-        CommunicatorResult<Date> communicatorResult = communicator.sendMessage(user, friend, chatItem);
+        Message message = new Message(user.getUserData().getUserName(), friend.getUsername()
+                , MessageType.OUT, "Hallo World1", "true", new Date());
+        CommunicatorResult<Date> communicatorResult = communicator.sendMessage(user, friend, message);
         System.out.println(communicatorResult.toString());
     }
 
@@ -107,7 +107,7 @@ public class CommunicatorTest {
         Communicator communicator = new Communicator();
         User user = new User(new UserData("test1991", "test1991"));
         Friend friend = new Friend("test1992");
-        CommunicatorResult<ChatItem> communicatorResult = communicator.getMessage(user, friend);
+        CommunicatorResult<Message> communicatorResult = communicator.getMessage(user, friend);
         System.out.println(communicatorResult.toString());
     }
 }
