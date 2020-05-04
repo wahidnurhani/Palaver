@@ -110,6 +110,10 @@ public class FriendManagerActivity extends AppCompatActivity {
         });
     }
 
+    public static boolean isVisibility() {
+        return visibility;
+    }
+
     @Override
     protected void onResume() {
         super.onResume();

@@ -25,6 +25,7 @@ public class ChatRoomActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == android.R.id.home){
             palaverEngine.handleOpenChatManagerActivityRequest(ChatRoomActivity.this);
+            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_rigt);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -60,6 +61,10 @@ public class ChatRoomActivity extends AppCompatActivity {
                 messageEditText.setText("");
             }
         });
+    }
+
+    public static boolean isVisibility() {
+        return visibility;
     }
 
     @Override

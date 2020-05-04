@@ -57,7 +57,7 @@ public class ChatManagerActivity extends AppCompatActivity {
         if (item.getItemId()==R.id.menu_logout){
             palaverEngine.handleLogoutRequest(getApplicationContext());
         } else if(item.getItemId()==R.id.menu_setting){
-            //AppPrefererence.startIntent(MainActivity.this);
+            palaverEngine.handleOpenSettingRequest(getApplicationContext(), ChatManagerActivity.this);
         } else if(item.getItemId()==R.id.menu_addFriend){
             palaverEngine.handleOpenAddFriendDialogRequest(getApplicationContext(), ChatManagerActivity.this);
 
@@ -92,6 +92,8 @@ public class ChatManagerActivity extends AppCompatActivity {
                         chatsManager.getChatArrayAdapter().getItem(position)));
 
     }
+
+
 
     @Override
     protected void onResume() {

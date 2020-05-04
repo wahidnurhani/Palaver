@@ -80,6 +80,10 @@ public class RegisterActivity extends AppCompatActivity {
         return true;
     }
 
+    public static boolean isVisibility() {
+        return visibility;
+    }
+
     @Override
     protected void onResume() {
         super.onResume();

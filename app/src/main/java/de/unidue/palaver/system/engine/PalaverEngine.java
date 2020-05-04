@@ -28,6 +28,7 @@ import de.unidue.palaver.system.service.ServiceAddFriend;
 import de.unidue.palaver.system.service.ServiceFetchAllChat;
 import de.unidue.palaver.system.service.ServiceSendMessage;
 import de.unidue.palaver.system.uicontroller.UIController;
+import de.unidue.palaver.ui.ChatManagerActivity;
 import de.unidue.palaver.ui.LoginActivity;
 
 public class PalaverEngine implements IPalaverEngine {
@@ -217,5 +218,9 @@ public class PalaverEngine implements IPalaverEngine {
     public void handleSendLocalBroadCastRequest(Context applicationContext, String action) {
         Intent intent = new Intent(action);
         LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent);
+    }
+
+    public void handleOpenSettingRequest(Context applicationContext, Activity activity) {
+        uiController.openSettingActivity(applicationContext, activity);
     }
 }

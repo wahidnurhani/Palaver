@@ -60,6 +60,10 @@ public class LoginActivity extends AppCompatActivity {
         return true;
     }
 
+    public static boolean isVisibility() {
+        return visibility;
+    }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();

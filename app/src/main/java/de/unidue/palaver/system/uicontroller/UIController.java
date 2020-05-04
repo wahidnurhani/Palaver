@@ -15,6 +15,7 @@ import de.unidue.palaver.ui.ChatRoomActivity;
 import de.unidue.palaver.ui.FriendManagerActivity;
 import de.unidue.palaver.ui.LoginActivity;
 import de.unidue.palaver.ui.RegisterActivity;
+import de.unidue.palaver.ui.SettingsActivity;
 import de.unidue.palaver.ui.SplashScreenActivity;
 
 public class UIController {
@@ -76,5 +77,10 @@ public class UIController {
         bundle.putSerializable(StringValue.IntentKeyName.FRIEND, chatRoomManager);
         intent.putExtras(bundle);
         context.startActivity(intent);
+    }
+
+    public void openSettingActivity(Context applicationContext, Activity activity) {
+        Intent intent = new Intent(activity, SettingsActivity.class);
+        activity.startActivity(intent);
     }
 }

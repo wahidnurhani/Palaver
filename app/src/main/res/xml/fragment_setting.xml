@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+
+    <PreferenceCategory
+        app:title="User">
+
+        <Preference
+            app:title="Username"
+            app:summary="@string/username"
+            >
+        </Preference>
+
+        <EditTextPreference
+            app:title="Change Password"
+            app:key="@string/password">
+
+        </EditTextPreference>
+
+
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="App Setting">
+        <CheckBoxPreference
+            app:title="Automatic login"
+            app:key="login_preference"
+            android:summaryOn="always login"
+            android:summaryOff="always request login on start"
+            ></CheckBoxPreference>
+
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="About">
+
+        <Preference
+            app:title="Build version"
+            app:summary="1.0.0"
+            >
+
+
+        </Preference>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

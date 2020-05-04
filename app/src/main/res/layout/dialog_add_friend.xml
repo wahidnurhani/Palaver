@@ -46,8 +46,9 @@
         android:importantForAutofill="no"
         android:inputType="textPersonName"
         android:textColor="@color/colorWhite"
-        android:textColorHighlight="#C5A3A3"
         android:textColorHint="#8FC4D0C7"
+        android:backgroundTint="@color/colorWhite"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
