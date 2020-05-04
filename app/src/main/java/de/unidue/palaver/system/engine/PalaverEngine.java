@@ -21,6 +21,7 @@ import de.unidue.palaver.system.service.ServiceAddFriend;
 import de.unidue.palaver.system.service.ServiceFetchAllChat;
 import de.unidue.palaver.system.service.ServiceSendMessage;
 import de.unidue.palaver.ui.ChatManagerActivity;
+import de.unidue.palaver.ui.FriendManagerActivity;
 import de.unidue.palaver.ui.LoginActivity;
 
 public class PalaverEngine implements IPalaverEngine {
@@ -152,5 +153,9 @@ public class PalaverEngine implements IPalaverEngine {
 
     public void handleOpenAddFriendDialogRequest(Context applicationContext, Activity activity) {
         uiManager.openAddFriendDDialog(applicationContext, activity);
+    }
+
+    public void handleOpenChatManagerActivity(Activity activity) {
+        uiManager.openChatManagerActivity(activity);
     }
 }

@@ -17,22 +17,18 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.Objects;
 
-import de.unidue.palaver.system.ChatsManager;
 import de.unidue.palaver.system.FriendManager;
 import de.unidue.palaver.system.Palaver;
 import de.unidue.palaver.R;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.resource.StringValue;
-import de.unidue.palaver.system.UIManager;
 import de.unidue.palaver.system.engine.Communicator;
 import de.unidue.palaver.system.engine.PalaverEngine;
-import de.unidue.palaver.system.ChatRoomManager;
 
 public class FriendManagerActivity extends AppCompatActivity {
     private static boolean visibility;
 
     private PalaverEngine palaverEngine;
-    private UIManager uiManager;
     private Communicator communicator;
     private FriendManager friendManager;
 
@@ -72,7 +68,7 @@ public class FriendManagerActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == android.R.id.home){
-            uiManager.openChatManagerActivity(FriendManagerActivity.this);
+            palaverEngine.handleOpenChatManagerActivity(FriendManagerActivity.this);
             overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_rigt);
         }
 
@@ -83,7 +79,6 @@ public class FriendManagerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         palaverEngine = Palaver.getInstance().getPalaverEngine();
-        uiManager = Palaver.getInstance().getUiManager();
         communicator = palaverEngine.getCommunicator();
         friendManager = Palaver.getInstance().getFriendManager();
         palaverEngine = Palaver.getInstance().getPalaverEngine();
@@ -99,8 +94,9 @@ public class FriendManagerActivity extends AppCompatActivity {
 
 
         FloatingActionButton floatingActionButton = findViewById(R.id.friendManager_addChatFloatingButton);
-        floatingActionButton.setOnClickListener(v -> uiManager.openAddFriendDDialog(getApplicationContext(),
-                FriendManagerActivity.this));
+        floatingActionButton.setOnClickListener(v ->
+                palaverEngine.handleOpenAddFriendDialogRequest(getApplicationContext(),
+                        FriendManagerActivity.this));
 
         ListView friendsListView = findViewById(R.id.friendManager_recycleView);
         friendManager.initArrayAdapter(FriendManagerActivity.this,
