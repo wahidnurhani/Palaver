@@ -68,7 +68,7 @@ public class FriendManagerActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == android.R.id.home){
-            palaverEngine.handleOpenChatManagerActivity(FriendManagerActivity.this);
+            palaverEngine.handleOpenChatManagerActivityRequest(FriendManagerActivity.this);
             overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_rigt);
         }
 

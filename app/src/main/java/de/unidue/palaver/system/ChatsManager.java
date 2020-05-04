@@ -23,7 +23,7 @@ public class ChatsManager {
 
     public ChatRoomManager getChat(Friend friend) {
         for(ChatRoomManager chatRoomManager : chatRoomManagers){
-            if(chatRoomManager.getFriend()==friend){
+            if(chatRoomManager.getFriend().getUsername().equals(friend.getUsername())){
                 return chatRoomManager;
             }
         }

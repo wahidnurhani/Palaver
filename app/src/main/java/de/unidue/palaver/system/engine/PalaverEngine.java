@@ -20,8 +20,6 @@ import de.unidue.palaver.system.model.User;
 import de.unidue.palaver.system.service.ServiceAddFriend;
 import de.unidue.palaver.system.service.ServiceFetchAllChat;
 import de.unidue.palaver.system.service.ServiceSendMessage;
-import de.unidue.palaver.ui.ChatManagerActivity;
-import de.unidue.palaver.ui.FriendManagerActivity;
 import de.unidue.palaver.ui.LoginActivity;
 
 public class PalaverEngine implements IPalaverEngine {
@@ -128,15 +126,15 @@ public class PalaverEngine implements IPalaverEngine {
     }
 
     public void handleClickOnFriend(Context context, Friend friend) {
-        for(ChatRoomManager chatRoomManager : chatsManager.getChatList()){
-            System.out.println("hasil--------------"+chatRoomManager.getFriend().getUsername());
+        chatsManager = Palaver.getInstance().getChatsManager();
+
+        ChatRoomManager chatRoomManager = chatsManager.getChat(friend);
+
+        if(chatRoomManager==null){
+            ChatRoomManager chatRoomManager1 = new ChatRoomManager(friend);
+            chatsManager.addChat(chatRoomManager1);
         }
-//        ChatRoomManager chatRoomManager = Palaver.getInstance().getChatsManager().getChat(friend);
-//        if(chatRoomManager == null){
-//            ChatRoomManager chatRoomManager1 = new ChatRoomManager(friend);
-//            Palaver.getInstance().getChatsManager().addChat(chatRoomManager1);
-//        }
-//        uiManager.openChat(context, chatRoomManager);
+        uiManager.openChat(context, chatRoomManager);
     }
 
     public void handleOpenLoginActivityRequest(Activity activity) {
@@ -155,7 +153,7 @@ public class PalaverEngine implements IPalaverEngine {
         uiManager.openAddFriendDDialog(applicationContext, activity);
     }
 
-    public void handleOpenChatManagerActivity(Activity activity) {
+    public void handleOpenChatManagerActivityRequest(Activity activity) {
         uiManager.openChatManagerActivity(activity);
     }
 }
