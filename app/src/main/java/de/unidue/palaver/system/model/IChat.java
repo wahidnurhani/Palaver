@@ -2,11 +2,11 @@ package de.unidue.palaver.system.model;
 
 import android.content.Context;
 
-import de.unidue.palaver.system.MessageManager;
+import de.unidue.palaver.system.ChatRoomManager;
 
 public interface IChat {
 
-    void openChat(Context context, MessageManager messageManager);
+    void openChat(Context context, ChatRoomManager chatRoomManager);
 
     Message getLatestMessage();
 

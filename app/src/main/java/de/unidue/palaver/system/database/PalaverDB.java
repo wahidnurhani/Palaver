@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import de.unidue.palaver.system.MessageManager;
+import de.unidue.palaver.system.ChatRoomManager;
 import de.unidue.palaver.system.SessionManager;
 import de.unidue.palaver.system.model.Message;
 import de.unidue.palaver.system.resource.MessageType;
@@ -66,7 +66,7 @@ public class PalaverDB implements IPalaverDB{
     }
 
     @Override
-    public MessageManager getChat(Friend friend) {
+    public ChatRoomManager getChat(Friend friend) {
         return null;
     }
 
@@ -189,20 +189,20 @@ public class PalaverDB implements IPalaverDB{
     }
 
     @Override
-    public List<MessageManager> getAllChat() {
+    public List<ChatRoomManager> getAllChat() {
         List<Friend> friendsList = getAllFriends();
-        List<MessageManager> messageManagerList = new ArrayList<>();
+        List<ChatRoomManager> chatRoomManagerList = new ArrayList<>();
 
         for(Friend friend:friendsList){
             List<Message> messages = getAllChatData(friend);
             if(messages.size()>0){
-                MessageManager tmp= new MessageManager(friend);
+                ChatRoomManager tmp= new ChatRoomManager(friend);
                 tmp.setChatItems(messages);
-                messageManagerList.add(tmp);
+                chatRoomManagerList.add(tmp);
             }
         }
-        Collections.sort(messageManagerList);
-        return messageManagerList;
+        Collections.sort(chatRoomManagerList);
+        return chatRoomManagerList;
     }
 
     @Override

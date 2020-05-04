@@ -17,30 +17,31 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.Objects;
 
-import de.unidue.palaver.system.ChatManager;
+import de.unidue.palaver.system.ChatsManager;
 import de.unidue.palaver.system.FriendManager;
 import de.unidue.palaver.system.Palaver;
 import de.unidue.palaver.R;
+import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.resource.StringValue;
 import de.unidue.palaver.system.UIManager;
 import de.unidue.palaver.system.engine.Communicator;
 import de.unidue.palaver.system.engine.PalaverEngine;
-import de.unidue.palaver.system.MessageManager;
+import de.unidue.palaver.system.ChatRoomManager;
 
 public class FriendManagerActivity extends AppCompatActivity {
     private static boolean visibility;
 
+    private PalaverEngine palaverEngine;
     private UIManager uiManager;
     private Communicator communicator;
     private FriendManager friendManager;
-    private ChatManager chatManager;
 
     private BroadcastReceiver friendAddeddMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             String addFriendResult = intent.getCharSequenceExtra(StringValue.IntentKeyName.BROADCAST_FRIENDADDED_MESSAGE_RESULT).toString();
             if(communicator.checkConnectivity(getApplicationContext())){
-                uiManager.showToast(FriendManagerActivity.this, addFriendResult);
+                palaverEngine.handleShowToastRequest(getApplicationContext(), addFriendResult);
                 friendManager.updateFriends();
             }
         }
@@ -81,12 +82,11 @@ public class FriendManagerActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Palaver palaver = Palaver.getInstance();
-        PalaverEngine palaverEngine = palaver.getPalaverEngine();
-        uiManager = palaver.getUiManager();
+        palaverEngine = Palaver.getInstance().getPalaverEngine();
+        uiManager = Palaver.getInstance().getUiManager();
         communicator = palaverEngine.getCommunicator();
-        friendManager = palaver.getFriendManager();
-        chatManager = palaver.getChatManager();
+        friendManager = Palaver.getInstance().getFriendManager();
+        palaverEngine = Palaver.getInstance().getPalaverEngine();
 
         LocalBroadcastManager.getInstance(this).registerReceiver(friendAddeddMessageReceiver,
                 new IntentFilter(StringValue.IntentAction.BROADCAST_FRIENDADDED));
@@ -109,12 +109,8 @@ public class FriendManagerActivity extends AppCompatActivity {
         friendsListView.setAdapter(friendManager.getFriendArrayAdapter());
 
         friendsListView.setOnItemClickListener((parent, view, position, id) -> {
-            MessageManager messageManager = chatManager.getChat(friendManager.getFriendArrayAdapter().getItem(position));
-            if(messageManager ==null){
-                messageManager = new MessageManager(friendManager.getFriendArrayAdapter().getItem(position));
-                chatManager.addChat(messageManager);
-            }
-            uiManager.openChat(FriendManagerActivity.this, messageManager);
+            Friend friend = friendManager.getFriendArrayAdapter().getItem(position);
+            palaverEngine.handleClickOnFriend(FriendManagerActivity.this, friend);
         });
     }
 

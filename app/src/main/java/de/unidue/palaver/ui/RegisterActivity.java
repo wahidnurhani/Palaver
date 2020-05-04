@@ -64,13 +64,13 @@ public class RegisterActivity extends AppCompatActivity {
         String password = passwordEditText.getText().toString();
         String rePassword = rePasswordEditText.getText().toString();
         if (username.equals("") || password.equals("") || rePassword.equals("")){
-            uiManager.showErrorDialog(RegisterActivity.this, StringValue.ErrorMessage.USERNAME_PASSWORD_BLANK);
+            palaverEngine.handleShowErrorDialogRequest(RegisterActivity.this, StringValue.ErrorMessage.USERNAME_PASSWORD_BLANK);
             return false;
         } else if(!validString(username)){
-            uiManager.showErrorDialog(RegisterActivity.this, StringValue.ErrorMessage.PLEASE_INPUT_VALID_USERNAME_FORMAT);
+            palaverEngine.handleShowErrorDialogRequest(RegisterActivity.this, StringValue.ErrorMessage.PLEASE_INPUT_VALID_USERNAME_FORMAT);
             return false;
         }else if (!password.equals(rePassword)) {
-            uiManager.showErrorDialog(RegisterActivity.this, StringValue.ErrorMessage.PASSWORD_DON_T_MATCH_EACH_OTHER);
+            palaverEngine.handleShowErrorDialogRequest(RegisterActivity.this, StringValue.ErrorMessage.PASSWORD_DON_T_MATCH_EACH_OTHER);
             return false;
         }
         return true;

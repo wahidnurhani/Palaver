@@ -13,6 +13,7 @@ import android.widget.EditText;
 import de.unidue.palaver.system.Palaver;
 import de.unidue.palaver.R;
 import de.unidue.palaver.system.SessionManager;
+import de.unidue.palaver.system.engine.PalaverEngine;
 import de.unidue.palaver.system.resource.StringValue;
 import de.unidue.palaver.system.UIManager;
 
@@ -21,8 +22,7 @@ public class AddFriendDialog {
     private AlertDialog alertDialog;
     private Context applicationContext;
     private Activity activity;
-    private Palaver palaver;
-    private UIManager uiManager;
+    private PalaverEngine palaverEngine;
     private SessionManager sessionManager;
 
     private EditText userNameEditText;
@@ -30,9 +30,7 @@ public class AddFriendDialog {
     public AddFriendDialog(Context applicationContext, Activity activity) {
         this.applicationContext =applicationContext;
         this.activity = activity;
-        this.palaver = Palaver.getInstance();
-        this.uiManager = palaver.getUiManager();
-        this.sessionManager = SessionManager.getSessionManagerInstance(activity);
+        this.sessionManager = SessionManager.getSessionManagerInstance(applicationContext);
     }
 
     public void startDialog(){
@@ -41,6 +39,7 @@ public class AddFriendDialog {
         @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.dialog_add_friend, null);
         builder.setView(view);
         builder.setCancelable(false);
+        palaverEngine = Palaver.getInstance().getPalaverEngine();
 
         userNameEditText = view.findViewById(R.id.addFriend_editText);
         userNameEditText.setImeOptions(EditorInfo.IME_ACTION_NEXT);
@@ -54,7 +53,7 @@ public class AddFriendDialog {
         addButton.setOnClickListener(v -> {
             if(inputValid()){
                 String username = userNameEditText.getText().toString().trim();
-                palaver.getPalaverEngine().handleAddFriendRequest(applicationContext, activity, username);
+                palaverEngine.handleAddFriendRequest(applicationContext, activity, username);
                 dismiss();
             }
         });
@@ -68,10 +67,10 @@ public class AddFriendDialog {
     private boolean inputValid() {
         String username = userNameEditText.getText().toString().trim();
         if(username.equals("") || userNameEditText.getText()==null){
-            uiManager.showToast(applicationContext, StringValue.ErrorMessage.USERNAME_BLANK);
+            palaverEngine.handleShowToastRequest(applicationContext, StringValue.ErrorMessage.USERNAME_BLANK);
             return false;
         } else if (username.equals(sessionManager.getUser().getUserData().getUserName())){
-            palaver.getUiManager().showToast(applicationContext, StringValue.ErrorMessage.ADD_OWN_ACCOUNT);
+            palaverEngine.handleShowToastRequest(applicationContext, StringValue.ErrorMessage.ADD_OWN_ACCOUNT);
             return false;
         }
         return true;

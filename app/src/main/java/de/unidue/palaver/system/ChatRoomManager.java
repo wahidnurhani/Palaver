@@ -20,13 +20,13 @@ import de.unidue.palaver.system.resource.StringValue;
 import de.unidue.palaver.ui.ChatRoomActivity;
 import de.unidue.palaver.ui.arrayadapter.MessageAdapter;
 
-public class MessageManager implements Comparable<MessageManager>, IChat, Serializable {
+public class ChatRoomManager implements Comparable<ChatRoomManager>, IChat, Serializable {
 
     private final Friend friend;
     private List<Message> messageList;
     private MessageAdapter messageAdapter;
 
-    public MessageManager(Friend friend) {
+    public ChatRoomManager(Friend friend) {
         this.friend = friend;
         this.messageList = new ArrayList<>();
     }
@@ -65,16 +65,16 @@ public class MessageManager implements Comparable<MessageManager>, IChat, Serial
     }
 
     @Override
-    public int compareTo(MessageManager o) {
+    public int compareTo(ChatRoomManager o) {
         return this.getLatestMessage().compareTo(o.getLatestMessage());
     }
 
     @Override
-    public void openChat(Context context, MessageManager messageManager) {
+    public void openChat(Context context, ChatRoomManager chatRoomManager) {
         setAllMessageToRead();
         Intent intent = new Intent(context, ChatRoomActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putSerializable(StringValue.IntentKeyName.FRIEND, messageManager);
+        bundle.putSerializable(StringValue.IntentKeyName.FRIEND, chatRoomManager);
         intent.putExtras(bundle);
         context.startActivity(intent);
     }
@@ -101,10 +101,9 @@ public class MessageManager implements Comparable<MessageManager>, IChat, Serial
         fectchChatFromDB.execute();
     }
 
-    public void sendMessage(Context applicationContext, Activity activity, Message message) {
+    public void addMessage(Message message) {
         addChatItem(message);
         messageAdapter.add(message);
-        Palaver.getInstance().getPalaverEngine().handleSendMessage(applicationContext, activity, friend, message);
     }
 
     public void initArrayAdapter(Context context, int layout) {

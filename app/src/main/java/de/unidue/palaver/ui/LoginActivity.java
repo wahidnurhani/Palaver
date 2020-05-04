@@ -58,7 +58,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private boolean validateUserInput() {
         if (userNameEditText.getText().toString().equals("") || passwordEditText.getText().toString().equals("")){
-            uiManager.showErrorDialog(LoginActivity.this, StringValue.ErrorMessage.USERNAME_PASSWORD_BLANK);
+            palaverEngine.handleShowErrorDialogRequest(LoginActivity.this, StringValue.ErrorMessage.USERNAME_PASSWORD_BLANK);
             return false;
         }
         return true;

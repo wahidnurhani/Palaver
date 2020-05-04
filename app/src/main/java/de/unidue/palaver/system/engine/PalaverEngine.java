@@ -3,12 +3,17 @@ package de.unidue.palaver.system.engine;
 import android.app.Activity;
 import android.content.Context;
 
+import java.util.Date;
 import java.util.List;
 
+import de.unidue.palaver.system.ChatRoomManager;
+import de.unidue.palaver.system.ChatsManager;
 import de.unidue.palaver.system.Palaver;
 import de.unidue.palaver.system.SessionManager;
+import de.unidue.palaver.system.UIManager;
 import de.unidue.palaver.system.model.Message;
 import de.unidue.palaver.system.model.CommunicatorResult;
+import de.unidue.palaver.system.resource.MessageType;
 import de.unidue.palaver.system.resource.StringValue;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.User;
@@ -22,11 +27,15 @@ public class PalaverEngine implements IPalaverEngine {
     private Communicator communicator;
     private Authentificator authentificator;
     private Palaver palaver;
+    private ChatsManager chatsManager;
+    private UIManager uiManager;
 
     public PalaverEngine() {
         this.communicator = new Communicator();
         this.authentificator = new Authentificator();
+        this.uiManager = new UIManager();
         this.palaver = Palaver.getInstance();
+        this.chatsManager = Palaver.getInstance().getChatsManager();
     }
 
     public Communicator getCommunicator() {
@@ -34,9 +43,16 @@ public class PalaverEngine implements IPalaverEngine {
     }
 
     @Override
-    public void handleSendMessage(Context applicationContext, Activity activity, Friend friend, Message message) {
+    public void handleSendMessage(Context applicationContext, Activity activity, ChatRoomManager chatRoomManager, String messageText) {
+
+        Message message = new Message(SessionManager.getSessionManagerInstance(applicationContext).getUser().getUserData().getUserName(),
+                chatRoomManager.getFriend().getUsername(), MessageType.OUT, messageText, "true", new Date());
+
+        Friend friend = chatRoomManager.getFriend();
+
         Palaver.getInstance().getPalaverDB().insertChatItem(friend, message);
         ServiceSendMessage.startIntent(applicationContext, activity, friend, message);
+        chatRoomManager.addMessage(message);
     }
 
     @Override
@@ -53,7 +69,7 @@ public class PalaverEngine implements IPalaverEngine {
             authentificator.register((Activity) context, user.getUserData().getUserName(),
                     user.getUserData().getPassword());
         } else{
-            palaver.getUiManager().showToast(context, StringValue.ErrorMessage.NO_INTERNET);
+            uiManager.showToast(context, StringValue.ErrorMessage.NO_INTERNET);
         }
     }
 
@@ -70,7 +86,7 @@ public class PalaverEngine implements IPalaverEngine {
     @Override
     public void handleLogoutRequest(Context applicationContext) {
         SessionManager.getSessionManagerInstance(applicationContext).endSession();
-        palaver.getUiManager().openLoginActivity(applicationContext);
+        uiManager.openLoginActivity(applicationContext);
         palaver.destroy();
     }
 
@@ -93,7 +109,27 @@ public class PalaverEngine implements IPalaverEngine {
         }
     }
 
+    public void handleChangePasswordRequest(String newPassword){
+        //TODO change password to server . if it success then SessionManager handle the changed Password
+    }
+
     public void handleFetchAllChatRequestWithService(Context applicationContext, Activity activity) {
         ServiceFetchAllChat.startIntent(applicationContext, activity);
+    }
+
+    public void handleShowErrorDialogRequest(Context context, String message){
+        uiManager.showErrorDialog(context, StringValue.ErrorMessage.USERNAME_PASSWORD_BLANK);
+    }
+
+    public void handleShowToastRequest(Context applicationContext, String string) {
+        uiManager.showToast(applicationContext, string);
+    }
+
+    public void handleClickOnFriend(Context context, Friend friend) {
+        ChatRoomManager chatRoomManager = chatsManager.getChat(friend);
+        if(chatRoomManager == null){
+            chatsManager.addChat(chatRoomManager);
+        }
+        uiManager.openChat(context, chatRoomManager);
     }
 }

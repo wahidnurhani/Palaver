@@ -3,6 +3,7 @@ package de.unidue.palaver.system.engine;
 import android.app.Activity;
 import android.content.Context;
 
+import de.unidue.palaver.system.ChatRoomManager;
 import de.unidue.palaver.system.model.Message;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.User;
@@ -10,7 +11,7 @@ import de.unidue.palaver.ui.LoginActivity;
 
 public interface IPalaverEngine {
 
-    void handleSendMessage(Context applicationContext, Activity activity, Friend friend, Message message);
+    void handleSendMessage(Context applicationContext, Activity activity, ChatRoomManager chatRoomManager, String message);
 
     void handleFetchAllFriendRequestWithNoService(User user);
 

@@ -12,9 +12,9 @@ import androidx.annotation.Nullable;
 
 
 import de.unidue.palaver.R;
-import de.unidue.palaver.system.MessageManager;
+import de.unidue.palaver.system.ChatRoomManager;
 
-public class ChatArrayAdapter extends ArrayAdapter<MessageManager> {
+public class ChatArrayAdapter extends ArrayAdapter<ChatRoomManager> {
 
     public ChatArrayAdapter(@NonNull Context context, int resource) {
         super(context, resource);
@@ -22,7 +22,7 @@ public class ChatArrayAdapter extends ArrayAdapter<MessageManager> {
 
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        MessageManager messageManager = getItem(position);
+        ChatRoomManager chatRoomManager = getItem(position);
 
         if(convertView==null){
             convertView = LayoutInflater.from(getContext()).inflate(
@@ -32,15 +32,15 @@ public class ChatArrayAdapter extends ArrayAdapter<MessageManager> {
         TextView friendView = convertView.findViewById(R.id.chat_list_name);
         TextView messageView = convertView.findViewById(R.id.chat_list_message);
 
-        String message = messageManager.getLatestMessage().getMessage().split("\n")[0];
+        String message = chatRoomManager.getLatestMessage().getMessage().split("\n")[0];
         String showingMessage;
-        if(messageManager.getLatestMessage().getMessage().length()>40){
+        if(chatRoomManager.getLatestMessage().getMessage().length()>40){
             showingMessage = message.substring(0, 39)+" . . .";
         } else {
             showingMessage= message;
         }
-        assert messageManager != null;
-        friendView.setText(messageManager.getFriend().getUsername());
+        assert chatRoomManager != null;
+        friendView.setText(chatRoomManager.getFriend().getUsername());
         messageView.setText(showingMessage);
 
         return convertView;

@@ -9,7 +9,7 @@ import de.unidue.palaver.system.engine.PalaverEngine;
 public class Palaver implements IPalaver{
     private PalaverEngine palaverEngine;
     private PalaverDB palaverDB;
-    private ChatManager chatManager;
+    private ChatsManager chatsManager;
     private FriendManager friendManager;
     private UIManager uiManager;
     @SuppressLint("StaticFieldLeak")
@@ -38,7 +38,7 @@ public class Palaver implements IPalaver{
     private Palaver() {
         palaverInstance =this;
         this.palaverEngine = new PalaverEngine();
-        this.chatManager = new ChatManager();
+        this.chatsManager = new ChatsManager();
         this.friendManager = new FriendManager();
         this.uiManager = new UIManager();
     }
@@ -51,8 +51,8 @@ public class Palaver implements IPalaver{
         return friendManager;
     }
 
-    public ChatManager getChatManager() {
-        return chatManager;
+    public ChatsManager getChatsManager() {
+        return chatsManager;
     }
 
     public PalaverEngine getPalaverEngine() {

@@ -18,7 +18,7 @@ import de.unidue.palaver.ui.SplashScreenActivity;
 
 public class UIManager {
 
-    UIManager() {
+    public UIManager() {
     }
 
     public void showErrorDialog(Context context, String message) {
@@ -69,10 +69,10 @@ public class UIManager {
         context.startActivity(intent);
     }
 
-    public void openChat(Context context, MessageManager messageManager) {
+    public void openChat(Context context, ChatRoomManager chatRoomManager) {
         Intent intent = new Intent(context, ChatRoomActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putSerializable(StringValue.IntentKeyName.FRIEND, messageManager);
+        bundle.putSerializable(StringValue.IntentKeyName.FRIEND, chatRoomManager);
         intent.putExtras(bundle);
         context.startActivity(intent);
     }
