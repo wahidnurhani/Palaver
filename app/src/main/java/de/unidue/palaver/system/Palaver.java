@@ -32,11 +32,10 @@ public class Palaver implements IPalaver{
     @Override
     public void destroy() {
         palaverDB.deleteAllDataOnDataBase();
-        palaverInstance = null;
     }
 
     private Palaver() {
-        palaverInstance =this;
+        palaverInstance = this;
         this.palaverEngine = new PalaverEngine();
         this.chatsManager = new ChatsManager();
         this.friendManager = new FriendManager();

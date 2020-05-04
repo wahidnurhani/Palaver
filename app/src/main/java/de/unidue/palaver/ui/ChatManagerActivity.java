@@ -20,7 +20,7 @@ import de.unidue.palaver.system.engine.PalaverEngine;
 public class ChatManagerActivity extends AppCompatActivity {
     private static final String TAG= ChatManagerActivity.class.getSimpleName();
     private PalaverEngine palaverEngine;
-    private UIManager uiManager;
+
     private ChatsManager chatsManager;
     private static boolean visibility;
 
@@ -60,7 +60,8 @@ public class ChatManagerActivity extends AppCompatActivity {
         } else if(item.getItemId()==R.id.menu_setting){
             //AppPrefererence.startIntent(MainActivity.this);
         } else if(item.getItemId()==R.id.menu_addFriend){
-            uiManager.openAddFriendDDialog(getApplicationContext(), ChatManagerActivity.this);
+            palaverEngine.handleOpenAddFriendDialogRequest(getApplicationContext(), ChatManagerActivity.this);
+
         }
         return super.onOptionsItemSelected(item);
     }
@@ -70,16 +71,16 @@ public class ChatManagerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_manager);
         palaverEngine = Palaver.getInstance().getPalaverEngine();
-        uiManager = Palaver.getInstance().getUiManager();
         chatsManager = Palaver.getInstance().getChatsManager();
 
         if(!SessionManager.getSessionManagerInstance(getApplicationContext()).chekLogin()){
-            uiManager.openLoginActivity(ChatManagerActivity.this);
+            palaverEngine.handleOpenLoginActivityRequest(ChatManagerActivity.this);
+
         }
 
         FloatingActionButton floatingActionButton = findViewById(R.id.chatManager_addChatFloatingButton);
         floatingActionButton.setOnClickListener(v -> {
-            uiManager.openFriendManagerActivity(ChatManagerActivity.this);
+            palaverEngine.handleOpenFriendManagerActivityRequest(ChatManagerActivity.this);
             overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
         });
 
@@ -88,7 +89,9 @@ public class ChatManagerActivity extends AppCompatActivity {
         listView.setAdapter(chatsManager.getChatArrayAdapter());
 
         listView.setOnItemClickListener((parent, view, position, id)->
-                uiManager.openChat(ChatManagerActivity.this, chatsManager.getChatArrayAdapter().getItem(position)));
+                palaverEngine.handleOpenChatRoomRequest(ChatManagerActivity.this,
+                        chatsManager.getChatArrayAdapter().getItem(position)));
+
     }
 
     @Override

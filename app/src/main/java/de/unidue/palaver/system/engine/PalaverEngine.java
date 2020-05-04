@@ -20,6 +20,7 @@ import de.unidue.palaver.system.model.User;
 import de.unidue.palaver.system.service.ServiceAddFriend;
 import de.unidue.palaver.system.service.ServiceFetchAllChat;
 import de.unidue.palaver.system.service.ServiceSendMessage;
+import de.unidue.palaver.ui.ChatManagerActivity;
 import de.unidue.palaver.ui.LoginActivity;
 
 public class PalaverEngine implements IPalaverEngine {
@@ -31,10 +32,10 @@ public class PalaverEngine implements IPalaverEngine {
     private UIManager uiManager;
 
     public PalaverEngine() {
+        this.palaver = Palaver.getInstance();
         this.communicator = new Communicator();
         this.authentificator = new Authentificator();
         this.uiManager = new UIManager();
-        this.palaver = Palaver.getInstance();
         this.chatsManager = Palaver.getInstance().getChatsManager();
     }
 
@@ -126,10 +127,30 @@ public class PalaverEngine implements IPalaverEngine {
     }
 
     public void handleClickOnFriend(Context context, Friend friend) {
-        ChatRoomManager chatRoomManager = chatsManager.getChat(friend);
-        if(chatRoomManager == null){
-            chatsManager.addChat(chatRoomManager);
+        for(ChatRoomManager chatRoomManager : chatsManager.getChatList()){
+            System.out.println("hasil--------------"+chatRoomManager.getFriend().getUsername());
         }
-        uiManager.openChat(context, chatRoomManager);
+//        ChatRoomManager chatRoomManager = Palaver.getInstance().getChatsManager().getChat(friend);
+//        if(chatRoomManager == null){
+//            ChatRoomManager chatRoomManager1 = new ChatRoomManager(friend);
+//            Palaver.getInstance().getChatsManager().addChat(chatRoomManager1);
+//        }
+//        uiManager.openChat(context, chatRoomManager);
+    }
+
+    public void handleOpenLoginActivityRequest(Activity activity) {
+        uiManager.openLoginActivity(activity);
+    }
+
+    public void handleOpenFriendManagerActivityRequest(Activity activity) {
+        uiManager.openFriendManagerActivity(activity);
+    }
+
+    public void handleOpenChatRoomRequest(Activity activity, ChatRoomManager chatRoomManager) {
+        uiManager.openChat(activity, chatRoomManager);
+    }
+
+    public void handleOpenAddFriendDialogRequest(Context applicationContext, Activity activity) {
+        uiManager.openAddFriendDDialog(applicationContext, activity);
     }
 }

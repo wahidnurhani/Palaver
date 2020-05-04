@@ -10,11 +10,13 @@ import java.util.Objects;
 
 import de.unidue.palaver.system.Palaver;
 import de.unidue.palaver.R;
+import de.unidue.palaver.system.UIManager;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
     private static final String TAG = SplashScreenActivity.class.getSimpleName();
     private Palaver palaver;
+    private UIManager uiManager;
 
     @SuppressLint("InlinedApi")
     private void hideSystemUI() {
@@ -42,6 +44,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         palaver = Palaver.getInstance();
         palaver.startPalaver(getApplicationContext());
+        uiManager= palaver.getUiManager();
         Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.activity_splash_screen);
         SplashAction splashAction = new SplashAction();
@@ -56,7 +59,7 @@ public class SplashScreenActivity extends AppCompatActivity {
             }catch(InterruptedException e){
                 e.printStackTrace();
             }
-            palaver.getUiManager().openChatManagerActivity(SplashScreenActivity.this);
+            uiManager.openChatManagerActivity(SplashScreenActivity.this);
             SplashScreenActivity.this.finish();
         }
     }
