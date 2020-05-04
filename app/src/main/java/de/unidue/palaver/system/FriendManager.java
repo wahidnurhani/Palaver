@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.unidue.palaver.system.database.PalaverDB;
+import de.unidue.palaver.system.engine.PalaverEngine;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.uicontroller.arrayadapter.FriendArrayAdapter;
 
@@ -17,7 +18,7 @@ public class FriendManager {
     private List<Friend> friendList;
     private FriendArrayAdapter friendArrayAdapter;
 
-    FriendManager() {
+    public FriendManager() {
         this.friendList = new ArrayList<>();
     }
 
@@ -39,6 +40,7 @@ public class FriendManager {
     public List<Friend> search(String string){
         List<Friend> result = new ArrayList<>();
         friendArrayAdapter.clear();
+        sort();
         if(string.equals("")){
             friendArrayAdapter.addAll(friendList);
             result = friendList;
@@ -68,6 +70,7 @@ public class FriendManager {
 
         @Override
         protected Void doInBackground(Void... voids) {
+
             PalaverDB palaverDB = Palaver.getInstance().getPalaverDB();
             friendList.clear();
             friendList.addAll(palaverDB.getAllFriends());
@@ -77,6 +80,7 @@ public class FriendManager {
 
         @Override
         protected void onPostExecute(Void aVoid) {
+            sort();
             friendArrayAdapter.clear();
             friendArrayAdapter.addAll(friendList);
         }

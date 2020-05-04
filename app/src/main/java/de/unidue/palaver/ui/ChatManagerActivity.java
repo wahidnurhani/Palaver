@@ -70,7 +70,7 @@ public class ChatManagerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_manager);
         palaverEngine = Palaver.getInstance().getPalaverEngine();
-        chatsManager = Palaver.getInstance().getChatsManager();
+        chatsManager = palaverEngine.getChatsManager();
 
         if(!SessionManager.getSessionManagerInstance(getApplicationContext()).chekLogin()){
             palaverEngine.handleOpenLoginActivityRequest(ChatManagerActivity.this);

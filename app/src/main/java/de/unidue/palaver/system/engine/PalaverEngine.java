@@ -40,16 +40,24 @@ public class PalaverEngine implements IPalaverEngine {
     private UIController uiController;
     private FriendManager friendManager;
 
-    public PalaverEngine(ChatsManager chatsManager, FriendManager friendManager) {
+    public PalaverEngine() {
         this.communicator = new Communicator();
         this.authentificator = new Authentificator();
         this.uiController = new UIController();
-        this.chatsManager = chatsManager;
-        this.friendManager = friendManager;
+        this.chatsManager = new ChatsManager();
+        this.friendManager = new FriendManager();
     }
 
     public Communicator getCommunicator() {
         return communicator;
+    }
+
+    public ChatsManager getChatsManager() {
+        return chatsManager;
+    }
+
+    public FriendManager getFriendManager() {
+        return friendManager;
     }
 
     @Override

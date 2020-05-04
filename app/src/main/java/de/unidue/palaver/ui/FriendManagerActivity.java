@@ -80,8 +80,8 @@ public class FriendManagerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         palaverEngine = Palaver.getInstance().getPalaverEngine();
         communicator = palaverEngine.getCommunicator();
-        friendManager = Palaver.getInstance().getFriendManager();
         palaverEngine = Palaver.getInstance().getPalaverEngine();
+        friendManager = palaverEngine.getFriendManager();
 
         LocalBroadcastManager.getInstance(this).registerReceiver(friendAddeddMessageReceiver,
                 new IntentFilter(StringValue.IntentAction.BROADCAST_FRIENDADDED));

@@ -11,7 +11,6 @@ import java.util.Objects;
 
 import de.unidue.palaver.system.Palaver;
 import de.unidue.palaver.R;
-import de.unidue.palaver.system.uicontroller.UIController;
 import de.unidue.palaver.system.ChatRoomManager;
 import de.unidue.palaver.system.engine.PalaverEngine;
 import de.unidue.palaver.system.resource.StringValue;
@@ -19,14 +18,13 @@ import de.unidue.palaver.system.resource.StringValue;
 public class ChatRoomActivity extends AppCompatActivity {
     private static boolean visibility;
 
-    private UIController uiController;
     private PalaverEngine palaverEngine;
     private ChatRoomManager chatRoomManager;
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == android.R.id.home){
-           uiController.openChatManagerActivity(ChatRoomActivity.this);
+            palaverEngine.handleOpenChatManagerActivityRequest(ChatRoomActivity.this);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -35,13 +33,18 @@ public class ChatRoomActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message_manager);
-        uiController = Palaver.getInstance().getUiController();
+
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        palaverEngine = Palaver.getInstance().getPalaverEngine();
+
+
         palaverEngine = Palaver.getInstance().getPalaverEngine();
         chatRoomManager = (ChatRoomManager) Objects.requireNonNull(Objects.requireNonNull(getIntent().getExtras()).getSerializable(StringValue.IntentKeyName.FRIEND));
 
         Objects.requireNonNull(getSupportActionBar()).setTitle(chatRoomManager.getFriend().getUsername());
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
 
         ListView listView = findViewById(R.id.chatRoom_listView);
         chatRoomManager.initArrayAdapter(ChatRoomActivity.this, R.layout.message_layout);
@@ -74,6 +77,6 @@ public class ChatRoomActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        uiController.openChatManagerActivity(ChatRoomActivity.this);
+        palaverEngine.handleOpenChatManagerActivityRequest(ChatRoomActivity.this);
     }
 }

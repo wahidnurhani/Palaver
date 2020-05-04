@@ -10,8 +10,6 @@ import de.unidue.palaver.system.uicontroller.UIController;
 public class Palaver implements IPalaver{
     private PalaverEngine palaverEngine;
     private PalaverDB palaverDB;
-    private ChatsManager chatsManager;
-    private FriendManager friendManager;
     private UIController uiController;
     @SuppressLint("StaticFieldLeak")
     private static Palaver palaverInstance;
@@ -36,23 +34,13 @@ public class Palaver implements IPalaver{
     }
 
     private Palaver() {
-        palaverInstance = this;
-        this.chatsManager = new ChatsManager();
-        this.friendManager = new FriendManager();
-        this.palaverEngine = new PalaverEngine(chatsManager, friendManager);
+        palaverInstance = this;;
+        this.palaverEngine = new PalaverEngine();
         this.uiController = new UIController();
     }
 
     public UIController getUiController() {
         return uiController;
-    }
-
-    public FriendManager getFriendManager() {
-        return friendManager;
-    }
-
-    public ChatsManager getChatsManager() {
-        return chatsManager;
     }
 
     public PalaverEngine getPalaverEngine() {
