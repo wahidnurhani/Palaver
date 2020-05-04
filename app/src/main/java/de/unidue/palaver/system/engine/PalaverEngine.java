@@ -128,11 +128,12 @@ public class PalaverEngine implements IPalaverEngine {
     public void handleClickOnFriend(Context context, Friend friend) {
         chatsManager = Palaver.getInstance().getChatsManager();
 
+        System.out.println(chatsManager==null);
         ChatRoomManager chatRoomManager = chatsManager.getChat(friend);
 
         if(chatRoomManager==null){
-            ChatRoomManager chatRoomManager1 = new ChatRoomManager(friend);
-            chatsManager.addChat(chatRoomManager1);
+            chatRoomManager = new ChatRoomManager(friend);
+            chatsManager.addChat(chatRoomManager);
         }
         uiManager.openChat(context, chatRoomManager);
     }
