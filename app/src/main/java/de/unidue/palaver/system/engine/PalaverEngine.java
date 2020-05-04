@@ -118,7 +118,7 @@ public class PalaverEngine implements IPalaverEngine {
     }
 
     public void handleShowErrorDialogRequest(Context context, String message){
-        uiManager.showErrorDialog(context, StringValue.ErrorMessage.USERNAME_PASSWORD_BLANK);
+        uiManager.showErrorDialog(context, message);
     }
 
     public void handleShowToastRequest(Context applicationContext, String string) {
