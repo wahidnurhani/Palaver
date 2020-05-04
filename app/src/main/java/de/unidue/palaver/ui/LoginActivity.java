@@ -26,7 +26,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private EditText userNameEditText, passwordEditText;
     private PalaverEngine palaverEngine;
-    private UIManager uiManager;
 
 
     @Override
@@ -35,7 +34,6 @@ public class LoginActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.activity_login);
         palaverEngine = Palaver.getInstance().getPalaverEngine();
-        uiManager = Palaver.getInstance().getUiManager();
 
         Button loginButton = findViewById(R.id.login_login_button);
         TextView toRegisterTextView = findViewById(R.id.login_register_button);
@@ -51,7 +49,7 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         toRegisterTextView.setOnClickListener(v -> {
-            uiManager.openRegisterActivity(LoginActivity.this);
+            palaverEngine.handleOpenRegisterActivityRequest(LoginActivity.this);
             overridePendingTransition(0,0);
         });
     }

@@ -157,4 +157,8 @@ public class PalaverEngine implements IPalaverEngine {
     public void handleOpenChatManagerActivityRequest(Activity activity) {
         uiManager.openChatManagerActivity(activity);
     }
+
+    public void handleOpenRegisterActivityRequest(Context context) {
+        uiManager.openRegisterActivity(context);
+    }
 }
