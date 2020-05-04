@@ -22,9 +22,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private static final String TAG= RegisterActivity.class.getSimpleName();
     private static boolean visibility;
-    private Palaver palaver = Palaver.getInstance();
     private PalaverEngine palaverEngine;
-    private UIManager uiManager;
 
     private EditText userNameEditText;
     private EditText passwordEditText;
@@ -36,8 +34,7 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.activity_register);
-        palaverEngine = palaver.getPalaverEngine();
-        uiManager = palaver.getUiManager();
+        palaverEngine = Palaver.getInstance().getPalaverEngine();
 
         Button registerButton = findViewById(R.id.register_register_button);
         userNameEditText = findViewById(R.id.register_userName_editText);
@@ -54,7 +51,7 @@ public class RegisterActivity extends AppCompatActivity {
         });
 
         backToLoginTextView.setOnClickListener(v -> {
-            uiManager.openLoginActivity(RegisterActivity.this);
+            palaverEngine.handleOpenLoginActivityRequest(RegisterActivity.this);
             overridePendingTransition(0,0);
         });
     }
@@ -99,7 +96,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        uiManager.openLoginActivity(RegisterActivity.this);
+        palaverEngine.handleOpenLoginActivityRequest(RegisterActivity.this);
         overridePendingTransition(0,0);
     }
 }
