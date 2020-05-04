@@ -37,9 +37,9 @@ public class Palaver implements IPalaver{
 
     private Palaver() {
         palaverInstance = this;
-        this.palaverEngine = new PalaverEngine();
         this.chatsManager = new ChatsManager();
         this.friendManager = new FriendManager();
+        this.palaverEngine = new PalaverEngine(chatsManager, friendManager);
         this.uiController = new UIController();
     }
 

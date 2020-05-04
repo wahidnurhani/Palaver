@@ -3,11 +3,8 @@ package de.unidue.palaver.system.engine.communicator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-import de.unidue.palaver.system.SessionManager;
 import de.unidue.palaver.system.engine.PalaverEngine;
 import de.unidue.palaver.system.resource.StringValue;
 import de.unidue.palaver.system.Palaver;
@@ -19,17 +16,17 @@ public class Authentificator {
     private static final String TAG= Authentificator.class.getSimpleName();
 
     private Context applicationContext;
-    private PalaverEngine palaverEngine;
     private Activity activity;
+    private PalaverEngine palaverEngine;
+
     private int method;
     private ProgressDialog progressDialog;
 
     public Authentificator() {
-        this.palaverEngine = Palaver.getInstance().getPalaverEngine();
+
     }
 
     public void register(Context applicationContext, Activity activity, String userName, String password) {
-
 
         this.method = 2;
         this.activity = activity;
@@ -82,7 +79,6 @@ public class Authentificator {
     @SuppressLint("StaticFieldLeak")
     private class FetchAuthentification extends AsyncTask<MyParam, Void, String[]> {
 
-
         @Override
         protected String[] doInBackground(MyParam... myParams) {
 
@@ -100,13 +96,10 @@ public class Authentificator {
             }
             if(returnValue[0].equals("1")){
                 if(myParams[0].getCmd().equals(StringValue.APICmd.VALIDATE)){
-                    SessionManager.getSessionManagerInstance(applicationContext).setUser(user);
-                    SessionManager.getSessionManagerInstance(applicationContext).startSession(user.getUserData().getUserName(),
-                            user.getUserData().getPassword());
-                    Intent intent = new Intent(StringValue.IntentAction.BROADCAST_AUTHENTIFICATED);
-                    LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent);
+                    palaverEngine.handleStartSessionRequest(applicationContext, user);
+                    palaverEngine.handleSendLocalBroadCastRequest(applicationContext,
+                            StringValue.IntentAction.BROADCAST_AUTHENTIFICATED);
                     try {
-
                         palaverEngine.handleFetchAllFriendRequestWithNoService(myParams[0].getUser());
                         palaverEngine.handleFetchAllChatRequestWithNoService(applicationContext);
 
@@ -114,9 +107,11 @@ public class Authentificator {
                         e.printStackTrace();
                     }
                 } else {
+                    palaverEngine.handleSendLocalBroadCastRequest(applicationContext,
+                            StringValue.IntentAction.BROADCAST_USER_REGISTERED);
 
-                    Intent intent = new Intent(StringValue.IntentAction.BROADCAST_USER_REGISTERED);
-                    LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent);
+                    palaverEngine.handleSendLocalBroadCastRequest(applicationContext,
+                            StringValue.IntentAction.BROADCAST_USER_REGISTERED);
                 }
             }
             return returnValue;
