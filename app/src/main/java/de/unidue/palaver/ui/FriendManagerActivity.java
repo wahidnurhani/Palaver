@@ -22,7 +22,7 @@ import de.unidue.palaver.system.Palaver;
 import de.unidue.palaver.R;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.resource.StringValue;
-import de.unidue.palaver.system.engine.Communicator;
+import de.unidue.palaver.system.engine.communicator.Communicator;
 import de.unidue.palaver.system.engine.PalaverEngine;
 
 public class FriendManagerActivity extends AppCompatActivity {

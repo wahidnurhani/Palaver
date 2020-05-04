@@ -17,7 +17,7 @@ import de.unidue.palaver.system.model.CommunicatorResult;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.User;
 import de.unidue.palaver.system.resource.StringValue;
-import de.unidue.palaver.system.engine.Communicator;
+import de.unidue.palaver.system.engine.communicator.Communicator;
 
 public class ServiceFetchFriend extends Service {
     private static final String TAG= ServiceFetchFriend.class.getSimpleName();

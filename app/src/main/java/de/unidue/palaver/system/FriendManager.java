@@ -10,7 +10,7 @@ import java.util.List;
 
 import de.unidue.palaver.system.database.PalaverDB;
 import de.unidue.palaver.system.model.Friend;
-import de.unidue.palaver.ui.arrayadapter.FriendArrayAdapter;
+import de.unidue.palaver.system.uicontroller.arrayadapter.FriendArrayAdapter;
 
 public class FriendManager {
 

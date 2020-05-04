@@ -18,7 +18,7 @@ import java.util.Objects;
 import de.unidue.palaver.system.Palaver;
 import de.unidue.palaver.system.SessionManager;
 import de.unidue.palaver.system.database.PalaverDB;
-import de.unidue.palaver.system.engine.Communicator;
+import de.unidue.palaver.system.engine.communicator.Communicator;
 import de.unidue.palaver.system.model.CommunicatorResult;
 
 import de.unidue.palaver.system.model.Friend;
@@ -90,7 +90,7 @@ public class ServiceSendMessage extends Service {
         protected void onPostExecute(CommunicatorResult<Date> s) {
             super.onPostExecute(s);
             if(s.getResponseValue()!=1){
-                Palaver.getInstance().getUiManager().showToast(getApplicationContext(), "failed to send message");
+                Palaver.getInstance().getUiController().showToast(getApplicationContext(), "failed to send message");
             }
 
 

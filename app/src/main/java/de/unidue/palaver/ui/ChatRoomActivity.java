@@ -11,7 +11,7 @@ import java.util.Objects;
 
 import de.unidue.palaver.system.Palaver;
 import de.unidue.palaver.R;
-import de.unidue.palaver.system.UIManager;
+import de.unidue.palaver.system.uicontroller.UIController;
 import de.unidue.palaver.system.ChatRoomManager;
 import de.unidue.palaver.system.engine.PalaverEngine;
 import de.unidue.palaver.system.resource.StringValue;
@@ -19,14 +19,14 @@ import de.unidue.palaver.system.resource.StringValue;
 public class ChatRoomActivity extends AppCompatActivity {
     private static boolean visibility;
 
-    private UIManager uiManager;
+    private UIController uiController;
     private PalaverEngine palaverEngine;
     private ChatRoomManager chatRoomManager;
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == android.R.id.home){
-           uiManager.openChatManagerActivity(ChatRoomActivity.this);
+           uiController.openChatManagerActivity(ChatRoomActivity.this);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -35,7 +35,7 @@ public class ChatRoomActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message_manager);
-        uiManager = Palaver.getInstance().getUiManager();
+        uiController = Palaver.getInstance().getUiController();
         palaverEngine = Palaver.getInstance().getPalaverEngine();
         chatRoomManager = (ChatRoomManager) Objects.requireNonNull(Objects.requireNonNull(getIntent().getExtras()).getSerializable(StringValue.IntentKeyName.FRIEND));
 
@@ -74,6 +74,6 @@ public class ChatRoomActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        uiManager.openChatManagerActivity(ChatRoomActivity.this);
+        uiController.openChatManagerActivity(ChatRoomActivity.this);
     }
 }

@@ -1,4 +1,4 @@
-package de.unidue.palaver.system.communicator;
+package de.unidue.palaver.system.engine.communicator;
 
 import org.junit.Test;
 import java.util.Date;

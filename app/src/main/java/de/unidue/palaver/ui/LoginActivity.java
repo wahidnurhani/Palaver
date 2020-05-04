@@ -2,7 +2,6 @@ package de.unidue.palaver.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -14,7 +13,6 @@ import java.util.Objects;
 import de.unidue.palaver.system.Palaver;
 import de.unidue.palaver.R;
 import de.unidue.palaver.system.resource.StringValue;
-import de.unidue.palaver.system.UIManager;
 import de.unidue.palaver.system.engine.PalaverEngine;
 import de.unidue.palaver.system.model.User;
 import de.unidue.palaver.system.model.UserData;

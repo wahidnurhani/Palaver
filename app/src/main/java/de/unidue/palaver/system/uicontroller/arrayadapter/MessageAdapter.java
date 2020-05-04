@@ -1,4 +1,4 @@
-package de.unidue.palaver.system.arrayadapter;
+package de.unidue.palaver.system.uicontroller.arrayadapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

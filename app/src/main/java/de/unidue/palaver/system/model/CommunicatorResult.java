@@ -1,13 +1,15 @@
 package de.unidue.palaver.system.model;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import java.util.Date;
 import java.util.List;
-
-import de.unidue.palaver.system.engine.Parser;
+import de.unidue.palaver.system.engine.communicator.Parser;
 
 public class CommunicatorResult<T> {
+    private static final String TAG = CommunicatorResult.class.getSimpleName();
     private int responseValue;
     private String message;
     private List<T> data;
@@ -41,6 +43,7 @@ public class CommunicatorResult<T> {
                     stringBuilder.append(((Friend)friend).getUsername()).append(", ");
                 }
                 stringBuilder.append(" ]");
+                Log.i(TAG, "test");
                 return "Msg Type :"+responseValue+" , "+"message : "+message+" , data : "+stringBuilder.toString();
             }
 
@@ -51,6 +54,7 @@ public class CommunicatorResult<T> {
                     stringBuilder.append((String)s).append(", ");
                 }
                 stringBuilder.append(" ]");
+                Log.i(TAG, stringBuilder.toString());
                 return "Msg Type :"+responseValue+" , "+"message : "+message+" , data : "+stringBuilder.toString();
             }
 
@@ -63,6 +67,7 @@ public class CommunicatorResult<T> {
                     stringBuilder.append(dateString).append(", ");
                 }
                 stringBuilder.append(" ]");
+                Log.i(TAG, stringBuilder.toString());
                 return "Msg Type :"+responseValue+" , "+"message : "+message+" , data : "+stringBuilder.toString();
             }
 
@@ -70,14 +75,16 @@ public class CommunicatorResult<T> {
                 StringBuilder stringBuilder = new StringBuilder();
                 stringBuilder.append("[ ");
                 for (T chatItem : data){
-                    stringBuilder.append(((Message)chatItem).getMessage()).append("  "+((Message) chatItem).getDate().toString()).append(", ");
+                    stringBuilder.append(((Message) chatItem).getMessage()).append("  ").append(((Message) chatItem).getDate().toString()).append(", ");
                 }
                 stringBuilder.append(" ]");
+                Log.i(TAG, stringBuilder.toString());
                 return "Msg Type :"+responseValue+" , "+"message : "+message+" , data : "+stringBuilder.toString() ;
             }
         }
 
 
+        Log.i(TAG, "Msg Type :"+responseValue+" , "+"message : "+message);
         return "Msg Type :"+responseValue+" , "+"message : "+message;
     }
 }

@@ -4,7 +4,7 @@ package de.unidue.palaver.system.model;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.util.Date;
-import de.unidue.palaver.system.engine.Parser;
+import de.unidue.palaver.system.engine.communicator.Parser;
 import de.unidue.palaver.system.resource.MessageType;
 
 public class Message implements Comparable<Message>, Serializable {

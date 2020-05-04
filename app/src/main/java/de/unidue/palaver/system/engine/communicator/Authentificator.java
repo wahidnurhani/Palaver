@@ -1,38 +1,36 @@
-package de.unidue.palaver.system.communicator;
+package de.unidue.palaver.system.engine.communicator;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-
+import android.util.Log;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-
 import de.unidue.palaver.system.SessionManager;
+import de.unidue.palaver.system.engine.PalaverEngine;
 import de.unidue.palaver.system.resource.StringValue;
-import de.unidue.palaver.system.uicontroller.UIController;
-import de.unidue.palaver.ui.LoginActivity;
 import de.unidue.palaver.system.Palaver;
 import de.unidue.palaver.system.model.User;
 import de.unidue.palaver.system.model.UserData;
 import de.unidue.palaver.ui.ProgressDialog;
 
 public class Authentificator {
-    private static final String TAG= LoginActivity.class.getSimpleName();
+    private static final String TAG= Authentificator.class.getSimpleName();
 
-    private Palaver palaver;
-    private UIController uiController;
     private Context applicationContext;
+    private PalaverEngine palaverEngine;
     private Activity activity;
     private int method;
     private ProgressDialog progressDialog;
 
     public Authentificator() {
-        this.palaver = Palaver.getInstance();
-        uiController = palaver.getUiController();
+        this.palaverEngine = Palaver.getInstance().getPalaverEngine();
     }
 
     public void register(Context applicationContext, Activity activity, String userName, String password) {
+
+
         this.method = 2;
         this.activity = activity;
         this.applicationContext = applicationContext;
@@ -43,9 +41,12 @@ public class Authentificator {
         fetchAuthentification.execute(myParam);
         progressDialog = new ProgressDialog(activity);
         progressDialog.startDialog();
+
+        palaverEngine= Palaver.getInstance().getPalaverEngine();
     }
 
     public void authentificate(Context applicationContext, Activity activity, String userName, String password) {
+
         this.method = 1;
         this.applicationContext = applicationContext;
         this.activity = activity;
@@ -56,6 +57,8 @@ public class Authentificator {
         fetchAuthentification.execute(myParam);
         progressDialog = new ProgressDialog(activity);
         progressDialog.startDialog();
+
+        palaverEngine= Palaver.getInstance().getPalaverEngine();
     }
 
     private static class MyParam{
@@ -78,11 +81,17 @@ public class Authentificator {
 
     @SuppressLint("StaticFieldLeak")
     private class FetchAuthentification extends AsyncTask<MyParam, Void, String[]> {
+
+
         @Override
         protected String[] doInBackground(MyParam... myParams) {
+
+            Log.i(TAG, "check applicationContext :"+ (applicationContext!=null));
+            Log.i(TAG, "chieck palavarEngine FetchAuthentification:"+ (palaverEngine!=null));
+
             String[] returnValue=new String[]{};
             User user = myParams[0].getUser();
-            Communicator communicator = palaver.getPalaverEngine().getCommunicator();
+            Communicator communicator = Palaver.getInstance().getPalaverEngine().getCommunicator();
             try {
                 returnValue= communicator.registerAndValidate(myParams[0].getUser(),
                         myParams[0].getCmd());
@@ -98,14 +107,14 @@ public class Authentificator {
                     LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent);
                     try {
 
-                        Palaver.getInstance().getPalaverEngine().handleFetchAllFriendRequestWithNoService(myParams[0].getUser());
-
-                        Palaver.getInstance().getPalaverEngine().handleFetchAllChatRequestWithNoService(applicationContext);
+                        palaverEngine.handleFetchAllFriendRequestWithNoService(myParams[0].getUser());
+                        palaverEngine.handleFetchAllChatRequestWithNoService(applicationContext);
 
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 } else {
+
                     Intent intent = new Intent(StringValue.IntentAction.BROADCAST_USER_REGISTERED);
                     LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent);
                 }
@@ -119,16 +128,18 @@ public class Authentificator {
 
         @Override
         protected void onPostExecute(String[] objects) {
+            Log.i(TAG, "chieck palavarEngine FetchAuthentification onPost:"+ (palaverEngine!=null));
+
             progressDialog.dismissDialog();
             if (!objects[0].equals("1")) {
-                Palaver.getInstance().getUiController().showToast(applicationContext, objects[1]);
+                palaverEngine.handleShowToastRequest(applicationContext, objects[1]);
             } else {
                 if(method==1){
-                    Palaver.getInstance().getUiController().openSplashScreenActivity(activity);
+                    palaverEngine.hadleOpenSplashScreenActivityRequest(activity);
                     activity.overridePendingTransition(0,0);
                 } else {
-                    Palaver.getInstance().getUiController().showToast(applicationContext, objects[1]);
-                    Palaver.getInstance().getUiController().openLoginActivity(activity);
+                    palaverEngine.handleShowToastRequest(applicationContext, objects[1]);
+                    palaverEngine.handleOpenLoginActivityRequest(activity);
                     activity.overridePendingTransition(0,0);
                 }
 

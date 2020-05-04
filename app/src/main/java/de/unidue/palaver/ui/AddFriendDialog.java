@@ -15,7 +15,6 @@ import de.unidue.palaver.R;
 import de.unidue.palaver.system.SessionManager;
 import de.unidue.palaver.system.engine.PalaverEngine;
 import de.unidue.palaver.system.resource.StringValue;
-import de.unidue.palaver.system.UIManager;
 
 public class AddFriendDialog {
 
@@ -28,7 +27,7 @@ public class AddFriendDialog {
     private EditText userNameEditText;
 
     public AddFriendDialog(Context applicationContext, Activity activity) {
-        this.applicationContext =applicationContext;
+        this.applicationContext = applicationContext;
         this.activity = activity;
         this.sessionManager = SessionManager.getSessionManagerInstance(applicationContext);
     }

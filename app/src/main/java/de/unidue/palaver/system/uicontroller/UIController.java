@@ -1,4 +1,4 @@
-package de.unidue.palaver.system;
+package de.unidue.palaver.system.uicontroller;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.widget.Toast;
 
+import de.unidue.palaver.system.ChatRoomManager;
 import de.unidue.palaver.system.resource.StringValue;
 import de.unidue.palaver.ui.AddFriendDialog;
 import de.unidue.palaver.ui.ChatManagerActivity;
@@ -16,9 +17,9 @@ import de.unidue.palaver.ui.LoginActivity;
 import de.unidue.palaver.ui.RegisterActivity;
 import de.unidue.palaver.ui.SplashScreenActivity;
 
-public class UIManager {
+public class UIController {
 
-    public UIManager() {
+    public UIController() {
     }
 
     public void showErrorDialog(Context context, String message) {
@@ -69,7 +70,7 @@ public class UIManager {
         context.startActivity(intent);
     }
 
-    public void openChat(Context context, ChatRoomManager chatRoomManager) {
+    public void openChatRoom(Context context, ChatRoomManager chatRoomManager) {
         Intent intent = new Intent(context, ChatRoomActivity.class);
         Bundle bundle = new Bundle();
         bundle.putSerializable(StringValue.IntentKeyName.FRIEND, chatRoomManager);

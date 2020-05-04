@@ -1,6 +1,6 @@
 package de.unidue.palaver.system;
 
-import android.app.Activity;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -18,7 +18,7 @@ import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.IChat;
 import de.unidue.palaver.system.resource.StringValue;
 import de.unidue.palaver.ui.ChatRoomActivity;
-import de.unidue.palaver.ui.arrayadapter.MessageAdapter;
+import de.unidue.palaver.system.uicontroller.arrayadapter.MessageAdapter;
 
 public class ChatRoomManager implements Comparable<ChatRoomManager>, IChat, Serializable {
 
@@ -114,6 +114,7 @@ public class ChatRoomManager implements Comparable<ChatRoomManager>, IChat, Seri
         return messageAdapter;
     }
 
+    @SuppressLint("StaticFieldLeak")
     private class FectchChatFromDB extends AsyncTask<Void, Void, Void> {
 
         @Override

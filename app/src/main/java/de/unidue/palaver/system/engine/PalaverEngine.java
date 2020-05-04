@@ -1,13 +1,18 @@
-package de.unidue.palaver.system;
+package de.unidue.palaver.system.engine;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 
 import java.util.Date;
 import java.util.List;
 
-import de.unidue.palaver.system.communicator.Authentificator;
-import de.unidue.palaver.system.communicator.Communicator;
+import de.unidue.palaver.system.ChatRoomManager;
+import de.unidue.palaver.system.ChatsManager;
+import de.unidue.palaver.system.Palaver;
+import de.unidue.palaver.system.SessionManager;
+import de.unidue.palaver.system.engine.communicator.Authentificator;
+import de.unidue.palaver.system.engine.communicator.Communicator;
 import de.unidue.palaver.system.model.Message;
 import de.unidue.palaver.system.model.CommunicatorResult;
 import de.unidue.palaver.system.resource.MessageType;
@@ -21,6 +26,7 @@ import de.unidue.palaver.system.uicontroller.UIController;
 import de.unidue.palaver.ui.LoginActivity;
 
 public class PalaverEngine implements IPalaverEngine {
+    private static final String TAG = PalaverEngine.class.getSimpleName();
 
     private Communicator communicator;
     private Authentificator authentificator;
@@ -42,6 +48,7 @@ public class PalaverEngine implements IPalaverEngine {
 
     @Override
     public void handleSendMessage(Context applicationContext, Activity activity, ChatRoomManager chatRoomManager, String messageText) {
+        Log.i(TAG, "Check palaverDB SendMessage: "+ (palaver.getPalaverDB()!=null));
 
         Message message = new Message(SessionManager.getSessionManagerInstance(applicationContext).getUser().getUserData().getUserName(),
                 chatRoomManager.getFriend().getUsername(), MessageType.OUT, messageText, "true", new Date());
@@ -55,6 +62,8 @@ public class PalaverEngine implements IPalaverEngine {
 
     @Override
     public void handleFetchAllFriendRequestWithNoService(User user) {
+        Log.i(TAG, "Check communicator FetchAllFriendRequest: "+ (communicator!=null));
+
         List<Friend> friends = communicator.fetchFriends(user).getData();
         for (Friend friend : friends){
             palaver.getPalaverDB().insertFriend(friend);
@@ -63,6 +72,9 @@ public class PalaverEngine implements IPalaverEngine {
 
     @Override
     public void handleRegisterRequest(Context applicationContext, Activity activity, User user) {
+        Log.i(TAG, "Check authenticator RegisterRequest: "+ (authentificator!=null));
+        Log.i(TAG, "Check uiController RegisterRequest: "+ (uiController!=null));
+
         if(communicator.checkConnectivity(applicationContext)){
             authentificator.register(applicationContext, activity, user.getUserData().getUserName(),
                     user.getUserData().getPassword());
@@ -73,16 +85,20 @@ public class PalaverEngine implements IPalaverEngine {
 
     @Override
     public void handleLoginRequest(Context applicationContext, LoginActivity loginActivity, User user) {
+        Log.i(TAG, "Check uiController LoginRequest: "+ (uiController!=null));
+        Log.i(TAG, "Check authenticator LoginRequest: "+ (authentificator!=null));
+
         if(communicator.checkConnectivity(applicationContext)){
             authentificator.authentificate(applicationContext, loginActivity,  user.getUserData().getUserName(),
                     user.getUserData().getPassword());
         } else{
-            palaver.getUiController().showToast(applicationContext, StringValue.ErrorMessage.NO_INTERNET);
+            uiController.showToast(applicationContext, StringValue.ErrorMessage.NO_INTERNET);
         }
     }
 
     @Override
     public void handleLogoutRequest(Context applicationContext) {
+        Log.i(TAG, "Check uiController LogoutRequest: "+ (uiController!=null));
         SessionManager.getSessionManagerInstance(applicationContext).endSession();
         uiController.openLoginActivity(applicationContext);
         palaver.destroy();
@@ -97,6 +113,7 @@ public class PalaverEngine implements IPalaverEngine {
     }
 
     public void handleFetchAllChatRequestWithNoService(Context applicationContext) {
+        Log.i(TAG, "Check communicator FetchAllAchatWithoutService: "+ (communicator!=null));
         List<Friend> friends = palaver.getPalaverDB().getAllFriends();
 
         for(Friend friend : friends){
@@ -116,14 +133,18 @@ public class PalaverEngine implements IPalaverEngine {
     }
 
     public void handleShowErrorDialogRequest(Context context, String message){
+        Log.i(TAG, "Check uiController ShowErrorDdialog: "+ (uiController!=null));
         uiController.showErrorDialog(context, message);
     }
 
     public void handleShowToastRequest(Context applicationContext, String string) {
+        Log.i(TAG, "Check uiController ShowToast: "+ (uiController!=null));
         uiController.showToast(applicationContext, string);
     }
 
     public void handleClickOnFriend(Context context, Friend friend) {
+        Log.i(TAG, "Check chatManager ClickOnFriend: "+ (chatsManager!=null));
+        Log.i(TAG, "Check uiController ClickOnFriend: "+ (uiController!=null));
         chatsManager = Palaver.getInstance().getChatsManager();
         ChatRoomManager chatRoomManager = chatsManager.getChat(friend);
 
@@ -131,30 +152,40 @@ public class PalaverEngine implements IPalaverEngine {
             chatRoomManager = new ChatRoomManager(friend);
             chatsManager.addChat(chatRoomManager);
         }
-        uiController.openChat(context, chatRoomManager);
+        uiController.openChatRoom(context, chatRoomManager);
     }
 
     public void handleOpenLoginActivityRequest(Activity activity) {
+        Log.i(TAG, "Check uiController openLoginActivity: "+ (uiController!=null));
         uiController.openLoginActivity(activity);
     }
 
     public void handleOpenFriendManagerActivityRequest(Activity activity) {
+        Log.i(TAG, "Check uiController openFriendMAnagerActivity: "+ (uiController!=null));
         uiController.openFriendManagerActivity(activity);
     }
 
     public void handleOpenChatRoomRequest(Activity activity, ChatRoomManager chatRoomManager) {
-        uiController.openChat(activity, chatRoomManager);
+        Log.i(TAG, "Check uiController ChatRoomActivity: "+ (uiController!=null));
+        uiController.openChatRoom(activity, chatRoomManager);
     }
 
     public void handleOpenAddFriendDialogRequest(Context applicationContext, Activity activity) {
+        Log.i(TAG, "Check uiController open addFriend Dialog: "+ (uiController!=null));
         uiController.openAddFriendDDialog(applicationContext, activity);
     }
 
     public void handleOpenChatManagerActivityRequest(Activity activity) {
+        Log.i(TAG, "Check uiController openChatManagerActivity: "+ (uiController!=null));
         uiController.openChatManagerActivity(activity);
     }
 
     public void handleOpenRegisterActivityRequest(Context context) {
+        Log.i(TAG, "Check uiController openRegisterActivity: "+ (uiController!=null));
         uiController.openRegisterActivity(context);
+    }
+
+    public void hadleOpenSplashScreenActivityRequest(Activity activity) {
+        uiController.openSplashScreenActivity(activity);
     }
 }

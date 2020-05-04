@@ -1,4 +1,4 @@
-package de.unidue.palaver.system.communicator;
+package de.unidue.palaver.system.engine.communicator;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

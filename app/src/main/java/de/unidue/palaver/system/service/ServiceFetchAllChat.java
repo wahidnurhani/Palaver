@@ -17,7 +17,7 @@ import java.util.List;
 import de.unidue.palaver.system.Palaver;
 import de.unidue.palaver.system.SessionManager;
 import de.unidue.palaver.system.database.PalaverDB;
-import de.unidue.palaver.system.engine.Communicator;
+import de.unidue.palaver.system.engine.communicator.Communicator;
 import de.unidue.palaver.system.model.Message;
 import de.unidue.palaver.system.model.CommunicatorResult;
 import de.unidue.palaver.system.model.Friend;
@@ -84,7 +84,7 @@ public class ServiceFetchAllChat extends Service {
         @Override
         protected void onPostExecute(CommunicatorResult<Message> s) {
             super.onPostExecute(s);
-            palaver.getUiManager().showToast(getApplicationContext(), s.getMessage());
+            palaver.getUiController().showToast(getApplicationContext(), s.getMessage());
 
         }
     }

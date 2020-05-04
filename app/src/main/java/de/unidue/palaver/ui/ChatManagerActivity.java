@@ -14,13 +14,12 @@ import de.unidue.palaver.system.ChatsManager;
 import de.unidue.palaver.system.Palaver;
 import de.unidue.palaver.R;
 import de.unidue.palaver.system.SessionManager;
-import de.unidue.palaver.system.UIManager;
 import de.unidue.palaver.system.engine.PalaverEngine;
 
 public class ChatManagerActivity extends AppCompatActivity {
     private static final String TAG= ChatManagerActivity.class.getSimpleName();
-    private PalaverEngine palaverEngine;
 
+    private PalaverEngine palaverEngine;
     private ChatsManager chatsManager;
     private static boolean visibility;
 

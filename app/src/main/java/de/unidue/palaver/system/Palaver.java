@@ -5,13 +5,14 @@ import android.content.Context;
 
 import de.unidue.palaver.system.database.PalaverDB;
 import de.unidue.palaver.system.engine.PalaverEngine;
+import de.unidue.palaver.system.uicontroller.UIController;
 
 public class Palaver implements IPalaver{
     private PalaverEngine palaverEngine;
     private PalaverDB palaverDB;
     private ChatsManager chatsManager;
     private FriendManager friendManager;
-    private UIManager uiManager;
+    private UIController uiController;
     @SuppressLint("StaticFieldLeak")
     private static Palaver palaverInstance;
     private Context context;
@@ -39,11 +40,11 @@ public class Palaver implements IPalaver{
         this.palaverEngine = new PalaverEngine();
         this.chatsManager = new ChatsManager();
         this.friendManager = new FriendManager();
-        this.uiManager = new UIManager();
+        this.uiController = new UIController();
     }
 
-    public UIManager getUiManager() {
-        return uiManager;
+    public UIController getUiController() {
+        return uiController;
     }
 
     public FriendManager getFriendManager() {
