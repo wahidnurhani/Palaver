@@ -1,4 +1,4 @@
-package de.unidue.palaver.ui.arrayadapter;
+package de.unidue.palaver.system.arrayadapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;

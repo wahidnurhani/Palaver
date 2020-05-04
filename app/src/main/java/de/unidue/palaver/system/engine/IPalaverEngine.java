@@ -1,11 +1,9 @@
-package de.unidue.palaver.system.engine;
+package de.unidue.palaver.system;
 
 import android.app.Activity;
 import android.content.Context;
 
 import de.unidue.palaver.system.ChatRoomManager;
-import de.unidue.palaver.system.model.Message;
-import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.User;
 import de.unidue.palaver.ui.LoginActivity;
 

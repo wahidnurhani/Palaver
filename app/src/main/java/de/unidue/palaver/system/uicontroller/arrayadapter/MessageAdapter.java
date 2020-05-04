@@ -1,4 +1,4 @@
-package de.unidue.palaver.ui.arrayadapter;
+package de.unidue.palaver.system.arrayadapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -16,10 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
-import java.text.SimpleDateFormat;
-
 import de.unidue.palaver.R;
-import de.unidue.palaver.system.engine.Parser;
 import de.unidue.palaver.system.model.Message;
 import de.unidue.palaver.system.resource.MessageType;
 

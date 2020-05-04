@@ -1,4 +1,4 @@
-package de.unidue.palaver.system.engine;
+package de.unidue.palaver.system.communicator;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -37,7 +37,7 @@ public class Communicator {
     private JSONBuilder jsonBuilder;
     private Parser parser;
 
-    Communicator() {
+    public Communicator() {
         this.jsonBuilder = new JSONBuilder();
         this.parser = new Parser();
     }

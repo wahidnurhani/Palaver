@@ -1,4 +1,4 @@
-package de.unidue.palaver.system.engine;
+package de.unidue.palaver.system.communicator;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -10,29 +10,29 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import de.unidue.palaver.system.SessionManager;
 import de.unidue.palaver.system.resource.StringValue;
-import de.unidue.palaver.system.UIManager;
+import de.unidue.palaver.system.uicontroller.UIController;
 import de.unidue.palaver.ui.LoginActivity;
 import de.unidue.palaver.system.Palaver;
 import de.unidue.palaver.system.model.User;
 import de.unidue.palaver.system.model.UserData;
 import de.unidue.palaver.ui.ProgressDialog;
 
-class Authentificator {
+public class Authentificator {
     private static final String TAG= LoginActivity.class.getSimpleName();
 
     private Palaver palaver;
-    private UIManager uiManager;
+    private UIController uiController;
     private Context applicationContext;
     private Activity activity;
     private int method;
     private ProgressDialog progressDialog;
 
-    Authentificator() {
+    public Authentificator() {
         this.palaver = Palaver.getInstance();
-        uiManager = palaver.getUiManager();
+        uiController = palaver.getUiController();
     }
 
-    void register(Context applicationContext, Activity activity, String userName, String password) {
+    public void register(Context applicationContext, Activity activity, String userName, String password) {
         this.method = 2;
         this.activity = activity;
         this.applicationContext = applicationContext;
@@ -45,7 +45,7 @@ class Authentificator {
         progressDialog.startDialog();
     }
 
-    void authentificate(Context applicationContext, Activity activity, String userName, String password) {
+    public void authentificate(Context applicationContext, Activity activity, String userName, String password) {
         this.method = 1;
         this.applicationContext = applicationContext;
         this.activity = activity;
@@ -121,14 +121,14 @@ class Authentificator {
         protected void onPostExecute(String[] objects) {
             progressDialog.dismissDialog();
             if (!objects[0].equals("1")) {
-                Palaver.getInstance().getUiManager().showToast(applicationContext, objects[1]);
+                Palaver.getInstance().getUiController().showToast(applicationContext, objects[1]);
             } else {
                 if(method==1){
-                    Palaver.getInstance().getUiManager().openSplashScreenActivity(activity);
+                    Palaver.getInstance().getUiController().openSplashScreenActivity(activity);
                     activity.overridePendingTransition(0,0);
                 } else {
-                    Palaver.getInstance().getUiManager().showToast(applicationContext, objects[1]);
-                    Palaver.getInstance().getUiManager().openLoginActivity(activity);
+                    Palaver.getInstance().getUiController().showToast(applicationContext, objects[1]);
+                    Palaver.getInstance().getUiController().openLoginActivity(activity);
                     activity.overridePendingTransition(0,0);
                 }
 

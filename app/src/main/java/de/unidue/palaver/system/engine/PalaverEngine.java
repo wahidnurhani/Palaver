@@ -1,4 +1,4 @@
-package de.unidue.palaver.system.engine;
+package de.unidue.palaver.system;
 
 import android.app.Activity;
 import android.content.Context;
@@ -6,11 +6,8 @@ import android.content.Context;
 import java.util.Date;
 import java.util.List;
 
-import de.unidue.palaver.system.ChatRoomManager;
-import de.unidue.palaver.system.ChatsManager;
-import de.unidue.palaver.system.Palaver;
-import de.unidue.palaver.system.SessionManager;
-import de.unidue.palaver.system.UIManager;
+import de.unidue.palaver.system.communicator.Authentificator;
+import de.unidue.palaver.system.communicator.Communicator;
 import de.unidue.palaver.system.model.Message;
 import de.unidue.palaver.system.model.CommunicatorResult;
 import de.unidue.palaver.system.resource.MessageType;
@@ -20,6 +17,7 @@ import de.unidue.palaver.system.model.User;
 import de.unidue.palaver.system.service.ServiceAddFriend;
 import de.unidue.palaver.system.service.ServiceFetchAllChat;
 import de.unidue.palaver.system.service.ServiceSendMessage;
+import de.unidue.palaver.system.uicontroller.UIController;
 import de.unidue.palaver.ui.LoginActivity;
 
 public class PalaverEngine implements IPalaverEngine {
@@ -28,13 +26,13 @@ public class PalaverEngine implements IPalaverEngine {
     private Authentificator authentificator;
     private Palaver palaver;
     private ChatsManager chatsManager;
-    private UIManager uiManager;
+    private UIController uiController;
 
     public PalaverEngine() {
         this.palaver = Palaver.getInstance();
         this.communicator = new Communicator();
         this.authentificator = new Authentificator();
-        this.uiManager = new UIManager();
+        this.uiController = new UIController();
         this.chatsManager = Palaver.getInstance().getChatsManager();
     }
 
@@ -69,7 +67,7 @@ public class PalaverEngine implements IPalaverEngine {
             authentificator.register(applicationContext, activity, user.getUserData().getUserName(),
                     user.getUserData().getPassword());
         } else{
-            uiManager.showToast(activity, StringValue.ErrorMessage.NO_INTERNET);
+            uiController.showToast(activity, StringValue.ErrorMessage.NO_INTERNET);
         }
     }
 
@@ -79,14 +77,14 @@ public class PalaverEngine implements IPalaverEngine {
             authentificator.authentificate(applicationContext, loginActivity,  user.getUserData().getUserName(),
                     user.getUserData().getPassword());
         } else{
-            palaver.getUiManager().showToast(applicationContext, StringValue.ErrorMessage.NO_INTERNET);
+            palaver.getUiController().showToast(applicationContext, StringValue.ErrorMessage.NO_INTERNET);
         }
     }
 
     @Override
     public void handleLogoutRequest(Context applicationContext) {
         SessionManager.getSessionManagerInstance(applicationContext).endSession();
-        uiManager.openLoginActivity(applicationContext);
+        uiController.openLoginActivity(applicationContext);
         palaver.destroy();
     }
 
@@ -118,47 +116,45 @@ public class PalaverEngine implements IPalaverEngine {
     }
 
     public void handleShowErrorDialogRequest(Context context, String message){
-        uiManager.showErrorDialog(context, message);
+        uiController.showErrorDialog(context, message);
     }
 
     public void handleShowToastRequest(Context applicationContext, String string) {
-        uiManager.showToast(applicationContext, string);
+        uiController.showToast(applicationContext, string);
     }
 
     public void handleClickOnFriend(Context context, Friend friend) {
         chatsManager = Palaver.getInstance().getChatsManager();
-
-        System.out.println(chatsManager==null);
         ChatRoomManager chatRoomManager = chatsManager.getChat(friend);
 
         if(chatRoomManager==null){
             chatRoomManager = new ChatRoomManager(friend);
             chatsManager.addChat(chatRoomManager);
         }
-        uiManager.openChat(context, chatRoomManager);
+        uiController.openChat(context, chatRoomManager);
     }
 
     public void handleOpenLoginActivityRequest(Activity activity) {
-        uiManager.openLoginActivity(activity);
+        uiController.openLoginActivity(activity);
     }
 
     public void handleOpenFriendManagerActivityRequest(Activity activity) {
-        uiManager.openFriendManagerActivity(activity);
+        uiController.openFriendManagerActivity(activity);
     }
 
     public void handleOpenChatRoomRequest(Activity activity, ChatRoomManager chatRoomManager) {
-        uiManager.openChat(activity, chatRoomManager);
+        uiController.openChat(activity, chatRoomManager);
     }
 
     public void handleOpenAddFriendDialogRequest(Context applicationContext, Activity activity) {
-        uiManager.openAddFriendDDialog(applicationContext, activity);
+        uiController.openAddFriendDDialog(applicationContext, activity);
     }
 
     public void handleOpenChatManagerActivityRequest(Activity activity) {
-        uiManager.openChatManagerActivity(activity);
+        uiController.openChatManagerActivity(activity);
     }
 
     public void handleOpenRegisterActivityRequest(Context context) {
-        uiManager.openRegisterActivity(context);
+        uiController.openRegisterActivity(context);
     }
 }
