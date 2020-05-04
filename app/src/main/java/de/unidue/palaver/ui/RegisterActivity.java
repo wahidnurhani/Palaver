@@ -49,7 +49,7 @@ public class RegisterActivity extends AppCompatActivity {
             if(validateUserInput()){
                 User user = new User(new UserData(userNameEditText.getText().toString(),
                         passwordEditText.getText().toString()));
-                palaverEngine.handleRegisterRequest(RegisterActivity.this, user);
+                palaverEngine.handleRegisterRequest(getApplicationContext(), RegisterActivity.this, user);
             }
         });
 

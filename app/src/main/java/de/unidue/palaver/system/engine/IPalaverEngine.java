@@ -15,7 +15,7 @@ public interface IPalaverEngine {
 
     void handleFetchAllFriendRequestWithNoService(User user);
 
-    void handleRegisterRequest(Context context, User user);
+    void handleRegisterRequest(Context applicationContext, Activity activity, User user);
 
     void handleLoginRequest(Context context, LoginActivity loginActivity, User user);
 

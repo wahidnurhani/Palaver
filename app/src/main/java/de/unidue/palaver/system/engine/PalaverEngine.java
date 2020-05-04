@@ -64,12 +64,12 @@ public class PalaverEngine implements IPalaverEngine {
     }
 
     @Override
-    public void handleRegisterRequest(Context context, User user) {
-        if(communicator.checkConnectivity(context)){
-            authentificator.register((Activity) context, user.getUserData().getUserName(),
+    public void handleRegisterRequest(Context applicationContext, Activity activity, User user) {
+        if(communicator.checkConnectivity(applicationContext)){
+            authentificator.register(applicationContext, activity, user.getUserData().getUserName(),
                     user.getUserData().getPassword());
         } else{
-            uiManager.showToast(context, StringValue.ErrorMessage.NO_INTERNET);
+            uiManager.showToast(activity, StringValue.ErrorMessage.NO_INTERNET);
         }
     }
 

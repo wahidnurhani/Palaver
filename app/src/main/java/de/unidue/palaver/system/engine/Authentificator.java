@@ -32,9 +32,10 @@ class Authentificator {
         uiManager = palaver.getUiManager();
     }
 
-    void register(Activity activity, String userName, String password) {
+    void register(Context applicationContext, Activity activity, String userName, String password) {
         this.method = 2;
         this.activity = activity;
+        this.applicationContext = applicationContext;
         User user = new User(new UserData(userName, password));
         String cmd = StringValue.APICmd.REGISTER;
         MyParam myParam = new MyParam(user, cmd);
@@ -97,9 +98,9 @@ class Authentificator {
                     LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent);
                     try {
 
-                        palaver.getPalaverEngine().handleFetchAllFriendRequestWithNoService(myParams[0].getUser());
+                        Palaver.getInstance().getPalaverEngine().handleFetchAllFriendRequestWithNoService(myParams[0].getUser());
 
-                        palaver.getPalaverEngine().handleFetchAllChatRequestWithNoService(applicationContext);
+                        Palaver.getInstance().getPalaverEngine().handleFetchAllChatRequestWithNoService(applicationContext);
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -120,14 +121,14 @@ class Authentificator {
         protected void onPostExecute(String[] objects) {
             progressDialog.dismissDialog();
             if (!objects[0].equals("1")) {
-                palaver.getUiManager().showToast(applicationContext, objects[1]);
+                Palaver.getInstance().getUiManager().showToast(applicationContext, objects[1]);
             } else {
                 if(method==1){
                     Palaver.getInstance().getUiManager().openSplashScreenActivity(activity);
                     activity.overridePendingTransition(0,0);
                 } else {
-                    uiManager.showToast(applicationContext, objects[1]);
-                    uiManager.openLoginActivity(activity);
+                    Palaver.getInstance().getUiManager().showToast(applicationContext, objects[1]);
+                    Palaver.getInstance().getUiManager().openLoginActivity(activity);
                     activity.overridePendingTransition(0,0);
                 }
 
