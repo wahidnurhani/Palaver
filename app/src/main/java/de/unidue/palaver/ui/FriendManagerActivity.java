@@ -19,17 +19,14 @@ import java.util.Objects;
 
 import de.unidue.palaver.system.FriendModelView;
 import de.unidue.palaver.R;
-import de.unidue.palaver.system.Palaver;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.ListLiveData;
 import de.unidue.palaver.system.resource.StringValue;
-import de.unidue.palaver.system.engine.PalaverEngine;
 import de.unidue.palaver.system.uicontroller.arrayadapter.FriendArrayAdapter;
 
 public class FriendManagerActivity extends AppCompatActivity {
     private static boolean visibility;
 
-    private PalaverEngine palaverEngine;
     private FriendModelView friendModelView;
 
     private BroadcastReceiver friendAddeddMessageReceiver = new BroadcastReceiver() {
@@ -64,7 +61,7 @@ public class FriendManagerActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == android.R.id.home){
-            palaverEngine.handleOpenChatManagerActivityRequest(FriendManagerActivity.this);
+            friendModelView.OpenChatManagerActivity(FriendManagerActivity.this);
             overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_rigt);
         }
 
@@ -75,7 +72,6 @@ public class FriendManagerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friend_manager);
-        palaverEngine = Palaver.getInstance().getPalaverEngine();
 
         friendModelView = new FriendModelView();
         final ListLiveData<Friend> friendsListLiveData = friendModelView.getFriendsLiveData();
@@ -90,7 +86,7 @@ public class FriendManagerActivity extends AppCompatActivity {
 
         FloatingActionButton floatingActionButton = findViewById(R.id.friendManager_addChatFloatingButton);
         floatingActionButton.setOnClickListener(v ->
-                palaverEngine.handleOpenAddFriendDialogRequest(getApplicationContext(),
+                friendModelView.openAddFriendDialog(getApplicationContext(),
                         FriendManagerActivity.this));
 
         ListView friendsListView = findViewById(R.id.friendManager_recycleView);
@@ -103,7 +99,7 @@ public class FriendManagerActivity extends AppCompatActivity {
 
         friendsListView.setOnItemClickListener((parent, view, position, id) -> {
             Friend friend = friendArrayAdapter.getItem(position);
-            palaverEngine.handleClickOnFriend(FriendManagerActivity.this, friend);
+            friendModelView.openChat(FriendManagerActivity.this, friend);
         });
     }
 
