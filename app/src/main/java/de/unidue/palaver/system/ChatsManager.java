@@ -4,7 +4,6 @@ package de.unidue.palaver.system;
 import android.content.Context;
 import android.os.AsyncTask;
 
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import java.util.ArrayList;
@@ -17,32 +16,32 @@ import de.unidue.palaver.system.uicontroller.arrayadapter.ChatArrayAdapter;
 
 public class ChatsManager extends ViewModel {
 
-    private List<ChatRoomManager> chatRoomManagers;
+    private List<MessageViewModel> messageViewModels;
     private ChatArrayAdapter chatArrayAdapter;
 
     public ChatsManager() {
-        this.chatRoomManagers = new ArrayList<>();
+        this.messageViewModels = new ArrayList<>();
     }
 
-    public ChatRoomManager getChat(Friend friend) {
-        for(ChatRoomManager chatRoomManager : chatRoomManagers){
-            if(chatRoomManager.getFriend().getUsername().equals(friend.getUsername())){
-                return chatRoomManager;
+    public MessageViewModel getChat(Friend friend) {
+        for(MessageViewModel messageViewModel : messageViewModels){
+            if(messageViewModel.getFriend().getUsername().equals(friend.getUsername())){
+                return messageViewModel;
             }
         }
         return null;
     }
 
-    public void addChat(ChatRoomManager chatRoomManager) {
-        String friendUserName = chatRoomManager.getFriend().getUsername();
+    public void addChat(MessageViewModel messageViewModel) {
+        String friendUserName = messageViewModel.getFriend().getUsername();
         if(!chatExist(friendUserName)){
-            chatRoomManagers.add(chatRoomManager);
+            messageViewModels.add(messageViewModel);
         }
     }
 
     private boolean chatExist(String userName) {
 
-        for(ChatRoomManager tmp : chatRoomManagers){
+        for(MessageViewModel tmp : messageViewModels){
             if(tmp.getFriend().getUsername().equals(userName)){
                 return true;
             }
@@ -50,25 +49,25 @@ public class ChatsManager extends ViewModel {
         return false;
     }
 
-    public boolean removeChat(ChatRoomManager chatRoomManager){
-        return chatRoomManagers.remove(chatRoomManager);
+    public boolean removeChat(MessageViewModel messageViewModel){
+        return messageViewModels.remove(messageViewModel);
     }
 
     public void sort(){
-        Collections.sort(chatRoomManagers);
+        Collections.sort(messageViewModels);
     }
 
-    public List<ChatRoomManager> search(String string){
-        List<ChatRoomManager> result = new ArrayList<>();
+    public List<MessageViewModel> search(String string){
+        List<MessageViewModel> result = new ArrayList<>();
         chatArrayAdapter.clear();
         if(string.equals("")){
-            chatArrayAdapter.addAll(chatRoomManagers);
-            result = chatRoomManagers;
+            chatArrayAdapter.addAll(messageViewModels);
+            result = messageViewModels;
         } else {
-            for (ChatRoomManager chatRoomManager : chatRoomManagers
+            for (MessageViewModel messageViewModel : messageViewModels
             ) {
-                if(chatRoomManager.getFriend().getUsername().contains(string)){
-                    result.add(chatRoomManager);
+                if(messageViewModel.getFriend().getUsername().contains(string)){
+                    result.add(messageViewModel);
                 }
             }
             chatArrayAdapter.addAll(result);
@@ -89,24 +88,24 @@ public class ChatsManager extends ViewModel {
         fectchChatListFromDB.execute();
     }
 
-    public List<ChatRoomManager> getChatList() {
-        return chatRoomManagers;
+    public List<MessageViewModel> getChatList() {
+        return messageViewModels;
     }
 
     private class FectchChatListFromDB extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            PalaverDB palaverDB = Palaver.getInstance().getPalaverDB();
-            chatRoomManagers.clear();
-            chatRoomManagers.addAll(palaverDB.getAllChat());
+//            PalaverDB palaverDB = Palaver.getInstance().getPalaverDB();
+//            messageViewModels.clear();
+//            messageViewModels.addAll(palaverDB.getAllChat());
             return null;
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
             chatArrayAdapter.clear();
-            chatArrayAdapter.addAll(chatRoomManagers);
+            chatArrayAdapter.addAll(messageViewModels);
         }
     }
 }

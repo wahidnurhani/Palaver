@@ -3,14 +3,14 @@ package de.unidue.palaver.system.database;
 import java.sql.SQLException;
 import java.util.List;
 
-import de.unidue.palaver.system.ChatRoomManager;
+import de.unidue.palaver.system.MessageViewModel;
 import de.unidue.palaver.system.model.Message;
 import de.unidue.palaver.system.model.Friend;
 
 public interface IPalaverDB {
 
 
-    ChatRoomManager getChat(Friend friend);
+    MessageViewModel getChat(Friend friend);
 
     public boolean insertFriend(Friend friend);
 
@@ -29,7 +29,7 @@ public interface IPalaverDB {
 
     boolean updateIsReadValue(Friend friend);
 
-    public List<ChatRoomManager> getAllChat();
+    public List<MessageViewModel> getAllChat();
 
     public List<Friend> getAllFriends();
 

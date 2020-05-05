@@ -10,7 +10,7 @@ public class DBContract {
     public DBContract(){}
 
 
-    public static abstract class TableContact implements BaseColumns{
+    public static abstract class TableFriend implements BaseColumns{
 
         public static final String TABLE_FFRIEND_NAME = "table_friend";
 
@@ -39,7 +39,7 @@ public class DBContract {
                 +COLUMN_CHAT_DATA+" TEXT NOT NULL, "
                 +COLUMN_CHAT_DATETIME+" TEXT NOT NULL,"
                 +COLUMN_CHAT_DATA_ISREAD+" TEXT NOT NULL,"
-                +" FOREIGN KEY "+"("+ COLUMN_FKCHAT+")"+" REFERENCES "+ TableContact.TABLE_FFRIEND_NAME +" ("+TableContact.COLUMN_FRIEND_NAME +")"+","
+                +" FOREIGN KEY "+"("+ COLUMN_FKCHAT+")"+" REFERENCES "+ TableFriend.TABLE_FFRIEND_NAME +" ("+ TableFriend.COLUMN_FRIEND_NAME +")"+","
                 +" PRIMARY KEY"+"("+COLUMN_FKCHAT+","+COLUMN_CHAT_SENDER+","+COLUMN_CHAT_DATA+","+COLUMN_CHAT_DATETIME+"))";
 
         public static final String DELETE_TABLE_CONTACT = "DROP TABLE IF EXISTS " + TABLE_CHAT_DATA_NAME;
@@ -48,7 +48,7 @@ public class DBContract {
     public static abstract class Query implements BaseColumns{
 
         public static final String checkContactExistenceBaseQuery =
-                "SELECT EXISTS (SELECT 1 FROM "+TableContact.COLUMN_FRIEND_NAME +" where "+TableContact.COLUMN_FRIEND_NAME +"=";
+                "SELECT EXISTS (SELECT 1 FROM "+ TableFriend.COLUMN_FRIEND_NAME +" where "+ TableFriend.COLUMN_FRIEND_NAME +"=";
 
         public static final String getLastTwoDateTimeQueryBase=
                 "SELECT "+ TableChatData.COLUMN_CHAT_DATETIME+" FROM "+TableChatData.TABLE_CHAT_DATA_NAME+

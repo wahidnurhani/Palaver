@@ -10,9 +10,9 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import java.util.Date;
 import java.util.List;
 
-import de.unidue.palaver.system.ChatRoomManager;
+import de.unidue.palaver.system.MessageViewModel;
 import de.unidue.palaver.system.ChatsManager;
-import de.unidue.palaver.system.FriendModelView;
+import de.unidue.palaver.system.FriendViewModel;
 import de.unidue.palaver.system.Palaver;
 import de.unidue.palaver.system.SessionManager;
 import de.unidue.palaver.system.database.PalaverDB;
@@ -38,7 +38,7 @@ public class PalaverEngine implements IPalaverEngine {
     private PalaverDB palaverDB;
     private ChatsManager chatsManager;
     private UIController uiController;
-    private FriendModelView friendModelView;
+    private FriendViewModel friendViewModel;
 
     public PalaverEngine() {
         this.communicator = new Communicator();
@@ -55,23 +55,23 @@ public class PalaverEngine implements IPalaverEngine {
         return chatsManager;
     }
 
-    public FriendModelView getFriendModelView() {
-        return friendModelView;
+    public FriendViewModel getFriendViewModel() {
+        return friendViewModel;
     }
 
     @Override
-    public void handleSendMessage(Context applicationContext, Activity activity, ChatRoomManager chatRoomManager, String messageText) {
+    public void handleSendMessage(Context applicationContext, Activity activity, MessageViewModel messageViewModel, String messageText) {
         palaverDB = Palaver.getInstance().getPalaverDB();
         Log.i(TAG, "Check palaverDB SendMessage: "+ (palaverDB!=null));
 
         Message message = new Message(SessionManager.getSessionManagerInstance(applicationContext).getUser().getUserData().getUserName(),
-                chatRoomManager.getFriend().getUsername(), MessageType.OUT, messageText, "true", new Date());
+                messageViewModel.getFriend().getUsername(), MessageType.OUT, messageText, "true", new Date());
 
-        Friend friend = chatRoomManager.getFriend();
+        Friend friend = messageViewModel.getFriend();
 
         palaverDB.insertChatItem(friend, message);
         ServiceSendMessage.startIntent(applicationContext, activity, friend, message);
-        chatRoomManager.addMessage(message);
+        //messageViewModel.addMessage(message);
     }
 
     @Override
@@ -163,13 +163,7 @@ public class PalaverEngine implements IPalaverEngine {
         Log.i(TAG, "Check chatManager ClickOnFriend: "+ (chatsManager!=null));
         Log.i(TAG, "Check uiController ClickOnFriend: "+ (uiController!=null));
 
-        ChatRoomManager chatRoomManager = chatsManager.getChat(friend);
-
-        if(chatRoomManager==null){
-            chatRoomManager = new ChatRoomManager(friend);
-            chatsManager.addChat(chatRoomManager);
-        }
-        uiController.openChatRoom(context, chatRoomManager);
+        uiController.openChatRoom(context, friend);
     }
 
     public void handleOpenLoginActivityRequest(Activity activity) {
@@ -182,9 +176,9 @@ public class PalaverEngine implements IPalaverEngine {
         uiController.openFriendManagerActivity(activity);
     }
 
-    public void handleOpenChatRoomRequest(Activity activity, ChatRoomManager chatRoomManager) {
+    public void handleOpenChatRoomRequest(Activity activity, Friend friend) {
         Log.i(TAG, "Check uiController ChatRoomActivity: "+ (uiController!=null));
-        uiController.openChatRoom(activity, chatRoomManager);
+        uiController.openChatRoom(activity, friend);
     }
 
     public void handleOpenAddFriendDialogRequest(Context applicationContext, Activity activity) {

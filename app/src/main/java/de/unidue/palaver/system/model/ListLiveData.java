@@ -14,6 +14,13 @@ public class ListLiveData<T> extends MutableLiveData<List<T>> {
         }
     }
 
+    public void add( T item){
+        if(getValue() != null && item != null){
+            getValue().add(item);
+            setValue(getValue());
+        }
+    }
+
     public void override(List<T> items){
         if (getValue() != null && items != null) {
             clear();

@@ -16,6 +16,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
+import java.util.List;
+
 import de.unidue.palaver.R;
 import de.unidue.palaver.system.model.Message;
 import de.unidue.palaver.system.resource.MessageType;
@@ -61,5 +63,10 @@ public class MessageAdapter extends ArrayAdapter<Message> {
 
         chatItemTextView.setText(message.getMessage().trim());
         return convertView;
+    }
+
+    public void override(List<Message> value) {
+        clear();
+        addAll(value);
     }
 }

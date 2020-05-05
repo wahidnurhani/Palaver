@@ -7,7 +7,8 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.widget.Toast;
 
-import de.unidue.palaver.system.ChatRoomManager;
+import de.unidue.palaver.system.MessageViewModel;
+import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.resource.StringValue;
 import de.unidue.palaver.ui.AddFriendDialog;
 import de.unidue.palaver.ui.ChatManagerActivity;
@@ -71,10 +72,10 @@ public class UIController {
         context.startActivity(intent);
     }
 
-    public void openChatRoom(Context context, ChatRoomManager chatRoomManager) {
+    public void openChatRoom(Context context, Friend friend) {
         Intent intent = new Intent(context, ChatRoomActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putSerializable(StringValue.IntentKeyName.FRIEND, chatRoomManager);
+        bundle.putSerializable(StringValue.IntentKeyName.FRIEND, friend);
         intent.putExtras(bundle);
         context.startActivity(intent);
     }

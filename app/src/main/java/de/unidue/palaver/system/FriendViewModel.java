@@ -7,7 +7,6 @@ import android.content.Context;
 import android.os.AsyncTask;
 
 import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.ViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,18 +14,31 @@ import de.unidue.palaver.system.database.PalaverDB;
 import de.unidue.palaver.system.engine.PalaverEngine;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.ListLiveData;
+import de.unidue.palaver.system.roomdatabase.FriendSchema;
+import de.unidue.palaver.system.roomdatabase.PalaverDao;
+import de.unidue.palaver.system.roomdatabase.PalaverRoomDatabase;
 
-public class FriendModelView extends AndroidViewModel {
+public class FriendViewModel extends AndroidViewModel {
 
     private ListLiveData<Friend> friendsLiveData;
     private PalaverEngine palaverEngine;
+    private PalaverDao palaverDao;
+    private PalaverRoomDatabase palaverDB;
 
-    public FriendModelView(Application application) {
+    public FriendViewModel(Application application) {
         super(application);
+
+        palaverDB = PalaverRoomDatabase.getDatabase(getApplication());
+        palaverDao = palaverDB.friendsDao();
+
         this.palaverEngine = Palaver.getInstance().getPalaverEngine();
         this.friendsLiveData = new ListLiveData<>();
         this.friendsLiveData.setValue(new ArrayList<>());
         this.fetchFriends();
+    }
+
+    public void insert(FriendSchema friend){
+        new InsertAsyncTask(palaverDao).execute(friend);
     }
 
     public ListLiveData<Friend> getFriendsLiveData() {
@@ -72,5 +84,20 @@ public class FriendModelView extends AndroidViewModel {
     @Override
     protected void onCleared() {
         super.onCleared();
+    }
+
+    private class InsertAsyncTask extends AsyncTask<FriendSchema, Void, Void>{
+
+        PalaverDao palaverDao;
+
+        public InsertAsyncTask(PalaverDao palaverDao) {
+            this.palaverDao = palaverDao;
+        }
+
+        @Override
+        protected Void doInBackground(FriendSchema... friends) {
+            palaverDao.insert(friends[0]);
+            return null;
+        }
     }
 }

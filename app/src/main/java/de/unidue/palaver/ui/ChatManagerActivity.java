@@ -89,7 +89,7 @@ public class ChatManagerActivity extends AppCompatActivity {
 
         listView.setOnItemClickListener((parent, view, position, id)->
                 palaverEngine.handleOpenChatRoomRequest(ChatManagerActivity.this,
-                        chatsManager.getChatArrayAdapter().getItem(position)));
+                        chatsManager.getChatArrayAdapter().getItem(position).getFriend()));
 
     }
 

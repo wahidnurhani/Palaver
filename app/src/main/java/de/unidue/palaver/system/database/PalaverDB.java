@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import de.unidue.palaver.system.ChatRoomManager;
+import de.unidue.palaver.system.MessageViewModel;
 import de.unidue.palaver.system.SessionManager;
 import de.unidue.palaver.system.model.Message;
 import de.unidue.palaver.system.resource.MessageType;
@@ -43,7 +43,7 @@ public class PalaverDB implements IPalaverDB{
                 null, DBContract.DB_VERSION) {
             @Override
             public void onCreate(SQLiteDatabase db) {
-                db.execSQL(DBContract.TableContact.CREATE_TABLE_CONTACT);
+                db.execSQL(DBContract.TableFriend.CREATE_TABLE_CONTACT);
                 db.execSQL(DBContract.TableChatData.CREATE_TABLE_CHAT_DATA);
             }
 
@@ -57,7 +57,7 @@ public class PalaverDB implements IPalaverDB{
 
             @Override
             public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-                db.execSQL(DBContract.TableContact.DELETE_TABLE_CONTACT);
+                db.execSQL(DBContract.TableFriend.DELETE_TABLE_CONTACT);
                 db.execSQL(DBContract.TableChatData.DELETE_TABLE_CONTACT);
 
                 onCreate(db);
@@ -66,7 +66,7 @@ public class PalaverDB implements IPalaverDB{
     }
 
     @Override
-    public ChatRoomManager getChat(Friend friend) {
+    public MessageViewModel getChat(Friend friend) {
         return null;
     }
 
@@ -74,9 +74,9 @@ public class PalaverDB implements IPalaverDB{
     public synchronized boolean insertFriend(Friend friend) {
         boolean returnValue=false;
         ContentValues contentValues = new ContentValues();
-        contentValues.put(DBContract.TableContact.COLUMN_FRIEND_NAME, friend.getUsername());
+        contentValues.put(DBContract.TableFriend.COLUMN_FRIEND_NAME, friend.getUsername());
 
-        if(sqLiteDatabase.insert(DBContract.TableContact.TABLE_FFRIEND_NAME,null, contentValues)>0){
+        if(sqLiteDatabase.insert(DBContract.TableFriend.TABLE_FFRIEND_NAME,null, contentValues)>0){
             returnValue= true;
             Log.i(TAG, "insert contact : "+ true);
         }
@@ -115,7 +115,7 @@ public class PalaverDB implements IPalaverDB{
         if(sqLiteDatabase.delete(DBContract.TableChatData.TABLE_CHAT_DATA_NAME, DBContract.TableChatData.COLUMN_FKCHAT+"=?", new String[]{friend.getUsername()})>0){
             Log.i(TAG, "delete chatData success from :"+friend.getUsername());
         }
-        if(sqLiteDatabase.delete(DBContract.TableContact.TABLE_FFRIEND_NAME, DBContract.TableContact.COLUMN_FRIEND_NAME+"=?", new String[]{friend.getUsername()})>0){
+        if(sqLiteDatabase.delete(DBContract.TableFriend.TABLE_FFRIEND_NAME, DBContract.TableFriend.COLUMN_FRIEND_NAME+"=?", new String[]{friend.getUsername()})>0){
             Log.i(TAG, "delete contact success from :"+friend.getUsername());
             returnValue2 = true;
         }
@@ -147,7 +147,7 @@ public class PalaverDB implements IPalaverDB{
     public synchronized boolean deleteAllContact() {
         boolean returnValue;
         if(sqLiteDatabase.delete(
-                DBContract.TableContact.TABLE_FFRIEND_NAME,
+                DBContract.TableFriend.TABLE_FFRIEND_NAME,
                 null, null)>0){
             Log.i(TAG, "delete All Contact success :");
         }
@@ -165,7 +165,7 @@ public class PalaverDB implements IPalaverDB{
             Log.i(TAG, "delete All ChatData success ");
         }
         if(sqLiteDatabase.delete(
-                DBContract.TableContact.TABLE_FFRIEND_NAME,
+                DBContract.TableFriend.TABLE_FFRIEND_NAME,
                 null, null)>0){
             Log.i(TAG, "delete All Contact success :");
             returnValue= true;
@@ -189,29 +189,29 @@ public class PalaverDB implements IPalaverDB{
     }
 
     @Override
-    public List<ChatRoomManager> getAllChat() {
+    public List<MessageViewModel> getAllChat() {
         List<Friend> friendsList = getAllFriends();
-        List<ChatRoomManager> chatRoomManagerList = new ArrayList<>();
+        List<MessageViewModel> messageViewModelList = new ArrayList<>();
 
         for(Friend friend:friendsList){
             List<Message> messages = getAllChatData(friend);
             if(messages.size()>0){
-                ChatRoomManager tmp= new ChatRoomManager(friend);
-                tmp.setChatItems(messages);
-                chatRoomManagerList.add(tmp);
+                //MessageViewModel tmp= new MessageViewModel(friend);
+                //tmp.setChatItems(messages);
+                //messageViewModelList.add(tmp);
             }
         }
-        Collections.sort(chatRoomManagerList);
-        return chatRoomManagerList;
+        Collections.sort(messageViewModelList);
+        return messageViewModelList;
     }
 
     @Override
     public List<Friend> getAllFriends() {
         List<Friend> friendList = new ArrayList<>();
         @SuppressLint("Recycle") Cursor cursor = sqLiteDatabase.query(
-                DBContract.TableContact.TABLE_FFRIEND_NAME,
-                new String[]{DBContract.TableContact.COLUMN_FRIEND_NAME},null, null,
-                null,null,DBContract.TableContact.COLUMN_FRIEND_NAME+" ASC");
+                DBContract.TableFriend.TABLE_FFRIEND_NAME,
+                new String[]{DBContract.TableFriend.COLUMN_FRIEND_NAME},null, null,
+                null,null, DBContract.TableFriend.COLUMN_FRIEND_NAME+" ASC");
 
         if (cursor!=null && cursor.getCount()>0){
             while (cursor.moveToNext()){
