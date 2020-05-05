@@ -12,7 +12,7 @@ import java.util.List;
 
 import de.unidue.palaver.system.ChatRoomManager;
 import de.unidue.palaver.system.ChatsManager;
-import de.unidue.palaver.system.FriendManager;
+import de.unidue.palaver.system.FriendModelView;
 import de.unidue.palaver.system.Palaver;
 import de.unidue.palaver.system.SessionManager;
 import de.unidue.palaver.system.database.PalaverDB;
@@ -28,7 +28,6 @@ import de.unidue.palaver.system.service.ServiceAddFriend;
 import de.unidue.palaver.system.service.ServiceFetchAllChat;
 import de.unidue.palaver.system.service.ServiceSendMessage;
 import de.unidue.palaver.system.uicontroller.UIController;
-import de.unidue.palaver.ui.ChatManagerActivity;
 import de.unidue.palaver.ui.LoginActivity;
 
 public class PalaverEngine implements IPalaverEngine {
@@ -39,14 +38,13 @@ public class PalaverEngine implements IPalaverEngine {
     private PalaverDB palaverDB;
     private ChatsManager chatsManager;
     private UIController uiController;
-    private FriendManager friendManager;
+    private FriendModelView friendModelView;
 
     public PalaverEngine() {
         this.communicator = new Communicator();
         this.authentificator = new Authentificator();
         this.uiController = new UIController();
         this.chatsManager = new ChatsManager();
-        this.friendManager = new FriendManager();
     }
 
     public Communicator getCommunicator() {
@@ -57,8 +55,8 @@ public class PalaverEngine implements IPalaverEngine {
         return chatsManager;
     }
 
-    public FriendManager getFriendManager() {
-        return friendManager;
+    public FriendModelView getFriendModelView() {
+        return friendModelView;
     }
 
     @Override

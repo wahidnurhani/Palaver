@@ -4,6 +4,9 @@ package de.unidue.palaver.system;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -12,7 +15,7 @@ import de.unidue.palaver.system.database.PalaverDB;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.uicontroller.arrayadapter.ChatArrayAdapter;
 
-public class ChatsManager {
+public class ChatsManager extends ViewModel {
 
     private List<ChatRoomManager> chatRoomManagers;
     private ChatArrayAdapter chatArrayAdapter;

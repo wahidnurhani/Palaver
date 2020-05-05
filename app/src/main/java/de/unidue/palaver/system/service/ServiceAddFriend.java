@@ -68,7 +68,6 @@ public class ServiceAddFriend extends Service {
             if(resultValue.getResponseValue()==1){
                 palaverDB.insertFriend(friends[0]);
                 Intent intent = new Intent(StringValue.IntentAction.BROADCAST_FRIENDADDED);
-                intent.putExtra(StringValue.IntentKeyName.BROADCAST_FRIENDADDED_MESSAGE_RESULT, resultValue.getMessage());
                 LocalBroadcastManager.getInstance(ServiceAddFriend.this).sendBroadcast(intent);
             }
             return resultValue;
@@ -77,8 +76,7 @@ public class ServiceAddFriend extends Service {
         @Override
         protected void onPostExecute(CommunicatorResult<Friend> s) {
             super.onPostExecute(s);
-            palaver.getUiController().showToast(getApplicationContext(), s.getMessage());
-
+            //palaver.getUiController().showToast(getApplicationContext(), s.getMessage());
         }
     }
 }

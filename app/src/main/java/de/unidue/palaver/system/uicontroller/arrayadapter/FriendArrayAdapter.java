@@ -10,13 +10,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.util.List;
+
 import de.unidue.palaver.R;
 import de.unidue.palaver.system.model.Friend;
 
 public class FriendArrayAdapter extends ArrayAdapter<Friend> {
-
-
-
 
     public FriendArrayAdapter(@NonNull Context context, int resource) {
         super(context, resource);
@@ -31,10 +30,15 @@ public class FriendArrayAdapter extends ArrayAdapter<Friend> {
                     R.layout.friend_list_item_layout,parent,false);
         }
 
-        TextView contactView = convertView.findViewById(R.id.friend_list_item_textview);
+        TextView friendView = convertView.findViewById(R.id.friend_list_item_textview);
         assert friend != null;
-        contactView.setText(friend.getUsername());
+        friendView.setText(friend.getUsername());
 
         return convertView;
+    }
+
+    public void override(List<Friend> friends) {
+        clear();
+        addAll(friends);
     }
 }
