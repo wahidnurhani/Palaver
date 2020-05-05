@@ -3,6 +3,10 @@ package de.unidue.palaver.ui;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -11,11 +15,13 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SearchView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.List;
 import java.util.Objects;
 
 import de.unidue.palaver.system.FriendViewModel;
@@ -23,6 +29,7 @@ import de.unidue.palaver.R;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.ListLiveData;
 import de.unidue.palaver.system.resource.StringValue;
+import de.unidue.palaver.system.uicontroller.arrayadapter.FriendAdapter;
 import de.unidue.palaver.system.uicontroller.arrayadapter.FriendArrayAdapter;
 
 public class FriendManagerActivity extends AppCompatActivity {
@@ -89,18 +96,28 @@ public class FriendManagerActivity extends AppCompatActivity {
                 friendViewModel.openAddFriendDialog(getApplicationContext(),
                         FriendManagerActivity.this));
 
-        ListView friendsListView = findViewById(R.id.friendManager_recycleView);
-        FriendArrayAdapter friendArrayAdapter = new FriendArrayAdapter(this,
-                R.layout.friend_list_item_layout);
-        friendsListView.setAdapter(friendArrayAdapter);
+        RecyclerView friendsListView = findViewById(R.id.friendManager_recycleView);
 
-        friendsListLiveData.observe(this, friends ->
-                friendArrayAdapter.override(Objects.requireNonNull(friendsListLiveData.getValue())));
+        FriendAdapter friendAdapter = new FriendAdapter(this,
+                friendsListLiveData.getValue());
+        friendsListView.setAdapter(friendAdapter);
 
-        friendsListView.setOnItemClickListener((parent, view, position, id) -> {
-            Friend friend = friendArrayAdapter.getItem(position);
-            friendViewModel.openChat(FriendManagerActivity.this, friend);
-        });
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        friendsListView.setLayoutManager(linearLayoutManager);
+
+        friendsListView.setItemAnimator(new DefaultItemAnimator());
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(friendsListView.getContext(),
+                linearLayoutManager.getOrientation());
+        friendsListView.addItemDecoration(dividerItemDecoration);
+
+//        friendsListLiveData.observe(this, friends ->
+//                friendArrayAdapter.override(Objects.requireNonNull(friendsListLiveData.getValue())));
+//
+//        friendsListView.setOnItemClickListener((parent, view, position, id) -> {
+//            Friend friend = friendArrayAdapter.getItem(position);
+//            friendViewModel.openChat(FriendManagerActivity.this, friend);
+//        });
     }
 
     public static boolean isVisibility() {

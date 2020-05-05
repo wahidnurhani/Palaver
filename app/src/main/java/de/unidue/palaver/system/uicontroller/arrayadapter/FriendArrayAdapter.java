@@ -27,7 +27,7 @@ public class FriendArrayAdapter extends ArrayAdapter<Friend> {
 
         if(convertView==null){
             convertView = LayoutInflater.from(getContext()).inflate(
-                    R.layout.friend_list_item_layout,parent,false);
+                    R.layout.friend_list_recycle_view_item_layout,parent,false);
         }
 
         TextView friendView = convertView.findViewById(R.id.friend_list_item_textview);
