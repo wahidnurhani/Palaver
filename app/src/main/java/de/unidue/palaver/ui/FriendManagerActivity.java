@@ -1,6 +1,8 @@
 package de.unidue.palaver.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import android.content.BroadcastReceiver;
@@ -64,7 +66,6 @@ public class FriendManagerActivity extends AppCompatActivity {
             friendModelView.OpenChatManagerActivity(FriendManagerActivity.this);
             overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_rigt);
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -73,7 +74,7 @@ public class FriendManagerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friend_manager);
 
-        friendModelView = new FriendModelView();
+        friendModelView = ViewModelProviders.of(this).get(FriendModelView.class);
         final ListLiveData<Friend> friendsListLiveData = friendModelView.getFriendsLiveData();
 
 

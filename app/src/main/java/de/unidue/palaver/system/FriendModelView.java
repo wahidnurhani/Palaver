@@ -2,9 +2,12 @@ package de.unidue.palaver.system;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.os.AsyncTask;
-import androidx.lifecycle.MutableLiveData;
+
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.ViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,14 +15,14 @@ import de.unidue.palaver.system.database.PalaverDB;
 import de.unidue.palaver.system.engine.PalaverEngine;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.ListLiveData;
-import de.unidue.palaver.ui.FriendManagerActivity;
 
-public class FriendModelView extends MutableLiveData<Friend> {
+public class FriendModelView extends AndroidViewModel {
 
     private ListLiveData<Friend> friendsLiveData;
     private PalaverEngine palaverEngine;
 
-    public FriendModelView() {
+    public FriendModelView(Application application) {
+        super(application);
         this.palaverEngine = Palaver.getInstance().getPalaverEngine();
         this.friendsLiveData = new ListLiveData<>();
         this.friendsLiveData.setValue(new ArrayList<>());
@@ -64,5 +67,10 @@ public class FriendModelView extends MutableLiveData<Friend> {
         protected void onPostExecute(List<Friend> friends) {
             friendsLiveData.override(friends);
         }
+    }
+
+    @Override
+    protected void onCleared() {
+        super.onCleared();
     }
 }
