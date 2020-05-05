@@ -76,7 +76,7 @@ public class ServiceAddFriend extends Service {
         @Override
         protected void onPostExecute(CommunicatorResult<Friend> s) {
             super.onPostExecute(s);
-            //palaver.getUiController().showToast(getApplicationContext(), s.getMessage());
+            palaver.getUiController().showToast(getApplicationContext(), s.getMessage());
         }
     }
 }

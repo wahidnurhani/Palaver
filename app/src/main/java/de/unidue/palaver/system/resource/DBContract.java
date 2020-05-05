@@ -20,9 +20,9 @@ public class DBContract {
         public static final String DELETE_TABLE_CONTACT = "DROP TABLE IF EXISTS " + TABLE_FFRIEND_NAME;
     }
 
-    public static abstract class TableChatData implements BaseColumns {
+    public static abstract class TableMessage implements BaseColumns {
 
-        public static final String TABLE_CHAT_DATA_NAME = "table_chat_data";
+        public static final String TABLE_MESSAGE_NAME = "table_chat_data";
 
         public static final String COLUMN_FKCHAT = "fk_chat";
         public static final String COLUMN_CHAT_SENDER = "sender";
@@ -32,7 +32,7 @@ public class DBContract {
         public static final String COLUMN_CHAT_DATA_ISREAD="isread";
         public static final String COLUMN_CHAT_DATETIME= "date_time";
 
-        public static final String CREATE_TABLE_CHAT_DATA =  "CREATE TABLE "+ TABLE_CHAT_DATA_NAME +"("+COLUMN_FKCHAT+" TEXT NOT NULL, "
+        public static final String CREATE_TABLE_CHAT_DATA =  "CREATE TABLE "+ TABLE_MESSAGE_NAME +"("+COLUMN_FKCHAT+" TEXT NOT NULL, "
                 +COLUMN_CHAT_SENDER+" TEXT NOT NULL, "
                 +COLUMN_CHAT_RECIPIENT+" TEXT NOT NULL, "
                 +COLUMN_CHAT_MIMETYPE+" TEXT NOT NULL, "
@@ -42,7 +42,7 @@ public class DBContract {
                 +" FOREIGN KEY "+"("+ COLUMN_FKCHAT+")"+" REFERENCES "+ TableFriend.TABLE_FFRIEND_NAME +" ("+ TableFriend.COLUMN_FRIEND_NAME +")"+","
                 +" PRIMARY KEY"+"("+COLUMN_FKCHAT+","+COLUMN_CHAT_SENDER+","+COLUMN_CHAT_DATA+","+COLUMN_CHAT_DATETIME+"))";
 
-        public static final String DELETE_TABLE_CONTACT = "DROP TABLE IF EXISTS " + TABLE_CHAT_DATA_NAME;
+        public static final String DELETE_TABLE_CONTACT = "DROP TABLE IF EXISTS " + TABLE_MESSAGE_NAME;
     }
 
     public static abstract class Query implements BaseColumns{
@@ -51,7 +51,7 @@ public class DBContract {
                 "SELECT EXISTS (SELECT 1 FROM "+ TableFriend.COLUMN_FRIEND_NAME +" where "+ TableFriend.COLUMN_FRIEND_NAME +"=";
 
         public static final String getLastTwoDateTimeQueryBase=
-                "SELECT "+ TableChatData.COLUMN_CHAT_DATETIME+" FROM "+TableChatData.TABLE_CHAT_DATA_NAME+
-                        " WHERE "+TableChatData.COLUMN_FKCHAT+"=" ;
+                "SELECT "+ TableMessage.COLUMN_CHAT_DATETIME+" FROM "+ TableMessage.TABLE_MESSAGE_NAME +
+                        " WHERE "+ TableMessage.COLUMN_FKCHAT+"=" ;
     }
 }

@@ -2,9 +2,7 @@ package de.unidue.palaver.system;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
-import android.content.Context;
 import android.os.AsyncTask;
-import android.widget.ListAdapter;
 
 import androidx.lifecycle.AndroidViewModel;
 
@@ -18,18 +16,19 @@ import de.unidue.palaver.system.model.ListLiveData;
 import de.unidue.palaver.system.model.Message;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.IChat;
+import de.unidue.palaver.system.model.User;
 import de.unidue.palaver.system.resource.MessageType;
-import de.unidue.palaver.system.uicontroller.arrayadapter.MessageAdapter;
 
 public class MessageViewModel extends AndroidViewModel implements Comparable<MessageViewModel>, IChat, Serializable {
 
     private final Friend friend;
-    private ListLiveData<Message> messageListLiveData;
-    private MessageAdapter messageAdapter;
+    private final User user;
+    private final ListLiveData<Message> messageListLiveData;
 
     public MessageViewModel(Application application, Friend friend) {
         super(application);
         this.friend = friend;
+        this.user = SessionManager.getSessionManagerInstance(getApplication()).getUser();
         this.messageListLiveData = new ListLiveData<>();
         this.messageListLiveData.setValue(new ArrayList<>());
         fetchChat();
@@ -63,9 +62,7 @@ public class MessageViewModel extends AndroidViewModel implements Comparable<Mes
 
     @Override
     public boolean setAllMessageToRead() {
-//        for (Message message : messageList){
-//            message.setIsReadStatus(true);
-//        }
+        //TODO
         return false;
     }
 
@@ -82,7 +79,7 @@ public class MessageViewModel extends AndroidViewModel implements Comparable<Mes
 
     public void addMessage(String text) {
          Message message = new Message(
-                 SessionManager.getSessionManagerInstance(getApplication()).getUser().getUserData().getUserName(),
+                 user.getUserData().getUserName(),
                  friend.getUsername(),
                  MessageType.OUT,
                  text,

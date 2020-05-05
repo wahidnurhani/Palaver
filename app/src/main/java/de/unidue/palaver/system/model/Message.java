@@ -1,31 +1,47 @@
 package de.unidue.palaver.system.model;
 
 
+import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+
 import java.io.Serializable;
 import java.text.ParseException;
 import java.util.Date;
 import de.unidue.palaver.system.engine.communicator.Parser;
+import de.unidue.palaver.system.resource.DBContract;
 import de.unidue.palaver.system.resource.MessageType;
 
+
+@Entity(tableName = DBContract.TableMessage.TABLE_MESSAGE_NAME)
 public class Message implements Comparable<Message>, Serializable {
 
     private final String sender;
+
     private final String recipient;
+
+
     private final String message;
+
     private String mimeType;
+
     private final MessageType messageType;
+
+
     private boolean isRead;
+
     private Date date;
+
 
     public Message(String sender, String recipient, MessageType messageType, String message, String isReadStatus, String date) throws ParseException {
         this.sender = sender;
         this.recipient = recipient;
         this.messageType = messageType;
-        this.mimeType = mimeType;
+        this.mimeType = "text/plain";
         this.message = message;
         this.isRead = Boolean.parseBoolean(isReadStatus);
-        Parser parser = new Parser();
-        this.date = parser.stringToDateFromDataBase(date);
+        this.date = new Parser().stringToDateFromDataBase(date);
     }
 
     public Message(String sender, String recipient, MessageType messageType, String message, String isReadStatus, Date date) {
@@ -38,10 +54,12 @@ public class Message implements Comparable<Message>, Serializable {
         this.date = date;
     }
 
+    @NonNull
     public String getSender() {
         return sender;
     }
 
+    @NonNull
     public String getRecipient() {
         return recipient;
     }
@@ -54,6 +72,7 @@ public class Message implements Comparable<Message>, Serializable {
         return messageType;
     }
 
+    @NonNull
     public String getMessage() {
         return message;
     }
@@ -66,7 +85,9 @@ public class Message implements Comparable<Message>, Serializable {
         isRead = read;
     }
 
+    @NonNull
     public Date getDate() {
+        Parser parser = new Parser();
         return date;
     }
 

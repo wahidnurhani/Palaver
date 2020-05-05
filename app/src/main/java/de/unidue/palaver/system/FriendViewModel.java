@@ -14,7 +14,6 @@ import de.unidue.palaver.system.database.PalaverDB;
 import de.unidue.palaver.system.engine.PalaverEngine;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.ListLiveData;
-import de.unidue.palaver.system.roomdatabase.FriendSchema;
 import de.unidue.palaver.system.roomdatabase.PalaverDao;
 import de.unidue.palaver.system.roomdatabase.PalaverRoomDatabase;
 
@@ -37,7 +36,7 @@ public class FriendViewModel extends AndroidViewModel {
         this.fetchFriends();
     }
 
-    public void insert(FriendSchema friend){
+    public void insert(Friend friend){
         new InsertAsyncTask(palaverDao).execute(friend);
     }
 
@@ -86,7 +85,7 @@ public class FriendViewModel extends AndroidViewModel {
         super.onCleared();
     }
 
-    private class InsertAsyncTask extends AsyncTask<FriendSchema, Void, Void>{
+    private class InsertAsyncTask extends AsyncTask<Friend, Void, Void>{
 
         PalaverDao palaverDao;
 
@@ -95,7 +94,7 @@ public class FriendViewModel extends AndroidViewModel {
         }
 
         @Override
-        protected Void doInBackground(FriendSchema... friends) {
+        protected Void doInBackground(Friend... friends) {
             palaverDao.insert(friends[0]);
             return null;
         }

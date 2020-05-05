@@ -44,7 +44,7 @@ public class PalaverDB implements IPalaverDB{
             @Override
             public void onCreate(SQLiteDatabase db) {
                 db.execSQL(DBContract.TableFriend.CREATE_TABLE_CONTACT);
-                db.execSQL(DBContract.TableChatData.CREATE_TABLE_CHAT_DATA);
+                db.execSQL(DBContract.TableMessage.CREATE_TABLE_CHAT_DATA);
             }
 
             @Override
@@ -58,7 +58,7 @@ public class PalaverDB implements IPalaverDB{
             @Override
             public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
                 db.execSQL(DBContract.TableFriend.DELETE_TABLE_CONTACT);
-                db.execSQL(DBContract.TableChatData.DELETE_TABLE_CONTACT);
+                db.execSQL(DBContract.TableMessage.DELETE_TABLE_CONTACT);
 
                 onCreate(db);
             }
@@ -94,14 +94,14 @@ public class PalaverDB implements IPalaverDB{
         String isRead = Boolean.toString(message.getIsReadStatus());
         String dateTime = message.getDateToString();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(DBContract.TableChatData.COLUMN_FKCHAT, contactString);
-        contentValues.put(DBContract.TableChatData.COLUMN_CHAT_SENDER, sender);
-        contentValues.put(DBContract.TableChatData.COLUMN_CHAT_RECIPIENT, recipient);
-        contentValues.put(DBContract.TableChatData.COLUMN_CHAT_MIMETYPE, mimeType);
-        contentValues.put(DBContract.TableChatData.COLUMN_CHAT_DATA, data);
-        contentValues.put(DBContract.TableChatData.COLUMN_CHAT_DATA_ISREAD, isRead);
-        contentValues.put(DBContract.TableChatData.COLUMN_CHAT_DATETIME,dateTime);
-        if(sqLiteDatabase.insert(DBContract.TableChatData.TABLE_CHAT_DATA_NAME, null, contentValues)>0){
+        contentValues.put(DBContract.TableMessage.COLUMN_FKCHAT, contactString);
+        contentValues.put(DBContract.TableMessage.COLUMN_CHAT_SENDER, sender);
+        contentValues.put(DBContract.TableMessage.COLUMN_CHAT_RECIPIENT, recipient);
+        contentValues.put(DBContract.TableMessage.COLUMN_CHAT_MIMETYPE, mimeType);
+        contentValues.put(DBContract.TableMessage.COLUMN_CHAT_DATA, data);
+        contentValues.put(DBContract.TableMessage.COLUMN_CHAT_DATA_ISREAD, isRead);
+        contentValues.put(DBContract.TableMessage.COLUMN_CHAT_DATETIME,dateTime);
+        if(sqLiteDatabase.insert(DBContract.TableMessage.TABLE_MESSAGE_NAME, null, contentValues)>0){
             returnValue=true;
             Log.i(TAG, "insert chat data : "+ true);
         }
@@ -112,7 +112,7 @@ public class PalaverDB implements IPalaverDB{
     public synchronized boolean deleteContact(Friend friend) {
         boolean returnValue;
         boolean returnValue2 = false;
-        if(sqLiteDatabase.delete(DBContract.TableChatData.TABLE_CHAT_DATA_NAME, DBContract.TableChatData.COLUMN_FKCHAT+"=?", new String[]{friend.getUsername()})>0){
+        if(sqLiteDatabase.delete(DBContract.TableMessage.TABLE_MESSAGE_NAME, DBContract.TableMessage.COLUMN_FKCHAT+"=?", new String[]{friend.getUsername()})>0){
             Log.i(TAG, "delete chatData success from :"+friend.getUsername());
         }
         if(sqLiteDatabase.delete(DBContract.TableFriend.TABLE_FFRIEND_NAME, DBContract.TableFriend.COLUMN_FRIEND_NAME+"=?", new String[]{friend.getUsername()})>0){
@@ -126,7 +126,7 @@ public class PalaverDB implements IPalaverDB{
     @Override
     public synchronized boolean deleteChat(Friend friend) {
         boolean returnValue=false;
-        if(sqLiteDatabase.delete(DBContract.TableChatData.TABLE_CHAT_DATA_NAME, DBContract.TableChatData.COLUMN_FKCHAT+"=?", new String[]{friend.getUsername()})>0){
+        if(sqLiteDatabase.delete(DBContract.TableMessage.TABLE_MESSAGE_NAME, DBContract.TableMessage.COLUMN_FKCHAT+"=?", new String[]{friend.getUsername()})>0){
             Log.i(TAG, "delete chatData success from :"+friend.getUsername());
             returnValue = true;
         }
@@ -136,7 +136,7 @@ public class PalaverDB implements IPalaverDB{
     @Override
     public synchronized boolean deleteAllChat() {
         boolean returnValue=false;
-        if(sqLiteDatabase.delete(DBContract.TableChatData.TABLE_CHAT_DATA_NAME, null, null)>0){
+        if(sqLiteDatabase.delete(DBContract.TableMessage.TABLE_MESSAGE_NAME, null, null)>0){
             Log.i(TAG, "delete All chatData success ");
             returnValue = true;
         }
@@ -160,7 +160,7 @@ public class PalaverDB implements IPalaverDB{
     public synchronized boolean deleteAllDataOnDataBase() {
         boolean returnValue = false;
         if(sqLiteDatabase.delete(
-                DBContract.TableChatData.TABLE_CHAT_DATA_NAME,
+                DBContract.TableMessage.TABLE_MESSAGE_NAME,
                 null, null)>0){
             Log.i(TAG, "delete All ChatData success ");
         }
@@ -177,10 +177,10 @@ public class PalaverDB implements IPalaverDB{
     @Override
     public synchronized boolean updateIsReadValue(Friend friend) {
         ContentValues contentValues = new ContentValues();
-        contentValues.put(DBContract.TableChatData.COLUMN_CHAT_DATA_ISREAD, "true");
+        contentValues.put(DBContract.TableMessage.COLUMN_CHAT_DATA_ISREAD, "true");
 
-        if(sqLiteDatabase.update(DBContract.TableChatData.TABLE_CHAT_DATA_NAME,
-                contentValues,DBContract.TableChatData.COLUMN_FKCHAT+"=?",
+        if(sqLiteDatabase.update(DBContract.TableMessage.TABLE_MESSAGE_NAME,
+                contentValues, DBContract.TableMessage.COLUMN_FKCHAT+"=?",
                 new String[]{friend.getUsername()})>0){
             Log.i(TAG, "change isRead into true : is true");
             return true;
@@ -226,16 +226,16 @@ public class PalaverDB implements IPalaverDB{
     public List<Message> getAllChatData(Friend friend) {
         List<Message> messageList= new ArrayList<>();
         @SuppressLint("Recycle") Cursor cursor = sqLiteDatabase.query(
-                DBContract.TableChatData.TABLE_CHAT_DATA_NAME,
-                new String[]{DBContract.TableChatData.COLUMN_FKCHAT,
-                        DBContract.TableChatData.COLUMN_CHAT_SENDER,
-                        DBContract.TableChatData.COLUMN_CHAT_RECIPIENT,
-                        DBContract.TableChatData.COLUMN_CHAT_MIMETYPE,
-                        DBContract.TableChatData.COLUMN_CHAT_DATA,
-                        DBContract.TableChatData.COLUMN_CHAT_DATA_ISREAD,
-                        DBContract.TableChatData.COLUMN_CHAT_DATETIME},
-                DBContract.TableChatData.COLUMN_FKCHAT+"=?", new String[]{friend.getUsername()},
-                null,null, DBContract.TableChatData.COLUMN_CHAT_DATETIME);
+                DBContract.TableMessage.TABLE_MESSAGE_NAME,
+                new String[]{DBContract.TableMessage.COLUMN_FKCHAT,
+                        DBContract.TableMessage.COLUMN_CHAT_SENDER,
+                        DBContract.TableMessage.COLUMN_CHAT_RECIPIENT,
+                        DBContract.TableMessage.COLUMN_CHAT_MIMETYPE,
+                        DBContract.TableMessage.COLUMN_CHAT_DATA,
+                        DBContract.TableMessage.COLUMN_CHAT_DATA_ISREAD,
+                        DBContract.TableMessage.COLUMN_CHAT_DATETIME},
+                DBContract.TableMessage.COLUMN_FKCHAT+"=?", new String[]{friend.getUsername()},
+                null,null, DBContract.TableMessage.COLUMN_CHAT_DATETIME);
 
         if (cursor!=null && cursor.getCount()>0){
             while (cursor.moveToNext()){
