@@ -1,6 +1,8 @@
-package de.unidue.palaver.system.uicontroller.arrayadapter;
+package de.unidue.palaver.ui.uicontroller.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,33 +12,43 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
-
 import de.unidue.palaver.R;
 import de.unidue.palaver.system.model.Friend;
+import de.unidue.palaver.system.resource.StringValue;
+import de.unidue.palaver.ui.ChatRoomActivity;
 
 
 public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendViewHolder> {
 
     private List<Friend> friends;
     private LayoutInflater inflater;
+    private Context context;
 
     public FriendAdapter(Context context, List<Friend> friends) {
         inflater = LayoutInflater.from(context);
         this.friends = friends;
+        this.context = context;
     }
 
     @NonNull
     @Override
     public FriendViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.friend_list_recycle_view_item_layout, parent, false);
-        FriendViewHolder friendViewHolder = new FriendViewHolder(view);
-        return friendViewHolder;
+        View view = inflater.inflate(R.layout.friend_view_holder_layout, parent, false);
+        return new FriendViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull FriendViewHolder holder, int position) {
         Friend current = friends.get(position);
         holder.setData(current, position);
+
+        holder.getCardView().setOnClickListener(v -> {
+            Intent intent = new Intent(context, ChatRoomActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(StringValue.IntentKeyName.FRIEND, current);
+            intent.putExtras(bundle);
+            context.startActivity(intent);
+        });
     }
 
     @Override
@@ -44,21 +56,23 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
         return friends.size();
     }
 
-    class FriendViewHolder extends RecyclerView.ViewHolder {
+    class FriendViewHolder extends RecyclerView.ViewHolder{
 
+        private View cardView;
         private TextView name;
-        private int position;
-        private Friend friend;
 
-        public FriendViewHolder(@NonNull View itemView) {
+        FriendViewHolder(@NonNull View itemView) {
             super(itemView);
-            name = itemView.findViewById(R.id.friend_list_item_textview);
+            cardView = itemView.findViewById(R.id.friend_cardHolder);
+            name = itemView.findViewById(R.id.friend_textview);
+    }
+
+        void setData(Friend current, int position) {
+              this.name.setText(current.getUsername());
         }
 
-        public void setData(Friend current, int position) {
-              this.name.setText(current.getUsername());
-              this.position = position;
-              this.friend = current;
+        public View getCardView() {
+            return cardView;
         }
     }
 }

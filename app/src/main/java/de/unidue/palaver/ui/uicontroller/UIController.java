@@ -1,4 +1,4 @@
-package de.unidue.palaver.system.uicontroller;
+package de.unidue.palaver.ui.uicontroller;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.widget.Toast;
 
-import de.unidue.palaver.system.MessageViewModel;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.resource.StringValue;
 import de.unidue.palaver.ui.AddFriendDialog;

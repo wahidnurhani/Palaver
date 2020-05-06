@@ -1,4 +1,4 @@
-package de.unidue.palaver.system;
+package de.unidue.palaver.system.viewmodel;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -10,6 +10,8 @@ import androidx.lifecycle.AndroidViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import de.unidue.palaver.system.Palaver;
 import de.unidue.palaver.system.database.PalaverDB;
 import de.unidue.palaver.system.engine.PalaverEngine;
 import de.unidue.palaver.system.model.Friend;
@@ -59,10 +61,6 @@ public class FriendViewModel extends AndroidViewModel {
 
     public void openAddFriendDialog(Context applicationContext, Activity activity) {
         palaverEngine.handleOpenAddFriendDialogRequest(applicationContext, activity);
-    }
-
-    public void openChat(Activity activity, Friend friend) {
-        palaverEngine.handleClickOnFriend(activity, friend);
     }
 
     @SuppressLint("StaticFieldLeak")

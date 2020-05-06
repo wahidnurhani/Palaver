@@ -2,15 +2,13 @@ package de.unidue.palaver.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.view.View;
 
 import java.util.Objects;
 
 import de.unidue.palaver.system.Palaver;
 import de.unidue.palaver.R;
-import de.unidue.palaver.system.uicontroller.UIController;
+import de.unidue.palaver.ui.uicontroller.UIController;
 
 public class SplashScreenActivity extends AppCompatActivity {
 

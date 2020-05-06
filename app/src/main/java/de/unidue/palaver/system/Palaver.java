@@ -5,7 +5,7 @@ import android.content.Context;
 
 import de.unidue.palaver.system.database.PalaverDB;
 import de.unidue.palaver.system.engine.PalaverEngine;
-import de.unidue.palaver.system.uicontroller.UIController;
+import de.unidue.palaver.ui.uicontroller.UIController;
 
 public class Palaver implements IPalaver{
     private PalaverEngine palaverEngine;

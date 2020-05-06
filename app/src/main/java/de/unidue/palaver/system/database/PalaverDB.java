@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import de.unidue.palaver.system.MessageViewModel;
+import de.unidue.palaver.system.viewmodel.MessageViewModel;
 import de.unidue.palaver.system.SessionManager;
 import de.unidue.palaver.system.model.Message;
 import de.unidue.palaver.system.resource.MessageType;
@@ -241,7 +241,7 @@ public class PalaverDB implements IPalaverDB{
             while (cursor.moveToNext()){
                 MessageType messageType;
                 User user = SessionManager.getSessionManagerInstance(contex).getUser();
-                if(cursor.getString(1).equals(user.getUserData().getUserName())){
+                if(cursor.getString(1).equals(user.getUserName())){
                     messageType = MessageType.OUT;
                 }else {
                     messageType = MessageType.INCOMMING;

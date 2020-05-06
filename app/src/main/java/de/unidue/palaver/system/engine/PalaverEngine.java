@@ -9,10 +9,6 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import java.util.Date;
 import java.util.List;
-
-import de.unidue.palaver.system.MessageViewModel;
-import de.unidue.palaver.system.ChatsManager;
-import de.unidue.palaver.system.FriendViewModel;
 import de.unidue.palaver.system.Palaver;
 import de.unidue.palaver.system.SessionManager;
 import de.unidue.palaver.system.database.PalaverDB;
@@ -27,7 +23,7 @@ import de.unidue.palaver.system.model.User;
 import de.unidue.palaver.system.service.ServiceAddFriend;
 import de.unidue.palaver.system.service.ServiceFetchAllChat;
 import de.unidue.palaver.system.service.ServiceSendMessage;
-import de.unidue.palaver.system.uicontroller.UIController;
+import de.unidue.palaver.ui.uicontroller.UIController;
 import de.unidue.palaver.ui.LoginActivity;
 
 public class PalaverEngine implements IPalaverEngine {
@@ -36,42 +32,29 @@ public class PalaverEngine implements IPalaverEngine {
     private Communicator communicator;
     private Authentificator authentificator;
     private PalaverDB palaverDB;
-    private ChatsManager chatsManager;
     private UIController uiController;
-    private FriendViewModel friendViewModel;
 
     public PalaverEngine() {
         this.communicator = new Communicator();
         this.authentificator = new Authentificator();
         this.uiController = new UIController();
-        this.chatsManager = new ChatsManager();
     }
 
     public Communicator getCommunicator() {
         return communicator;
     }
 
-    public ChatsManager getChatsManager() {
-        return chatsManager;
-    }
-
-    public FriendViewModel getFriendViewModel() {
-        return friendViewModel;
-    }
 
     @Override
-    public void handleSendMessage(Context applicationContext, Activity activity, MessageViewModel messageViewModel, String messageText) {
+    public void handleSendMessage(Context applicationContext, Activity activity, Friend friend, String messageText) {
         palaverDB = Palaver.getInstance().getPalaverDB();
         Log.i(TAG, "Check palaverDB SendMessage: "+ (palaverDB!=null));
 
-        Message message = new Message(SessionManager.getSessionManagerInstance(applicationContext).getUser().getUserData().getUserName(),
-                messageViewModel.getFriend().getUsername(), MessageType.OUT, messageText, "true", new Date());
-
-        Friend friend = messageViewModel.getFriend();
+        Message message = new Message(SessionManager.getSessionManagerInstance(applicationContext).getUser().getUserName(),
+                friend.getUsername(), MessageType.OUT, messageText, "true", new Date());
 
         palaverDB.insertChatItem(friend, message);
         ServiceSendMessage.startIntent(applicationContext, activity, friend, message);
-        //messageViewModel.addMessage(message);
     }
 
     @Override
@@ -91,8 +74,8 @@ public class PalaverEngine implements IPalaverEngine {
         Log.i(TAG, "Check uiController RegisterRequest: "+ (uiController!=null));
 
         if(communicator.checkConnectivity(applicationContext)){
-            authentificator.register(applicationContext, activity, user.getUserData().getUserName(),
-                    user.getUserData().getPassword());
+            authentificator.register(applicationContext, activity, user.getUserName(),
+                    user.getPassword());
         } else{
             uiController.showToast(activity, StringValue.ErrorMessage.NO_INTERNET);
         }
@@ -104,8 +87,8 @@ public class PalaverEngine implements IPalaverEngine {
         Log.i(TAG, "Check authenticator LoginRequest: "+ (authentificator!=null));
 
         if(communicator.checkConnectivity(applicationContext)){
-            authentificator.authentificate(applicationContext, loginActivity,  user.getUserData().getUserName(),
-                    user.getUserData().getPassword());
+            authentificator.authentificate(applicationContext, loginActivity,  user.getUserName(),
+                    user.getPassword());
         } else{
             uiController.showToast(applicationContext, StringValue.ErrorMessage.NO_INTERNET);
         }
@@ -159,13 +142,6 @@ public class PalaverEngine implements IPalaverEngine {
         uiController.showToast(applicationContext, string);
     }
 
-    public void handleClickOnFriend(Context context, Friend friend) {
-        Log.i(TAG, "Check chatManager ClickOnFriend: "+ (chatsManager!=null));
-        Log.i(TAG, "Check uiController ClickOnFriend: "+ (uiController!=null));
-
-        uiController.openChatRoom(context, friend);
-    }
-
     public void handleOpenLoginActivityRequest(Activity activity) {
         Log.i(TAG, "Check uiController openLoginActivity: "+ (uiController!=null));
         uiController.openLoginActivity(activity);
@@ -203,8 +179,8 @@ public class PalaverEngine implements IPalaverEngine {
     public void handleStartSessionRequest(Context applicationContext, User user) {
         SessionManager sessionManager = SessionManager.getSessionManagerInstance(applicationContext);
         sessionManager.setUser(user);
-        sessionManager.startSession(user.getUserData().getUserName(),
-                user.getUserData().getPassword());
+        sessionManager.startSession(user.getUserName(),
+                user.getPassword());
     }
 
     public void handleSendLocalBroadCastRequest(Context applicationContext, String action) {

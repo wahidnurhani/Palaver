@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/message_cardView"
+    app:cardBackgroundColor="@color/colorChatBackgroud">
 
 
     <LinearLayout
         android:id="@+id/message_container"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_marginTop="2dp"
         android:layout_marginBottom="2dp"
         android:layout_height="wrap_content"
@@ -23,12 +26,11 @@
             android:maxWidth="300dp"
             android:paddingLeft="10dp"
             android:paddingTop="5dp"
+            android:textColor="#FFFEFE"
             android:paddingBottom="10dp"
             android:paddingRight="10dp"
             android:textSize="5pt" />
-
-
     </LinearLayout>
 
 
-</RelativeLayout>
+</androidx.cardview.widget.CardView>

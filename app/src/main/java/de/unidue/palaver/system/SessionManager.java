@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 
 import de.unidue.palaver.R;
 import de.unidue.palaver.system.model.User;
-import de.unidue.palaver.system.model.UserData;
 
 public class SessionManager {
 
@@ -51,8 +50,8 @@ public class SessionManager {
     }
 
     public void setUser(User user) {
-        editor.putString(KEY_USERNAME, user.getUserData().getUserName());
-        editor.putString(KEY_PASSWORD, user.getUserData().getUserName());
+        editor.putString(KEY_USERNAME, user.getUserName());
+        editor.putString(KEY_PASSWORD, user.getUserName());
         editor.commit();
     }
 
@@ -82,7 +81,7 @@ public class SessionManager {
     public User getUser() {
         String username = pref.getString(KEY_USERNAME,"");
         String password = pref.getString(KEY_PASSWORD,"");
-        return new User(new UserData(username, password));
+        return new User(username, password);
     }
 
     public SharedPreferences getPreference() {

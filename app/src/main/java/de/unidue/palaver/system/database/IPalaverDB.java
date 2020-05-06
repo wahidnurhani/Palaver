@@ -3,7 +3,7 @@ package de.unidue.palaver.system.database;
 import java.sql.SQLException;
 import java.util.List;
 
-import de.unidue.palaver.system.MessageViewModel;
+import de.unidue.palaver.system.viewmodel.MessageViewModel;
 import de.unidue.palaver.system.model.Message;
 import de.unidue.palaver.system.model.Friend;
 

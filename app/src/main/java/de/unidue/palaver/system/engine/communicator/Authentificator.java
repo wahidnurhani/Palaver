@@ -9,7 +9,6 @@ import de.unidue.palaver.system.engine.PalaverEngine;
 import de.unidue.palaver.system.resource.StringValue;
 import de.unidue.palaver.system.Palaver;
 import de.unidue.palaver.system.model.User;
-import de.unidue.palaver.system.model.UserData;
 import de.unidue.palaver.ui.ProgressDialog;
 
 public class Authentificator {
@@ -31,7 +30,7 @@ public class Authentificator {
         this.method = 2;
         this.activity = activity;
         this.applicationContext = applicationContext;
-        User user = new User(new UserData(userName, password));
+        User user = new User(userName, password);
         String cmd = StringValue.APICmd.REGISTER;
         MyParam myParam = new MyParam(user, cmd);
         FetchAuthentification fetchAuthentification = new FetchAuthentification();
@@ -47,7 +46,7 @@ public class Authentificator {
         this.method = 1;
         this.applicationContext = applicationContext;
         this.activity = activity;
-        User user = new User(new UserData(userName, password));
+        User user = new User(userName, password);
         String cmd = StringValue.APICmd.VALIDATE;
         MyParam myParam = new MyParam(user, cmd);
         FetchAuthentification fetchAuthentification = new FetchAuthentification();

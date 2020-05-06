@@ -1,23 +1,26 @@
 package de.unidue.palaver.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
+
 import java.util.Objects;
 
 import de.unidue.palaver.system.Palaver;
 import de.unidue.palaver.R;
-import de.unidue.palaver.system.MessageViewModel;
+import de.unidue.palaver.system.viewmodel.MessageViewModel;
 import de.unidue.palaver.system.engine.PalaverEngine;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.ListLiveData;
 import de.unidue.palaver.system.model.Message;
 import de.unidue.palaver.system.resource.StringValue;
-import de.unidue.palaver.system.uicontroller.arrayadapter.MessageAdapter;
+import de.unidue.palaver.ui.uicontroller.adapter.MessageAdapter;
 
 public class ChatRoomActivity extends AppCompatActivity {
     private static boolean visibility;
@@ -37,28 +40,30 @@ public class ChatRoomActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_message_manager);
+        setContentView(R.layout.activity_chat_room);
 
         Friend friend = (Friend) Objects.requireNonNull(getIntent().
                 getExtras()).getSerializable(StringValue.IntentKeyName.FRIEND);
 
         messageViewModel = new MessageViewModel(getApplication(), friend);
         final ListLiveData<Message> messageListLiveData = messageViewModel.getMessageList();
-        Objects.requireNonNull(getSupportActionBar()).setTitle(messageViewModel.getFriend().getUsername());
 
+        Objects.requireNonNull(getSupportActionBar()).setTitle(messageViewModel.getFriend().getUsername());
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         palaverEngine = Palaver.getInstance().getPalaverEngine();
 
-
-        ListView listView = findViewById(R.id.chatRoom_listView);
+        RecyclerView messageRecycleview = findViewById(R.id.chatRoom_recycleView);
         MessageAdapter messageAdapter = new MessageAdapter(this,
-                R.layout.message_layout);
-        listView.setAdapter(messageAdapter);
+                messageListLiveData.getValue());
+        messageRecycleview.setAdapter(messageAdapter);
 
-        messageListLiveData.observe(this, messages ->
-                messageAdapter.override(messageListLiveData.getValue()));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        messageRecycleview.setLayoutManager(linearLayoutManager);
+
+        messageRecycleview.setItemAnimator(new DefaultItemAnimator());
 
         EditText messageEditText = findViewById(R.id.chatRoom_editText_message);
         Button sendButton = findViewById(R.id.chatRoom_button_send);
@@ -66,11 +71,12 @@ public class ChatRoomActivity extends AppCompatActivity {
         sendButton.setOnClickListener(v -> {
             if (!messageEditText.getText().toString().equals("")){
                 String messageText = messageEditText.getText().toString();
-                messageViewModel.addMessage(messageText);
-                palaverEngine.handleSendMessage(getApplicationContext(), ChatRoomActivity.this, messageViewModel, messageText);
+                messageViewModel.addMessage(this, messageText);
                 messageEditText.setText("");
             }
         });
+
+        messageListLiveData.observe(this, messages -> messageAdapter.setMessages(messages));
     }
 
     public static boolean isVisibility() {

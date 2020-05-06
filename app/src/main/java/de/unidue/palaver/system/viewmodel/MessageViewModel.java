@@ -1,6 +1,7 @@
-package de.unidue.palaver.system;
+package de.unidue.palaver.system.viewmodel;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Application;
 import android.os.AsyncTask;
 
@@ -11,15 +12,16 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import de.unidue.palaver.system.Palaver;
+import de.unidue.palaver.system.SessionManager;
 import de.unidue.palaver.system.database.PalaverDB;
 import de.unidue.palaver.system.model.ListLiveData;
 import de.unidue.palaver.system.model.Message;
 import de.unidue.palaver.system.model.Friend;
-import de.unidue.palaver.system.model.IChat;
 import de.unidue.palaver.system.model.User;
 import de.unidue.palaver.system.resource.MessageType;
 
-public class MessageViewModel extends AndroidViewModel implements Comparable<MessageViewModel>, IChat, Serializable {
+public class MessageViewModel extends AndroidViewModel implements Comparable<MessageViewModel>, Serializable {
 
     private final Friend friend;
     private final User user;
@@ -42,44 +44,19 @@ public class MessageViewModel extends AndroidViewModel implements Comparable<Mes
         return messageListLiveData;
     }
 
-
-    @Override
-    public void sort(){
-        //Collections.sort(messageList);
-    }
-
-    @Override
-    public Message getLatestMessage() {
-        sort();
-        //return messageList.get(messageList.size()-1);
-        return null;
-    }
-
-    @Override
-    public int compareTo(MessageViewModel o) {
-        return this.getLatestMessage().compareTo(o.getLatestMessage());
-    }
-
-    @Override
     public boolean setAllMessageToRead() {
         //TODO
         return false;
     }
-
-    @Override
-    public void refreshView(){
-        //TODO
-    }
-
 
     private void fetchChat(){
         FectchChatFromDB fectchChatFromDB = new FectchChatFromDB();
         fectchChatFromDB.execute();
     }
 
-    public void addMessage(String text) {
+    public void addMessage(Activity activity, String text) {
          Message message = new Message(
-                 user.getUserData().getUserName(),
+                 user.getUserName(),
                  friend.getUsername(),
                  MessageType.OUT,
                  text,
@@ -88,18 +65,32 @@ public class MessageViewModel extends AndroidViewModel implements Comparable<Mes
          messageListLiveData.add(message);
     }
 
+    @Override
+    public int compareTo(MessageViewModel o) {
+        return 0;
+    }
+
     @SuppressLint("StaticFieldLeak")
     private class FectchChatFromDB extends AsyncTask<Void, Void, List<Message>> {
 
         @Override
         protected List<Message> doInBackground(Void... voids) {
             PalaverDB palaverDB = Palaver.getInstance().getPalaverDB();
-            return new ArrayList<>(palaverDB.getAllChatData(friend));
+
+            List<Message> messages;
+            messages = palaverDB.getAllChatData(friend);
+            return messages;
         }
 
         @Override
         protected void onPostExecute(List<Message> messages) {
-            messageListLiveData.override(messages);
+
+            messageListLiveData.addAll(messages);
         }
+    }
+
+    @Override
+    protected void onCleared() {
+        super.onCleared();
     }
 }

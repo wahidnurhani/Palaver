@@ -15,22 +15,19 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.SearchView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.List;
 import java.util.Objects;
 
-import de.unidue.palaver.system.FriendViewModel;
+import de.unidue.palaver.system.viewmodel.FriendViewModel;
 import de.unidue.palaver.R;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.ListLiveData;
 import de.unidue.palaver.system.resource.StringValue;
-import de.unidue.palaver.system.uicontroller.arrayadapter.FriendAdapter;
-import de.unidue.palaver.system.uicontroller.arrayadapter.FriendArrayAdapter;
+import de.unidue.palaver.ui.uicontroller.adapter.FriendAdapter;
+
 
 public class FriendManagerActivity extends AppCompatActivity {
     private static boolean visibility;
@@ -96,28 +93,20 @@ public class FriendManagerActivity extends AppCompatActivity {
                 friendViewModel.openAddFriendDialog(getApplicationContext(),
                         FriendManagerActivity.this));
 
-        RecyclerView friendsListView = findViewById(R.id.friendManager_recycleView);
+        RecyclerView friendsRecycleView = findViewById(R.id.friendManager_recycleView);
 
         FriendAdapter friendAdapter = new FriendAdapter(this,
                 friendsListLiveData.getValue());
-        friendsListView.setAdapter(friendAdapter);
+        friendsRecycleView.setAdapter(friendAdapter);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        friendsListView.setLayoutManager(linearLayoutManager);
+        friendsRecycleView.setLayoutManager(linearLayoutManager);
 
-        friendsListView.setItemAnimator(new DefaultItemAnimator());
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(friendsListView.getContext(),
+        friendsRecycleView.setItemAnimator(new DefaultItemAnimator());
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(friendsRecycleView.getContext(),
                 linearLayoutManager.getOrientation());
-        friendsListView.addItemDecoration(dividerItemDecoration);
-
-//        friendsListLiveData.observe(this, friends ->
-//                friendArrayAdapter.override(Objects.requireNonNull(friendsListLiveData.getValue())));
-//
-//        friendsListView.setOnItemClickListener((parent, view, position, id) -> {
-//            Friend friend = friendArrayAdapter.getItem(position);
-//            friendViewModel.openChat(FriendManagerActivity.this, friend);
-//        });
+        friendsRecycleView.addItemDecoration(dividerItemDecoration);
     }
 
     public static boolean isVisibility() {

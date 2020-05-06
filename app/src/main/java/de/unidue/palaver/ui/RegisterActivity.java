@@ -14,7 +14,6 @@ import de.unidue.palaver.R;
 import de.unidue.palaver.system.resource.StringValue;
 import de.unidue.palaver.system.engine.PalaverEngine;
 import de.unidue.palaver.system.model.User;
-import de.unidue.palaver.system.model.UserData;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -42,8 +41,8 @@ public class RegisterActivity extends AppCompatActivity {
 
         registerButton.setOnClickListener(e -> {
             if(validateUserInput()){
-                User user = new User(new UserData(userNameEditText.getText().toString(),
-                        passwordEditText.getText().toString()));
+                User user = new User(userNameEditText.getText().toString(),
+                        passwordEditText.getText().toString());
                 palaverEngine.handleRegisterRequest(getApplicationContext(), RegisterActivity.this, user);
             }
         });

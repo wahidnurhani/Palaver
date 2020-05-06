@@ -68,7 +68,7 @@ public class AddFriendDialog {
         if(username.equals("") || userNameEditText.getText()==null){
             palaverEngine.handleShowToastRequest(applicationContext, StringValue.ErrorMessage.USERNAME_BLANK);
             return false;
-        } else if (username.equals(sessionManager.getUser().getUserData().getUserName())){
+        } else if (username.equals(sessionManager.getUser().getUserName())){
             palaverEngine.handleShowToastRequest(applicationContext, StringValue.ErrorMessage.ADD_OWN_ACCOUNT);
             return false;
         }

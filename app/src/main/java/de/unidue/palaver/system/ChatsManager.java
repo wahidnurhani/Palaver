@@ -1,7 +1,6 @@
 package de.unidue.palaver.system;
 
 
-import android.content.Context;
 import android.os.AsyncTask;
 
 import androidx.lifecycle.ViewModel;
@@ -10,14 +9,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import de.unidue.palaver.system.database.PalaverDB;
 import de.unidue.palaver.system.model.Friend;
-import de.unidue.palaver.system.uicontroller.arrayadapter.ChatArrayAdapter;
+import de.unidue.palaver.system.viewmodel.MessageViewModel;
 
 public class ChatsManager extends ViewModel {
 
     private List<MessageViewModel> messageViewModels;
-    private ChatArrayAdapter chatArrayAdapter;
 
     public ChatsManager() {
         this.messageViewModels = new ArrayList<>();
@@ -57,31 +54,6 @@ public class ChatsManager extends ViewModel {
         Collections.sort(messageViewModels);
     }
 
-    public List<MessageViewModel> search(String string){
-        List<MessageViewModel> result = new ArrayList<>();
-        chatArrayAdapter.clear();
-        if(string.equals("")){
-            chatArrayAdapter.addAll(messageViewModels);
-            result = messageViewModels;
-        } else {
-            for (MessageViewModel messageViewModel : messageViewModels
-            ) {
-                if(messageViewModel.getFriend().getUsername().contains(string)){
-                    result.add(messageViewModel);
-                }
-            }
-            chatArrayAdapter.addAll(result);
-        }
-        return result;
-    }
-
-    public void initArrayAdapter(Context context, int layout) {
-        this.chatArrayAdapter = new ChatArrayAdapter(context, layout);
-    }
-
-    public ChatArrayAdapter getChatArrayAdapter() {
-        return chatArrayAdapter;
-    }
 
     public void updateChatList() {
         FectchChatListFromDB fectchChatListFromDB = new FectchChatListFromDB();
@@ -96,16 +68,8 @@ public class ChatsManager extends ViewModel {
 
         @Override
         protected Void doInBackground(Void... voids) {
-//            PalaverDB palaverDB = Palaver.getInstance().getPalaverDB();
-//            messageViewModels.clear();
-//            messageViewModels.addAll(palaverDB.getAllChat());
-            return null;
-        }
 
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            chatArrayAdapter.clear();
-            chatArrayAdapter.addAll(messageViewModels);
+            return null;
         }
     }
 }

@@ -15,7 +15,6 @@ import de.unidue.palaver.R;
 import de.unidue.palaver.system.resource.StringValue;
 import de.unidue.palaver.system.engine.PalaverEngine;
 import de.unidue.palaver.system.model.User;
-import de.unidue.palaver.system.model.UserData;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -40,8 +39,8 @@ public class LoginActivity extends AppCompatActivity {
         passwordEditText = findViewById(R.id.login_password_editText);
         loginButton.setOnClickListener(v -> {
             if(validateUserInput()){
-                User user = new User(new UserData(userNameEditText.getText().toString(),
-                        passwordEditText.getText().toString()));
+                User user = new User(userNameEditText.getText().toString(),
+                        passwordEditText.getText().toString());
                 palaverEngine.handleLoginRequest(getApplicationContext(), LoginActivity.this, user);
             }
         });

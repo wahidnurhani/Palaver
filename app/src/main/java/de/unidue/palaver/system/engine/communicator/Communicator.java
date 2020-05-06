@@ -53,7 +53,7 @@ public class Communicator {
         try {
             url = new URL( baseUrl + cmd);
 
-            JSONObject body = jsonBuilder.formatBodyUserDataToJSON(user.getUserData().getUserName(), user.getUserData().getPassword());
+            JSONObject body = jsonBuilder.formatBodyUserDataToJSON(user.getUserName(), user.getPassword());
 
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("POST");
@@ -108,7 +108,7 @@ public class Communicator {
         String cmd = StringValue.APICmd.GET_ALL_FRIENDS;
 
         try {
-            JSONObject body = jsonBuilder.formatBodyUserDataToJSON(user.getUserData().getUserName(), user.getUserData().getPassword());
+            JSONObject body = jsonBuilder.formatBodyUserDataToJSON(user.getUserName(), user.getPassword());
 
             url = new URL(baseUrl + cmd);
             urlConnection = (HttpURLConnection) url.openConnection();
@@ -165,7 +165,7 @@ public class Communicator {
         CommunicatorResult<Friend> result = null;
         String cmd = StringValue.APICmd.ADD_FRIEND;
         try {
-            JSONObject body = jsonBuilder.formatBodyAddOrRemoveFriendtToJSON(user.getUserData().getUserName(), user.getUserData().getPassword(), friendUserName);
+            JSONObject body = jsonBuilder.formatBodyAddOrRemoveFriendtToJSON(user.getUserName(), user.getPassword(), friendUserName);
             url = new URL(baseUrl+cmd);
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("POST");
@@ -218,7 +218,7 @@ public class Communicator {
         CommunicatorResult<Friend> result = null;
         String cmd = StringValue.APICmd.REMOVE_FRIEND;
         try {
-            JSONObject body = jsonBuilder.formatBodyAddOrRemoveFriendtToJSON(user.getUserData().getUserName(), user.getUserData().getPassword(), friendUserName);
+            JSONObject body = jsonBuilder.formatBodyAddOrRemoveFriendtToJSON(user.getUserName(), user.getPassword(), friendUserName);
             url = new URL(baseUrl+cmd);
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("POST");
@@ -273,8 +273,8 @@ public class Communicator {
         String cmd = StringValue.APICmd.CHANGE_PASSWORD;
         try {
 
-            JSONObject body = jsonBuilder.formatBodyChangePasswordDataToJSON(user.getUserData().getUserName(),
-                    user.getUserData().getPassword(),
+            JSONObject body = jsonBuilder.formatBodyChangePasswordDataToJSON(user.getUserName(),
+                    user.getPassword(),
                     newPassword);
 
 
@@ -332,8 +332,8 @@ public class Communicator {
         String cmd = StringValue.APICmd.PUSHTOKEN;
         try {
 
-            JSONObject body = jsonBuilder.formatBodyPushTokenDataToJSON(user.getUserData().getUserName(),
-                    user.getUserData().getPassword(),
+            JSONObject body = jsonBuilder.formatBodyPushTokenDataToJSON(user.getUserName(),
+                    user.getPassword(),
                     token);
 
             url = new URL(baseUrl + cmd);
@@ -390,8 +390,8 @@ public class Communicator {
         CommunicatorResult<Date> resultValue=null;
         try {
             String cmd = StringValue.APICmd.SEND_MESSAGE;
-            JSONObject body = jsonBuilder.formatBodySendMessageToJSON(user.getUserData().getUserName(),
-                    user.getUserData().getPassword(), friend.getUsername(),
+            JSONObject body = jsonBuilder.formatBodySendMessageToJSON(user.getUserName(),
+                    user.getPassword(), friend.getUsername(),
                     message.getMessage());
 
             url = new URL(baseUrl+cmd);
@@ -446,8 +446,8 @@ public class Communicator {
         CommunicatorResult<Message> result=null;
         String cmd = StringValue.APICmd.GET_MESSAGE;
         try {
-            JSONObject body = jsonBuilder.formatBodyGetChatToJSON(user.getUserData().getUserName(),
-                    user.getUserData().getPassword(), friend.getUsername());
+            JSONObject body = jsonBuilder.formatBodyGetChatToJSON(user.getUserName(),
+                    user.getPassword(), friend.getUsername());
 
             url = new URL(baseUrl+cmd);
             urlConnection = (HttpURLConnection) url.openConnection();
