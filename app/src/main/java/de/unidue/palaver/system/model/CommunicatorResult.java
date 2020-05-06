@@ -1,8 +1,10 @@
 package de.unidue.palaver.system.model;
 
+import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 
 import java.util.Date;
 import java.util.List;
@@ -32,6 +34,7 @@ public class CommunicatorResult<T> {
         return data;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @NonNull
     @Override
     public String toString() {
@@ -39,6 +42,7 @@ public class CommunicatorResult<T> {
             if (data.get(0) instanceof Friend){
                 StringBuilder stringBuilder = new StringBuilder();
                 stringBuilder.append("[ ");
+
                 for (T friend : data){
                     stringBuilder.append(((Friend)friend).getUsername()).append(", ");
                 }
@@ -82,7 +86,6 @@ public class CommunicatorResult<T> {
                 return "Msg Type :"+responseValue+" , "+"message : "+message+" , data : "+stringBuilder.toString() ;
             }
         }
-
 
         Log.i(TAG, "Msg Type :"+responseValue+" , "+"message : "+message);
         return "Msg Type :"+responseValue+" , "+"message : "+message;

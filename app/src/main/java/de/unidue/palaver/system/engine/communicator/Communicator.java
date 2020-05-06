@@ -51,8 +51,6 @@ public class Communicator {
     String[] registerAndValidate(User user, String cmd) {
         String[] resultValue=new String[]{};
         try {
-            url = new URL( baseUrl + cmd);
-
             JSONObject body = jsonBuilder.formatBodyUserDataToJSON(user.getUserName(), user.getPassword());
 
             urlConnection = (HttpURLConnection) url.openConnection();
