@@ -23,8 +23,7 @@
             android:layout_weight="100"
             android:divider="@null"
             android:scrollbars="none"
-            android:stackFromBottom="true"
-            android:transcriptMode="normal" />
+            android:stackFromBottom="true" />
 
         <LinearLayout
             android:layout_width="match_parent"

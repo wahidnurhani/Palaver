@@ -1,43 +1,69 @@
 package de.unidue.palaver.ui.uicontroller.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
 import de.unidue.palaver.R;
 import de.unidue.palaver.system.model.Message;
+import de.unidue.palaver.system.resource.MessageType;
 
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHolder>{
 
     private List<Message> messages;
     private LayoutInflater inflater;
-    private Context context;
 
     public MessageAdapter(Context context, List<Message> messages) {
         inflater = LayoutInflater.from(context);
         this.messages = messages;
-        this.context = context;
     }
     @NonNull
     @Override
     public MessageAdapter.MessageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
         View view = inflater.inflate(R.layout.message_view_holder_layout, parent, false);
-
-
         return new MessageViewHolder(view);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     @Override
     public void onBindViewHolder(@NonNull MessageViewHolder holder, int position) {
         Message current = messages.get(position);
-        holder.setData(current, position);
+
+        LinearLayout containerLinearLayout = holder.getLinearLayout();
+        TextView chatItemTextView = holder.getTextView();
+
+        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)containerLinearLayout.getLayoutParams();
+
+        if (current.getMessageType()== MessageType.OUT){
+            params.removeRule(RelativeLayout.ALIGN_PARENT_END);
+            params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+            containerLinearLayout.setLayoutParams(params);
+
+            chatItemTextView.setTextColor(Color.WHITE);
+            containerLinearLayout.setBackgroundResource(R.drawable.shape_round_message_out);
+
+        }else{
+            params.removeRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+            containerLinearLayout.setLayoutParams(params);
+
+            chatItemTextView.setTextColor(Color.WHITE);
+            containerLinearLayout.setBackgroundResource(R.drawable.shape_round_message_in);
+        }
+
+        holder.setData(current);
     }
 
     public void setMessages(List<Message> messages) {
@@ -50,19 +76,27 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
         return messages.size();
     }
 
-    class MessageViewHolder extends RecyclerView.ViewHolder{
+    static class MessageViewHolder extends RecyclerView.ViewHolder{
 
-        private View cardView;
-        private TextView message;
+        private LinearLayout linearLayout;
+        private TextView textView;
 
-        public MessageViewHolder(@NonNull View itemView) {
+        MessageViewHolder(@NonNull View itemView) {
             super(itemView);
-            cardView = itemView.findViewById(R.id.message_cardView);
-            message = itemView.findViewById(R.id.message_textView);
+            linearLayout = itemView.findViewById(R.id.message_container);
+            textView = itemView.findViewById(R.id.message_textView);
         }
 
-        public void setData(Message current, int position) {
-            this.message.setText(current.getMessage());
+        LinearLayout getLinearLayout() {
+            return linearLayout;
+        }
+
+        TextView getTextView() {
+            return textView;
+        }
+
+        void setData(Message current) {
+            this.textView.setText(current.getMessage());
         }
     }
 }

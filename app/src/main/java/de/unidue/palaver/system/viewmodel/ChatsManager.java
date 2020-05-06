@@ -1,4 +1,4 @@
-package de.unidue.palaver.system;
+package de.unidue.palaver.system.viewmodel;
 
 
 import android.os.AsyncTask;
@@ -10,7 +10,6 @@ import java.util.Collections;
 import java.util.List;
 
 import de.unidue.palaver.system.model.Friend;
-import de.unidue.palaver.system.viewmodel.MessageViewModel;
 
 public class ChatsManager extends ViewModel {
 

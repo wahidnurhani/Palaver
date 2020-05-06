@@ -23,7 +23,7 @@ import de.unidue.palaver.system.resource.StringValue;
 import de.unidue.palaver.ui.uicontroller.adapter.MessageAdapter;
 
 public class ChatRoomActivity extends AppCompatActivity {
-    private static boolean visibility;
+    public static String TAG = ChatRoomActivity.class.getSimpleName();
 
     private PalaverEngine palaverEngine;
     private MessageViewModel messageViewModel;
@@ -76,23 +76,26 @@ public class ChatRoomActivity extends AppCompatActivity {
             }
         });
 
-        messageListLiveData.observe(this, messages -> messageAdapter.setMessages(messages));
-    }
-
-    public static boolean isVisibility() {
-        return visibility;
+        messageRecycleview.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
+            if(bottom < oldBottom){
+                messageRecycleview.post(() ->
+                        messageRecycleview.smoothScrollToPosition(messageAdapter.getItemCount()-1));
+            }
+        });
+        messageListLiveData.observe(this, messages -> {
+            messageAdapter.setMessages(messages);
+            messageRecycleview.scrollToPosition(messages.size()-1);
+        });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        visibility = true;
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        visibility = false;
     }
 
     @Override

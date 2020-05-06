@@ -87,7 +87,7 @@ public class FriendViewModel extends AndroidViewModel {
 
         PalaverDao palaverDao;
 
-        public InsertAsyncTask(PalaverDao palaverDao) {
+        InsertAsyncTask(PalaverDao palaverDao) {
             this.palaverDao = palaverDao;
         }
 

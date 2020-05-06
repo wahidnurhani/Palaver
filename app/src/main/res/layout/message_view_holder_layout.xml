@@ -7,30 +7,37 @@
     android:id="@+id/message_cardView"
     app:cardBackgroundColor="@color/colorChatBackgroud">
 
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:id="@+id/message_container"
-        android:layout_width="match_parent"
-        android:layout_marginTop="2dp"
-        android:layout_marginBottom="2dp"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        tools:ignore="UselessParent">
-
-        <TextView
-            android:id="@+id/message_textView"
+        <LinearLayout
+            android:id="@+id/message_container"
             android:layout_width="wrap_content"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:maxWidth="300dp"
-            android:paddingLeft="10dp"
-            android:paddingTop="5dp"
-            android:textColor="#FFFEFE"
-            android:paddingBottom="10dp"
-            android:paddingRight="10dp"
-            android:textSize="5pt" />
-    </LinearLayout>
+            android:orientation="vertical"
+            tools:ignore="UselessParent">
+
+            <TextView
+                android:id="@+id/message_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:maxWidth="300dp"
+                android:paddingLeft="10dp"
+                android:paddingTop="5dp"
+                android:textColor="#FFFEFE"
+                android:paddingBottom="10dp"
+                android:paddingRight="10dp"
+                android:textSize="5pt" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
 
 
 </androidx.cardview.widget.CardView>

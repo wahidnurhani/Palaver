@@ -2,9 +2,7 @@ package de.unidue.palaver.system.model;
 
 
 import androidx.annotation.NonNull;
-import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.Ignore;
 
 import java.io.Serializable;
 import java.text.ParseException;
@@ -18,19 +16,11 @@ import de.unidue.palaver.system.resource.MessageType;
 public class Message implements Comparable<Message>, Serializable {
 
     private final String sender;
-
     private final String recipient;
-
-
     private final String message;
-
     private String mimeType;
-
     private final MessageType messageType;
-
-
     private boolean isRead;
-
     private Date date;
 
 
