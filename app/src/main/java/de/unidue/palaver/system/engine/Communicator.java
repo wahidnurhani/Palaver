@@ -47,7 +47,7 @@ public class Communicator {
         return networkInfo != null && networkInfo.isConnectedOrConnecting();
     }
 
-    String[] registerAndValidate(User user, String cmd) {
+    public String[] registerAndValidate(User user, String cmd) {
         String[] resultValue=new String[]{};
         try {
             JSONObject body = jsonBuilder.formatBodyUserDataToJSON(user.getUserName(), user.getPassword());

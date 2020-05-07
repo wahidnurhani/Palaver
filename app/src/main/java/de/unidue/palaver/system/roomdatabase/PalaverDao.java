@@ -1,6 +1,5 @@
 package de.unidue.palaver.system.roomdatabase;
 
-import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -38,7 +37,7 @@ public interface PalaverDao {
     @Query("SELECT * FROM table_friend")
     List<Chat> loadAllChat();
 
-    @Query("SELECT * From table_chat_data WHERE fk_friend = :friendName ")
+    @Query("SELECT * From table_chat_data WHERE fk_friend = :friendName ORDER BY date_time DESC" )
     List<Message> loadChat(String friendName);
 
     @Update

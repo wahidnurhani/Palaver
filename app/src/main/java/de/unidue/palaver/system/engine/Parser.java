@@ -25,7 +25,7 @@ public class Parser {
     public Parser() {
     }
 
-    String[] validateAndRegisterReportParser(String result){
+    public String[] validateAndRegisterReportParser(String result){
         try {
             JSONObject jsonObject = new JSONObject(result);
             int msgType = jsonObject.getInt(StringValue.JSONKeyName.MSG_TYPE);
@@ -44,7 +44,7 @@ public class Parser {
         return null;
     }
 
-    CommunicatorResult<Friend> getFriendParser(String result) {
+    public CommunicatorResult<Friend> getFriendParser(String result) {
         CommunicatorResult<Friend> communicatorResult;
 
         try {
@@ -65,7 +65,7 @@ public class Parser {
         return null;
     }
 
-    CommunicatorResult<Friend> addAndRemoveFriendReportParser(String result) {
+    public CommunicatorResult<Friend> addAndRemoveFriendReportParser(String result) {
 
         CommunicatorResult<Friend> communicatorResult=null;
         try {
@@ -83,7 +83,7 @@ public class Parser {
         return communicatorResult;
     }
 
-    Date stringToDateFromServer(String date) throws ParseException {
+    public Date stringToDateFromServer(String date) throws ParseException {
 
         String[] dateTime = date.split("\\.");
         String validDateTime = dateTime[0];
@@ -101,7 +101,6 @@ public class Parser {
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.GERMANY);
         formatter.setTimeZone(TimeZone.getTimeZone("Europe/Berlin"));
-
         return formatter.parse(date);
     }
 
@@ -111,7 +110,7 @@ public class Parser {
         return dateFormat.format(date);
     }
 
-    CommunicatorResult<String> changePasswordResultParser(String result, String newPassWord) {
+    public CommunicatorResult<String> changePasswordResultParser(String result, String newPassWord) {
         CommunicatorResult<String> communicatorResult=null;
         try {
             JSONObject jsonObject = new JSONObject(result);
@@ -150,7 +149,7 @@ public class Parser {
         return communicatorResult;
     }
 
-    CommunicatorResult<Date> sendMessageReport(String result) {
+    public CommunicatorResult<Date> sendMessageReport(String result) {
         CommunicatorResult<Date> communicatorResult = null;
 
         try {
@@ -172,7 +171,7 @@ public class Parser {
         return communicatorResult;
     }
 
-    CommunicatorResult<Message> getChatDataParser(String result, String isMessageRead, String friendUserName) throws JSONException, ParseException {
+    public CommunicatorResult<Message> getChatDataParser(String result, String isMessageRead, String friendUserName) throws JSONException, ParseException {
         CommunicatorResult<Message> communicatorResult;
         JSONObject jsonObject = new JSONObject(result);
         int msgType = jsonObject.getInt(StringValue.JSONKeyName.MSG_TYPE);

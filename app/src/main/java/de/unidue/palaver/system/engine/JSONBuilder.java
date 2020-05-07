@@ -5,8 +5,8 @@ import org.json.JSONObject;
 
 import de.unidue.palaver.system.resource.StringValue;
 
-class JSONBuilder {
-    JSONObject formatBodyUserDataToJSON(String username, String password) {
+public class JSONBuilder {
+    public JSONObject formatBodyUserDataToJSON(String username, String password) {
         JSONObject root = new JSONObject();
         try {
             root.put(StringValue.JSONKeyName.USERNAME,username);
@@ -19,7 +19,7 @@ class JSONBuilder {
         return null;
     }
 
-    JSONObject formatBodyAddOrRemoveFriendtToJSON(String username, String password, String friendsUsername){
+    public JSONObject formatBodyAddOrRemoveFriendtToJSON(String username, String password, String friendsUsername){
         final JSONObject root = new JSONObject();
         try {
             root.put(StringValue.JSONKeyName.USERNAME,username);

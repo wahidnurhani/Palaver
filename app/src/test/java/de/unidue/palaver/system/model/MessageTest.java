@@ -3,7 +3,10 @@ package de.unidue.palaver.system.model;
 import org.junit.Test;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 import de.unidue.palaver.system.resource.MessageType;
 
@@ -50,5 +53,22 @@ public class MessageTest {
         assertNotNull(message.getDateDate());
         System.out.println(message.getDateDate().toString());
         System.out.println(message.getDateToString());
+    }
+
+    @Test
+    public void playWithDate(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+
+//Here you say to java the initial timezone. This is the secret
+        sdf.setTimeZone(TimeZone.getDefault());
+//Will print in UTC
+        System.out.println(sdf.format(calendar.getTime()));
+
+//Here you set to your timezone
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT+5"));
+//Will print on your default Timezone
+        System.out.println(sdf.format(calendar.getTime()));
     }
 }

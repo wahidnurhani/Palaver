@@ -13,7 +13,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-
 import de.unidue.palaver.system.Palaver;
 import de.unidue.palaver.system.engine.PalaverEngine;
 import de.unidue.palaver.system.model.Friend;
