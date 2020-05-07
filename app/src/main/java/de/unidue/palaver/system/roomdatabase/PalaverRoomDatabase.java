@@ -24,7 +24,9 @@ public abstract class PalaverRoomDatabase extends RoomDatabase {
         if(palaverRoomInstance == null){
             synchronized (PalaverRoomDatabase.class) {
                 palaverRoomInstance = Room.databaseBuilder(context.getApplicationContext(),
-                         PalaverRoomDatabase.class, DBContract.DB_NAME).build();
+                         PalaverRoomDatabase.class, DBContract.DB_NAME)
+                        .fallbackToDestructiveMigration()
+                        .build();
             }
         }
         return palaverRoomInstance;

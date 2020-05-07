@@ -52,7 +52,10 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
 
     @Override
     public int getItemCount() {
-        return friends.size();
+        if(friends!=null){
+            return friends.size();
+        }
+        return 0;
     }
 
     void overrade(List<Friend> searchedList) {

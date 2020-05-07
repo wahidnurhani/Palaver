@@ -12,29 +12,30 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import de.unidue.palaver.system.Palaver;
 import de.unidue.palaver.system.SessionManager;
-import de.unidue.palaver.system.database.PalaverDB;
 import de.unidue.palaver.system.engine.CommunicatorResult;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.User;
 import de.unidue.palaver.system.resource.StringValue;
 import de.unidue.palaver.system.engine.Communicator;
+import de.unidue.palaver.system.roomdatabase.PalaverDao;
+import de.unidue.palaver.system.roomdatabase.PalaverRoomDatabase;
 
 public class ServiceFetchFriend extends Service {
     private static final String TAG= ServiceFetchFriend.class.getSimpleName();
-    private PalaverDB palaverDB;
     private Communicator communicator;
-    @Nullable
-    @Override
+    private PalaverDao palaverDao;
+
     public IBinder onBind(Intent intent) {
         return null;
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        PalaverRoomDatabase palaverRoomDatabase = PalaverRoomDatabase.getDatabase(getApplicationContext());
+        palaverDao = palaverRoomDatabase.palaverDao();
         FetchAllFriendFromServer fetchAllFriendFromServer=new FetchAllFriendFromServer();
         fetchAllFriendFromServer.execute("initiate friend");
         communicator = Palaver.getInstance().getPalaverEngine().getCommunicator();
-        palaverDB = Palaver.getInstance().getPalaverDB();
         return START_STICKY;
     }
 
@@ -53,9 +54,9 @@ public class ServiceFetchFriend extends Service {
             CommunicatorResult<Friend> communicatorResult = communicator.fetchFriends(user);
 
             if(communicatorResult.getData().size()>0){
-                if(palaverDB.deleteAllContact()){
+                if(palaverDao.deleteFriend()==1){
                     for(Friend friend : communicatorResult.getData()) {
-                        palaverDB.insertFriend(friend);
+                        palaverDao.insert(friend);
                     }
                 }
                 Intent intent = new Intent(StringValue.IntentAction.BROADCAST_ALL_FRIENDS_FETCHED);

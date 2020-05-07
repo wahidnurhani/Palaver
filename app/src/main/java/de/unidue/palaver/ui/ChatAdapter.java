@@ -53,7 +53,10 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
 
     @Override
     public int getItemCount() {
-        return chats.size();
+        if(chats!=null){
+            return chats.size();
+        }
+        return 0;
     }
 
     void overrade(List<Chat> searchedList) {
@@ -79,7 +82,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
         void setData(Chat current, int position){
             this.textViewName.setText(current.friend.getUsername());
             if(current.getLastMessage()!= null){
-                this.textViewLastMessage.setText(current.getLastMessage().getMessage());
+                this.textViewLastMessage.setText(current.getLastMessage().getMessage().trim());
             }
         }
     }

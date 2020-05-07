@@ -38,7 +38,7 @@ public class FriendManagerActivity extends AppCompatActivity {
     private BroadcastReceiver friendAddeddMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            friendViewModel.fetchFriends();
+            //friendViewModel.fetchFriends();
         }
     };
 

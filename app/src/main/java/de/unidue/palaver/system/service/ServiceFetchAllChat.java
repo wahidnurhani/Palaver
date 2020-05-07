@@ -16,21 +16,22 @@ import java.util.List;
 
 import de.unidue.palaver.system.Palaver;
 import de.unidue.palaver.system.SessionManager;
-import de.unidue.palaver.system.database.PalaverDB;
 import de.unidue.palaver.system.engine.Communicator;
 import de.unidue.palaver.system.model.Message;
 import de.unidue.palaver.system.engine.CommunicatorResult;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.User;
 import de.unidue.palaver.system.resource.StringValue;
+import de.unidue.palaver.system.roomdatabase.PalaverDao;
+import de.unidue.palaver.system.roomdatabase.PalaverRoomDatabase;
 
 public class ServiceFetchAllChat extends Service {
     private static final String TAG= ServiceFetchAllChat.class.getSimpleName();
 
     private Palaver palaver;
     private Communicator communicator;
-    private PalaverDB palaverDB;
     private SessionManager sessionManager;
+    private PalaverDao palaverDao;
 
     public static void startIntent(Context applicationContext, Activity activity) {
         Intent intent = new Intent(applicationContext, ServiceFetchAllChat.class);
@@ -46,9 +47,10 @@ public class ServiceFetchAllChat extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         palaver = Palaver.getInstance();
+        PalaverRoomDatabase palaverRoomDatabase = PalaverRoomDatabase.getDatabase(getApplicationContext());
+        palaverDao = palaverRoomDatabase.palaverDao();
         sessionManager = SessionManager.getSessionManagerInstance(getApplicationContext());
         communicator = Palaver.getInstance().getPalaverEngine().getCommunicator();
-        palaverDB = Palaver.getInstance().getPalaverDB();
         FetchAllChat fetchAllChat = new FetchAllChat();
         fetchAllChat.execute("all");
         return START_STICKY;
@@ -66,12 +68,12 @@ public class ServiceFetchAllChat extends Service {
         protected CommunicatorResult<Message> doInBackground(String... strings) {
             CommunicatorResult<Message> result = null;
             User user = sessionManager.getUser();
-            List<Friend> friends = palaverDB.getAllFriends();
+            List<Friend> friends = palaverDao.loadAllFriend();
             for(Friend friend : friends){
                 result = communicator.getMessage(user, friend);
                 if(result.getResponseValue()==1){
                     for (Message message : result.getData()){
-                        palaverDB.insertChatItem(friend, message);
+                        palaverDao.insert(message);
                     }
                 }
             }

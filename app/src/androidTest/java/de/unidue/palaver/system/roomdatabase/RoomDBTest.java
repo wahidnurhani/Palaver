@@ -18,8 +18,6 @@ import java.util.List;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.Message;
 import de.unidue.palaver.system.resource.MessageType;
-import de.unidue.palaver.system.roomdatabase.PalaverDao;
-import de.unidue.palaver.system.roomdatabase.PalaverRoomDatabase;
 
 import static org.junit.Assert.*;
 
@@ -42,7 +40,7 @@ public class RoomDBTest {
     }
 
     @Test
-    public void writeUserAndReadInList() {
+    public void writeAndReadInList() {
         Friend friend = new Friend("haloo");
         palaverDao.insert(friend);
         List<Friend> friends = palaverDao.loadAllFriend();
@@ -53,4 +51,25 @@ public class RoomDBTest {
 
         assertNotNull(palaverDao.loadChat("wahid").get(0));
     }
+
+    @Test
+    public void deleteFriend(){
+
+        Friend friend = new Friend("haloo");
+
+        palaverDao.insert(friend);
+        palaverDao.delete(friend);
+
+        assertEquals(0, palaverDao.loadAllFriend().size());
+
+    }
+
+    @Test
+    public void deleteMessage(){
+        Message message = new Message("wahid", "jimmy", MessageType.INCOMMING, "hallo", "true", "2016-02-12 17:02:38.663");
+        palaverDao.insert(message);
+        palaverDao.delete(message);
+        assertEquals(0, palaverDao.loadAllChat().size());
+    }
+
 }

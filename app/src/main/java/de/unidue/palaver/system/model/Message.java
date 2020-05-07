@@ -48,8 +48,7 @@ public class Message implements Comparable<Message>, Serializable {
     @ColumnInfo(name = TableMessage.COLUMN_CHAT_DATETIME)
     private String date;
 
-    public Message() {
-    }
+    public Message() { }
 
     public Message(String sender, String recipient, MessageType messageType, String message, String isReadStatus, String date) {
         if(messageType == MessageType.INCOMMING){
@@ -97,7 +96,6 @@ public class Message implements Comparable<Message>, Serializable {
     public void setSender(String sender){
         this.sender = sender;
     }
-
 
     @NonNull
     public String getRecipient() {

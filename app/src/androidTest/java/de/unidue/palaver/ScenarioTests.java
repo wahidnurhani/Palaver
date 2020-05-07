@@ -53,11 +53,13 @@ public class ScenarioTests {
         onView(withId(R.id.login_login_button)).
                 perform(click());
 
-        Thread.sleep(3000 /*Or any other time*/);
+        Thread.sleep(5000 /*Or any other time*/);
 
         openActionBarOverflowOrOptionsMenu(ApplicationProvider.getApplicationContext());
 
         onView(withText("Logout")).perform(click());
+
+        Thread.sleep(3000 /*Or any other time*/);
     }
 
     @Test
@@ -83,6 +85,8 @@ public class ScenarioTests {
 
         onView(withId(R.id.register_register_button)).
                 perform(click());
+
+        Thread.sleep(2000 /*Or any other time*/);
 
         onView(withId(R.id.register_backToLogin)).
                 perform(click());

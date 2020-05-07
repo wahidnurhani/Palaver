@@ -3,14 +3,13 @@ package de.unidue.palaver.system;
 import android.annotation.SuppressLint;
 import android.content.Context;
 
-import de.unidue.palaver.system.database.PalaverDB;
 import de.unidue.palaver.system.engine.PalaverEngine;
 import de.unidue.palaver.system.roomdatabase.DatabaseCleaner;
 import de.unidue.palaver.system.engine.UIController;
 
 public class Palaver implements IPalaver{
     private PalaverEngine palaverEngine;
-    private PalaverDB palaverDB;
+
     private UIController uiController;
     @SuppressLint("StaticFieldLeak")
     private static Palaver palaverInstance;
@@ -26,7 +25,6 @@ public class Palaver implements IPalaver{
     @Override
     public void startPalaver(Context applicationContext) {
         this.context = applicationContext;
-        this.palaverDB = PalaverDB.getPalaverDBInstace(applicationContext);
     }
 
     @Override
@@ -36,7 +34,7 @@ public class Palaver implements IPalaver{
     }
 
     private Palaver() {
-        palaverInstance = this;;
+        palaverInstance = this;
         this.palaverEngine = new PalaverEngine();
         this.uiController = new UIController();
     }
@@ -47,12 +45,5 @@ public class Palaver implements IPalaver{
 
     public PalaverEngine getPalaverEngine() {
         return palaverEngine;
-    }
-
-    public PalaverDB getPalaverDB() {
-        if(palaverDB==null){
-            return PalaverDB.getPalaverDBInstace(context);
-        }
-        return palaverDB;
     }
 }

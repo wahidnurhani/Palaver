@@ -14,7 +14,6 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import de.unidue.palaver.system.Palaver;
 import de.unidue.palaver.system.SessionManager;
-import de.unidue.palaver.system.database.PalaverDB;
 import de.unidue.palaver.system.engine.CommunicatorResult;
 import de.unidue.palaver.system.resource.StringValue;
 import de.unidue.palaver.system.engine.Communicator;
@@ -28,8 +27,6 @@ public class ServiceAddFriend extends Service {
     private Palaver palaver;
     private SessionManager sessionManager;
     private Communicator communicator;
-    private PalaverRoomDatabase palaverRoomDatabase;
-    private PalaverDao palaverDao;
 
     public static void startIntent(Context applicationContext, Activity activity, String username) {
         Intent intent = new Intent(applicationContext, ServiceAddFriend.class);
@@ -67,8 +64,8 @@ public class ServiceAddFriend extends Service {
         @Override
         protected CommunicatorResult<Friend> doInBackground(Friend... friends) {
             User user = sessionManager.getUser();
-            palaverRoomDatabase = PalaverRoomDatabase.getDatabase(getApplicationContext());
-            palaverDao = palaverRoomDatabase.palaverDao();
+            PalaverRoomDatabase palaverRoomDatabase = PalaverRoomDatabase.getDatabase(getApplicationContext());
+            PalaverDao palaverDao = palaverRoomDatabase.palaverDao();
             CommunicatorResult<Friend> resultValue = communicator.addFriend(user, friends[0].getUsername());
             if(resultValue.getResponseValue()==1){
                 palaverDao.insert(friends[0]);

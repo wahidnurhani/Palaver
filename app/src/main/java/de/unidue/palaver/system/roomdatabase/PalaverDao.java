@@ -19,7 +19,7 @@ import de.unidue.palaver.system.model.Message;
 @Dao
 public interface PalaverDao {
 
-    @Insert
+    @Insert (onConflict = OnConflictStrategy.REPLACE)
     void insert(Friend friend);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -51,8 +51,8 @@ public interface PalaverDao {
     Friend findUserByName(String friendUserName);
 
     @Query("DELETE FROM table_friend")
-    void deleteFriend();
+    int deleteFriend();
 
     @Query("DELETE FROM table_chat_data")
-    void deleteAllChat();
+    int deleteAllChat();
 }

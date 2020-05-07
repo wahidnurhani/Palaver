@@ -13,6 +13,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+
 import de.unidue.palaver.system.Palaver;
 import de.unidue.palaver.system.engine.PalaverEngine;
 import de.unidue.palaver.system.model.Friend;
@@ -30,11 +31,10 @@ public class FriendViewModel extends AndroidViewModel {
 
         PalaverRoomDatabase palaverDB = PalaverRoomDatabase.getDatabase(getApplication());
         palaverDao = palaverDB.palaverDao();
-
+        friendsLiveData = new ListLiveData<>();
+        friendsLiveData.setValue(new ArrayList<>());
+        fetchFriends();
         this.palaverEngine = Palaver.getInstance().getPalaverEngine();
-        this.friendsLiveData = new ListLiveData<>();
-        this.friendsLiveData.setValue(new ArrayList<>());
-        this.fetchFriends();
     }
 
     public ListLiveData<Friend> getFriendsLiveData() {
@@ -55,6 +55,7 @@ public class FriendViewModel extends AndroidViewModel {
     }
 
     public void fetchFriends() {
+
         FetchFriendFromDB fetchFriendFromDB = new FetchFriendFromDB();
         fetchFriendFromDB.execute();
     }

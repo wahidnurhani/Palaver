@@ -26,14 +26,13 @@ import de.unidue.palaver.system.viewmodel.ChatsViewModel;
 import de.unidue.palaver.system.viewmodel.ListLiveData;
 
 public class ChatManagerActivity extends AppCompatActivity {
-    private static final String TAG= ChatManagerActivity.class.getSimpleName();
+    private static final String TAG = ChatManagerActivity.class.getSimpleName();
 
     private PalaverEngine palaverEngine;
     private ChatsViewModel chatsViewModel;
     private ChatAdapter chatAdapter;
 
     private static boolean visibility;
-
 
     public static boolean isVisibility() {
         return visibility;
@@ -106,7 +105,8 @@ public class ChatManagerActivity extends AppCompatActivity {
         chatsRecyclerView.setLayoutManager(linearLayoutManager);
         chatsRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(chatsRecyclerView.getContext(),
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(
+                chatsRecyclerView.getContext(),
                 linearLayoutManager.getOrientation());
         chatsRecyclerView.addItemDecoration(dividerItemDecoration);
 
