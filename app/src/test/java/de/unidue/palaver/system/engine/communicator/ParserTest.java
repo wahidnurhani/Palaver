@@ -33,12 +33,6 @@ public class ParserTest {
         System.out.println(communicatorResult.toString());
     }
 
-    @Test
-    public void stringToDate() throws ParseException {
-        Parser parser = new Parser();
-        String date = "2016-02-12T17:01:44.623";
-        System.out.println(parser.stringToDateFromServer(date).toGMTString());
-    }
 
     @Test
     public void addFriendParser() {
@@ -98,7 +92,7 @@ public class ParserTest {
         System.out.println(date.toString());
         String dateString = parser.dateToString(date);
         System.out.println(dateString);
-        Date date1 = parser.stringToDateFromDataBase(dateString);
+        Date date1 = parser.stringToDate(dateString);
         System.out.println(date1);
 
 

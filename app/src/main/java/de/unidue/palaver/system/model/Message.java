@@ -149,19 +149,19 @@ public class Message implements Comparable<Message>, Serializable {
     @NonNull
     public Date getDateDate() throws ParseException {
         Parser parser = new Parser();
-        return parser.stringToDateFromDataBase(date);
+        return parser.stringToDate(date);
     }
 
     public String getDate() {
         return date;
     }
 
-    public boolean isRead() {
-        return isRead;
+    public void setDate(String date) {
+        this.date = date;
     }
 
-    public String getDateToString(){
-        return date;
+    public boolean isRead() {
+        return isRead;
     }
 
     public String getFriendName() {
@@ -176,14 +176,10 @@ public class Message implements Comparable<Message>, Serializable {
         isRead = read;
     }
 
-    public void setDate(String date) {
-        this.date = date;
-    }
-
     @Override
     public int compareTo(Message o) {
         try {
-            return new Parser().stringToDateFromDataBase(date).compareTo(o.getDateDate());
+            return new Parser().stringToDate(date).compareTo(o.getDateDate());
         } catch (ParseException e) {
             e.printStackTrace();
         }
