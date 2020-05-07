@@ -3,7 +3,6 @@ package de.unidue.palaver.system.model;
 public class User {
 
     private String username;
-
     private String password;
 
     public User(String username, String password) {

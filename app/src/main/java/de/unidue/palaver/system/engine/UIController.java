@@ -1,4 +1,4 @@
-package de.unidue.palaver.ui.uicontroller;
+package de.unidue.palaver.system.engine;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;

@@ -1,11 +1,12 @@
 package de.unidue.palaver.system.roomdatabase;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.AsyncTask;
 
 public class DatabaseCleaner {
 
-    Context context;
+    private Context context;
 
 
     public DatabaseCleaner(Context context) {
@@ -17,6 +18,7 @@ public class DatabaseCleaner {
         cleanDatabase.execute();
     }
 
+    @SuppressLint("StaticFieldLeak")
     private class CleanDatabase extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... voids) {

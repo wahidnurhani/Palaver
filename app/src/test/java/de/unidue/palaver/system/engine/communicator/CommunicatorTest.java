@@ -3,6 +3,8 @@ package de.unidue.palaver.system.engine.communicator;
 import org.junit.Test;
 import java.util.Date;
 
+import de.unidue.palaver.system.engine.Communicator;
+import de.unidue.palaver.system.engine.CommunicatorResult;
 import de.unidue.palaver.system.model.Message;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.User;

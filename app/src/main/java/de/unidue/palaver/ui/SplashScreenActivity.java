@@ -8,7 +8,7 @@ import java.util.Objects;
 
 import de.unidue.palaver.system.Palaver;
 import de.unidue.palaver.R;
-import de.unidue.palaver.ui.uicontroller.UIController;
+import de.unidue.palaver.system.engine.UIController;
 
 public class SplashScreenActivity extends AppCompatActivity {
 

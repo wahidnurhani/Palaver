@@ -6,6 +6,8 @@ import org.junit.Test;
 import java.text.ParseException;
 import java.util.Date;
 
+import de.unidue.palaver.system.engine.CommunicatorResult;
+import de.unidue.palaver.system.engine.Parser;
 import de.unidue.palaver.system.model.Message;
 import de.unidue.palaver.system.model.Friend;
 

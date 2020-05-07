@@ -1,11 +1,11 @@
-package de.unidue.palaver.system.engine.communicator;
+package de.unidue.palaver.system.engine;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
-import de.unidue.palaver.system.engine.PalaverEngine;
+
 import de.unidue.palaver.system.resource.StringValue;
 import de.unidue.palaver.system.Palaver;
 import de.unidue.palaver.system.model.User;

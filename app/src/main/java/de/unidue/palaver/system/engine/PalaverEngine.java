@@ -11,11 +11,7 @@ import java.util.Date;
 import java.util.List;
 import de.unidue.palaver.system.Palaver;
 import de.unidue.palaver.system.SessionManager;
-import de.unidue.palaver.system.database.PalaverDB;
-import de.unidue.palaver.system.engine.communicator.Authentificator;
-import de.unidue.palaver.system.engine.communicator.Communicator;
 import de.unidue.palaver.system.model.Message;
-import de.unidue.palaver.system.engine.communicator.CommunicatorResult;
 import de.unidue.palaver.system.resource.MessageType;
 import de.unidue.palaver.system.resource.StringValue;
 import de.unidue.palaver.system.model.Friend;
@@ -25,7 +21,6 @@ import de.unidue.palaver.system.roomdatabase.PalaverRoomDatabase;
 import de.unidue.palaver.system.service.ServiceAddFriend;
 import de.unidue.palaver.system.service.ServiceFetchAllChat;
 import de.unidue.palaver.system.service.ServiceSendMessage;
-import de.unidue.palaver.ui.uicontroller.UIController;
 import de.unidue.palaver.ui.LoginActivity;
 
 public class PalaverEngine implements IPalaverEngine {
@@ -49,13 +44,9 @@ public class PalaverEngine implements IPalaverEngine {
 
     @Override
     public void handleSendMessage(Context applicationContext, Activity activity, Friend friend, String messageText) {
-//        palaverDB = Palaver.getInstance().getPalaverDB();
-//        Log.i(TAG, "Check palaverDB SendMessage: "+ (palaverDB!=null));
-
         Message message = new Message(SessionManager.getSessionManagerInstance(applicationContext).getUser().getUserName(),
                 friend.getUsername(), MessageType.OUT, messageText, "true", new Date());
 
-//        palaverDB.insertChatItem(friend, message);
         ServiceSendMessage.startIntent(applicationContext, activity, friend, message);
     }
 

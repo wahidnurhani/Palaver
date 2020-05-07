@@ -17,14 +17,15 @@ import java.util.Objects;
 
 import de.unidue.palaver.system.Palaver;
 import de.unidue.palaver.system.SessionManager;
-import de.unidue.palaver.system.database.PalaverDB;
-import de.unidue.palaver.system.engine.communicator.Communicator;
-import de.unidue.palaver.system.engine.communicator.CommunicatorResult;
+import de.unidue.palaver.system.engine.Communicator;
+import de.unidue.palaver.system.engine.CommunicatorResult;
 
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.Message;
 import de.unidue.palaver.system.model.User;
 import de.unidue.palaver.system.resource.StringValue;
+import de.unidue.palaver.system.roomdatabase.PalaverDao;
+import de.unidue.palaver.system.roomdatabase.PalaverRoomDatabase;
 
 
 public class ServiceSendMessage extends Service {
@@ -34,7 +35,8 @@ public class ServiceSendMessage extends Service {
     private Message message;
     private Friend friend;
     private Communicator communicator;
-    private PalaverDB palaverDB;
+    PalaverRoomDatabase palaverRoomDatabase;
+    PalaverDao palaverDao;
 
     public static void startIntent(Context applicationContext, Activity activity, Friend friend, Message message) {
         Intent intent = new Intent(applicationContext, ServiceSendMessage.class);
@@ -43,7 +45,6 @@ public class ServiceSendMessage extends Service {
         bundle.putSerializable(StringValue.IntentKeyName.FRIEND, friend);
         intent.putExtras(bundle);
         activity.startService(intent);
-        System.out.println("send message service intent");
     }
 
     @Nullable
@@ -54,12 +55,10 @@ public class ServiceSendMessage extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        System.out.println("send message service intent start");
         message = (Message) Objects.requireNonNull(intent.getExtras()).getSerializable(StringValue.IntentKeyName.MESSAGE);
         friend = (Friend) intent.getExtras().getSerializable(StringValue.IntentKeyName.FRIEND);
         user = SessionManager.getSessionManagerInstance(getApplicationContext()).getUser();
         communicator = Palaver.getInstance().getPalaverEngine().getCommunicator();
-        palaverDB = Palaver.getInstance().getPalaverDB();
 
         SendMessage sendMessage = new SendMessage();
         sendMessage.execute();
@@ -79,8 +78,12 @@ public class ServiceSendMessage extends Service {
         @Override
         protected CommunicatorResult<Date> doInBackground(Void... myParams) {
             CommunicatorResult<Date> resultValue = communicator.sendMessage(user, friend, message);
-            if(resultValue.getResponseValue()!=1){
-                palaverDB.deleteMessage(message);
+            if(resultValue.getResponseValue()==1){
+                palaverRoomDatabase = PalaverRoomDatabase.getDatabase(getApplicationContext());
+                palaverDao = palaverRoomDatabase.palaverDao();
+                palaverDao.insert(message);
+            } else {
+                palaverDao.delete(message);
             }
             return resultValue;
         }
@@ -90,10 +93,9 @@ public class ServiceSendMessage extends Service {
         protected void onPostExecute(CommunicatorResult<Date> s) {
             super.onPostExecute(s);
             if(s.getResponseValue()!=1){
-                Palaver.getInstance().getUiController().showToast(getApplicationContext(), "failed to send message");
+                Palaver.getInstance().getUiController().showToast(getApplicationContext(),
+                        "failed to send message");
             }
-
-
         }
     }
 

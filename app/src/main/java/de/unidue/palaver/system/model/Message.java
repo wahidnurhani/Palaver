@@ -5,12 +5,10 @@ import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 
-import androidx.room.Index;
-
 import java.io.Serializable;
 import java.text.ParseException;
 import java.util.Date;
-import de.unidue.palaver.system.engine.communicator.Parser;
+import de.unidue.palaver.system.engine.Parser;
 import de.unidue.palaver.system.resource.DBContract;
 import de.unidue.palaver.system.resource.DBContract.TableMessage;
 import de.unidue.palaver.system.resource.MessageType;

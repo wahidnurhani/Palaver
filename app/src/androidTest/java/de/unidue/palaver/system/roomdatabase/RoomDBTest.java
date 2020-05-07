@@ -1,9 +1,8 @@
-package de.unidue.palaver;
+package de.unidue.palaver.system.roomdatabase;
 
 
 import android.content.Context;
 
-import androidx.lifecycle.LiveData;
 import androidx.room.Room;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -14,7 +13,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 
-import java.util.Date;
 import java.util.List;
 
 import de.unidue.palaver.system.model.Friend;
@@ -23,7 +21,7 @@ import de.unidue.palaver.system.resource.MessageType;
 import de.unidue.palaver.system.roomdatabase.PalaverDao;
 import de.unidue.palaver.system.roomdatabase.PalaverRoomDatabase;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 @RunWith(AndroidJUnit4.class)
 public class RoomDBTest {

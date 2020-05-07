@@ -2,6 +2,8 @@ package de.unidue.palaver.system.engine.communicator;
 
 import org.junit.Test;
 
+import de.unidue.palaver.system.engine.JSONBuilder;
+
 import static org.junit.Assert.*;
 
 public class JSONBuilderTest {

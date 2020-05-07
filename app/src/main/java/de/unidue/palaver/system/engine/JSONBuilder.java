@@ -1,4 +1,4 @@
-package de.unidue.palaver.system.engine.communicator;
+package de.unidue.palaver.system.engine;
 
 import org.json.JSONException;
 import org.json.JSONObject;

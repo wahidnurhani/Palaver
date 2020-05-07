@@ -78,8 +78,11 @@ public class ChatRoomActivity extends AppCompatActivity {
 
         messageRecycleview.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
             if(bottom < oldBottom){
-                messageRecycleview.post(() ->
-                        messageRecycleview.smoothScrollToPosition(messageAdapter.getItemCount()-1));
+                messageRecycleview.post(() ->{
+                        if(messageAdapter.getItemCount()!=0){
+                            messageRecycleview.smoothScrollToPosition(messageAdapter.getItemCount()-1);
+                        }
+                });
             }
         });
         messageListLiveData.observe(this, messages -> {
