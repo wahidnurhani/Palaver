@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import java.text.ParseException;
 import java.util.Date;
+import java.util.TimeZone;
 
 import de.unidue.palaver.system.engine.CommunicatorResult;
 import de.unidue.palaver.system.engine.Parser;
@@ -86,15 +87,9 @@ public class ParserTest {
     }
 
     @Test
-    public void dateToString() throws ParseException {
-        Parser parser = new Parser();
-        Date date = new Date();
-        System.out.println(date.toString());
-        String dateString = parser.dateToString(date);
-        System.out.println(dateString);
-        Date date1 = parser.stringToDate(dateString);
-        System.out.println(date1);
-
-
+    public void dateToString() {
+        TimeZone timeZone = TimeZone.getTimeZone("America/Havana");
+        System.out.println(timeZone.getRawOffset());
+        System.out.println(timeZone.getDSTSavings());
     }
 }

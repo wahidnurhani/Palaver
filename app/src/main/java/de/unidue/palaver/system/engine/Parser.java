@@ -13,15 +13,23 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
+import de.unidue.palaver.system.Palaver;
 import de.unidue.palaver.system.model.Message;
 import de.unidue.palaver.system.resource.MessageType;
 import de.unidue.palaver.system.resource.StringValue;
 import de.unidue.palaver.system.model.Friend;
 
 public class Parser {
+    String serverTimeZone;
 
     public Parser() {
+        TimeZone timeZone= TimeZone.getTimeZone("Europe/Berlin");
+        int offset = 3600000/timeZone.getRawOffset();
+        int dstOffset = timeZone.getDSTSavings()/3600000;
+        int timezoneInt = offset+dstOffset;
+        serverTimeZone = "+"+timezoneInt;
     }
 
     public String[] validateAndRegisterReportParser(String result){
@@ -88,7 +96,11 @@ public class Parser {
         String realDateTime = dateTime.split("\\.")[0];
         String timeZone = DateTimeAndTimeZone[1];
         String[] timezoneConvert = timeZone.split(":");
-        String realTimeZone = timezoneConvert[0]+"00";
+        String realTimeZone = timezoneConvert[0];
+        if(!realTimeZone.equals("")){
+            realTimeZone = realDateTime+"00";
+        }
+
         return realDateTime+'+'+realTimeZone;
     }
 
@@ -169,7 +181,6 @@ public class Parser {
     }
 
     public CommunicatorResult<Message> getChatDataParser(String result, String isMessageRead, String friendUserName) throws JSONException, ParseException {
-        String serverTimeZone = "+0100";
         CommunicatorResult<Message> communicatorResult;
         JSONObject jsonObject = new JSONObject(result);
         int msgType = jsonObject.getInt(StringValue.JSONKeyName.MSG_TYPE);

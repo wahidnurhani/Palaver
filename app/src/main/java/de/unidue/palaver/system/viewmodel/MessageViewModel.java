@@ -15,6 +15,7 @@ import java.util.List;
 
 import de.unidue.palaver.system.Palaver;
 import de.unidue.palaver.system.SessionManager;
+import de.unidue.palaver.system.engine.Parser;
 import de.unidue.palaver.system.model.Message;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.User;
@@ -56,13 +57,14 @@ public class MessageViewModel extends AndroidViewModel implements Comparable<Mes
     }
 
     public void addMessage(Activity activity, String text) {
+        Parser parser = new Parser();
          Message message = new Message(
                  user.getUserName(),
                  friend.getUsername(),
                  MessageType.OUT,
                  text,
                  "true",
-                 new Date());
+                 parser.dateToString(new Date()));
         Palaver.getInstance().getPalaverEngine().handleSendMessage(
                 getApplication(),
                 activity,

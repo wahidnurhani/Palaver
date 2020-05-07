@@ -9,6 +9,8 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
+
 import de.unidue.palaver.system.Palaver;
 import de.unidue.palaver.system.SessionManager;
 import de.unidue.palaver.system.model.Message;
@@ -28,13 +30,14 @@ public class PalaverEngine implements IPalaverEngine {
 
     private Communicator communicator;
     private Authentificator authentificator;
-//    private PalaverDB palaverDB;
     private UIController uiController;
+
 
     public PalaverEngine() {
         this.communicator = new Communicator();
         this.authentificator = new Authentificator();
         this.uiController = new UIController();
+
     }
 
     public Communicator getCommunicator() {
