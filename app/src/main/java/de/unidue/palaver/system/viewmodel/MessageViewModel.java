@@ -13,8 +13,8 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import de.unidue.palaver.system.Palaver;
 import de.unidue.palaver.system.SessionManager;
+import de.unidue.palaver.system.engine.PalaverEngine;
 import de.unidue.palaver.system.engine.Parser;
 import de.unidue.palaver.system.model.Message;
 import de.unidue.palaver.system.model.Friend;
@@ -65,7 +65,7 @@ public class MessageViewModel extends AndroidViewModel implements Comparable<Mes
                  text,
                  "true",
                  parser.dateToString(new Date()));
-        Palaver.getInstance().getPalaverEngine().handleSendMessage(
+        PalaverEngine.getPalaverEngineInstance().handleSendMessage(
                 getApplication(),
                 activity,
                 friend,

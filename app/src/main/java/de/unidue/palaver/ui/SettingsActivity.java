@@ -8,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceFragmentCompat;
 
 import de.unidue.palaver.R;
-import de.unidue.palaver.system.Palaver;
 import de.unidue.palaver.system.engine.PalaverEngine;
 import de.unidue.palaver.system.roomdatabase.PalaverRoomDatabase;
 
@@ -30,7 +29,7 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_activity);
 
-        palaverEngine = Palaver.getInstance().getPalaverEngine();
+        palaverEngine =PalaverEngine.getPalaverEngineInstance();
         PalaverRoomDatabase.getDatabase(getApplicationContext());
 
         getSupportFragmentManager()

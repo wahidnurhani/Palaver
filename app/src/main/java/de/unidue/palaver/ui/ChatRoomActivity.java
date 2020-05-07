@@ -12,7 +12,6 @@ import android.widget.EditText;
 
 import java.util.Objects;
 
-import de.unidue.palaver.system.Palaver;
 import de.unidue.palaver.R;
 import de.unidue.palaver.system.viewmodel.MessageViewModel;
 import de.unidue.palaver.system.engine.PalaverEngine;
@@ -51,7 +50,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        palaverEngine = Palaver.getInstance().getPalaverEngine();
+        palaverEngine = PalaverEngine.getPalaverEngineInstance();
 
         RecyclerView messageRecycleview = findViewById(R.id.chatRoom_recycleView);
         MessageAdapter messageAdapter = new MessageAdapter(this,

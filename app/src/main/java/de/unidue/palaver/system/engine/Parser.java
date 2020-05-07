@@ -15,7 +15,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
-import de.unidue.palaver.system.Palaver;
 import de.unidue.palaver.system.model.Message;
 import de.unidue.palaver.system.resource.MessageType;
 import de.unidue.palaver.system.resource.StringValue;

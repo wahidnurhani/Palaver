@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Objects;
 
-import de.unidue.palaver.system.Palaver;
 import de.unidue.palaver.R;
 import de.unidue.palaver.system.resource.StringValue;
 import de.unidue.palaver.system.engine.PalaverEngine;
@@ -30,7 +29,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.activity_login);
-        palaverEngine = Palaver.getInstance().getPalaverEngine();
+        palaverEngine = PalaverEngine.getPalaverEngineInstance();
 
         Button loginButton = findViewById(R.id.login_login_button);
         TextView toRegisterTextView = findViewById(R.id.login_register_button);

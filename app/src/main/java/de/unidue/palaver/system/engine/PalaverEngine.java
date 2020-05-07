@@ -9,15 +9,14 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 
-import de.unidue.palaver.system.Palaver;
 import de.unidue.palaver.system.SessionManager;
 import de.unidue.palaver.system.model.Message;
 import de.unidue.palaver.system.resource.MessageType;
 import de.unidue.palaver.system.resource.StringValue;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.User;
+import de.unidue.palaver.system.roomdatabase.DatabaseCleaner;
 import de.unidue.palaver.system.roomdatabase.PalaverDao;
 import de.unidue.palaver.system.roomdatabase.PalaverRoomDatabase;
 import de.unidue.palaver.system.service.ServiceAddFriend;
@@ -31,19 +30,28 @@ public class PalaverEngine implements IPalaverEngine {
     private Communicator communicator;
     private Authentificator authentificator;
     private UIController uiController;
+    private static PalaverEngine palaverEngineInstance;
 
+    public static PalaverEngine getPalaverEngineInstance() {
+        if(palaverEngineInstance ==null){
+            palaverEngineInstance = new PalaverEngine();
+        }
+        return palaverEngineInstance;
+    }
 
-    public PalaverEngine() {
+    private PalaverEngine() {
         this.communicator = new Communicator();
         this.authentificator = new Authentificator();
         this.uiController = new UIController();
-
     }
 
     public Communicator getCommunicator() {
         return communicator;
     }
 
+    public UIController getUiController() {
+        return uiController;
+    }
 
     @Override
     public void handleSendMessage(Context applicationContext, Activity activity, Friend friend, String messageText) {
@@ -94,7 +102,8 @@ public class PalaverEngine implements IPalaverEngine {
         Log.i(TAG, "Check uiController LogoutRequest: "+ (uiController!=null));
         SessionManager.getSessionManagerInstance(applicationContext).endSession();
         uiController.openLoginActivity(applicationContext);
-        Palaver.getInstance().destroy();
+        DatabaseCleaner databaseCleaner = new DatabaseCleaner(applicationContext);
+        databaseCleaner.cleanDatabase();
     }
 
     public void handleIncommingMessage(Friend friend, String message){

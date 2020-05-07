@@ -1,7 +1,6 @@
 package de.unidue.palaver.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -17,7 +16,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 
-import de.unidue.palaver.system.Palaver;
 import de.unidue.palaver.R;
 import de.unidue.palaver.system.SessionManager;
 import de.unidue.palaver.system.engine.PalaverEngine;
@@ -80,7 +78,7 @@ public class ChatManagerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_manager);
-        palaverEngine = Palaver.getInstance().getPalaverEngine();
+        palaverEngine = PalaverEngine.getPalaverEngineInstance();
 
         if(!SessionManager.getSessionManagerInstance(getApplicationContext()).chekLogin()){
             palaverEngine.handleLogoutRequest(ChatManagerActivity.this);
