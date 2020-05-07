@@ -15,11 +15,13 @@ import de.unidue.palaver.system.database.PalaverDB;
 import de.unidue.palaver.system.engine.communicator.Authentificator;
 import de.unidue.palaver.system.engine.communicator.Communicator;
 import de.unidue.palaver.system.model.Message;
-import de.unidue.palaver.system.model.CommunicatorResult;
+import de.unidue.palaver.system.engine.communicator.CommunicatorResult;
 import de.unidue.palaver.system.resource.MessageType;
 import de.unidue.palaver.system.resource.StringValue;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.User;
+import de.unidue.palaver.system.roomdatabase.PalaverDao;
+import de.unidue.palaver.system.roomdatabase.PalaverRoomDatabase;
 import de.unidue.palaver.system.service.ServiceAddFriend;
 import de.unidue.palaver.system.service.ServiceFetchAllChat;
 import de.unidue.palaver.system.service.ServiceSendMessage;
@@ -31,7 +33,7 @@ public class PalaverEngine implements IPalaverEngine {
 
     private Communicator communicator;
     private Authentificator authentificator;
-    private PalaverDB palaverDB;
+//    private PalaverDB palaverDB;
     private UIController uiController;
 
     public PalaverEngine() {
@@ -47,24 +49,23 @@ public class PalaverEngine implements IPalaverEngine {
 
     @Override
     public void handleSendMessage(Context applicationContext, Activity activity, Friend friend, String messageText) {
-        palaverDB = Palaver.getInstance().getPalaverDB();
-        Log.i(TAG, "Check palaverDB SendMessage: "+ (palaverDB!=null));
+//        palaverDB = Palaver.getInstance().getPalaverDB();
+//        Log.i(TAG, "Check palaverDB SendMessage: "+ (palaverDB!=null));
 
         Message message = new Message(SessionManager.getSessionManagerInstance(applicationContext).getUser().getUserName(),
                 friend.getUsername(), MessageType.OUT, messageText, "true", new Date());
 
-        palaverDB.insertChatItem(friend, message);
+//        palaverDB.insertChatItem(friend, message);
         ServiceSendMessage.startIntent(applicationContext, activity, friend, message);
     }
 
     @Override
-    public void handleFetchAllFriendRequestWithNoService(User user) {
+    public void handleFetchAllFriendRequestWithNoService(Context context, User user) {
         Log.i(TAG, "Check communicator FetchAllFriendRequest: "+ (communicator!=null));
-        palaverDB = Palaver.getInstance().getPalaverDB();
 
         List<Friend> friends = communicator.fetchFriends(user).getData();
         for (Friend friend : friends){
-            palaverDB.insertFriend(friend);
+            PalaverRoomDatabase.getDatabase(context).palaverDao().insert(friend);
         }
     }
 
@@ -111,15 +112,15 @@ public class PalaverEngine implements IPalaverEngine {
     }
 
     public void handleFetchAllChatRequestWithNoService(Context applicationContext) {
-        Log.i(TAG, "Check communicator FetchAllAchatWithoutService: "+ (communicator!=null));
-        palaverDB = Palaver.getInstance().getPalaverDB();
 
-        List<Friend> friends = palaverDB.getAllFriends();
+        PalaverRoomDatabase palaverRoomDatabase = PalaverRoomDatabase.getDatabase(applicationContext);
+        PalaverDao palaverDao = palaverRoomDatabase.palaverDao();
+        List<Friend> friends = palaverDao.loadAllFriend();
 
         for(Friend friend : friends){
             CommunicatorResult<Message> communicatorResult = communicator.getMessage(SessionManager.getSessionManagerInstance(applicationContext).getUser(), friend);
             for(Message message : communicatorResult.getData()){
-                palaverDB.insertChatItem(friend, message);
+                palaverDao.insert(message);
             }
         }
     }

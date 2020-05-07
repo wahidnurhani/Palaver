@@ -1,6 +1,7 @@
 package de.unidue.palaver.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -19,12 +20,13 @@ import android.widget.SearchView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.List;
 import java.util.Objects;
 
 import de.unidue.palaver.system.viewmodel.FriendViewModel;
 import de.unidue.palaver.R;
 import de.unidue.palaver.system.model.Friend;
-import de.unidue.palaver.system.model.ListLiveData;
+import de.unidue.palaver.system.viewmodel.ListLiveData;
 import de.unidue.palaver.system.resource.StringValue;
 import de.unidue.palaver.ui.uicontroller.adapter.FriendAdapter;
 
@@ -107,6 +109,8 @@ public class FriendManagerActivity extends AppCompatActivity {
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(friendsRecycleView.getContext(),
                 linearLayoutManager.getOrientation());
         friendsRecycleView.addItemDecoration(dividerItemDecoration);
+
+        friendsListLiveData.observe(this, friends -> friendAdapter.notifyDataSetChanged());
     }
 
     public static boolean isVisibility() {

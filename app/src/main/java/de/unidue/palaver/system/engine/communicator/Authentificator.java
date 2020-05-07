@@ -99,7 +99,7 @@ public class Authentificator {
                     palaverEngine.handleSendLocalBroadCastRequest(applicationContext,
                             StringValue.IntentAction.BROADCAST_AUTHENTIFICATED);
                     try {
-                        palaverEngine.handleFetchAllFriendRequestWithNoService(myParams[0].getUser());
+                        palaverEngine.handleFetchAllFriendRequestWithNoService(applicationContext,myParams[0].getUser());
                         palaverEngine.handleFetchAllChatRequestWithNoService(applicationContext);
 
                     } catch (Exception e) {

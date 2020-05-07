@@ -28,6 +28,7 @@ public class DBContract {
         public static final String COLUMN_CHAT_SENDER = "sender";
         public static final String COLUMN_CHAT_RECIPIENT = "recipient";
         public static final String COLUMN_CHAT_MIMETYPE= "mimetype";
+        public static final String COLUMN_MESSAGE_TYPE = "type";
         public static final String COLUMN_CHAT_DATA= "data";
         public static final String COLUMN_CHAT_DATA_ISREAD="isread";
         public static final String COLUMN_CHAT_DATETIME= "date_time";
@@ -43,6 +44,7 @@ public class DBContract {
                 +" PRIMARY KEY"+"("+COLUMN_FKCHAT+","+COLUMN_CHAT_SENDER+","+COLUMN_CHAT_DATA+","+COLUMN_CHAT_DATETIME+"))";
 
         public static final String DELETE_TABLE_CONTACT = "DROP TABLE IF EXISTS " + TABLE_MESSAGE_NAME;
+
     }
 
     public static abstract class Query implements BaseColumns{

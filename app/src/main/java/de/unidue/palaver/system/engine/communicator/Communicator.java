@@ -21,7 +21,6 @@ import java.text.ParseException;
 import java.util.Date;
 
 import de.unidue.palaver.system.model.Message;
-import de.unidue.palaver.system.model.CommunicatorResult;
 import de.unidue.palaver.system.resource.StringValue;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.User;
@@ -53,6 +52,7 @@ public class Communicator {
         try {
             JSONObject body = jsonBuilder.formatBodyUserDataToJSON(user.getUserName(), user.getPassword());
 
+            url = new URL(baseUrl + cmd);
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("POST");
             urlConnection.setRequestProperty("Content-Type", "application/json");
@@ -475,7 +475,6 @@ public class Communicator {
             resultJSONString = stringBuilder.toString();
 
             result= parser.getChatDataParser(resultJSONString, "true", friend.getUsername());
-
         } catch (ProtocolException e) {
             e.printStackTrace();
         } catch (MalformedURLException e) {

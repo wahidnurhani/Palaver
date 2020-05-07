@@ -22,7 +22,7 @@ public class MessageTest {
     public void getChatItemType() {
         Friend friend = new Friend("Test");
         Message message = new Message(friend.getUsername(), "saya", MessageType.INCOMMING, "Hallo World", "true", new Date());
-        assertSame(message.getMessageType(), MessageType.INCOMMING);
+        assertSame(message.getMessageTypeEnum(), MessageType.INCOMMING);
     }
 
     @Test
@@ -33,13 +33,13 @@ public class MessageTest {
     }
 
     @Test
-    public void getIsReadStatus() {
+    public void getIsReadStatus() throws ParseException {
         Friend friend = new Friend("Test");
         Message message = new Message(friend.getUsername(), "saya", MessageType.INCOMMING, "Hallo World", "false", new Date());
         assertFalse(message.getIsReadStatus());
         message.setIsReadStatus(true);
         assertTrue(message.getIsReadStatus());
-        System.out.println(message.getDate().toString());
+        System.out.println(message.getDateDate().toString());
         System.out.println(message.getDateToString());
     }
 
@@ -47,8 +47,8 @@ public class MessageTest {
     public void getDate() throws ParseException {
         Friend friend = new Friend("Test");
         Message message = new Message(friend.getUsername(), "saya", MessageType.INCOMMING, "Hallo World", "true", "2016-02-12 17:02:38.663");
-        assertNotNull(message.getDate());
-        System.out.println(message.getDate().toString());
+        assertNotNull(message.getDateDate());
+        System.out.println(message.getDateDate().toString());
         System.out.println(message.getDateToString());
     }
 }

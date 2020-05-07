@@ -2,46 +2,93 @@ package de.unidue.palaver.system.model;
 
 
 import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+
+import androidx.room.Index;
 
 import java.io.Serializable;
 import java.text.ParseException;
 import java.util.Date;
 import de.unidue.palaver.system.engine.communicator.Parser;
 import de.unidue.palaver.system.resource.DBContract;
+import de.unidue.palaver.system.resource.DBContract.TableMessage;
 import de.unidue.palaver.system.resource.MessageType;
 
 
-@Entity(tableName = DBContract.TableMessage.TABLE_MESSAGE_NAME)
+@Entity(tableName = TableMessage.TABLE_MESSAGE_NAME, primaryKeys = { TableMessage.COLUMN_FKCHAT,
+        TableMessage.COLUMN_CHAT_SENDER,
+        TableMessage.COLUMN_CHAT_DATA,
+        TableMessage.COLUMN_CHAT_DATETIME})
 public class Message implements Comparable<Message>, Serializable {
 
-    private final String sender;
-    private final String recipient;
-    private final String message;
+    @NonNull
+    @ColumnInfo(name = TableMessage.COLUMN_FKCHAT)
+    private String friendName;
+
+    @NonNull
+    @ColumnInfo(name = TableMessage.COLUMN_CHAT_SENDER)
+    private String sender;
+
+    @ColumnInfo(name = TableMessage.COLUMN_CHAT_RECIPIENT)
+    private String recipient;
+
+    @NonNull
+    @ColumnInfo(name = TableMessage.COLUMN_CHAT_DATA)
+    private String message;
+
+    @ColumnInfo(name = TableMessage.COLUMN_CHAT_MIMETYPE)
     private String mimeType;
-    private final MessageType messageType;
+
+    @ColumnInfo(name = DBContract.TableMessage.COLUMN_MESSAGE_TYPE)
+    private String messageType;
+
+    @ColumnInfo(name = TableMessage.COLUMN_CHAT_DATA_ISREAD)
     private boolean isRead;
-    private Date date;
 
+    @NonNull
+    @ColumnInfo(name = TableMessage.COLUMN_CHAT_DATETIME)
+    private String date;
 
-    public Message(String sender, String recipient, MessageType messageType, String message, String isReadStatus, String date) throws ParseException {
+    public Message() {
+    }
+
+    public Message(String sender, String recipient, MessageType messageType, String message, String isReadStatus, String date) {
+        if(messageType == MessageType.INCOMMING){
+            friendName = sender;
+        } else {
+            friendName = recipient;
+        }
         this.sender = sender;
         this.recipient = recipient;
-        this.messageType = messageType;
+        if(messageType ==MessageType.OUT){
+            this.messageType = "out";
+        } else{
+            this.messageType = "in";
+        }
         this.mimeType = "text/plain";
         this.message = message;
         this.isRead = Boolean.parseBoolean(isReadStatus);
-        this.date = new Parser().stringToDateFromDataBase(date);
+        this.date = date;
     }
 
     public Message(String sender, String recipient, MessageType messageType, String message, String isReadStatus, Date date) {
+        if(messageType == MessageType.INCOMMING){
+            friendName = sender;
+        } else {
+            friendName = recipient;
+        }
         this.sender = sender;
         this.recipient = recipient;
-        this.messageType = messageType;
-        this.mimeType="text/plain";
+        if(messageType ==MessageType.OUT){
+            this.messageType = "out";
+        } else{
+            this.messageType = "in";
+        }
+        this.mimeType= "text/plain";
         this.message = message;
         this.isRead = Boolean.parseBoolean(isReadStatus);
-        this.date = date;
+        this.date = new Parser().dateToString(date);
     }
 
     @NonNull
@@ -49,22 +96,50 @@ public class Message implements Comparable<Message>, Serializable {
         return sender;
     }
 
+    public void setSender(String sender){
+        this.sender = sender;
+    }
+
+
     @NonNull
     public String getRecipient() {
         return recipient;
+    }
+
+    public void setRecipient(String recipient){
+        this.recipient = recipient;
     }
 
     public String getMimeType() {
         return mimeType;
     }
 
-    public MessageType getMessageType() {
+    public void setMimeType(String mimeType) {
+        this.mimeType = mimeType;
+    }
+
+    public MessageType getMessageTypeEnum() {
+        if (this.messageType.equals("in")){
+            return MessageType.INCOMMING;
+        }
+        return MessageType.OUT;
+    }
+
+    public String getMessageType() {
         return messageType;
+    }
+
+    public void setMessageType(String messageType) {
+        this.messageType = messageType;
     }
 
     @NonNull
     public String getMessage() {
         return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public boolean getIsReadStatus() {
@@ -76,18 +151,46 @@ public class Message implements Comparable<Message>, Serializable {
     }
 
     @NonNull
-    public Date getDate() {
+    public Date getDateDate() throws ParseException {
         Parser parser = new Parser();
+        return parser.stringToDateFromDataBase(date);
+    }
+
+    public String getDate() {
         return date;
     }
 
+    public boolean isRead() {
+        return isRead;
+    }
+
     public String getDateToString(){
-        Parser parser = new Parser();
-        return parser.dateToString(date);
+        return date;
+    }
+
+    public String getFriendName() {
+        return friendName;
+    }
+
+    public void setFriendName(String friendName) {
+        this.friendName = friendName;
+    }
+
+    public void setRead(boolean read) {
+        isRead = read;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
     @Override
     public int compareTo(Message o) {
-        return this.date.compareTo(o.getDate());
+        try {
+            return new Parser().stringToDateFromDataBase(date).compareTo(o.getDateDate());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return  0;
     }
 }

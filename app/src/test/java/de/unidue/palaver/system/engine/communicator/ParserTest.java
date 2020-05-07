@@ -7,7 +7,6 @@ import java.text.ParseException;
 import java.util.Date;
 
 import de.unidue.palaver.system.model.Message;
-import de.unidue.palaver.system.model.CommunicatorResult;
 import de.unidue.palaver.system.model.Friend;
 
 import static org.junit.Assert.*;

@@ -1,4 +1,4 @@
-package de.unidue.palaver.system.model;
+package de.unidue.palaver.system.viewmodel;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;

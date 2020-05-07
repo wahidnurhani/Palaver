@@ -1,4 +1,4 @@
-package de.unidue.palaver.system.model;
+package de.unidue.palaver.system.engine.communicator;
 
 import android.os.Build;
 import android.util.Log;
@@ -6,9 +6,12 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
-import de.unidue.palaver.system.engine.communicator.Parser;
+
+import de.unidue.palaver.system.model.Friend;
+import de.unidue.palaver.system.model.Message;
 
 public class CommunicatorResult<T> {
     private static final String TAG = CommunicatorResult.class.getSimpleName();
@@ -79,7 +82,11 @@ public class CommunicatorResult<T> {
                 StringBuilder stringBuilder = new StringBuilder();
                 stringBuilder.append("[ ");
                 for (T chatItem : data){
-                    stringBuilder.append(((Message) chatItem).getMessage()).append("  ").append(((Message) chatItem).getDate().toString()).append(", ");
+                    try {
+                        stringBuilder.append(((Message) chatItem).getMessage()).append("  ").append(((Message) chatItem).getDateDate().toString()).append(", ");
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                 }
                 stringBuilder.append(" ]");
                 Log.i(TAG, stringBuilder.toString());

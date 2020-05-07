@@ -15,11 +15,12 @@ import java.util.List;
 import de.unidue.palaver.system.Palaver;
 import de.unidue.palaver.system.SessionManager;
 import de.unidue.palaver.system.database.PalaverDB;
-import de.unidue.palaver.system.model.ListLiveData;
 import de.unidue.palaver.system.model.Message;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.User;
 import de.unidue.palaver.system.resource.MessageType;
+import de.unidue.palaver.system.roomdatabase.PalaverDao;
+import de.unidue.palaver.system.roomdatabase.PalaverRoomDatabase;
 
 public class MessageViewModel extends AndroidViewModel implements Comparable<MessageViewModel>, Serializable {
 
@@ -75,17 +76,22 @@ public class MessageViewModel extends AndroidViewModel implements Comparable<Mes
 
         @Override
         protected List<Message> doInBackground(Void... voids) {
-            PalaverDB palaverDB = Palaver.getInstance().getPalaverDB();
+            PalaverRoomDatabase palaverRoomDatabase = PalaverRoomDatabase.getDatabase(getApplication());
+            PalaverDao palaverDao = palaverRoomDatabase.palaverDao();
 
             List<Message> messages;
-            messages = palaverDB.getAllChatData(friend);
+            messages = palaverDao.loadChat(friend.getUsername());
             return messages;
         }
 
         @Override
         protected void onPostExecute(List<Message> messages) {
-
+            System.out.println("test--------------------------");
             messageListLiveData.addAll(messages);
+
+            for(Message message : messages){
+                System.out.println(message.getMessage());
+            }
         }
     }
 

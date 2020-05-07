@@ -18,13 +18,14 @@ public class Friend implements Comparable<Friend>, Serializable {
     @ColumnInfo(name = DBContract.TableFriend.COLUMN_FRIEND_NAME)
     private String username;
 
+
     public Friend(String username) {
         this.username = username;
     }
 
     @NonNull
     public String getUsername() {
-        return username;
+        return this.username+"";
     }
 
     @Override

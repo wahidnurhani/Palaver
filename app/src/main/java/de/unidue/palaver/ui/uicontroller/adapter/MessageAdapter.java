@@ -47,7 +47,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 
         RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)containerLinearLayout.getLayoutParams();
 
-        if (current.getMessageType()== MessageType.OUT){
+        if (current.getMessageTypeEnum()== MessageType.OUT){
             params.removeRule(RelativeLayout.ALIGN_PARENT_END);
             params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
             containerLinearLayout.setLayoutParams(params);

@@ -4,7 +4,6 @@ import org.junit.Test;
 import java.util.Date;
 
 import de.unidue.palaver.system.model.Message;
-import de.unidue.palaver.system.model.CommunicatorResult;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.User;
 import de.unidue.palaver.system.resource.MessageType;

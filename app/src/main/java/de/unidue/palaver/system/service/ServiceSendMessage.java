@@ -19,7 +19,7 @@ import de.unidue.palaver.system.Palaver;
 import de.unidue.palaver.system.SessionManager;
 import de.unidue.palaver.system.database.PalaverDB;
 import de.unidue.palaver.system.engine.communicator.Communicator;
-import de.unidue.palaver.system.model.CommunicatorResult;
+import de.unidue.palaver.system.engine.communicator.CommunicatorResult;
 
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.Message;

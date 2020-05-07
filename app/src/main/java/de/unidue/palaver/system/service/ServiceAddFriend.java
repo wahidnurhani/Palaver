@@ -15,7 +15,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import de.unidue.palaver.system.Palaver;
 import de.unidue.palaver.system.SessionManager;
 import de.unidue.palaver.system.database.PalaverDB;
-import de.unidue.palaver.system.model.CommunicatorResult;
+import de.unidue.palaver.system.engine.communicator.CommunicatorResult;
 import de.unidue.palaver.system.resource.StringValue;
 import de.unidue.palaver.system.engine.communicator.Communicator;
 import de.unidue.palaver.system.model.Friend;
@@ -44,11 +44,11 @@ public class ServiceAddFriend extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         palaver = Palaver.getInstance();
         sessionManager = SessionManager.getSessionManagerInstance(getApplicationContext());
-        communicator = Palaver.getInstance().getPalaverEngine().getCommunicator();
+        //communicator = Palaver.getInstance().getPalaverEngine().getCommunicator();
         palaverDB = Palaver.getInstance().getPalaverDB();
         String friendUsername = intent.getCharSequenceExtra(StringValue.IntentKeyName.FRIEND).toString();
         FetchAddFriend fetchAddFriend= new FetchAddFriend();
-        fetchAddFriend.execute(new Friend(friendUsername));
+        //fetchAddFriend.execute(new Friend(friendUsername));
         return START_STICKY;
     }
 

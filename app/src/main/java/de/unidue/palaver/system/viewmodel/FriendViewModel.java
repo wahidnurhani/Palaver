@@ -12,10 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.unidue.palaver.system.Palaver;
-import de.unidue.palaver.system.database.PalaverDB;
 import de.unidue.palaver.system.engine.PalaverEngine;
 import de.unidue.palaver.system.model.Friend;
-import de.unidue.palaver.system.model.ListLiveData;
 import de.unidue.palaver.system.roomdatabase.PalaverDao;
 import de.unidue.palaver.system.roomdatabase.PalaverRoomDatabase;
 
@@ -30,7 +28,7 @@ public class FriendViewModel extends AndroidViewModel {
         super(application);
 
         palaverDB = PalaverRoomDatabase.getDatabase(getApplication());
-        palaverDao = palaverDB.friendsDao();
+        palaverDao = palaverDB.palaverDao();
 
         this.palaverEngine = Palaver.getInstance().getPalaverEngine();
         this.friendsLiveData = new ListLiveData<>();
@@ -68,8 +66,7 @@ public class FriendViewModel extends AndroidViewModel {
 
         @Override
         protected List<Friend> doInBackground(Void... voids) {
-            PalaverDB palaverDB = Palaver.getInstance().getPalaverDB();
-            return new ArrayList<>(palaverDB.getAllFriends());
+            return new ArrayList<>(PalaverRoomDatabase.getDatabase(getApplication()).palaverDao().loadAllFriend());
         }
 
         @Override

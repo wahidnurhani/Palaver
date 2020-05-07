@@ -12,7 +12,7 @@ public interface IPalaverEngine {
 
     void handleSendMessage(Context applicationContext, Activity activity, Friend friend, String messageText);
 
-    void handleFetchAllFriendRequestWithNoService(User user);
+    void handleFetchAllFriendRequestWithNoService(Context context, User user);
 
     void handleRegisterRequest(Context applicationContext, Activity activity, User user);
 

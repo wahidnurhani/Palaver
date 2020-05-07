@@ -5,6 +5,7 @@ import android.content.Context;
 
 import de.unidue.palaver.system.database.PalaverDB;
 import de.unidue.palaver.system.engine.PalaverEngine;
+import de.unidue.palaver.system.roomdatabase.DatabaseCleaner;
 import de.unidue.palaver.ui.uicontroller.UIController;
 
 public class Palaver implements IPalaver{
@@ -30,7 +31,8 @@ public class Palaver implements IPalaver{
 
     @Override
     public void destroy() {
-        palaverDB.deleteAllDataOnDataBase();
+        DatabaseCleaner databaseCleaner = new DatabaseCleaner(context);
+        databaseCleaner.cleanDatabase();
     }
 
     private Palaver() {

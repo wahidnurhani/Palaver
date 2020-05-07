@@ -16,7 +16,6 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import de.unidue.palaver.system.model.Message;
-import de.unidue.palaver.system.model.CommunicatorResult;
 import de.unidue.palaver.system.resource.MessageType;
 import de.unidue.palaver.system.resource.StringValue;
 import de.unidue.palaver.system.model.Friend;
