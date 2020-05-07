@@ -473,6 +473,7 @@ public class Communicator {
                 stringBuilder.append(line).append("\n");
             }
             resultJSONString = stringBuilder.toString();
+            System.out.println(resultJSONString);
 
             result= parser.getChatDataParser(resultJSONString, "true", friend.getUsername());
         } catch (ProtocolException e) {
