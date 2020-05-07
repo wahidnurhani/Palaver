@@ -83,7 +83,7 @@ public class ServiceSendMessage extends Service {
                 palaverDao = palaverRoomDatabase.palaverDao();
                 palaverDao.insert(message);
             } else {
-                palaverDao.delete(message);
+                //palaverDao.delete(message);
             }
             return resultValue;
         }
@@ -95,7 +95,11 @@ public class ServiceSendMessage extends Service {
             if(s.getResponseValue()!=1){
                 Palaver.getInstance().getUiController().showToast(getApplicationContext(),
                         "failed to send message");
+            } else{
+                Palaver.getInstance().getUiController().showToast(getApplicationContext(),
+                        "send message");
             }
+            onDestroy();
         }
     }
 

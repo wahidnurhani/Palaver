@@ -9,6 +9,7 @@ import androidx.lifecycle.AndroidViewModel;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -90,6 +91,7 @@ public class MessageViewModel extends AndroidViewModel implements Comparable<Mes
 
         @Override
         protected void onPostExecute(List<Message> messages) {
+            Collections.sort(messages);
             messageListLiveData.addAll(messages);
         }
     }

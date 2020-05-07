@@ -1,4 +1,4 @@
-package de.unidue.palaver.ui.uicontroller.adapter;
+package de.unidue.palaver.ui;
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,7 +15,6 @@ import java.util.List;
 import de.unidue.palaver.R;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.resource.StringValue;
-import de.unidue.palaver.ui.ChatRoomActivity;
 
 
 public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendViewHolder> {
@@ -24,7 +23,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
     private LayoutInflater inflater;
     private Context context;
 
-    public FriendAdapter(Context context, List<Friend> friends) {
+    FriendAdapter(Context context, List<Friend> friends) {
         inflater = LayoutInflater.from(context);
         this.friends = friends;
         this.context = context;
@@ -56,7 +55,11 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
         return friends.size();
     }
 
-    class FriendViewHolder extends RecyclerView.ViewHolder{
+    void overrade(List<Friend> searchedList) {
+        this.friends= searchedList;
+    }
+
+    static class FriendViewHolder extends RecyclerView.ViewHolder{
 
         private View cardView;
         private TextView name;
@@ -71,7 +74,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
               this.name.setText(current.getUsername());
         }
 
-        public View getCardView() {
+        View getCardView() {
             return cardView;
         }
     }

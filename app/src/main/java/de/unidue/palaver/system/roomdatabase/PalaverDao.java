@@ -36,9 +36,9 @@ public interface PalaverDao {
 
     @Transaction
     @Query("SELECT * FROM table_friend")
-    LiveData<List<Chat>> loadAllChat();
+    List<Chat> loadAllChat();
 
-    @Query("SELECT * From table_chat_data WHERE fk_chat = :friendName ")
+    @Query("SELECT * From table_chat_data WHERE fk_friend = :friendName ")
     List<Message> loadChat(String friendName);
 
     @Update

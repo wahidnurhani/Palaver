@@ -48,7 +48,6 @@ public class AddFriendDialog {
         Button addButton = view.findViewById(R.id.addFriend_addButton);
         Button closeButton = view.findViewById(R.id.addFriend_closeButton);
 
-
         addButton.setOnClickListener(v -> {
             if(inputValid()){
                 String username = userNameEditText.getText().toString().trim();

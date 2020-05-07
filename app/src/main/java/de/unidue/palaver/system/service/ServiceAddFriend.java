@@ -20,13 +20,16 @@ import de.unidue.palaver.system.resource.StringValue;
 import de.unidue.palaver.system.engine.Communicator;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.User;
+import de.unidue.palaver.system.roomdatabase.PalaverDao;
+import de.unidue.palaver.system.roomdatabase.PalaverRoomDatabase;
 
 public class ServiceAddFriend extends Service {
     private static final String TAG= ServiceAddFriend.class.getSimpleName();
     private Palaver palaver;
     private SessionManager sessionManager;
     private Communicator communicator;
-    private PalaverDB palaverDB;
+    private PalaverRoomDatabase palaverRoomDatabase;
+    private PalaverDao palaverDao;
 
     public static void startIntent(Context applicationContext, Activity activity, String username) {
         Intent intent = new Intent(applicationContext, ServiceAddFriend.class);
@@ -44,11 +47,11 @@ public class ServiceAddFriend extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         palaver = Palaver.getInstance();
         sessionManager = SessionManager.getSessionManagerInstance(getApplicationContext());
-        //communicator = Palaver.getInstance().getPalaverEngine().getCommunicator();
-        palaverDB = Palaver.getInstance().getPalaverDB();
+        communicator = Palaver.getInstance().getPalaverEngine().getCommunicator();
+
         String friendUsername = intent.getCharSequenceExtra(StringValue.IntentKeyName.FRIEND).toString();
         FetchAddFriend fetchAddFriend= new FetchAddFriend();
-        //fetchAddFriend.execute(new Friend(friendUsername));
+        fetchAddFriend.execute(new Friend(friendUsername));
         return START_STICKY;
     }
 
@@ -64,9 +67,11 @@ public class ServiceAddFriend extends Service {
         @Override
         protected CommunicatorResult<Friend> doInBackground(Friend... friends) {
             User user = sessionManager.getUser();
+            palaverRoomDatabase = PalaverRoomDatabase.getDatabase(getApplicationContext());
+            palaverDao = palaverRoomDatabase.palaverDao();
             CommunicatorResult<Friend> resultValue = communicator.addFriend(user, friends[0].getUsername());
             if(resultValue.getResponseValue()==1){
-                palaverDB.insertFriend(friends[0]);
+                palaverDao.insert(friends[0]);
                 Intent intent = new Intent(StringValue.IntentAction.BROADCAST_FRIENDADDED);
                 LocalBroadcastManager.getInstance(ServiceAddFriend.this).sendBroadcast(intent);
             }
@@ -77,6 +82,7 @@ public class ServiceAddFriend extends Service {
         protected void onPostExecute(CommunicatorResult<Friend> s) {
             super.onPostExecute(s);
             palaver.getUiController().showToast(getApplicationContext(), s.getMessage());
+            onDestroy();
         }
     }
 }

@@ -85,7 +85,7 @@ public class ServiceFetchAllChat extends Service {
         protected void onPostExecute(CommunicatorResult<Message> s) {
             super.onPostExecute(s);
             palaver.getUiController().showToast(getApplicationContext(), s.getMessage());
-
+            onDestroy();
         }
     }
 }

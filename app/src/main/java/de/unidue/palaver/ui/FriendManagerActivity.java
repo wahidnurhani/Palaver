@@ -1,7 +1,6 @@
 package de.unidue.palaver.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -28,13 +27,13 @@ import de.unidue.palaver.R;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.viewmodel.ListLiveData;
 import de.unidue.palaver.system.resource.StringValue;
-import de.unidue.palaver.ui.uicontroller.adapter.FriendAdapter;
 
 
 public class FriendManagerActivity extends AppCompatActivity {
     private static boolean visibility;
 
     private FriendViewModel friendViewModel;
+    private FriendAdapter friendAdapter;
 
     private BroadcastReceiver friendAddeddMessageReceiver = new BroadcastReceiver() {
         @Override
@@ -58,7 +57,9 @@ public class FriendManagerActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                friendViewModel.search(newText);
+                List<Friend> searchedList= friendViewModel.search(newText);
+                friendAdapter.overrade(searchedList);
+                friendAdapter.notifyDataSetChanged();
                 return true;
             }
         });
@@ -97,7 +98,7 @@ public class FriendManagerActivity extends AppCompatActivity {
 
         RecyclerView friendsRecycleView = findViewById(R.id.friendManager_recycleView);
 
-        FriendAdapter friendAdapter = new FriendAdapter(this,
+        friendAdapter = new FriendAdapter(this,
                 friendsListLiveData.getValue());
         friendsRecycleView.setAdapter(friendAdapter);
 

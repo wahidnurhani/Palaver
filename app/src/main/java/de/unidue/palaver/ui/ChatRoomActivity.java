@@ -20,7 +20,6 @@ import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.viewmodel.ListLiveData;
 import de.unidue.palaver.system.model.Message;
 import de.unidue.palaver.system.resource.StringValue;
-import de.unidue.palaver.ui.uicontroller.adapter.MessageAdapter;
 
 public class ChatRoomActivity extends AppCompatActivity {
     public static String TAG = ChatRoomActivity.class.getSimpleName();
@@ -70,7 +69,7 @@ public class ChatRoomActivity extends AppCompatActivity {
 
         sendButton.setOnClickListener(v -> {
             if (!messageEditText.getText().toString().equals("")){
-                String messageText = messageEditText.getText().toString();
+                String messageText = messageEditText.getText().toString().trim();
                 messageViewModel.addMessage(this, messageText);
                 messageEditText.setText("");
             }

@@ -1,6 +1,12 @@
 package de.unidue.palaver.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.view.Menu;
@@ -9,16 +15,25 @@ import android.widget.SearchView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.List;
+
 import de.unidue.palaver.system.Palaver;
 import de.unidue.palaver.R;
 import de.unidue.palaver.system.SessionManager;
 import de.unidue.palaver.system.engine.PalaverEngine;
+import de.unidue.palaver.system.model.Chat;
+import de.unidue.palaver.system.viewmodel.ChatsViewModel;
+import de.unidue.palaver.system.viewmodel.ListLiveData;
 
 public class ChatManagerActivity extends AppCompatActivity {
     private static final String TAG= ChatManagerActivity.class.getSimpleName();
 
     private PalaverEngine palaverEngine;
+    private ChatsViewModel chatsViewModel;
+    private ChatAdapter chatAdapter;
+
     private static boolean visibility;
+
 
     public static boolean isVisibility() {
         return visibility;
@@ -40,7 +55,9 @@ public class ChatManagerActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                //TODO
+                List<Chat> searchedList= chatsViewModel.search(newText);
+                chatAdapter.overrade(searchedList);
+                chatAdapter.notifyDataSetChanged();
                 return true;
             }
         });
@@ -67,14 +84,34 @@ public class ChatManagerActivity extends AppCompatActivity {
         palaverEngine = Palaver.getInstance().getPalaverEngine();
 
         if(!SessionManager.getSessionManagerInstance(getApplicationContext()).chekLogin()){
-            palaverEngine.handleOpenLoginActivityRequest(ChatManagerActivity.this);
+            palaverEngine.handleLogoutRequest(ChatManagerActivity.this);
         }
+
+        chatsViewModel = ViewModelProviders.of(this).get(ChatsViewModel.class);
+        final ListLiveData<Chat> chatListLiveData = chatsViewModel.getChatListLiveData();
 
         FloatingActionButton floatingActionButton = findViewById(R.id.chatManager_addChatFloatingButton);
         floatingActionButton.setOnClickListener(v -> {
             palaverEngine.handleOpenFriendManagerActivityRequest(ChatManagerActivity.this);
             overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
         });
+
+        RecyclerView chatsRecyclerView = findViewById(R.id.chat_recycleView);
+
+        chatAdapter = new ChatAdapter(this, chatListLiveData.getValue());
+        chatsRecyclerView.setAdapter(chatAdapter);
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        chatsRecyclerView.setLayoutManager(linearLayoutManager);
+        chatsRecyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(chatsRecyclerView.getContext(),
+                linearLayoutManager.getOrientation());
+        chatsRecyclerView.addItemDecoration(dividerItemDecoration);
+
+        chatListLiveData.observe(this, chats -> chatAdapter.notifyDataSetChanged());
+
     }
 
     @Override

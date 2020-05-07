@@ -1,4 +1,4 @@
-package de.unidue.palaver.ui.uicontroller.adapter;
+package de.unidue.palaver.ui;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -96,7 +96,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
         }
 
         void setData(Message current) {
-            this.textView.setText(current.getMessage());
+            this.textView.setText(current.getMessage().trim());
         }
     }
 }

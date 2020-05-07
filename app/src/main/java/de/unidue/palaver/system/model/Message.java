@@ -9,19 +9,19 @@ import java.io.Serializable;
 import java.text.ParseException;
 import java.util.Date;
 import de.unidue.palaver.system.engine.Parser;
-import de.unidue.palaver.system.resource.DBContract;
-import de.unidue.palaver.system.resource.DBContract.TableMessage;
+import de.unidue.palaver.system.roomdatabase.DBContract;
+import de.unidue.palaver.system.roomdatabase.DBContract.TableMessage;
 import de.unidue.palaver.system.resource.MessageType;
 
 
-@Entity(tableName = TableMessage.TABLE_MESSAGE_NAME, primaryKeys = { TableMessage.COLUMN_FKCHAT,
+@Entity(tableName = TableMessage.TABLE_MESSAGE_NAME, primaryKeys = { TableMessage.COLUMN_FKFRIEND,
         TableMessage.COLUMN_CHAT_SENDER,
         TableMessage.COLUMN_CHAT_DATA,
         TableMessage.COLUMN_CHAT_DATETIME})
 public class Message implements Comparable<Message>, Serializable {
 
     @NonNull
-    @ColumnInfo(name = TableMessage.COLUMN_FKCHAT)
+    @ColumnInfo(name = TableMessage.COLUMN_FKFRIEND)
     private String friendName;
 
     @NonNull

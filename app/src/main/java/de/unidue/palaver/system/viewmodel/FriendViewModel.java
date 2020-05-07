@@ -9,7 +9,9 @@ import android.os.AsyncTask;
 import androidx.lifecycle.AndroidViewModel;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import de.unidue.palaver.system.Palaver;
 import de.unidue.palaver.system.engine.PalaverEngine;
@@ -22,12 +24,11 @@ public class FriendViewModel extends AndroidViewModel {
     private ListLiveData<Friend> friendsLiveData;
     private PalaverEngine palaverEngine;
     private PalaverDao palaverDao;
-    private PalaverRoomDatabase palaverDB;
 
     public FriendViewModel(Application application) {
         super(application);
 
-        palaverDB = PalaverRoomDatabase.getDatabase(getApplication());
+        PalaverRoomDatabase palaverDB = PalaverRoomDatabase.getDatabase(getApplication());
         palaverDao = palaverDB.palaverDao();
 
         this.palaverEngine = Palaver.getInstance().getPalaverEngine();
@@ -36,16 +37,21 @@ public class FriendViewModel extends AndroidViewModel {
         this.fetchFriends();
     }
 
-    public void insert(Friend friend){
-        new InsertAsyncTask(palaverDao).execute(friend);
-    }
-
     public ListLiveData<Friend> getFriendsLiveData() {
         return friendsLiveData;
     }
 
-    public void search(String string){
-        //TODO
+    public List<Friend> search(String string){
+        List<Friend> searched = new ArrayList<>();
+        for (Friend friend: Objects.requireNonNull(friendsLiveData.getValue())){
+            if(friend.getUsername().contains(string)){
+                searched.add(friend);
+            }
+        }
+        if(string.equals("")){
+            searched = friendsLiveData.getValue();
+        }
+        return searched;
     }
 
     public void fetchFriends() {
@@ -66,7 +72,9 @@ public class FriendViewModel extends AndroidViewModel {
 
         @Override
         protected List<Friend> doInBackground(Void... voids) {
-            return new ArrayList<>(PalaverRoomDatabase.getDatabase(getApplication()).palaverDao().loadAllFriend());
+            List<Friend> sorted = palaverDao.loadAllFriend();
+            Collections.sort(sorted);
+            return new ArrayList<>(sorted);
         }
 
         @Override
@@ -80,18 +88,4 @@ public class FriendViewModel extends AndroidViewModel {
         super.onCleared();
     }
 
-    private class InsertAsyncTask extends AsyncTask<Friend, Void, Void>{
-
-        PalaverDao palaverDao;
-
-        InsertAsyncTask(PalaverDao palaverDao) {
-            this.palaverDao = palaverDao;
-        }
-
-        @Override
-        protected Void doInBackground(Friend... friends) {
-            palaverDao.insert(friends[0]);
-            return null;
-        }
-    }
 }

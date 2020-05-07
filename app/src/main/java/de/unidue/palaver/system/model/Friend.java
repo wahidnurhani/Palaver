@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
 
-import de.unidue.palaver.system.resource.DBContract;
+import de.unidue.palaver.system.roomdatabase.DBContract;
 
 @Entity(tableName = DBContract.TableFriend.TABLE_FFRIEND_NAME)
 public class Friend implements Comparable<Friend>, Serializable {
@@ -17,7 +17,6 @@ public class Friend implements Comparable<Friend>, Serializable {
     @NonNull
     @ColumnInfo(name = DBContract.TableFriend.COLUMN_FRIEND_NAME)
     private String username;
-
 
     public Friend(String username) {
         this.username = username;
