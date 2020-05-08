@@ -1,6 +1,4 @@
-package de.unidue.palaver.system.resource;
-
-import android.content.Intent;
+package de.unidue.palaver.system.values;
 
 public class StringValue {
 

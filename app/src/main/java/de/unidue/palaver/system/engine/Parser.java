@@ -16,8 +16,8 @@ import java.util.List;
 import java.util.TimeZone;
 
 import de.unidue.palaver.system.model.Message;
-import de.unidue.palaver.system.resource.MessageType;
-import de.unidue.palaver.system.resource.StringValue;
+import de.unidue.palaver.system.values.MessageType;
+import de.unidue.palaver.system.values.StringValue;
 import de.unidue.palaver.system.model.Friend;
 
 public class Parser {

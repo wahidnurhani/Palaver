@@ -26,7 +26,7 @@ import de.unidue.palaver.system.viewmodel.FriendViewModel;
 import de.unidue.palaver.R;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.viewmodel.ListLiveData;
-import de.unidue.palaver.system.resource.StringValue;
+import de.unidue.palaver.system.values.StringValue;
 
 
 public class FriendManagerActivity extends AppCompatActivity {

@@ -35,6 +35,7 @@ public class FriendViewModel extends AndroidViewModel {
         this.palaverEngine = PalaverEngine.getPalaverEngineInstance();
     }
 
+
     public ListLiveData<Friend> getFriendsLiveData() {
         return friendsLiveData;
     }

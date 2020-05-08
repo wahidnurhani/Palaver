@@ -3,6 +3,7 @@ package de.unidue.palaver.system.engine.communicator;
 import org.json.JSONException;
 import org.junit.Test;
 
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.TimeZone;
@@ -91,5 +92,8 @@ public class ParserTest {
         TimeZone timeZone = TimeZone.getTimeZone("America/Havana");
         System.out.println(timeZone.getRawOffset());
         System.out.println(timeZone.getDSTSavings());
+
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        System.out.println(timestamp.toString());
     }
 }

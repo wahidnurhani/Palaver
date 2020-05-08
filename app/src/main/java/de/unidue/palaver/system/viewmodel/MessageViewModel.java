@@ -19,13 +19,13 @@ import de.unidue.palaver.system.engine.Parser;
 import de.unidue.palaver.system.model.Message;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.User;
-import de.unidue.palaver.system.resource.MessageType;
+import de.unidue.palaver.system.values.MessageType;
 import de.unidue.palaver.system.roomdatabase.PalaverDao;
 import de.unidue.palaver.system.roomdatabase.PalaverRoomDatabase;
 
 public class MessageViewModel extends AndroidViewModel implements Comparable<MessageViewModel>, Serializable {
 
-    private final Friend friend;
+    private Friend friend;
     private final User user;
     private final ListLiveData<Message> messageListLiveData;
 
@@ -35,6 +35,10 @@ public class MessageViewModel extends AndroidViewModel implements Comparable<Mes
         this.user = SessionManager.getSessionManagerInstance(getApplication()).getUser();
         this.messageListLiveData = new ListLiveData<>();
         this.messageListLiveData.setValue(new ArrayList<>());
+    }
+
+    public void setFriend(Friend friend) {
+        this.friend = friend;
         fetchChat();
     }
 

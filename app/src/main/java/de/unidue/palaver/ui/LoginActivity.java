@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.Objects;
 
 import de.unidue.palaver.R;
-import de.unidue.palaver.system.resource.StringValue;
+import de.unidue.palaver.system.values.StringValue;
 import de.unidue.palaver.system.engine.PalaverEngine;
 import de.unidue.palaver.system.model.User;
 

@@ -8,7 +8,7 @@ import de.unidue.palaver.system.engine.CommunicatorResult;
 import de.unidue.palaver.system.model.Message;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.User;
-import de.unidue.palaver.system.resource.MessageType;
+import de.unidue.palaver.system.values.MessageType;
 
 import static org.junit.Assert.*;
 

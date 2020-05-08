@@ -22,7 +22,7 @@ import de.unidue.palaver.system.model.Message;
 import de.unidue.palaver.system.engine.CommunicatorResult;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.User;
-import de.unidue.palaver.system.resource.StringValue;
+import de.unidue.palaver.system.values.StringValue;
 import de.unidue.palaver.system.roomdatabase.PalaverDao;
 import de.unidue.palaver.system.roomdatabase.PalaverRoomDatabase;
 

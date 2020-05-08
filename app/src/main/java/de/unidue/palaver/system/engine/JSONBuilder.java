@@ -3,7 +3,7 @@ package de.unidue.palaver.system.engine;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import de.unidue.palaver.system.resource.StringValue;
+import de.unidue.palaver.system.values.StringValue;
 
 public class JSONBuilder {
     public JSONObject formatBodyUserDataToJSON(String username, String password) {

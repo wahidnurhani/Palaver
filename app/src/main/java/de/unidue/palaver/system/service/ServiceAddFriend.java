@@ -16,7 +16,7 @@ import de.unidue.palaver.system.SessionManager;
 import de.unidue.palaver.system.engine.CommunicatorResult;
 import de.unidue.palaver.system.engine.PalaverEngine;
 import de.unidue.palaver.system.engine.UIController;
-import de.unidue.palaver.system.resource.StringValue;
+import de.unidue.palaver.system.values.StringValue;
 import de.unidue.palaver.system.engine.Communicator;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.User;

@@ -6,7 +6,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import de.unidue.palaver.system.resource.StringValue;
+import de.unidue.palaver.system.values.StringValue;
 import de.unidue.palaver.system.model.User;
 import de.unidue.palaver.ui.ProgressDialog;
 
