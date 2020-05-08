@@ -54,59 +54,6 @@ public class Communicator {
         return networkInfo != null && networkInfo.isConnectedOrConnecting();
     }
 
-    public String[] registerAndValidate(User user, String cmd) {
-        String[] resultValue=new String[]{};
-        try {
-            JSONObject body = jsonBuilder.formatBodyUserDataToJSON(user.getUserName(), user.getPassword());
-
-            url = new URL(baseUrl + cmd);
-            urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setRequestMethod("POST");
-            urlConnection.setRequestProperty("Content-Type", "application/json");
-            urlConnection.setDoInput(true);
-            urlConnection.setDoOutput(true);
-            OutputStream outputStream = urlConnection.getOutputStream();
-            PrintWriter printWriter = new PrintWriter(outputStream);
-            printWriter.print(body.toString());
-
-            printWriter.flush();
-            printWriter.close();
-
-            urlConnection.connect();
-
-            InputStream inputStream = urlConnection.getInputStream();
-            bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-            StringBuilder stringBuilder = new StringBuilder();
-            String line;
-
-            while ((line = bufferedReader.readLine()) != null) {
-                stringBuilder.append(line).append("\n");
-            }
-
-            resultJSONString = stringBuilder.toString();
-
-            resultValue= parser.validateAndRegisterReportParser(resultJSONString);
-
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (urlConnection != null) {
-                urlConnection.disconnect();
-            }
-            if (bufferedReader != null) {
-                try {
-                    bufferedReader.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return resultValue;
-    }
-
-
     public CommunicatorResult<Friend> fetchFriends(User user) {
         CommunicatorResult<Friend> result;
 

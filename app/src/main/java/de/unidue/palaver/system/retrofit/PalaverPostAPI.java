@@ -17,4 +17,6 @@ public interface PalaverPostAPI {
     @POST(StringValue.APICmd.VALIDATE)
     Call<DataServerResponse<String>> validate(@Body User body);
 
+    @POST(StringValue.APICmd.REGISTER)
+    Call<DataServerResponse<String>> register(@Body User body);
 }

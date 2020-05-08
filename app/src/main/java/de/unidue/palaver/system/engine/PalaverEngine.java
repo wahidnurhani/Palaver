@@ -13,7 +13,6 @@ import java.util.List;
 import de.unidue.palaver.system.SessionManager;
 import de.unidue.palaver.system.model.Message;
 import de.unidue.palaver.system.values.MessageType;
-import de.unidue.palaver.system.values.StringValue;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.User;
 import de.unidue.palaver.system.roomdatabase.DatabaseCleaner;
@@ -28,7 +27,6 @@ public class PalaverEngine implements IPalaverEngine {
     private static final String TAG = PalaverEngine.class.getSimpleName();
 
     private Communicator communicator;
-    private Authentificator authentificator;
     private UIController uiController;
     private static PalaverEngine palaverEngineInstance;
 
@@ -41,7 +39,6 @@ public class PalaverEngine implements IPalaverEngine {
 
     private PalaverEngine() {
         this.communicator = new Communicator();
-        this.authentificator = new Authentificator();
         this.uiController = new UIController();
     }
 
@@ -73,28 +70,14 @@ public class PalaverEngine implements IPalaverEngine {
 
     @Override
     public void handleRegisterRequest(Context applicationContext, Activity activity, User user) {
-        Log.i(TAG, "Check authenticator RegisterRequest: "+ (authentificator!=null));
-        Log.i(TAG, "Check uiController RegisterRequest: "+ (uiController!=null));
-
-        if(communicator.checkConnectivity(applicationContext)){
-            authentificator.register(applicationContext, activity, user.getUserName(),
-                    user.getPassword());
-        } else{
-            uiController.showToast(activity, StringValue.ErrorMessage.NO_INTERNET);
-        }
+        NewCommunicator newCommunicator = new NewCommunicator();
+        newCommunicator.register(applicationContext, activity, user);
     }
 
     @Override
-    public void handleLoginRequest(Context applicationContext, LoginActivity loginActivity, User user) {
-        Log.i(TAG, "Check uiController LoginRequest: "+ (uiController!=null));
-        Log.i(TAG, "Check authenticator LoginRequest: "+ (authentificator!=null));
-
-        if(communicator.checkConnectivity(applicationContext)){
-            authentificator.authentificate(applicationContext, loginActivity,  user.getUserName(),
-                    user.getPassword());
-        } else{
-            uiController.showToast(applicationContext, StringValue.ErrorMessage.NO_INTERNET);
-        }
+    public void handleLoginRequest(Context applicationContext, LoginActivity activity, User user) {
+        NewCommunicator newCommunicator = new NewCommunicator();
+        newCommunicator.authenticate(applicationContext, activity, user);
     }
 
     @Override
