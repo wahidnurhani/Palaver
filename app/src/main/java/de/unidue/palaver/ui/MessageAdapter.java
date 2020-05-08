@@ -18,7 +18,7 @@ import java.util.List;
 
 import de.unidue.palaver.R;
 import de.unidue.palaver.system.model.Message;
-import de.unidue.palaver.system.resource.MessageType;
+import de.unidue.palaver.system.values.MessageType;
 
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHolder>{
 

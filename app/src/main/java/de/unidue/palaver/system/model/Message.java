@@ -11,7 +11,7 @@ import java.util.Date;
 import de.unidue.palaver.system.engine.Parser;
 import de.unidue.palaver.system.roomdatabase.DBContract;
 import de.unidue.palaver.system.roomdatabase.DBContract.TableMessage;
-import de.unidue.palaver.system.resource.MessageType;
+import de.unidue.palaver.system.values.MessageType;
 
 
 @Entity(tableName = TableMessage.TABLE_MESSAGE_NAME, primaryKeys = { TableMessage.COLUMN_FKFRIEND,

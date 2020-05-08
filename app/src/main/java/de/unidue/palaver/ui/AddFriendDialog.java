@@ -10,11 +10,10 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 
-import de.unidue.palaver.system.Palaver;
 import de.unidue.palaver.R;
 import de.unidue.palaver.system.SessionManager;
 import de.unidue.palaver.system.engine.PalaverEngine;
-import de.unidue.palaver.system.resource.StringValue;
+import de.unidue.palaver.system.values.StringValue;
 
 public class AddFriendDialog {
 
@@ -38,7 +37,7 @@ public class AddFriendDialog {
         @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.dialog_add_friend, null);
         builder.setView(view);
         builder.setCancelable(false);
-        palaverEngine = Palaver.getInstance().getPalaverEngine();
+        palaverEngine = PalaverEngine.getPalaverEngineInstance();
 
         userNameEditText = view.findViewById(R.id.addFriend_editText);
         userNameEditText.setImeOptions(EditorInfo.IME_ACTION_NEXT);

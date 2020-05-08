@@ -14,22 +14,23 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import java.util.List;
 
-import de.unidue.palaver.system.Palaver;
 import de.unidue.palaver.system.SessionManager;
 import de.unidue.palaver.system.engine.Communicator;
+import de.unidue.palaver.system.engine.PalaverEngine;
+import de.unidue.palaver.system.engine.UIController;
 import de.unidue.palaver.system.model.Message;
 import de.unidue.palaver.system.engine.CommunicatorResult;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.User;
-import de.unidue.palaver.system.resource.StringValue;
+import de.unidue.palaver.system.values.StringValue;
 import de.unidue.palaver.system.roomdatabase.PalaverDao;
 import de.unidue.palaver.system.roomdatabase.PalaverRoomDatabase;
 
 public class ServiceFetchAllChat extends Service {
     private static final String TAG= ServiceFetchAllChat.class.getSimpleName();
 
-    private Palaver palaver;
     private Communicator communicator;
+    private UIController uiController;
     private SessionManager sessionManager;
     private PalaverDao palaverDao;
 
@@ -46,11 +47,11 @@ public class ServiceFetchAllChat extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        palaver = Palaver.getInstance();
         PalaverRoomDatabase palaverRoomDatabase = PalaverRoomDatabase.getDatabase(getApplicationContext());
         palaverDao = palaverRoomDatabase.palaverDao();
         sessionManager = SessionManager.getSessionManagerInstance(getApplicationContext());
-        communicator = Palaver.getInstance().getPalaverEngine().getCommunicator();
+        communicator = PalaverEngine.getPalaverEngineInstance().getCommunicator();
+        uiController = PalaverEngine.getPalaverEngineInstance().getUiController();
         FetchAllChat fetchAllChat = new FetchAllChat();
         fetchAllChat.execute("all");
         return START_STICKY;
@@ -86,7 +87,7 @@ public class ServiceFetchAllChat extends Service {
         @Override
         protected void onPostExecute(CommunicatorResult<Message> s) {
             super.onPostExecute(s);
-            palaver.getUiController().showToast(getApplicationContext(), s.getMessage());
+            uiController.showToast(getApplicationContext(), s.getMessage());
             onDestroy();
         }
     }

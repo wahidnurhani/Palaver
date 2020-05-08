@@ -16,7 +16,7 @@ import java.util.List;
 
 import de.unidue.palaver.R;
 import de.unidue.palaver.system.model.Chat;
-import de.unidue.palaver.system.resource.StringValue;
+import de.unidue.palaver.system.values.StringValue;
 
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder> {

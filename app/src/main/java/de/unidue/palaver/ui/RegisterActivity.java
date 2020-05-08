@@ -9,9 +9,8 @@ import android.widget.TextView;
 
 import java.util.Objects;
 
-import de.unidue.palaver.system.Palaver;
 import de.unidue.palaver.R;
-import de.unidue.palaver.system.resource.StringValue;
+import de.unidue.palaver.system.values.StringValue;
 import de.unidue.palaver.system.engine.PalaverEngine;
 import de.unidue.palaver.system.model.User;
 
@@ -31,7 +30,7 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.activity_register);
-        palaverEngine = Palaver.getInstance().getPalaverEngine();
+        palaverEngine = PalaverEngine.getPalaverEngineInstance();
 
         Button registerButton = findViewById(R.id.register_register_button);
         userNameEditText = findViewById(R.id.register_userName_editText);

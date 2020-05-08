@@ -1,6 +1,7 @@
 package de.unidue.palaver.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,14 +13,13 @@ import android.widget.EditText;
 
 import java.util.Objects;
 
-import de.unidue.palaver.system.Palaver;
 import de.unidue.palaver.R;
 import de.unidue.palaver.system.viewmodel.MessageViewModel;
 import de.unidue.palaver.system.engine.PalaverEngine;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.viewmodel.ListLiveData;
 import de.unidue.palaver.system.model.Message;
-import de.unidue.palaver.system.resource.StringValue;
+import de.unidue.palaver.system.values.StringValue;
 
 public class ChatRoomActivity extends AppCompatActivity {
     public static String TAG = ChatRoomActivity.class.getSimpleName();
@@ -44,14 +44,15 @@ public class ChatRoomActivity extends AppCompatActivity {
         Friend friend = (Friend) Objects.requireNonNull(getIntent().
                 getExtras()).getSerializable(StringValue.IntentKeyName.FRIEND);
 
-        messageViewModel = new MessageViewModel(getApplication(), friend);
+        messageViewModel = ViewModelProviders.of(this).get(MessageViewModel.class);
+        messageViewModel.setFriend(friend);
         final ListLiveData<Message> messageListLiveData = messageViewModel.getMessageList();
 
         Objects.requireNonNull(getSupportActionBar()).setTitle(messageViewModel.getFriend().getUsername());
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        palaverEngine = Palaver.getInstance().getPalaverEngine();
+        palaverEngine = PalaverEngine.getPalaverEngineInstance();
 
         RecyclerView messageRecycleview = findViewById(R.id.chatRoom_recycleView);
         MessageAdapter messageAdapter = new MessageAdapter(this,

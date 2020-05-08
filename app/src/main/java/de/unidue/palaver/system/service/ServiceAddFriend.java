@@ -12,10 +12,11 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-import de.unidue.palaver.system.Palaver;
 import de.unidue.palaver.system.SessionManager;
 import de.unidue.palaver.system.engine.CommunicatorResult;
-import de.unidue.palaver.system.resource.StringValue;
+import de.unidue.palaver.system.engine.PalaverEngine;
+import de.unidue.palaver.system.engine.UIController;
+import de.unidue.palaver.system.values.StringValue;
 import de.unidue.palaver.system.engine.Communicator;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.User;
@@ -24,9 +25,9 @@ import de.unidue.palaver.system.roomdatabase.PalaverRoomDatabase;
 
 public class ServiceAddFriend extends Service {
     private static final String TAG= ServiceAddFriend.class.getSimpleName();
-    private Palaver palaver;
     private SessionManager sessionManager;
     private Communicator communicator;
+    private UIController uiController;
 
     public static void startIntent(Context applicationContext, Activity activity, String username) {
         Intent intent = new Intent(applicationContext, ServiceAddFriend.class);
@@ -42,9 +43,10 @@ public class ServiceAddFriend extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        palaver = Palaver.getInstance();
+
         sessionManager = SessionManager.getSessionManagerInstance(getApplicationContext());
-        communicator = Palaver.getInstance().getPalaverEngine().getCommunicator();
+        communicator = PalaverEngine.getPalaverEngineInstance().getCommunicator();
+        uiController = PalaverEngine.getPalaverEngineInstance().getUiController();
 
         String friendUsername = intent.getCharSequenceExtra(StringValue.IntentKeyName.FRIEND).toString();
         FetchAddFriend fetchAddFriend= new FetchAddFriend();
@@ -78,7 +80,7 @@ public class ServiceAddFriend extends Service {
         @Override
         protected void onPostExecute(CommunicatorResult<Friend> s) {
             super.onPostExecute(s);
-            palaver.getUiController().showToast(getApplicationContext(), s.getMessage());
+            uiController.showToast(getApplicationContext(), s.getMessage());
             onDestroy();
         }
     }

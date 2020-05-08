@@ -6,23 +6,20 @@ import android.os.Bundle;
 
 import java.util.Objects;
 
-import de.unidue.palaver.system.Palaver;
 import de.unidue.palaver.R;
+import de.unidue.palaver.system.engine.PalaverEngine;
 import de.unidue.palaver.system.engine.UIController;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
     private static final String TAG = SplashScreenActivity.class.getSimpleName();
-    private Palaver palaver;
     private UIController uiController;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        palaver = Palaver.getInstance();
-        palaver.startPalaver(getApplicationContext());
-        uiController = palaver.getUiController();
+        uiController = PalaverEngine.getPalaverEngineInstance().getUiController();
         Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.activity_splash_screen);
         SplashAction splashAction = new SplashAction();

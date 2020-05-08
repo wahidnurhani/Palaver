@@ -7,15 +7,14 @@ import android.os.AsyncTask;
 import android.os.IBinder;
 import android.util.Log;
 
-import androidx.annotation.Nullable;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-import de.unidue.palaver.system.Palaver;
 import de.unidue.palaver.system.SessionManager;
 import de.unidue.palaver.system.engine.CommunicatorResult;
+import de.unidue.palaver.system.engine.PalaverEngine;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.User;
-import de.unidue.palaver.system.resource.StringValue;
+import de.unidue.palaver.system.values.StringValue;
 import de.unidue.palaver.system.engine.Communicator;
 import de.unidue.palaver.system.roomdatabase.PalaverDao;
 import de.unidue.palaver.system.roomdatabase.PalaverRoomDatabase;
@@ -35,7 +34,7 @@ public class ServiceFetchFriend extends Service {
         palaverDao = palaverRoomDatabase.palaverDao();
         FetchAllFriendFromServer fetchAllFriendFromServer=new FetchAllFriendFromServer();
         fetchAllFriendFromServer.execute("initiate friend");
-        communicator = Palaver.getInstance().getPalaverEngine().getCommunicator();
+        communicator = PalaverEngine.getPalaverEngineInstance().getCommunicator();
         return START_STICKY;
     }
 

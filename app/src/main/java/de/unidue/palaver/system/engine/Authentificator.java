@@ -6,8 +6,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import de.unidue.palaver.system.resource.StringValue;
-import de.unidue.palaver.system.Palaver;
+import de.unidue.palaver.system.values.StringValue;
 import de.unidue.palaver.system.model.User;
 import de.unidue.palaver.ui.ProgressDialog;
 
@@ -37,8 +36,6 @@ public class Authentificator {
         fetchAuthentification.execute(myParam);
         progressDialog = new ProgressDialog(activity);
         progressDialog.startDialog();
-
-        palaverEngine= Palaver.getInstance().getPalaverEngine();
     }
 
     public void authentificate(Context applicationContext, Activity activity, String userName, String password) {
@@ -53,8 +50,6 @@ public class Authentificator {
         fetchAuthentification.execute(myParam);
         progressDialog = new ProgressDialog(activity);
         progressDialog.startDialog();
-
-        palaverEngine= Palaver.getInstance().getPalaverEngine();
     }
 
     private static class MyParam{
@@ -86,7 +81,7 @@ public class Authentificator {
 
             String[] returnValue=new String[]{};
             User user = myParams[0].getUser();
-            Communicator communicator = Palaver.getInstance().getPalaverEngine().getCommunicator();
+            Communicator communicator = PalaverEngine.getPalaverEngineInstance().getCommunicator();
             try {
                 returnValue= communicator.registerAndValidate(myParams[0].getUser(),
                         myParams[0].getCmd());

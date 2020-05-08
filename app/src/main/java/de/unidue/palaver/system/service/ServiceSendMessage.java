@@ -15,15 +15,15 @@ import androidx.annotation.Nullable;
 import java.util.Date;
 import java.util.Objects;
 
-import de.unidue.palaver.system.Palaver;
 import de.unidue.palaver.system.SessionManager;
 import de.unidue.palaver.system.engine.Communicator;
 import de.unidue.palaver.system.engine.CommunicatorResult;
 
+import de.unidue.palaver.system.engine.PalaverEngine;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.Message;
 import de.unidue.palaver.system.model.User;
-import de.unidue.palaver.system.resource.StringValue;
+import de.unidue.palaver.system.values.StringValue;
 import de.unidue.palaver.system.roomdatabase.PalaverDao;
 import de.unidue.palaver.system.roomdatabase.PalaverRoomDatabase;
 
@@ -58,7 +58,7 @@ public class ServiceSendMessage extends Service {
         message = (Message) Objects.requireNonNull(intent.getExtras()).getSerializable(StringValue.IntentKeyName.MESSAGE);
         friend = (Friend) intent.getExtras().getSerializable(StringValue.IntentKeyName.FRIEND);
         user = SessionManager.getSessionManagerInstance(getApplicationContext()).getUser();
-        communicator = Palaver.getInstance().getPalaverEngine().getCommunicator();
+        communicator = PalaverEngine.getPalaverEngineInstance().getCommunicator();
 
         SendMessage sendMessage = new SendMessage();
         sendMessage.execute();
@@ -93,10 +93,10 @@ public class ServiceSendMessage extends Service {
         protected void onPostExecute(CommunicatorResult<Date> s) {
             super.onPostExecute(s);
             if(s.getResponseValue()!=1){
-                Palaver.getInstance().getUiController().showToast(getApplicationContext(),
+                PalaverEngine.getPalaverEngineInstance().getUiController().showToast(getApplicationContext(),
                         "failed to send message");
             } else{
-                Palaver.getInstance().getUiController().showToast(getApplicationContext(),
+                PalaverEngine.getPalaverEngineInstance().getUiController().showToast(getApplicationContext(),
                         "send message");
             }
             onDestroy();

@@ -19,9 +19,10 @@ import java.net.ProtocolException;
 import java.net.URL;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.TimeZone;
 
 import de.unidue.palaver.system.model.Message;
-import de.unidue.palaver.system.resource.StringValue;
+import de.unidue.palaver.system.values.StringValue;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.User;
 
@@ -35,10 +36,16 @@ public class Communicator {
     private String resultJSONString = null;
     private JSONBuilder jsonBuilder;
     private Parser parser;
+    private String serverTimeZone;
 
     public Communicator() {
         this.jsonBuilder = new JSONBuilder();
         this.parser = new Parser();
+        TimeZone timeZone= TimeZone.getTimeZone("Europe/Berlin");
+        int offset = 3600000/timeZone.getRawOffset();
+        int dstOffset = timeZone.getDSTSavings()/3600000;
+        int timezoneInt = offset+dstOffset;
+        serverTimeZone = "+"+timezoneInt;
     }
 
     public boolean checkConnectivity(Context contex){
@@ -418,6 +425,8 @@ public class Communicator {
             }
 
             resultJSONString = stringBuilder.toString();
+            System.out.println("fresulakfdaif ---------------");
+            System.out.println(resultJSONString);
 
             resultValue = parser.sendMessageReport(resultJSONString);
 

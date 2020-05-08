@@ -2,16 +2,14 @@ package de.unidue.palaver.system.model;
 
 import org.junit.Test;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 import java.util.TimeZone;
 
 import de.unidue.palaver.system.engine.Parser;
-import de.unidue.palaver.system.resource.MessageType;
+import de.unidue.palaver.system.values.MessageType;
 
 import static org.junit.Assert.*;
 
