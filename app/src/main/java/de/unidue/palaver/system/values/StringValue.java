@@ -67,5 +67,6 @@ public class StringValue {
         public static final String SEND_MESSAGE = "/api/message/send";
         public static final String GET_MESSAGE = "/api/message/get";
 
+        public static final String BASE_URL = "http://palaver.se.paluno.uni-due.de";
     }
 }

@@ -27,8 +27,19 @@ public class Friend implements Comparable<Friend>, Serializable {
         return this.username+"";
     }
 
+    public void setUsername(@NonNull String username) {
+        this.username = username;
+    }
+
     @Override
     public int compareTo(Friend o) {
         return username.compareTo(o.getUsername());
+    }
+
+    @Override
+    public String toString() {
+        return "Friend{" +
+                "username='" + username + '\'' +
+                '}';
     }
 }

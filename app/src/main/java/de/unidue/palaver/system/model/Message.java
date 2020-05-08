@@ -185,4 +185,18 @@ public class Message implements Comparable<Message>, Serializable {
         }
         return  0;
     }
+
+    @Override
+    public String toString() {
+        return "Message{" +
+                "friendName='" + friendName + '\'' +
+                ", sender='" + sender + '\'' +
+                ", recipient='" + recipient + '\'' +
+                ", message='" + message + '\'' +
+                ", mimeType='" + mimeType + '\'' +
+                ", messageType='" + messageType + '\'' +
+                ", isRead=" + isRead +
+                ", date='" + date + '\'' +
+                '}';
+    }
 }

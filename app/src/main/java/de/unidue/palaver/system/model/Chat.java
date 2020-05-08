@@ -42,4 +42,12 @@ public class Chat implements Comparable<Chat>{
         }
         return 0;
     }
+
+    @Override
+    public String toString() {
+        return "Chat{" +
+                "friend=" + friend +
+                ", messages=" + messages +
+                '}';
+    }
 }
