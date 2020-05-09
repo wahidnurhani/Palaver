@@ -12,8 +12,6 @@ public interface IPalaverEngine {
 
     void handleSendMessage(Context applicationContext, Activity activity, Friend friend, String messageText);
 
-    void handleFetchAllFriendRequestWithNoService(Context context, User user);
-
     void handleRegisterRequest(Context applicationContext, Activity activity, User user);
 
     void handleLoginRequest(Context context, LoginActivity loginActivity, User user);

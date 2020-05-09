@@ -1,5 +1,6 @@
-package de.unidue.palaver;
+package de.unidue.palaver.scenariotest;
 
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.AndroidJUnit4;
 
@@ -7,6 +8,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import de.unidue.palaver.R;
 import de.unidue.palaver.ui.RegisterActivity;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -22,7 +24,7 @@ public class RegisterActivityTest {
 
     @Test
     public void registerDataInputScenarioTest() {
-        onView(withId(R.id.register_userName_editText)).
+        onView(ViewMatchers.withId(R.id.register_userName_editText)).
                 perform(typeText("test1991")).perform(closeSoftKeyboard());
 
         onView(withId(R.id.register_password_editText)).

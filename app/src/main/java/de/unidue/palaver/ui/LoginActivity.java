@@ -1,12 +1,16 @@
 package de.unidue.palaver.ui;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import java.util.Objects;
 
@@ -23,6 +27,20 @@ public class LoginActivity extends AppCompatActivity {
     private EditText userNameEditText, passwordEditText;
     private PalaverEngine palaverEngine;
 
+    private BroadcastReceiver loginStartReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+        }
+    };
+
+    private BroadcastReceiver loginResultReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            palaverEngine.hadleOpenSplashScreenActivityRequest(LoginActivity.this);
+        }
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +48,11 @@ public class LoginActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.activity_login);
         palaverEngine = PalaverEngine.getPalaverEngineInstance();
+        LocalBroadcastManager.getInstance(this).registerReceiver(loginResultReceiver,
+                new IntentFilter(StringValue.IntentAction.BROADCAST_STARTLOGIN));
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(loginResultReceiver,
+                new IntentFilter(StringValue.IntentAction.BROADCAST_LOGINRESULT));
 
         Button loginButton = findViewById(R.id.login_login_button);
         TextView toRegisterTextView = findViewById(R.id.login_register_button);
@@ -40,7 +63,8 @@ public class LoginActivity extends AppCompatActivity {
             if(validateUserInput()){
                 User user = new User(userNameEditText.getText().toString(),
                         passwordEditText.getText().toString());
-                palaverEngine.handleLoginRequest(getApplicationContext(), LoginActivity.this, user);
+                palaverEngine.handleLoginRequest(getApplicationContext(),
+                        LoginActivity.this, user);
             }
         });
 
@@ -52,7 +76,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private boolean validateUserInput() {
         if (userNameEditText.getText().toString().equals("") || passwordEditText.getText().toString().equals("")){
-            palaverEngine.handleShowErrorDialogRequest(LoginActivity.this, StringValue.ErrorMessage.USERNAME_PASSWORD_BLANK);
+            palaverEngine.handleShowErrorDialogRequest(LoginActivity.this,
+                    StringValue.ErrorMessage.USERNAME_PASSWORD_BLANK);
             return false;
         }
         return true;
@@ -85,5 +110,9 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        LocalBroadcastManager.getInstance(this).
+                unregisterReceiver(loginStartReceiver);
+        LocalBroadcastManager.getInstance(this).
+                unregisterReceiver(loginResultReceiver);
     }
 }

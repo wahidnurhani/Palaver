@@ -146,6 +146,11 @@ public class Message implements Comparable<Message>, Serializable {
         isRead = read;
     }
 
+    public void setIsReadStatus(String read) {
+        isRead = Boolean.parseBoolean(read);
+    }
+
+
     @NonNull
     public Date getDateDate() throws ParseException {
         Parser parser = new Parser();

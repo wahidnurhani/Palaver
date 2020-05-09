@@ -41,4 +41,48 @@ public class User {
                 ", password='" + password + '\'' +
                 '}';
     }
+
+    public static class AndFriend {
+        @SerializedName("Username")
+        @Expose
+        private String username;
+
+        @SerializedName("Password")
+        @Expose
+        private String password;
+
+        @SerializedName("Friend")
+        @Expose
+        private String friendUserName;
+
+        public AndFriend(String username, String password, String friendUsername) {
+            this.username = username;
+            this.password = password;
+            this.friendUserName = friendUsername;
+        }
+
+        public String getUsername() {
+            return username;
+        }
+
+        public void setUsername(String username) {
+            this.username = username;
+        }
+
+        public String getPassword() {
+            return password;
+        }
+
+        public void setPassword(String password) {
+            this.password = password;
+        }
+
+        public String getFriendUserName() {
+            return friendUserName;
+        }
+
+        public void setFriendUserName(String friendUserName) {
+            this.friendUserName = friendUserName;
+        }
+    }
 }

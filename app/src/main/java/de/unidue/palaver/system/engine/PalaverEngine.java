@@ -7,11 +7,15 @@ import android.util.Log;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
 import de.unidue.palaver.system.SessionManager;
 import de.unidue.palaver.system.model.Message;
+import de.unidue.palaver.system.retrofit.DataServerResponse;
+import de.unidue.palaver.system.retrofit.NewCommunicator;
+import de.unidue.palaver.system.service.ServiceLogin;
 import de.unidue.palaver.system.values.MessageType;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.User;
@@ -22,6 +26,7 @@ import de.unidue.palaver.system.service.ServiceAddFriend;
 import de.unidue.palaver.system.service.ServiceFetchAllChat;
 import de.unidue.palaver.system.service.ServiceSendMessage;
 import de.unidue.palaver.ui.LoginActivity;
+import retrofit2.Response;
 
 public class PalaverEngine implements IPalaverEngine {
     private static final String TAG = PalaverEngine.class.getSimpleName();
@@ -59,25 +64,22 @@ public class PalaverEngine implements IPalaverEngine {
     }
 
     @Override
-    public void handleFetchAllFriendRequestWithNoService(Context context, User user) {
-        Log.i(TAG, "Check communicator FetchAllFriendRequest: "+ (communicator!=null));
-
-        List<Friend> friends = communicator.fetchFriends(user).getData();
-        for (Friend friend : friends){
-            PalaverRoomDatabase.getDatabase(context).palaverDao().insert(friend);
+    public void handleRegisterRequest(Context applicationContext, Activity activity, User user) {
+        NewCommunicator newCommunicator = new NewCommunicator();
+        try {
+            Response<DataServerResponse<String>> response = newCommunicator.register(user);
+            if (response.body().getMessageType()==1){
+                handleShowToastRequest(applicationContext, response.body().getInfo());
+                handleOpenLoginActivityRequest(activity);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
     @Override
-    public void handleRegisterRequest(Context applicationContext, Activity activity, User user) {
-        NewCommunicator newCommunicator = new NewCommunicator();
-        newCommunicator.register(applicationContext, activity, user);
-    }
-
-    @Override
     public void handleLoginRequest(Context applicationContext, LoginActivity activity, User user) {
-        NewCommunicator newCommunicator = new NewCommunicator();
-        newCommunicator.authenticate(applicationContext, activity, user);
+        ServiceLogin.startIntent(applicationContext, activity, user.getUserName(), user.getPassword());
     }
 
     @Override

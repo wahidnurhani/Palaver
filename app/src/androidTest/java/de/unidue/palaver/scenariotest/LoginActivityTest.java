@@ -1,6 +1,7 @@
-package de.unidue.palaver;
+package de.unidue.palaver.scenariotest;
 
 
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.AndroidJUnit4;
 
@@ -8,6 +9,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import de.unidue.palaver.R;
 import de.unidue.palaver.ui.LoginActivity;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -30,7 +32,7 @@ public class LoginActivityTest {
     public void onClickRegisterTextView() throws Exception{
         Thread.sleep(3000 /*Or any other time*/);
 
-        onView(withId(R.id.login_login_button)).
+        onView(ViewMatchers.withId(R.id.login_login_button)).
                 check(matches(isDisplayed()));
         onView(withId(R.id.login_password_editText)).
                 check(matches(isDisplayed()));

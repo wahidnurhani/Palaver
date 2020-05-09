@@ -1,5 +1,7 @@
 package de.unidue.palaver.system.values;
 
+import android.content.Intent;
+
 public class StringValue {
 
     public static class ErrorMessage {
@@ -22,6 +24,8 @@ public class StringValue {
         public static final String FRIEND = "INTENT_FRIEND";
         public static final String BROADCAST_FRIENDADDED_MESSAGE_RESULT = "INTENT_ADDFRIEND_RESULT";
         public static final String MESSAGE = "INTENT_MESSAGE";
+        public static final String USERNAME = "USERNAME";
+        public static final String PASSWORD = "PASSWORD";
     }
 
     public static class IntentAction {
@@ -30,6 +34,8 @@ public class StringValue {
         public static final String BROADCAST_ALL_FRIENDS_FETCHED = "friendfetched_broadcast";
         public static final String BROADCAST_USER_REGISTERED = "registered_broadcast";
         public static final String BROADCAST_ALL_CHAT_FETCHED = "allChatfetched_broadcast";
+        public static final String BROADCAST_LOGINRESULT = "loginResult_broadcast";
+        public static final String BROADCAST_STARTLOGIN = "loginStart_BroadCast";
     }
 
     public static class LogMessage {

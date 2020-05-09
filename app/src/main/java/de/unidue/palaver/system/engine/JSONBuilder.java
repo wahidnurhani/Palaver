@@ -1,5 +1,8 @@
 package de.unidue.palaver.system.engine;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -89,5 +92,52 @@ public class JSONBuilder {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static class UserAndRecipient {
+        @SerializedName("Username")
+        @Expose
+        private String username;
+
+        @SerializedName("Password")
+        @Expose
+        private String password;
+
+        @SerializedName("Recipient")
+        @Expose
+        private String friendUserName;
+
+        public String getUsername() {
+            return username;
+        }
+
+        public void setUsername(String username) {
+            this.username = username;
+        }
+
+        public String getPassword() {
+            return password;
+        }
+
+        @Override
+        public String toString() {
+            return "UserAndRecipient{" +
+                    "username='" + username + '\'' +
+                    ", password='" + password + '\'' +
+                    ", friendUserName='" + friendUserName + '\'' +
+                    '}';
+        }
+
+        public void setPassword(String password) {
+            this.password = password;
+        }
+
+        public String getFriendUserName() {
+            return friendUserName;
+        }
+
+        public void setFriendUserName(String friendUserName) {
+            this.friendUserName = friendUserName;
+        }
     }
 }

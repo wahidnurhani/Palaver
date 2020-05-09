@@ -1,6 +1,7 @@
-package de.unidue.palaver;
+package de.unidue.palaver.scenariotest;
 
 import androidx.test.core.app.ApplicationProvider;
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.AndroidJUnit4;
 
@@ -8,6 +9,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import de.unidue.palaver.R;
 import de.unidue.palaver.ui.ChatManagerActivity;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -19,7 +21,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 @RunWith(AndroidJUnit4.class)
-public class MessageViewModelActivityTest {
+public class ChatManagerActivityTest {
 
     @Rule
     public ActivityTestRule<ChatManagerActivity> mChatManagerActivityActivityTestRule =
@@ -27,7 +29,7 @@ public class MessageViewModelActivityTest {
 
     @Test
     public void TestMenuAndSearch(){
-        onView(withId(R.id.search_menu)).perform(click()).perform(typeText("search test")).
+        onView(ViewMatchers.withId(R.id.search_menu)).perform(click()).perform(typeText("search test")).
                 perform(closeSoftKeyboard());
 
         openActionBarOverflowOrOptionsMenu(ApplicationProvider.getApplicationContext());

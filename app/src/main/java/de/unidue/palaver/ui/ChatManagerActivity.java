@@ -18,6 +18,7 @@ import java.util.List;
 
 import de.unidue.palaver.R;
 import de.unidue.palaver.system.SessionManager;
+import de.unidue.palaver.system.retrofit.NewCommunicator;
 import de.unidue.palaver.system.engine.PalaverEngine;
 import de.unidue.palaver.system.model.Chat;
 import de.unidue.palaver.system.viewmodel.ChatsViewModel;
@@ -89,6 +90,7 @@ public class ChatManagerActivity extends AppCompatActivity {
 
         FloatingActionButton floatingActionButton = findViewById(R.id.chatManager_addChatFloatingButton);
         floatingActionButton.setOnClickListener(v -> {
+
             palaverEngine.handleOpenFriendManagerActivityRequest(ChatManagerActivity.this);
             overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
         });

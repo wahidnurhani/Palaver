@@ -12,21 +12,24 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import java.io.IOException;
+
 import de.unidue.palaver.system.SessionManager;
-import de.unidue.palaver.system.engine.CommunicatorResult;
 import de.unidue.palaver.system.engine.PalaverEngine;
 import de.unidue.palaver.system.engine.UIController;
+import de.unidue.palaver.system.retrofit.DataServerResponse;
+import de.unidue.palaver.system.retrofit.NewCommunicator;
 import de.unidue.palaver.system.values.StringValue;
 import de.unidue.palaver.system.engine.Communicator;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.User;
 import de.unidue.palaver.system.roomdatabase.PalaverDao;
 import de.unidue.palaver.system.roomdatabase.PalaverRoomDatabase;
+import retrofit2.Response;
 
 public class ServiceAddFriend extends Service {
     private static final String TAG= ServiceAddFriend.class.getSimpleName();
     private SessionManager sessionManager;
-    private Communicator communicator;
     private UIController uiController;
 
     public static void startIntent(Context applicationContext, Activity activity, String username) {
@@ -45,7 +48,6 @@ public class ServiceAddFriend extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
 
         sessionManager = SessionManager.getSessionManagerInstance(getApplicationContext());
-        communicator = PalaverEngine.getPalaverEngineInstance().getCommunicator();
         uiController = PalaverEngine.getPalaverEngineInstance().getUiController();
 
         String friendUsername = intent.getCharSequenceExtra(StringValue.IntentKeyName.FRIEND).toString();
@@ -61,26 +63,38 @@ public class ServiceAddFriend extends Service {
     }
 
     @SuppressLint("StaticFieldLeak")
-    private class FetchAddFriend extends AsyncTask<Friend, Void, CommunicatorResult<Friend>> {
+    private class FetchAddFriend extends AsyncTask<Friend, Void, Response<DataServerResponse<String>>> {
 
         @Override
-        protected CommunicatorResult<Friend> doInBackground(Friend... friends) {
+        protected Response<DataServerResponse<String>> doInBackground(Friend... friends) {
+            sessionManager = SessionManager.getSessionManagerInstance(getApplicationContext());
             User user = sessionManager.getUser();
             PalaverRoomDatabase palaverRoomDatabase = PalaverRoomDatabase.getDatabase(getApplicationContext());
             PalaverDao palaverDao = palaverRoomDatabase.palaverDao();
-            CommunicatorResult<Friend> resultValue = communicator.addFriend(user, friends[0].getUsername());
-            if(resultValue.getResponseValue()==1){
-                palaverDao.insert(friends[0]);
-                Intent intent = new Intent(StringValue.IntentAction.BROADCAST_FRIENDADDED);
-                LocalBroadcastManager.getInstance(ServiceAddFriend.this).sendBroadcast(intent);
+            Response<DataServerResponse<String>> response= null;
+
+            NewCommunicator newCommunicator = new NewCommunicator();
+            try {
+                response = newCommunicator.addFriend(user, friends[0]);
+                assert response.body() != null;
+                if(response.body().getMessageType()==1){
+                    palaverDao.insert(friends[0]);
+                    Intent intent = new Intent(StringValue.IntentAction.BROADCAST_FRIENDADDED);
+                    LocalBroadcastManager.getInstance(ServiceAddFriend.this).sendBroadcast(intent);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            return resultValue;
+            return response;
         }
 
         @Override
-        protected void onPostExecute(CommunicatorResult<Friend> s) {
+        protected void onPostExecute(Response<DataServerResponse<String>> s) {
             super.onPostExecute(s);
-            uiController.showToast(getApplicationContext(), s.getMessage());
+            if(s!=null){
+                assert s.body() != null;
+                uiController.showToast(getApplicationContext(), s.body().getInfo());
+            }
             onDestroy();
         }
     }
