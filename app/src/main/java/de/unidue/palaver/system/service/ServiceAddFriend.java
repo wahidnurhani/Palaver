@@ -17,10 +17,9 @@ import java.io.IOException;
 import de.unidue.palaver.system.SessionManager;
 import de.unidue.palaver.system.engine.PalaverEngine;
 import de.unidue.palaver.system.engine.UIController;
-import de.unidue.palaver.system.retrofit.DataServerResponse;
+import de.unidue.palaver.system.retrofit.DataServerResponseList;
 import de.unidue.palaver.system.retrofit.NewCommunicator;
 import de.unidue.palaver.system.values.StringValue;
-import de.unidue.palaver.system.engine.Communicator;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.User;
 import de.unidue.palaver.system.roomdatabase.PalaverDao;
@@ -63,15 +62,15 @@ public class ServiceAddFriend extends Service {
     }
 
     @SuppressLint("StaticFieldLeak")
-    private class FetchAddFriend extends AsyncTask<Friend, Void, Response<DataServerResponse<String>>> {
+    private class FetchAddFriend extends AsyncTask<Friend, Void, Response<DataServerResponseList<String>>> {
 
         @Override
-        protected Response<DataServerResponse<String>> doInBackground(Friend... friends) {
+        protected Response<DataServerResponseList<String>> doInBackground(Friend... friends) {
             sessionManager = SessionManager.getSessionManagerInstance(getApplicationContext());
             User user = sessionManager.getUser();
             PalaverRoomDatabase palaverRoomDatabase = PalaverRoomDatabase.getDatabase(getApplicationContext());
             PalaverDao palaverDao = palaverRoomDatabase.palaverDao();
-            Response<DataServerResponse<String>> response= null;
+            Response<DataServerResponseList<String>> response= null;
 
             NewCommunicator newCommunicator = new NewCommunicator();
             try {
@@ -89,7 +88,7 @@ public class ServiceAddFriend extends Service {
         }
 
         @Override
-        protected void onPostExecute(Response<DataServerResponse<String>> s) {
+        protected void onPostExecute(Response<DataServerResponseList<String>> s) {
             super.onPostExecute(s);
             if(s!=null){
                 assert s.body() != null;

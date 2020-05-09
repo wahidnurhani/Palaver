@@ -1,7 +1,10 @@
-package de.unidue.palaver.system.retrofit;
+package de.unidue.palaver.system.model;
 
-class SendMessageServerResponseData {
+import com.google.gson.annotations.SerializedName;
 
+public class DateTime<T> {
+
+    @SerializedName("DateTime")
     private String dateTime;
 
     public String getDateTime() {
@@ -14,7 +17,7 @@ class SendMessageServerResponseData {
 
     @Override
     public String toString() {
-        return "SendMessageServerResponseData{" +
+        return "DateTime{" +
                 "dateTime='" + dateTime + '\'' +
                 '}';
     }

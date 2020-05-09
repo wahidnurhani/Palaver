@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import de.unidue.palaver.R;
+import de.unidue.palaver.system.SessionManager;
 import de.unidue.palaver.system.model.Message;
 import de.unidue.palaver.system.values.MessageType;
 
@@ -24,6 +25,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 
     private List<Message> messages;
     private LayoutInflater inflater;
+    private Context context;
 
     public MessageAdapter(Context context, List<Message> messages) {
         inflater = LayoutInflater.from(context);
@@ -47,7 +49,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 
         RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)containerLinearLayout.getLayoutParams();
 
-        if (current.getMessageTypeEnum()== MessageType.OUT){
+        if (current.getSender().equals(SessionManager.getSessionManagerInstance(context).getUser().getUserName())){
             params.removeRule(RelativeLayout.ALIGN_PARENT_END);
             params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
             containerLinearLayout.setLayoutParams(params);

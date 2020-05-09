@@ -202,7 +202,7 @@ public class Parser {
                 } else {
                     messageType = MessageType.OUT;
                 }
-                messageList.add(new Message(sender, recipient, messageType, data, isMessageRead, serverDateTimeStringToPalaverDateString(dateTime)));
+                //messageList.add(new Message(sender, recipient, messageType, data, isMessageRead, serverDateTimeStringToPalaverDateString(dateTime)));
             }
             for (Message message: messageList){
                 System.out.println(message.getDate());

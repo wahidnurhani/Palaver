@@ -87,7 +87,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         });
         messageListLiveData.observe(this, messages -> {
             messageAdapter.setMessages(messages);
-            messageRecycleview.scrollToPosition(messages.size()-1);
+            messageRecycleview.scrollToPosition(messageAdapter.getItemCount()-1);
         });
     }
 

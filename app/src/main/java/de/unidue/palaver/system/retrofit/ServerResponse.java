@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 import de.unidue.palaver.system.values.StringValue;
 
-public class BaseServerResponse {
+public class ServerResponse {
 
     @SerializedName(StringValue.JSONKeyName.MSG_TYPE)
     @Expose
@@ -14,6 +14,8 @@ public class BaseServerResponse {
     @Expose
     @SerializedName(StringValue.JSONKeyName.INFO)
     private String info;
+
+
 
     public int getMessageType() {
         return messageType;
@@ -33,7 +35,7 @@ public class BaseServerResponse {
 
     @Override
     public String toString() {
-        return "BaseServerResponse{" +
+        return "ServerResponse{" +
                 "messageType=" + messageType +
                 ", info='" + info + '\'' +
                 '}';

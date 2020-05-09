@@ -13,17 +13,20 @@ public interface PalaverPostAPI {
     String BASE_URL = StringValue.APICmd.BASE_URL;
 
     @POST(StringValue.APICmd.GET_ALL_FRIENDS)
-    Call<DataServerResponse<String>> getFriends(@Body User body);
+    Call<DataServerResponseList<String>> getFriends(@Body User body);
 
     @POST(StringValue.APICmd.VALIDATE)
-    Call<DataServerResponse<String>> validate(@Body User body);
+    Call<DataServerResponseList<String>> validate(@Body User body);
 
     @POST(StringValue.APICmd.REGISTER)
-    Call<DataServerResponse<String>> register(@Body User body);
+    Call<DataServerResponseList<String>> register(@Body User body);
 
     @POST(StringValue.APICmd.ADD_FRIEND)
-    Call<DataServerResponse<String>> addFriend(@Body User.AndFriend body);
+    Call<DataServerResponseList<String>> addFriend(@Body User.AndFriend body);
 
     @POST(StringValue.APICmd.GET_MESSAGE)
-    Call<DataServerResponse<Message>> getMessage(@Body JSONBuilder.UserAndRecipient body);
+    Call<DataServerResponseList<Message>> getMessage(@Body JSONBuilder.UserAndRecipient body);
+
+    @POST(StringValue.APICmd.SEND_MESSAGE)
+    Call<DataServerResponse> sendMessage(@Body JSONBuilder.SendMessageBody body);
 }

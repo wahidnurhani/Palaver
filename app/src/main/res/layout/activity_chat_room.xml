@@ -22,6 +22,7 @@
             android:layout_marginRight="15dp"
             android:layout_weight="100"
             android:divider="@null"
+
             android:scrollbars="none"
             android:stackFromBottom="true" />
 

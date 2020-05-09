@@ -82,11 +82,7 @@ public class CommunicatorResult<T> {
                 StringBuilder stringBuilder = new StringBuilder();
                 stringBuilder.append("[ ");
                 for (T chatItem : data){
-                    try {
-                        stringBuilder.append(((Message) chatItem).getMessage()).append("  ").append(((Message) chatItem).getDateDate().toString()).append(", ");
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
+                    // stringBuilder.append(((Message) chatItem).getMessage()).append("  ").append(((Message) chatItem).getDateDate().toString()).append(", ");
                 }
                 stringBuilder.append(" ]");
                 Log.i(TAG, stringBuilder.toString());

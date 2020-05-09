@@ -12,20 +12,22 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
-import java.util.Date;
+import java.io.IOException;
 import java.util.Objects;
 
 import de.unidue.palaver.system.SessionManager;
-import de.unidue.palaver.system.engine.Communicator;
-import de.unidue.palaver.system.engine.CommunicatorResult;
 
+import de.unidue.palaver.system.engine.JSONBuilder;
 import de.unidue.palaver.system.engine.PalaverEngine;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.Message;
 import de.unidue.palaver.system.model.User;
+import de.unidue.palaver.system.retrofit.DataServerResponse;
+import de.unidue.palaver.system.retrofit.NewCommunicator;
 import de.unidue.palaver.system.values.StringValue;
 import de.unidue.palaver.system.roomdatabase.PalaverDao;
 import de.unidue.palaver.system.roomdatabase.PalaverRoomDatabase;
+import retrofit2.Response;
 
 
 public class ServiceSendMessage extends Service {
@@ -34,9 +36,8 @@ public class ServiceSendMessage extends Service {
     private User user;
     private Message message;
     private Friend friend;
-    private Communicator communicator;
-    PalaverRoomDatabase palaverRoomDatabase;
-    PalaverDao palaverDao;
+    private PalaverRoomDatabase palaverRoomDatabase;
+    private PalaverDao palaverDao;
 
     public static void startIntent(Context applicationContext, Activity activity, Friend friend, Message message) {
         Intent intent = new Intent(applicationContext, ServiceSendMessage.class);
@@ -58,7 +59,6 @@ public class ServiceSendMessage extends Service {
         message = (Message) Objects.requireNonNull(intent.getExtras()).getSerializable(StringValue.IntentKeyName.MESSAGE);
         friend = (Friend) intent.getExtras().getSerializable(StringValue.IntentKeyName.FRIEND);
         user = SessionManager.getSessionManagerInstance(getApplicationContext()).getUser();
-        communicator = PalaverEngine.getPalaverEngineInstance().getCommunicator();
 
         SendMessage sendMessage = new SendMessage();
         sendMessage.execute();
@@ -73,31 +73,37 @@ public class ServiceSendMessage extends Service {
     }
 
     @SuppressLint("StaticFieldLeak")
-    public class SendMessage extends AsyncTask<Void, Void, CommunicatorResult<Date>> {
+    public class SendMessage extends AsyncTask<Void, Void, Response<DataServerResponse>> {
 
         @Override
-        protected CommunicatorResult<Date> doInBackground(Void... myParams) {
-            CommunicatorResult<Date> resultValue = communicator.sendMessage(user, friend, message);
-            if(resultValue.getResponseValue()==1){
-                palaverRoomDatabase = PalaverRoomDatabase.getDatabase(getApplicationContext());
-                palaverDao = palaverRoomDatabase.palaverDao();
-                palaverDao.insert(message);
-            } else {
-                //palaverDao.delete(message);
+        protected Response<DataServerResponse> doInBackground(Void... myParams) {
+            palaverRoomDatabase = PalaverRoomDatabase.getDatabase(getApplicationContext());
+            palaverDao = palaverRoomDatabase.palaverDao();
+            NewCommunicator newCommunicator = new NewCommunicator();
+            Response<DataServerResponse> response = null;
+            JSONBuilder.SendMessageBody body = new JSONBuilder.SendMessageBody(user, friend, message);
+            try {
+                response = newCommunicator.sendMessage(body);
+                assert response.body() != null;
+                if(response.body().getMessageType()==1){
+                    message.setDate(response.body().getDateTime().getDateTime());
+                    palaverDao.insert(message);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            return resultValue;
+            return response;
         }
 
 
         @Override
-        protected void onPostExecute(CommunicatorResult<Date> s) {
+        protected void onPostExecute(Response<DataServerResponse> s) {
             super.onPostExecute(s);
-            if(s.getResponseValue()!=1){
-                PalaverEngine.getPalaverEngineInstance().getUiController().showToast(getApplicationContext(),
-                        "failed to send message");
-            } else{
-                PalaverEngine.getPalaverEngineInstance().getUiController().showToast(getApplicationContext(),
-                        "send message");
+            if(s!=null){
+                if(s.body().getMessageType()!=1){
+                    PalaverEngine.getPalaverEngineInstance().getUiController().showToast(getApplicationContext(),
+                            "failed to send message");
+                }
             }
             onDestroy();
         }

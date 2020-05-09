@@ -14,7 +14,7 @@ public class Chat implements Comparable<Chat>{
     @Embedded public Friend friend;
     @Relation(
             parentColumn =DBContract.TableFriend.COLUMN_FRIEND_NAME,
-            entityColumn = DBContract.TableMessage.COLUMN_FKFRIEND
+            entityColumn = DBContract.TableMessage.COLUMN_CHAT_SENDER
     )
     public List<Message> messages;
 
@@ -34,11 +34,7 @@ public class Chat implements Comparable<Chat>{
     @Override
     public int compareTo(Chat o) {
         if(this.getLastMessage()!=null && o.getLastMessage()!=null){
-            try {
-                return o.getLastMessage().getDateDate().compareTo(this.getLastMessage().getDateDate());
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+            return o.getLastMessage().getDate().compareTo(this.getLastMessage().getDate());
         }
         return 0;
     }

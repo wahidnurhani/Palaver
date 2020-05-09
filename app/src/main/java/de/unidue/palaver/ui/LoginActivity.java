@@ -27,13 +27,6 @@ public class LoginActivity extends AppCompatActivity {
     private EditText userNameEditText, passwordEditText;
     private PalaverEngine palaverEngine;
 
-    private BroadcastReceiver loginStartReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-
-        }
-    };
-
     private BroadcastReceiver loginResultReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -48,8 +41,6 @@ public class LoginActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.activity_login);
         palaverEngine = PalaverEngine.getPalaverEngineInstance();
-        LocalBroadcastManager.getInstance(this).registerReceiver(loginResultReceiver,
-                new IntentFilter(StringValue.IntentAction.BROADCAST_STARTLOGIN));
 
         LocalBroadcastManager.getInstance(this).registerReceiver(loginResultReceiver,
                 new IntentFilter(StringValue.IntentAction.BROADCAST_LOGINRESULT));
@@ -110,8 +101,6 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        LocalBroadcastManager.getInstance(this).
-                unregisterReceiver(loginStartReceiver);
         LocalBroadcastManager.getInstance(this).
                 unregisterReceiver(loginResultReceiver);
     }

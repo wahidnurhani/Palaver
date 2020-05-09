@@ -10,13 +10,13 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import de.unidue.palaver.system.SessionManager;
 import de.unidue.palaver.system.model.Message;
-import de.unidue.palaver.system.retrofit.DataServerResponse;
+import de.unidue.palaver.system.retrofit.DataServerResponseList;
 import de.unidue.palaver.system.retrofit.NewCommunicator;
 import de.unidue.palaver.system.service.ServiceLogin;
-import de.unidue.palaver.system.values.MessageType;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.User;
 import de.unidue.palaver.system.roomdatabase.DatabaseCleaner;
@@ -34,6 +34,7 @@ public class PalaverEngine implements IPalaverEngine {
     private Communicator communicator;
     private UIController uiController;
     private static PalaverEngine palaverEngineInstance;
+    private String serverTimeZone;
 
     public static PalaverEngine getPalaverEngineInstance() {
         if(palaverEngineInstance ==null){
@@ -45,6 +46,15 @@ public class PalaverEngine implements IPalaverEngine {
     private PalaverEngine() {
         this.communicator = new Communicator();
         this.uiController = new UIController();
+        TimeZone timeZone= TimeZone.getTimeZone("Europe/Berlin");
+        int offset = 3600000/timeZone.getRawOffset();
+        int dstOffset = timeZone.getDSTSavings()/3600000;
+        int timezoneInt = offset+dstOffset;
+        serverTimeZone = "+"+timezoneInt;
+    }
+
+    public String getServerTimeZone() {
+        return serverTimeZone;
     }
 
     public Communicator getCommunicator() {
@@ -58,7 +68,7 @@ public class PalaverEngine implements IPalaverEngine {
     @Override
     public void handleSendMessage(Context applicationContext, Activity activity, Friend friend, String messageText) {
         Message message = new Message(SessionManager.getSessionManagerInstance(applicationContext).getUser().getUserName(),
-                friend.getUsername(), MessageType.OUT, messageText, "true", new Date());
+                friend.getUsername(), messageText, new Date());
 
         ServiceSendMessage.startIntent(applicationContext, activity, friend, message);
     }
@@ -67,7 +77,7 @@ public class PalaverEngine implements IPalaverEngine {
     public void handleRegisterRequest(Context applicationContext, Activity activity, User user) {
         NewCommunicator newCommunicator = new NewCommunicator();
         try {
-            Response<DataServerResponse<String>> response = newCommunicator.register(user);
+            Response<DataServerResponseList<String>> response = newCommunicator.register(user);
             if (response.body().getMessageType()==1){
                 handleShowToastRequest(applicationContext, response.body().getInfo());
                 handleOpenLoginActivityRequest(activity);

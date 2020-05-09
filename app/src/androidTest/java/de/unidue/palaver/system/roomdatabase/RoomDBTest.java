@@ -46,7 +46,7 @@ public class RoomDBTest {
         List<Friend> friends = palaverDao.loadAllFriend();
         assertNotNull(friends);
 
-        Message message = new Message("wahid", "jimmy", MessageType.INCOMMING, "hallo", "true", "2016-02-12 17:02:38.663");
+        Message message = new Message("wahid", "jimmy", "hallo", "2016-02-12T17:02:38.663");
         palaverDao.insert(message);
 
         assertNotNull(palaverDao.loadChat("wahid").get(0));
@@ -66,7 +66,7 @@ public class RoomDBTest {
 
     @Test
     public void deleteMessage(){
-        Message message = new Message("wahid", "jimmy", MessageType.INCOMMING, "hallo", "true", "2016-02-12 17:02:38.663");
+        Message message = new Message("wahid", "jimmy", "hallo", "2016-02-12T17:02:38.663");
         palaverDao.insert(message);
         palaverDao.delete(message);
         assertEquals(0, palaverDao.loadAllChat().size());

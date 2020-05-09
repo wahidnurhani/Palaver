@@ -19,7 +19,6 @@ import de.unidue.palaver.system.engine.Parser;
 import de.unidue.palaver.system.model.Message;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.User;
-import de.unidue.palaver.system.values.MessageType;
 import de.unidue.palaver.system.roomdatabase.PalaverDao;
 import de.unidue.palaver.system.roomdatabase.PalaverRoomDatabase;
 
@@ -29,9 +28,8 @@ public class MessageViewModel extends AndroidViewModel implements Comparable<Mes
     private final User user;
     private final ListLiveData<Message> messageListLiveData;
 
-    public MessageViewModel(Application application, Friend friend) {
+    public MessageViewModel(Application application) {
         super(application);
-        this.friend = friend;
         this.user = SessionManager.getSessionManagerInstance(getApplication()).getUser();
         this.messageListLiveData = new ListLiveData<>();
         this.messageListLiveData.setValue(new ArrayList<>());
@@ -65,10 +63,8 @@ public class MessageViewModel extends AndroidViewModel implements Comparable<Mes
          Message message = new Message(
                  user.getUserName(),
                  friend.getUsername(),
-                 MessageType.OUT,
-                 text,
-                 "true",
-                 parser.dateToString(new Date()));
+                 text
+                 ,parser.dateToString(new Date()));
         PalaverEngine.getPalaverEngineInstance().handleSendMessage(
                 getApplication(),
                 activity,
@@ -97,7 +93,6 @@ public class MessageViewModel extends AndroidViewModel implements Comparable<Mes
 
         @Override
         protected void onPostExecute(List<Message> messages) {
-            Collections.sort(messages);
             messageListLiveData.addAll(messages);
         }
     }

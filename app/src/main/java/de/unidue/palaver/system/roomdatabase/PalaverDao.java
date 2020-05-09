@@ -37,7 +37,8 @@ public interface PalaverDao {
     @Query("SELECT * FROM table_friend")
     List<Chat> loadAllChat();
 
-    @Query("SELECT * From table_chat_data WHERE fk_friend = :friendName ORDER BY date_time DESC" )
+    @Query("SELECT * From table_chat_data WHERE sender = :friendName " +
+            "OR recipient = :friendName ORDER BY date_time ASC" )
     List<Message> loadChat(String friendName);
 
     @Update

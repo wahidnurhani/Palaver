@@ -12,12 +12,16 @@ import androidx.annotation.Nullable;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import de.unidue.palaver.system.SessionManager;
+import de.unidue.palaver.system.engine.JSONBuilder;
 import de.unidue.palaver.system.engine.PalaverEngine;
 import de.unidue.palaver.system.model.Friend;
+import de.unidue.palaver.system.model.Message;
 import de.unidue.palaver.system.model.User;
-import de.unidue.palaver.system.retrofit.DataServerResponse;
+import de.unidue.palaver.system.retrofit.DataServerResponseList;
 import de.unidue.palaver.system.retrofit.NewCommunicator;
 import de.unidue.palaver.system.roomdatabase.PalaverDao;
 import de.unidue.palaver.system.roomdatabase.PalaverRoomDatabase;
@@ -64,7 +68,7 @@ public class ServiceLogin extends Service {
     }
 
     @SuppressLint("StaticFieldLeak")
-    private class LoginProcessor extends AsyncTask<User, Void, Response<DataServerResponse<String>>> {
+    private class LoginProcessor extends AsyncTask<User, Void, Response<DataServerResponseList<String>>> {
         /**
          * Override this method to perform a computation on a background thread. The
          * specified parameters are the parameters passed to {@link #execute}
@@ -80,15 +84,14 @@ public class ServiceLogin extends Service {
          * @see #publishProgress
          */
         @Override
-        protected Response<DataServerResponse<String>> doInBackground(User... users) {
-
-            Intent intentStart = new Intent(StringValue.IntentAction.BROADCAST_STARTLOGIN);
-            LocalBroadcastManager.getInstance(ServiceLogin.this).sendBroadcast(intentStart);
+        protected Response<DataServerResponseList<String>> doInBackground(User... users) {
 
             NewCommunicator newCommunicator = new NewCommunicator();
 
-            Response<DataServerResponse<String>> responseAuthenticate = null;
-            Response<DataServerResponse<String>> responseFetchFriends;
+            Response<DataServerResponseList<String>> responseAuthenticate = null;
+            Response<DataServerResponseList<String>> responseFetchFriends;
+            Response<DataServerResponseList<Message>> responseFetchChat = null;
+
 
             SessionManager sessionManager = SessionManager.getSessionManagerInstance(getApplicationContext());
 
@@ -107,16 +110,30 @@ public class ServiceLogin extends Service {
 
                     assert responseFetchFriends.body() != null;
                     if (responseFetchFriends.body().getMessageType()==1){
-
+                        List<Friend> friends = new ArrayList<>();
                         for(String username : responseFetchFriends.body().getDatas()){
                             Friend friend = new Friend(username);
+                            friends.add(friend);
                             palaverDao.insert(friend);
                         }
 
-                        sessionManager.startSession(users[0].getUserName(), users[0].getPassword());
+                        for (Friend friend: friends){
+                            JSONBuilder.UserAndRecipient body = new JSONBuilder.UserAndRecipient(users[0], friend);
+                            responseFetchChat = newCommunicator.getMessage(body);
 
-                        Intent intent = new Intent(StringValue.IntentAction.BROADCAST_LOGINRESULT);
-                        LocalBroadcastManager.getInstance(ServiceLogin.this).sendBroadcast(intent);
+                            if(responseFetchChat!=null){
+                                for (Message message : responseFetchChat.body().getDatas()){
+                                    palaverDao.insert(message);
+                                }
+                            }
+                        }
+                        if(responseFetchChat!=null){
+                            if(responseFetchChat.body().getMessageType()==1){
+                                sessionManager.startSession(users[0].getUserName(), users[0].getPassword());
+                                Intent intent = new Intent(StringValue.IntentAction.BROADCAST_LOGINRESULT);
+                                LocalBroadcastManager.getInstance(ServiceLogin.this).sendBroadcast(intent);
+                            }
+                        }
                     } else {
                         return responseFetchFriends;
                     }
@@ -128,7 +145,7 @@ public class ServiceLogin extends Service {
         }
 
         @Override
-        protected void onPostExecute(Response<DataServerResponse<String>> dataServerResponseResponse) {
+        protected void onPostExecute(Response<DataServerResponseList<String>> dataServerResponseResponse) {
             if(dataServerResponseResponse!= null){
                 PalaverEngine palaverEngine = PalaverEngine.getPalaverEngineInstance();
                 assert dataServerResponseResponse.body() != null;
