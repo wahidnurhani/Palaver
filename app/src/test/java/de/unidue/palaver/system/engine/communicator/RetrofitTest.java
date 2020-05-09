@@ -5,13 +5,13 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.Date;
 
-import de.unidue.palaver.system.engine.JSONBuilder;
+import de.unidue.palaver.system.httpclient.JSONBuilder;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.Message;
 import de.unidue.palaver.system.model.User;
-import de.unidue.palaver.system.retrofit.DataServerResponseList;
-import de.unidue.palaver.system.retrofit.DataServerResponse;
-import de.unidue.palaver.system.retrofit.PalaverPostAPI;
+import de.unidue.palaver.system.model.DataServerResponseList;
+import de.unidue.palaver.system.model.DataServerResponse;
+import de.unidue.palaver.system.httpclient.PalaverPostAPI;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -129,7 +129,7 @@ public class RetrofitTest {
         System.out.println(response.body().getInfo());
 
         if(response!=null){
-            System.out.println(response.body().getDateTime().getDateTime());
+            System.out.println(response.body().getDataDateTime().getDateTime());
         }
     }
 

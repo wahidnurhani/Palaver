@@ -1,6 +1,8 @@
 package de.unidue.palaver.system.model;
 
 
+import android.annotation.SuppressLint;
+
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -9,8 +11,10 @@ import androidx.room.PrimaryKey;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
-import de.unidue.palaver.system.engine.Parser;
+
 import de.unidue.palaver.system.roomdatabase.DBContract.TableMessage;
 
 
@@ -37,7 +41,7 @@ public class Message implements Comparable<Message>, Serializable {
 
     @NonNull
     @PrimaryKey
-    @SerializedName("DateTime")
+    @SerializedName("DataDateTime")
     @ColumnInfo(name = TableMessage.COLUMN_CHAT_DATETIME)
     private String date;
 
@@ -56,7 +60,7 @@ public class Message implements Comparable<Message>, Serializable {
         this.recipient = recipient;
         this.mimeType= "text/plain";
         this.message = message;
-        this.date = new Parser().dateToString(date);
+        this.date = dateToString(date);
     }
 
     @NonNull
@@ -116,5 +120,11 @@ public class Message implements Comparable<Message>, Serializable {
                 ", mimeType='" + mimeType + '\'' +
                 ", date='" + date + '\'' +
                 '}';
+    }
+
+    public String dateToString(Date date){
+        String pattern = "yyyy-MM-dd'T'hh:mm:ssZ";
+        @SuppressLint("SimpleDateFormat") DateFormat dateFormat = new SimpleDateFormat(pattern);
+        return dateFormat.format(date);
     }
 }

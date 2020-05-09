@@ -17,7 +17,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.List;
 
 import de.unidue.palaver.R;
-import de.unidue.palaver.system.SessionManager;
+import de.unidue.palaver.system.engine.SessionManager;
 import de.unidue.palaver.system.engine.PalaverEngine;
 import de.unidue.palaver.system.model.Chat;
 import de.unidue.palaver.system.viewmodel.ChatsViewModel;

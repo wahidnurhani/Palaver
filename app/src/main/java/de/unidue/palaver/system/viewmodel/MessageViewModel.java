@@ -9,13 +9,11 @@ import androidx.lifecycle.AndroidViewModel;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import de.unidue.palaver.system.SessionManager;
+import de.unidue.palaver.system.engine.SessionManager;
 import de.unidue.palaver.system.engine.PalaverEngine;
-import de.unidue.palaver.system.engine.Parser;
 import de.unidue.palaver.system.model.Message;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.User;
@@ -59,13 +57,12 @@ public class MessageViewModel extends AndroidViewModel implements Comparable<Mes
     }
 
     public void addMessage(Activity activity, String text) {
-        Parser parser = new Parser();
          Message message = new Message(
                  user.getUserName(),
                  friend.getUsername(),
-                 text
-                 ,parser.dateToString(new Date()));
-        PalaverEngine.getPalaverEngineInstance().handleSendMessage(
+                 text,
+                 new Date());
+         PalaverEngine.getPalaverEngineInstance().handleSendMessage(
                 getApplication(),
                 activity,
                 friend,

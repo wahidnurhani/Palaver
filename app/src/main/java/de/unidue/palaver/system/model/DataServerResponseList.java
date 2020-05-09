@@ -1,11 +1,9 @@
-package de.unidue.palaver.system.retrofit;
+package de.unidue.palaver.system.model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
-
-import de.unidue.palaver.system.values.StringValue;
 
 public class DataServerResponseList<T> extends ServerResponse {
 

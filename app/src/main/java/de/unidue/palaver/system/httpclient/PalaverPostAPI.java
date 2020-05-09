@@ -1,9 +1,10 @@
-package de.unidue.palaver.system.retrofit;
+package de.unidue.palaver.system.httpclient;
 
-import de.unidue.palaver.system.engine.JSONBuilder;
+import de.unidue.palaver.system.model.DataServerResponse;
+import de.unidue.palaver.system.model.DataServerResponseList;
 import de.unidue.palaver.system.model.Message;
 import de.unidue.palaver.system.model.User;
-import de.unidue.palaver.system.values.StringValue;
+import de.unidue.palaver.system.model.StringValue;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
@@ -22,7 +23,7 @@ public interface PalaverPostAPI {
     Call<DataServerResponseList<String>> register(@Body User body);
 
     @POST(StringValue.APICmd.ADD_FRIEND)
-    Call<DataServerResponseList<String>> addFriend(@Body User.AndFriend body);
+    Call<DataServerResponseList<String>> addFriend(@Body JSONBuilder.UserAndFriend body);
 
     @POST(StringValue.APICmd.GET_MESSAGE)
     Call<DataServerResponseList<Message>> getMessage(@Body JSONBuilder.UserAndRecipient body);

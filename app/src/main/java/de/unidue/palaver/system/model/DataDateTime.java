@@ -2,9 +2,9 @@ package de.unidue.palaver.system.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class DateTime<T> {
+public class DataDateTime {
 
-    @SerializedName("DateTime")
+    @SerializedName("DataDateTime")
     private String dateTime;
 
     public String getDateTime() {
@@ -17,7 +17,7 @@ public class DateTime<T> {
 
     @Override
     public String toString() {
-        return "DateTime{" +
+        return "DataDateTime{" +
                 "dateTime='" + dateTime + '\'' +
                 '}';
     }

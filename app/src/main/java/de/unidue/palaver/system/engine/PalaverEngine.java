@@ -2,26 +2,18 @@ package de.unidue.palaver.system.engine;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
-
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import java.io.IOException;
 import java.util.Date;
-import java.util.List;
-import java.util.TimeZone;
 
-import de.unidue.palaver.system.SessionManager;
 import de.unidue.palaver.system.model.Message;
-import de.unidue.palaver.system.retrofit.DataServerResponseList;
-import de.unidue.palaver.system.retrofit.NewCommunicator;
+import de.unidue.palaver.system.model.DataServerResponseList;
+import de.unidue.palaver.system.httpclient.NewCommunicator;
 import de.unidue.palaver.system.service.ServiceLogin;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.User;
 import de.unidue.palaver.system.roomdatabase.DatabaseCleaner;
-import de.unidue.palaver.system.roomdatabase.PalaverDao;
-import de.unidue.palaver.system.roomdatabase.PalaverRoomDatabase;
 import de.unidue.palaver.system.service.ServiceAddFriend;
 import de.unidue.palaver.system.service.ServiceFetchAllChat;
 import de.unidue.palaver.system.service.ServiceSendMessage;
@@ -31,10 +23,8 @@ import retrofit2.Response;
 public class PalaverEngine implements IPalaverEngine {
     private static final String TAG = PalaverEngine.class.getSimpleName();
 
-    private Communicator communicator;
     private UIController uiController;
     private static PalaverEngine palaverEngineInstance;
-    private String serverTimeZone;
 
     public static PalaverEngine getPalaverEngineInstance() {
         if(palaverEngineInstance ==null){
@@ -44,21 +34,7 @@ public class PalaverEngine implements IPalaverEngine {
     }
 
     private PalaverEngine() {
-        this.communicator = new Communicator();
         this.uiController = new UIController();
-        TimeZone timeZone= TimeZone.getTimeZone("Europe/Berlin");
-        int offset = 3600000/timeZone.getRawOffset();
-        int dstOffset = timeZone.getDSTSavings()/3600000;
-        int timezoneInt = offset+dstOffset;
-        serverTimeZone = "+"+timezoneInt;
-    }
-
-    public String getServerTimeZone() {
-        return serverTimeZone;
-    }
-
-    public Communicator getCommunicator() {
-        return communicator;
     }
 
     public UIController getUiController() {
@@ -109,19 +85,6 @@ public class PalaverEngine implements IPalaverEngine {
         ServiceAddFriend.startIntent(applicationContext, activity, username);
     }
 
-    public void handleFetchAllChatRequestWithNoService(Context applicationContext) {
-
-        PalaverRoomDatabase palaverRoomDatabase = PalaverRoomDatabase.getDatabase(applicationContext);
-        PalaverDao palaverDao = palaverRoomDatabase.palaverDao();
-        List<Friend> friends = palaverDao.loadAllFriend();
-
-        for(Friend friend : friends){
-            CommunicatorResult<Message> communicatorResult = communicator.getMessage(SessionManager.getSessionManagerInstance(applicationContext).getUser(), friend);
-            for(Message message : communicatorResult.getData()){
-                palaverDao.insert(message);
-            }
-        }
-    }
 
     public void handleChangePasswordRequest(String newPassword){
         //TODO change password to server . if it success then SessionManager handle the changed Password
@@ -151,11 +114,6 @@ public class PalaverEngine implements IPalaverEngine {
         uiController.openFriendManagerActivity(activity);
     }
 
-    public void handleOpenChatRoomRequest(Activity activity, Friend friend) {
-        Log.i(TAG, "Check uiController ChatRoomActivity: "+ (uiController!=null));
-        uiController.openChatRoom(activity, friend);
-    }
-
     public void handleOpenAddFriendDialogRequest(Context applicationContext, Activity activity) {
         Log.i(TAG, "Check uiController open addFriend Dialog: "+ (uiController!=null));
         uiController.openAddFriendDDialog(applicationContext, activity);
@@ -173,18 +131,6 @@ public class PalaverEngine implements IPalaverEngine {
 
     public void hadleOpenSplashScreenActivityRequest(Activity activity) {
         uiController.openSplashScreenActivity(activity);
-    }
-
-    public void handleStartSessionRequest(Context applicationContext, User user) {
-        SessionManager sessionManager = SessionManager.getSessionManagerInstance(applicationContext);
-        sessionManager.setUser(user);
-        sessionManager.startSession(user.getUserName(),
-                user.getPassword());
-    }
-
-    public void handleSendLocalBroadCastRequest(Context applicationContext, String action) {
-        Intent intent = new Intent(action);
-        LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent);
     }
 
     public void handleOpenSettingRequest(Context applicationContext, Activity activity) {

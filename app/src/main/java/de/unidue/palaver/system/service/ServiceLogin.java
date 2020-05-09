@@ -15,17 +15,17 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.unidue.palaver.system.SessionManager;
-import de.unidue.palaver.system.engine.JSONBuilder;
+import de.unidue.palaver.system.engine.SessionManager;
+import de.unidue.palaver.system.httpclient.JSONBuilder;
 import de.unidue.palaver.system.engine.PalaverEngine;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.Message;
 import de.unidue.palaver.system.model.User;
-import de.unidue.palaver.system.retrofit.DataServerResponseList;
-import de.unidue.palaver.system.retrofit.NewCommunicator;
+import de.unidue.palaver.system.model.DataServerResponseList;
+import de.unidue.palaver.system.httpclient.NewCommunicator;
 import de.unidue.palaver.system.roomdatabase.PalaverDao;
 import de.unidue.palaver.system.roomdatabase.PalaverRoomDatabase;
-import de.unidue.palaver.system.values.StringValue;
+import de.unidue.palaver.system.model.StringValue;
 import retrofit2.Response;
 
 public class ServiceLogin extends Service {

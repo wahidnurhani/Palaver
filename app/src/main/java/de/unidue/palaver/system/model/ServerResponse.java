@@ -1,9 +1,7 @@
-package de.unidue.palaver.system.retrofit;
+package de.unidue.palaver.system.model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
-import de.unidue.palaver.system.values.StringValue;
 
 public class ServerResponse {
 
@@ -14,8 +12,6 @@ public class ServerResponse {
     @Expose
     @SerializedName(StringValue.JSONKeyName.INFO)
     private String info;
-
-
 
     public int getMessageType() {
         return messageType;

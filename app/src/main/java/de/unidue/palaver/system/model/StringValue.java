@@ -1,4 +1,4 @@
-package de.unidue.palaver.system.values;
+package de.unidue.palaver.system.model;
 
 import android.content.Intent;
 
@@ -54,7 +54,7 @@ public class StringValue {
         public static final String RECIPIENT = "Recipient";
         public static final String MIME_TYPE = "Mimetype";
         public static final String MIME_TYPE_VALUE = "text/plain";
-        public static final String DATE_TIME = "DateTime";
+        public static final String DATE_TIME = "DataDateTime";
         public static final String SENDER = "Sender";
     }
 

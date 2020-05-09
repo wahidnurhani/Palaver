@@ -15,7 +15,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import java.util.Objects;
 
 import de.unidue.palaver.R;
-import de.unidue.palaver.system.values.StringValue;
+import de.unidue.palaver.system.model.StringValue;
 import de.unidue.palaver.system.engine.PalaverEngine;
 import de.unidue.palaver.system.model.User;
 

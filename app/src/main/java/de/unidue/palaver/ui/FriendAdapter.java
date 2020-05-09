@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 import de.unidue.palaver.R;
 import de.unidue.palaver.system.model.Friend;
-import de.unidue.palaver.system.values.StringValue;
+import de.unidue.palaver.system.model.StringValue;
 
 
 public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendViewHolder> {

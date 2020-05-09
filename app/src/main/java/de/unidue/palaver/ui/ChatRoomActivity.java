@@ -19,7 +19,7 @@ import de.unidue.palaver.system.engine.PalaverEngine;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.viewmodel.ListLiveData;
 import de.unidue.palaver.system.model.Message;
-import de.unidue.palaver.system.values.StringValue;
+import de.unidue.palaver.system.model.StringValue;
 
 public class ChatRoomActivity extends AppCompatActivity {
     public static String TAG = ChatRoomActivity.class.getSimpleName();

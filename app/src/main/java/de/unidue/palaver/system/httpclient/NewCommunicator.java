@@ -1,14 +1,12 @@
-package de.unidue.palaver.system.retrofit;
+package de.unidue.palaver.system.httpclient;
 
 import java.io.IOException;
-import java.util.TimeZone;
 
-import de.unidue.palaver.system.engine.JSONBuilder;
-import de.unidue.palaver.system.engine.PalaverEngine;
+import de.unidue.palaver.system.model.DataServerResponse;
+import de.unidue.palaver.system.model.DataServerResponseList;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.Message;
 import de.unidue.palaver.system.model.User;
-import de.unidue.palaver.ui.ProgressDialog;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
@@ -17,19 +15,11 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class NewCommunicator {
     private PalaverPostAPI service;
-    private PalaverEngine palaverEngine;
-    private ProgressDialog progressDialog;
-    private String serverTimeZone;
-
+    private Retrofit retrofit;
+    private Call<DataServerResponseList<String>> callListString;
 
     public NewCommunicator() {
-        TimeZone timeZone= TimeZone.getTimeZone("Europe/Berlin");
-        int offset = 3600000/timeZone.getRawOffset();
-        int dstOffset = timeZone.getDSTSavings()/3600000;
-        int timezoneInt = offset+dstOffset;
-        serverTimeZone = "+"+timezoneInt;
-        palaverEngine = PalaverEngine.getPalaverEngineInstance();
-        Retrofit retrofit = new Retrofit.Builder()
+        retrofit = new Retrofit.Builder()
                 .baseUrl(PalaverPostAPI.BASE_URL)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
@@ -38,28 +28,25 @@ public class NewCommunicator {
     }
 
     public Response<DataServerResponseList<String>> authenticate(User user) throws IOException {
-        Call<DataServerResponseList<String>> call= service.validate(user);
-        return call.execute();
+        callListString = service.validate(user);
+        return callListString.execute();
     }
 
     public Response<DataServerResponseList<String>> register(User user) throws IOException {
-        Call<DataServerResponseList<String>> call= service.register(user);
-        return call.execute();
+        callListString = service.register(user);
+        return callListString.execute();
     }
 
     public Response<DataServerResponseList<String>> fetchAllFriend(User user) throws IOException {
-        Call<DataServerResponseList<String>> call= service.getFriends(user);
-        return call.execute();
+        callListString = service.getFriends(user);
+        return callListString.execute();
     }
 
     public Response<DataServerResponseList<String>> addFriend(User user, Friend friend) throws IOException {
-        User.AndFriend userAndFriend = new User.AndFriend(
-                user.getUserName(),
-                user.getPassword(),
-                friend.getUsername());
+        JSONBuilder.UserAndFriend userAndFriend = new JSONBuilder.UserAndFriend(user,friend);
 
-        Call<DataServerResponseList<String>> call = service.addFriend(userAndFriend);
-        return call.execute();
+        callListString = service.addFriend(userAndFriend);
+        return callListString.execute();
     }
 
     public Response<DataServerResponseList<Message>> getMessage(JSONBuilder.UserAndRecipient body) throws IOException {

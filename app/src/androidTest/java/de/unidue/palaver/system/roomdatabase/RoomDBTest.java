@@ -17,7 +17,6 @@ import java.util.List;
 
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.Message;
-import de.unidue.palaver.system.values.MessageType;
 
 import static org.junit.Assert.*;
 

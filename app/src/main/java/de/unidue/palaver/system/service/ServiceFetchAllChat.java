@@ -14,15 +14,13 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import java.util.List;
 
-import de.unidue.palaver.system.SessionManager;
-import de.unidue.palaver.system.engine.Communicator;
+import de.unidue.palaver.system.engine.SessionManager;
 import de.unidue.palaver.system.engine.PalaverEngine;
 import de.unidue.palaver.system.engine.UIController;
 import de.unidue.palaver.system.model.Message;
-import de.unidue.palaver.system.engine.CommunicatorResult;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.User;
-import de.unidue.palaver.system.values.StringValue;
+import de.unidue.palaver.system.model.StringValue;
 import de.unidue.palaver.system.roomdatabase.PalaverDao;
 import de.unidue.palaver.system.roomdatabase.PalaverRoomDatabase;
 

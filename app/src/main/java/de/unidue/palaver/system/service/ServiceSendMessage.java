@@ -15,16 +15,16 @@ import androidx.annotation.Nullable;
 import java.io.IOException;
 import java.util.Objects;
 
-import de.unidue.palaver.system.SessionManager;
+import de.unidue.palaver.system.engine.SessionManager;
 
-import de.unidue.palaver.system.engine.JSONBuilder;
+import de.unidue.palaver.system.httpclient.JSONBuilder;
 import de.unidue.palaver.system.engine.PalaverEngine;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.Message;
 import de.unidue.palaver.system.model.User;
-import de.unidue.palaver.system.retrofit.DataServerResponse;
-import de.unidue.palaver.system.retrofit.NewCommunicator;
-import de.unidue.palaver.system.values.StringValue;
+import de.unidue.palaver.system.model.DataServerResponse;
+import de.unidue.palaver.system.httpclient.NewCommunicator;
+import de.unidue.palaver.system.model.StringValue;
 import de.unidue.palaver.system.roomdatabase.PalaverDao;
 import de.unidue.palaver.system.roomdatabase.PalaverRoomDatabase;
 import retrofit2.Response;
@@ -86,7 +86,7 @@ public class ServiceSendMessage extends Service {
                 response = newCommunicator.sendMessage(body);
                 assert response.body() != null;
                 if(response.body().getMessageType()==1){
-                    message.setDate(response.body().getDateTime().getDateTime());
+                    message.setDate(response.body().getDataDateTime().getDateTime());
                     palaverDao.insert(message);
                 }
             } catch (IOException e) {
