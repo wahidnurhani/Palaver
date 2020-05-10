@@ -5,20 +5,20 @@ import com.google.gson.annotations.SerializedName;
 public class StackApiResponseDate extends StackApiResponse {
 
     @SerializedName("Data")
-    private DataDateTime dataDateTime;
+    private DateTime dateTime;
 
-    public DataDateTime getDataDateTime() {
-        return dataDateTime;
+    public DateTime getDateTime() {
+        return dateTime;
     }
 
     @Override
     public String toString() {
         return "StackApiResponseDate{" +
-                "dataDateTime=" + dataDateTime +
+                "dateTime=" + dateTime +
                 '}';
     }
 
-    public class DataDateTime {
+    public class DateTime {
 
         @SerializedName("DateTime")
         private String dateTime;
@@ -29,7 +29,7 @@ public class StackApiResponseDate extends StackApiResponse {
 
         @Override
         public String toString() {
-            return "DataDateTime{" +
+            return "DateTime{" +
                     "dateTime='" + dateTime + '\'' +
                     '}';
         }

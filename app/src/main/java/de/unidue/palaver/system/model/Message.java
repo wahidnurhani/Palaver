@@ -85,17 +85,9 @@ public class Message implements Comparable<Message>, Serializable {
         return sender;
     }
 
-    public void setSender(String sender){
-        this.sender = sender;
-    }
-
     @NonNull
     public String getRecipient() {
         return recipient;
-    }
-
-    public void setRecipient(String recipient){
-        this.recipient = recipient;
     }
 
     public String getMimeType() {

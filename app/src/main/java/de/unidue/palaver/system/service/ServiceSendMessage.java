@@ -85,12 +85,12 @@ public class ServiceSendMessage extends Service {
             try {
                 response = retrofit.sendMessage(body);
                 System.out.println("response date --------------------------- : ");
-                System.out.println(response.body().getDataDateTime().getDateTime());
+                System.out.println(response.body().getDateTime().getDateTime());
                 assert response.body() != null;
                 if(response.body().getMessageType()==1){
                     System.out.println("message date before set--------------------------- : ");
                     System.out.println(message.getDate());
-                    message.setDate(response.body().getDataDateTime().getDateTime());
+                    message.setDate(response.body().getDateTime().getDateTime());
                     System.out.println("message date after set--------------------------- : ");
                     System.out.println(message.getDate());
                     message.setFriendUserName(friend.getUsername());

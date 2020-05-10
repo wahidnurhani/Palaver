@@ -23,7 +23,7 @@ public abstract class PalaverRoomDatabase extends RoomDatabase {
     @SuppressLint("StaticFieldLeak")
     private static volatile PalaverRoomDatabase palaverRoomInstance;
 
-    public static PalaverRoomDatabase getDatabase(final Context context) {
+    public synchronized static PalaverRoomDatabase getDatabase(final Context context) {
         if(palaverRoomInstance == null){
             synchronized (PalaverRoomDatabase.class) {
                 palaverRoomInstance = Room.databaseBuilder(context.getApplicationContext(),

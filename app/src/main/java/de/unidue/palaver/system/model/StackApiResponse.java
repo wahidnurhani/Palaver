@@ -21,7 +21,6 @@ public class StackApiResponse {
         return info;
     }
 
-
     @Override
     public String toString() {
         return "StackApiResponse{" +

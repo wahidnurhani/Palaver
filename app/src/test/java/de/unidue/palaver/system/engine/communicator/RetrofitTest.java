@@ -132,7 +132,7 @@ public class RetrofitTest {
         System.out.println(response.body().getInfo());
 
         if(response!=null){
-            System.out.println(response.body().getDataDateTime().getDateTime());
+            System.out.println(response.body().getDateTime().getDateTime());
         }
     }
 
