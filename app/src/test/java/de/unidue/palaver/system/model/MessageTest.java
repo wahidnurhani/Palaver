@@ -17,6 +17,7 @@ public class MessageTest {
         Friend friend = new Friend("Test");
         Message message = new Message(friend.getUsername(), friend.getUsername(), "saya", "Hallo World", new Date());
         assertEquals("Test", message.getSender());
+        System.out.println(message.toString());
     }
 
 
@@ -25,6 +26,7 @@ public class MessageTest {
         Friend friend = new Friend("Test");
         Message message = new Message(friend.getUsername(),friend.getUsername(), "saya", "Hallo World", new Date());
         assertEquals("Hallo World", message.getMessage());
+        System.out.println(message.toString());
     }
 
 
@@ -33,9 +35,9 @@ public class MessageTest {
         Friend friend = new Friend("Test");
         String serverTime = "2016-02-12T17:01:44.6224075+02:00";
         Message message = new Message(friend.getUsername(), "saya", "Hallo World",  serverTime);
+        System.out.println(message.toString());
         assertNotNull(message.getDate());
-        System.out.println(message.getDate());
-        System.out.println(message.getDate());
+
     }
 
     @Test

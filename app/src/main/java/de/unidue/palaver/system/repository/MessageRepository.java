@@ -6,7 +6,6 @@ import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
 
-import java.io.Serializable;
 import java.util.List;
 
 import de.unidue.palaver.system.model.Friend;
@@ -15,7 +14,7 @@ import de.unidue.palaver.system.roomdatabase.PalaverDao;
 import de.unidue.palaver.system.roomdatabase.PalaverRoomDatabase;
 import de.unidue.palaver.system.service.ServiceSendMessage;
 
-public class MessageRepository implements Serializable {
+public class MessageRepository {
     private PalaverDao palaverDao;
     private Friend friend;
 
@@ -107,6 +106,7 @@ public class MessageRepository implements Serializable {
             return null;
         }
     }
+
     public static class DeleteAsyntask extends AsyncTask<Message, Void, Void>{
         private PalaverDao palaverDao;
 
@@ -134,6 +134,7 @@ public class MessageRepository implements Serializable {
             return null;
         }
     }
+
     public static class UpdateAsynctask extends AsyncTask<Message, Void, Void>{
         private PalaverDao palaverDao;
 

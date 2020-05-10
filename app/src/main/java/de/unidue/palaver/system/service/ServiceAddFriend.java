@@ -14,9 +14,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import java.io.IOException;
 
-import de.unidue.palaver.system.engine.SessionManager;
-import de.unidue.palaver.system.engine.PalaverEngine;
-import de.unidue.palaver.system.engine.UIController;
+import de.unidue.palaver.system.sessionmanager.SessionManager;
 import de.unidue.palaver.system.model.StackApiResponseList;
 import de.unidue.palaver.system.httpclient.Retrofit;
 import de.unidue.palaver.system.model.StringValue;
@@ -24,12 +22,12 @@ import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.User;
 import de.unidue.palaver.system.roomdatabase.PalaverDao;
 import de.unidue.palaver.system.roomdatabase.PalaverRoomDatabase;
+import de.unidue.palaver.ui.CustomToast;
 import retrofit2.Response;
 
 public class ServiceAddFriend extends Service {
     private static final String TAG= ServiceAddFriend.class.getSimpleName();
     private SessionManager sessionManager;
-    private UIController uiController;
 
     public static void startIntent(Context applicationContext, Activity activity, String username) {
         Intent intent = new Intent(applicationContext, ServiceAddFriend.class);
@@ -47,7 +45,6 @@ public class ServiceAddFriend extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
 
         sessionManager = SessionManager.getSessionManagerInstance(getApplicationContext());
-        uiController = PalaverEngine.getPalaverEngineInstance().getUiController();
 
         String friendUsername = intent.getCharSequenceExtra(StringValue.IntentKeyName.FRIEND).toString();
         FetchAddFriend fetchAddFriend= new FetchAddFriend();
@@ -92,7 +89,7 @@ public class ServiceAddFriend extends Service {
             super.onPostExecute(s);
             if(s!=null){
                 assert s.body() != null;
-                uiController.showToast(getApplicationContext(), s.body().getInfo());
+                CustomToast.makeText(getApplicationContext(), s.body().getInfo());
             }
             onDestroy();
         }

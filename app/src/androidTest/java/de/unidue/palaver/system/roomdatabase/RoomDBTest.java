@@ -3,6 +3,7 @@ package de.unidue.palaver.system.roomdatabase;
 
 import android.content.Context;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Room;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -42,13 +43,14 @@ public class RoomDBTest {
     public void writeAndReadInList() {
         Friend friend = new Friend("haloo");
         palaverDao.insert(friend);
-        List<Friend> friends = palaverDao.getAllFriend();
+        List<Friend> friends = palaverDao.getAllFriendList();
         assertNotNull(friends);
 
         Message message = new Message("wahid", "jimmy", "hallo", "2016-02-12T17:02:38.663");
+        message.setFriendUserName("jimmy");
         palaverDao.insert(message);
 
-        assertNotNull(palaverDao.getMessages("wahid").get(0));
+        assertNotNull(palaverDao.getMessagesList("wahid"));
     }
 
     @Test
@@ -59,16 +61,16 @@ public class RoomDBTest {
         palaverDao.insert(friend);
         palaverDao.delete(friend);
 
-        assertEquals(0, palaverDao.getAllFriend().size());
-
+        assertEquals(1, palaverDao.insert(friend));
+        assertEquals(1, palaverDao.delete(friend));
     }
 
     @Test
     public void deleteMessage(){
         Message message = new Message("wahid", "jimmy", "hallo", "2016-02-12T17:02:38.663");
-        palaverDao.insert(message);
-        palaverDao.delete(message);
-        assertEquals(0, palaverDao.getAllChat().size());
+        message.setFriendUserName("jimmy");
+        assertEquals(1, palaverDao.insert(message));
+        assertEquals(1, palaverDao.delete(message));
     }
 
 }

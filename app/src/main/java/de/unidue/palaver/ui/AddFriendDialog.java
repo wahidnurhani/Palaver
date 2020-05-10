@@ -11,7 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import de.unidue.palaver.R;
-import de.unidue.palaver.system.engine.SessionManager;
+import de.unidue.palaver.system.sessionmanager.SessionManager;
 import de.unidue.palaver.system.model.StringValue;
 import de.unidue.palaver.system.service.ServiceAddFriend;
 

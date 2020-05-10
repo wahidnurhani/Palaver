@@ -20,36 +20,44 @@ import de.unidue.palaver.system.model.Message;
 public interface PalaverDao{
 
     @Insert (onConflict = OnConflictStrategy.REPLACE)
-    void insert(Friend friend);
+    long insert(Friend friend);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(Message message);
+    long insert(Message message);
 
     @Delete
-    void delete(Friend friend);
+    int delete(Friend friend);
 
     @Delete
-    void delete(Message message);
+    int delete(Message message);
 
     @Query("SELECT * FROM table_friend")
     LiveData<List<Friend>> getAllFriend();
+
+    @Query("SELECT * FROM table_friend")
+    List<Friend> getAllFriendList();
+
 
     @Query("SELECT * " +
             "FROM (select fk_friend, table_chat_data.data, date_time " +
             "from table_friend INNER JOIN table_chat_data " +
             "on fk_friend = friend_name order by date_time ASC) " +
             "GROUP By fk_friend ")
-    List <Chat> getAllChat();
+    LiveData<List<Chat>> getAllChat();
 
     @Query("SELECT * From table_chat_data WHERE sender = :friendName " +
             "OR recipient = :friendName ORDER BY date_time ASC" )
     LiveData<List<Message>> getMessages(String friendName);
 
-    @Update
-    void updateMessage(Message message);
+    @Query("SELECT * From table_chat_data WHERE sender = :friendName " +
+            "OR recipient = :friendName ORDER BY date_time ASC" )
+    List<Message> getMessagesList(String friendName);
 
     @Update
-    void updateMessages(Message... messages);
+    int updateMessage(Message message);
+
+    @Update
+    int updateMessages(Message... messages);
 
     @Query("SELECT * FROM table_friend WHERE friend_name = :friendUserName")
     Friend findUserByName(String friendUserName);
@@ -61,8 +69,10 @@ public interface PalaverDao{
     int deleteAllChat();
 
     @Update
-    void update(Friend friend);
+    int update(Friend friend);
 
     @Update
-    void update(Message message);
+    int update(Message message);
+
+
 }

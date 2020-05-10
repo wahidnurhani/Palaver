@@ -16,8 +16,7 @@ import java.util.Objects;
 
 import de.unidue.palaver.R;
 import de.unidue.palaver.system.model.StringValue;
-import de.unidue.palaver.system.engine.PalaverEngine;
-import de.unidue.palaver.system.model.User;
+import de.unidue.palaver.system.service.ServiceLogin;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -25,14 +24,18 @@ public class LoginActivity extends AppCompatActivity {
     private static boolean visibility;
 
     private EditText userNameEditText, passwordEditText;
-    private PalaverEngine palaverEngine;
 
     private BroadcastReceiver loginResultReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            palaverEngine.hadleOpenSplashScreenActivityRequest(LoginActivity.this);
+            SplashScreenActivity.startActivity(LoginActivity.this);
         }
     };
+
+    public static void startActivity(Context context) {
+        Intent intent = new Intent(context, LoginActivity.class);
+        context.startActivity(intent);
+    }
 
 
     @Override
@@ -40,7 +43,6 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.activity_login);
-        palaverEngine = PalaverEngine.getPalaverEngineInstance();
 
         LocalBroadcastManager.getInstance(this).registerReceiver(loginResultReceiver,
                 new IntentFilter(StringValue.IntentAction.BROADCAST_LOGINRESULT));
@@ -52,22 +54,22 @@ public class LoginActivity extends AppCompatActivity {
         passwordEditText = findViewById(R.id.login_password_editText);
         loginButton.setOnClickListener(v -> {
             if(validateUserInput()){
-                User user = new User(userNameEditText.getText().toString(),
-                        passwordEditText.getText().toString());
-                palaverEngine.handleLoginRequest(getApplicationContext(),
-                        LoginActivity.this, user);
+                String username = userNameEditText.getText().toString().trim();
+                String password = passwordEditText.getText().toString().trim();
+                ServiceLogin.startIntent(getApplicationContext(),
+                        this, username, password);
             }
         });
 
         toRegisterTextView.setOnClickListener(v -> {
-            palaverEngine.handleOpenRegisterActivityRequest(LoginActivity.this);
-            overridePendingTransition(0,0);
+            RegisterActivity.startActivity(LoginActivity.this);
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         });
     }
 
     private boolean validateUserInput() {
         if (userNameEditText.getText().toString().equals("") || passwordEditText.getText().toString().equals("")){
-            palaverEngine.handleShowErrorDialogRequest(LoginActivity.this,
+            ErrorDialog.show(LoginActivity.this,
                     StringValue.ErrorMessage.USERNAME_PASSWORD_BLANK);
             return false;
         }

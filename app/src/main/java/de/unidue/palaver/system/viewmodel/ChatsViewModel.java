@@ -1,93 +1,53 @@
 package de.unidue.palaver.system.viewmodel;
 
-import android.annotation.SuppressLint;
 import android.app.Application;
-import android.os.AsyncTask;
 
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+import de.unidue.palaver.system.sessionmanager.SessionManager;
 import de.unidue.palaver.system.model.Chat;
-import de.unidue.palaver.system.roomdatabase.PalaverDao;
-import de.unidue.palaver.system.roomdatabase.PalaverRoomDatabase;
+import de.unidue.palaver.system.repository.ChatRepository;
 
 public class ChatsViewModel extends AndroidViewModel {
 
-    private ListLiveData<Chat> chatListLiveData;
-    private PalaverDao palaverDao;
+    private ChatRepository chatRepository;
+    private LiveData<List<Chat>> chats;
 
     public ChatsViewModel(Application application) {
         super(application);
-
-        PalaverRoomDatabase palaverRoomDatabase = PalaverRoomDatabase.getDatabase(application);
-        palaverDao = palaverRoomDatabase.palaverDao();
-        this.chatListLiveData = new ListLiveData<>();
-        this.chatListLiveData.setValue(new ArrayList<>());
-        this.fetchChats();
+        chatRepository = new ChatRepository(application);
+        this.chats = chatRepository.getChats();
     }
 
-    public ListLiveData<Chat> getChatListLiveData() {
-        return chatListLiveData;
-    }
-
-    public void removeChat(Chat chat){
-        new RemoveChatFromDB().execute(chat);
-    }
-
-    private void fetchChats() {
-        FectchChatListFromDB fectchChatListFromDB = new FectchChatListFromDB();
-        fectchChatListFromDB.execute();
+    public LiveData<List<Chat>> getChats() {
+        return chats;
     }
 
     public List<Chat> search(String newText) {
         List<Chat> searched = new ArrayList<>();
-        for (Chat chat: Objects.requireNonNull(chatListLiveData.getValue())){
+        for (Chat chat: Objects.requireNonNull(chats.getValue())){
             if(chat.getFk_friend().contains(newText)){
                 searched.add(chat);
             }
         }
         if(newText.equals("")){
-            searched =chatListLiveData.getValue();
+            searched = chats.getValue();
         }
         return searched;
-    }
-
-    @SuppressLint("StaticFieldLeak")
-    private class FectchChatListFromDB extends AsyncTask<Void, Void, List<Chat>> {
-
-        @Override
-        protected List<Chat> doInBackground(Void... voids) {
-            List<Chat> result= palaverDao.getAllChat();
-            List<Chat> returnValue = new ArrayList<>();
-            for (Chat chat : result){
-                if(chat.getData()!=null){
-                    returnValue.add(chat);
-                }
-            }
-            return returnValue;
-        }
-
-        @Override
-        protected void onPostExecute(List<Chat> chats) {
-            Collections.sort(chats);
-            chatListLiveData.override(chats);
-        }
-    }
-
-    private class RemoveChatFromDB extends AsyncTask<Chat, Void, Void>{
-
-        @Override
-        protected Void doInBackground(Chat... chats) {
-            return null;
-        }
     }
 
     @Override
     protected void onCleared() {
         super.onCleared();
+    }
+
+    public void handleLogoutRequest() {
+        SessionManager.getSessionManagerInstance(getApplication()).endSession();
+        chatRepository.cleanDatabase();
     }
 }

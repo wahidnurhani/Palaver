@@ -1,5 +1,7 @@
 package de.unidue.palaver.ui;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -8,17 +10,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceFragmentCompat;
 
 import de.unidue.palaver.R;
-import de.unidue.palaver.system.engine.PalaverEngine;
 import de.unidue.palaver.system.roomdatabase.PalaverRoomDatabase;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    private PalaverEngine palaverEngine;
+
+
+    public static void startActivity(Context context) {
+        Intent intent = new Intent(context, SettingsActivity.class);
+        context.startActivity(intent);
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == android.R.id.home){
-            palaverEngine.handleOpenChatManagerActivityRequest(SettingsActivity.this);
+            ChatManagerActivity.startActivity(SettingsActivity.this);
             overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_rigt);
         }
         return super.onOptionsItemSelected(item);
@@ -29,7 +35,6 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_activity);
 
-        palaverEngine =PalaverEngine.getPalaverEngineInstance();
         PalaverRoomDatabase.getDatabase(getApplicationContext());
 
         getSupportFragmentManager()

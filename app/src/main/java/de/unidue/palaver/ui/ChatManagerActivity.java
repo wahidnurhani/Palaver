@@ -19,16 +19,13 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.List;
 
 import de.unidue.palaver.R;
-import de.unidue.palaver.system.engine.SessionManager;
-import de.unidue.palaver.system.engine.PalaverEngine;
+import de.unidue.palaver.system.sessionmanager.SessionManager;
 import de.unidue.palaver.system.model.Chat;
 import de.unidue.palaver.system.viewmodel.ChatsViewModel;
-import de.unidue.palaver.system.viewmodel.ListLiveData;
 
 public class ChatManagerActivity extends AppCompatActivity {
     private static final String TAG = ChatManagerActivity.class.getSimpleName();
 
-    private PalaverEngine palaverEngine;
     private ChatsViewModel chatsViewModel;
     private ChatAdapter chatAdapter;
 
@@ -72,9 +69,10 @@ public class ChatManagerActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         if (item.getItemId()==R.id.menu_logout){
-            palaverEngine.handleLogoutRequest(getApplicationContext());
+            chatsViewModel.handleLogoutRequest();
+            LoginActivity.startActivity(ChatManagerActivity.this);
         } else if(item.getItemId()==R.id.menu_setting){
-            palaverEngine.handleOpenSettingRequest(getApplicationContext(), ChatManagerActivity.this);
+            SettingsActivity.startActivity(ChatManagerActivity.this);
         } else if(item.getItemId()==R.id.menu_addFriend){
             AddFriendDialog.startDialog(getApplicationContext(), this);
         }
@@ -85,25 +83,23 @@ public class ChatManagerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_manager);
-        palaverEngine = PalaverEngine.getPalaverEngineInstance();
 
         if(!SessionManager.getSessionManagerInstance(getApplicationContext()).chekLogin()){
-            palaverEngine.handleLogoutRequest(ChatManagerActivity.this);
+            chatsViewModel.handleLogoutRequest();
+            LoginActivity.startActivity(ChatManagerActivity.this);
         }
 
         chatsViewModel = ViewModelProviders.of(this).get(ChatsViewModel.class);
-        final ListLiveData<Chat> chatListLiveData = chatsViewModel.getChatListLiveData();
 
         FloatingActionButton floatingActionButton = findViewById(R.id.chatManager_addChatFloatingButton);
         floatingActionButton.setOnClickListener(v -> {
 
-            palaverEngine.handleOpenFriendManagerActivityRequest(ChatManagerActivity.this);
+            FriendManagerActivity.startActivity(ChatManagerActivity.this);
             overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
         });
 
         RecyclerView chatsRecyclerView = findViewById(R.id.chat_recycleView);
-
-        chatAdapter = new ChatAdapter(this, chatListLiveData.getValue());
+        chatAdapter = new ChatAdapter(this, chatsViewModel.getChats().getValue());
         chatsRecyclerView.setAdapter(chatAdapter);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -116,7 +112,7 @@ public class ChatManagerActivity extends AppCompatActivity {
                 linearLayoutManager.getOrientation());
         chatsRecyclerView.addItemDecoration(dividerItemDecoration);
 
-        chatListLiveData.observe(this, chats -> chatAdapter.notifyDataSetChanged());
+        chatsViewModel.getChats().observe(this, chats -> chatAdapter.setChats(chats));
 
     }
 

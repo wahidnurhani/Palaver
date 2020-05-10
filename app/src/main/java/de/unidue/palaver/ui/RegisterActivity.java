@@ -2,27 +2,36 @@ package de.unidue.palaver.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.io.IOException;
 import java.util.Objects;
 
 import de.unidue.palaver.R;
+import de.unidue.palaver.system.httpclient.Retrofit;
+import de.unidue.palaver.system.model.StackApiResponseList;
 import de.unidue.palaver.system.model.StringValue;
-import de.unidue.palaver.system.engine.PalaverEngine;
 import de.unidue.palaver.system.model.User;
+import retrofit2.Response;
 
 public class RegisterActivity extends AppCompatActivity {
 
     private static final String TAG= RegisterActivity.class.getSimpleName();
     private static boolean visibility;
-    private PalaverEngine palaverEngine;
 
     private EditText userNameEditText;
     private EditText passwordEditText;
     private EditText rePasswordEditText;
+
+    public static void startActivity(Context context) {
+        Intent intent = new Intent(context, RegisterActivity.class);
+        context.startActivity(intent);
+    }
 
 
     @Override
@@ -30,7 +39,6 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.activity_register);
-        palaverEngine = PalaverEngine.getPalaverEngineInstance();
 
         Button registerButton = findViewById(R.id.register_register_button);
         userNameEditText = findViewById(R.id.register_userName_editText);
@@ -38,17 +46,30 @@ public class RegisterActivity extends AppCompatActivity {
         rePasswordEditText = findViewById(R.id.register_repassword_editText);
         TextView backToLoginTextView = findViewById(R.id.register_backToLogin);
 
-        registerButton.setOnClickListener(e -> {
+        registerButton.setOnClickListener(view -> {
+
             if(validateUserInput()){
                 User user = new User(userNameEditText.getText().toString(),
                         passwordEditText.getText().toString());
-                palaverEngine.handleRegisterRequest(getApplicationContext(), RegisterActivity.this, user);
+
+                Retrofit retrofit = new Retrofit();
+                try {
+                    Response<StackApiResponseList<String>> response = retrofit.register(user);
+                    assert response.body() != null;
+                    if (response.body().getMessageType()==1){
+                        CustomToast.makeText(getApplicationContext(), response.body().getInfo());
+                        LoginActivity.startActivity(RegisterActivity.this);
+                        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_rigt);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
         backToLoginTextView.setOnClickListener(v -> {
-            palaverEngine.handleOpenLoginActivityRequest(RegisterActivity.this);
-            overridePendingTransition(0,0);
+            LoginActivity.startActivity(RegisterActivity.this);
+            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_rigt);
         });
     }
 
@@ -57,13 +78,13 @@ public class RegisterActivity extends AppCompatActivity {
         String password = passwordEditText.getText().toString();
         String rePassword = rePasswordEditText.getText().toString();
         if (username.equals("") || password.equals("") || rePassword.equals("")){
-            palaverEngine.handleShowErrorDialogRequest(RegisterActivity.this, StringValue.ErrorMessage.USERNAME_PASSWORD_BLANK);
+            ErrorDialog.show(RegisterActivity.this, StringValue.ErrorMessage.USERNAME_PASSWORD_BLANK);
             return false;
         } else if(!validString(username)){
-            palaverEngine.handleShowErrorDialogRequest(RegisterActivity.this, StringValue.ErrorMessage.PLEASE_INPUT_VALID_USERNAME_FORMAT);
+            ErrorDialog.show(RegisterActivity.this, StringValue.ErrorMessage.PLEASE_INPUT_VALID_USERNAME_FORMAT);
             return false;
         }else if (!password.equals(rePassword)) {
-            palaverEngine.handleShowErrorDialogRequest(RegisterActivity.this, StringValue.ErrorMessage.PASSWORD_DON_T_MATCH_EACH_OTHER);
+            ErrorDialog.show(RegisterActivity.this, StringValue.ErrorMessage.PASSWORD_DON_T_MATCH_EACH_OTHER);
             return false;
         }
         return true;
@@ -71,11 +92,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private boolean validString(String username) {
         char[] c = username.toCharArray();
-
-        if (Character.isDigit(c[0])) {
-            return false;
-        }
-        return true;
+        return !Character.isDigit(c[0]);
     }
 
     public static boolean isVisibility() {
@@ -96,7 +113,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        palaverEngine.handleOpenLoginActivityRequest(RegisterActivity.this);
-        overridePendingTransition(0,0);
+        LoginActivity.startActivity(RegisterActivity.this);
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_rigt);
     }
 }

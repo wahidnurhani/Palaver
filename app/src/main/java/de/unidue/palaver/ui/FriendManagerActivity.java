@@ -8,10 +8,8 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,11 +20,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.List;
 import java.util.Objects;
 
-import de.unidue.palaver.system.engine.PalaverEngine;
 import de.unidue.palaver.system.viewmodel.FriendViewModel;
 import de.unidue.palaver.R;
 import de.unidue.palaver.system.model.Friend;
-import de.unidue.palaver.system.viewmodel.ListLiveData;
 import de.unidue.palaver.system.model.StringValue;
 
 
@@ -35,6 +31,11 @@ public class FriendManagerActivity extends AppCompatActivity {
 
     private FriendViewModel friendViewModel;
     private FriendAdapter friendAdapter;
+
+    public static void startActivity(Context context) {
+        Intent intent = new Intent(context, FriendManagerActivity.class);
+        context.startActivity(intent);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

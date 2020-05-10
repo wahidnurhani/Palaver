@@ -2,24 +2,27 @@ package de.unidue.palaver.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import java.util.Objects;
 
 import de.unidue.palaver.R;
-import de.unidue.palaver.system.engine.PalaverEngine;
-import de.unidue.palaver.system.engine.UIController;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
     private static final String TAG = SplashScreenActivity.class.getSimpleName();
-    private UIController uiController;
+
+    public static void startActivity(Context context) {
+        Intent intent = new Intent(context, SplashScreenActivity.class);
+        context.startActivity(intent);
+    }
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        uiController = PalaverEngine.getPalaverEngineInstance().getUiController();
         Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.activity_splash_screen);
         SplashAction splashAction = new SplashAction();
@@ -34,7 +37,7 @@ public class SplashScreenActivity extends AppCompatActivity {
             }catch(InterruptedException e){
                 e.printStackTrace();
             }
-            uiController.openChatManagerActivity(SplashScreenActivity.this);
+            ChatManagerActivity.startActivity(SplashScreenActivity.this);
             SplashScreenActivity.this.finish();
         }
     }

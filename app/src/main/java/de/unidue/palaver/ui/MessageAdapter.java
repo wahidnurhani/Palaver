@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import de.unidue.palaver.R;
-import de.unidue.palaver.system.engine.SessionManager;
+import de.unidue.palaver.system.sessionmanager.SessionManager;
 import de.unidue.palaver.system.model.Message;
 
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHolder>{

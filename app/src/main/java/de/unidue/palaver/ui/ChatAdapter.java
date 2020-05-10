@@ -64,6 +64,11 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
         this.chats = searchedList;
     }
 
+    void setChats(List<Chat> chats) {
+        this.chats = chats;
+        notifyDataSetChanged();
+    }
+
     static class ChatViewHolder extends RecyclerView.ViewHolder{
         private CardView cardView;
         private TextView textViewName;

@@ -14,7 +14,7 @@ import androidx.annotation.Nullable;
 import java.io.IOException;
 import java.util.Objects;
 
-import de.unidue.palaver.system.engine.SessionManager;
+import de.unidue.palaver.system.sessionmanager.SessionManager;
 
 import de.unidue.palaver.system.httpclient.JSONBuilder;
 import de.unidue.palaver.system.model.Friend;
@@ -49,7 +49,8 @@ public class ServiceSendMessage extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Message message = (Message) intent.getExtras().getSerializable(StringValue.IntentKeyName.MESSAGE);
+        Message message = (Message) Objects.requireNonNull(intent.getExtras()).
+                getSerializable(StringValue.IntentKeyName.MESSAGE);
         User user = SessionManager.getSessionManagerInstance(getApplicationContext()).getUser();
         new SendMessageAsyncTask(user).execute(message);
         return START_STICKY;

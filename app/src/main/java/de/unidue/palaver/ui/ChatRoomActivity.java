@@ -15,7 +15,7 @@ import java.util.Date;
 import java.util.Objects;
 
 import de.unidue.palaver.R;
-import de.unidue.palaver.system.engine.SessionManager;
+import de.unidue.palaver.system.sessionmanager.SessionManager;
 import de.unidue.palaver.system.model.Message;
 import de.unidue.palaver.system.model.User;
 import de.unidue.palaver.system.viewmodel.MessageViewModel;

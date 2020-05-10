@@ -122,8 +122,7 @@ public class Message implements Comparable<Message>, Serializable {
 
     @Override
     public String toString() {
-        return "Message{" +
-                ", sender='" + sender + '\'' +
+        return "Message{ sender='" + sender + '\'' +
                 ", recipient='" + recipient + '\'' +
                 ", message='" + message + '\'' +
                 ", mimeType='" + mimeType + '\'' +

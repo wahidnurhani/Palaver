@@ -15,9 +15,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.unidue.palaver.system.engine.SessionManager;
+import de.unidue.palaver.system.sessionmanager.SessionManager;
 import de.unidue.palaver.system.httpclient.JSONBuilder;
-import de.unidue.palaver.system.engine.PalaverEngine;
 import de.unidue.palaver.system.model.StackApiResponseList;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.Message;
@@ -26,6 +25,7 @@ import de.unidue.palaver.system.httpclient.Retrofit;
 import de.unidue.palaver.system.roomdatabase.PalaverDao;
 import de.unidue.palaver.system.roomdatabase.PalaverRoomDatabase;
 import de.unidue.palaver.system.model.StringValue;
+import de.unidue.palaver.ui.CustomToast;
 import retrofit2.Response;
 
 public class ServiceLogin extends Service {
@@ -148,10 +148,9 @@ public class ServiceLogin extends Service {
         @Override
         protected void onPostExecute(Response<StackApiResponseList<String>> dataServerResponseResponse) {
             if(dataServerResponseResponse!= null){
-                PalaverEngine palaverEngine = PalaverEngine.getPalaverEngineInstance();
                 assert dataServerResponseResponse.body() != null;
                 if(dataServerResponseResponse.body().getMessageType()!=1){
-                    palaverEngine.handleShowToastRequest(getApplicationContext(),
+                    CustomToast.makeText(getApplicationContext(),
                             dataServerResponseResponse.body().getInfo());
                 }
             }

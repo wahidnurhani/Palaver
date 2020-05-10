@@ -2,6 +2,7 @@ package de.unidue.palaver.system.httpclient;
 
 import java.io.IOException;
 
+import de.unidue.palaver.system.model.StackApiResponse;
 import de.unidue.palaver.system.model.StackApiResponseDate;
 import de.unidue.palaver.system.model.StackApiResponseList;
 import de.unidue.palaver.system.model.Friend;
