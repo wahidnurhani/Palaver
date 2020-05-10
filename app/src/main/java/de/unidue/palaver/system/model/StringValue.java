@@ -26,6 +26,7 @@ public class StringValue {
         public static final String MESSAGE = "INTENT_MESSAGE";
         public static final String USERNAME = "USERNAME";
         public static final String PASSWORD = "PASSWORD";
+        public static final String MESSAGEREPOSITORY = "MESSAGEREPOSITORY";
     }
 
     public static class IntentAction {

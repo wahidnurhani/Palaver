@@ -48,7 +48,7 @@ public class RoomDBTest {
         Message message = new Message("wahid", "jimmy", "hallo", "2016-02-12T17:02:38.663");
         palaverDao.insert(message);
 
-        assertNotNull(palaverDao.loadChat("wahid").get(0));
+        assertNotNull(palaverDao.getMessages("wahid").get(0));
     }
 
     @Test

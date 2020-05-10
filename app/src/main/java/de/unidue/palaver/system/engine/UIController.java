@@ -9,7 +9,6 @@ import android.widget.Toast;
 
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.StringValue;
-import de.unidue.palaver.ui.AddFriendDialog;
 import de.unidue.palaver.ui.ChatManagerActivity;
 import de.unidue.palaver.ui.ChatRoomActivity;
 import de.unidue.palaver.ui.FriendManagerActivity;

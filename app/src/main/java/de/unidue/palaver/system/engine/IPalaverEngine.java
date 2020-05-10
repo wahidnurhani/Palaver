@@ -10,7 +10,6 @@ import de.unidue.palaver.ui.LoginActivity;
 public interface IPalaverEngine {
 
 
-    void handleSendMessage(Context applicationContext, Activity activity, Friend friend, String messageText);
 
     void handleRegisterRequest(Context applicationContext, Activity activity, User user);
 

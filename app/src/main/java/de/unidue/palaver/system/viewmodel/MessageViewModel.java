@@ -1,49 +1,40 @@
 package de.unidue.palaver.system.viewmodel;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Application;
-import android.os.AsyncTask;
 
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import de.unidue.palaver.system.engine.SessionManager;
-import de.unidue.palaver.system.engine.PalaverEngine;
 import de.unidue.palaver.system.model.Message;
 import de.unidue.palaver.system.model.Friend;
-import de.unidue.palaver.system.model.User;
-import de.unidue.palaver.system.roomdatabase.PalaverDao;
-import de.unidue.palaver.system.roomdatabase.PalaverRoomDatabase;
+import de.unidue.palaver.system.repository.MessageRepository;
 
 public class MessageViewModel extends AndroidViewModel implements Comparable<MessageViewModel>, Serializable {
 
     private Friend friend;
-    private final User user;
-    private final ListLiveData<Message> messageListLiveData;
+    private LiveData<List<Message>> messages;
+    private MessageRepository messageRepository;
 
     public MessageViewModel(Application application) {
         super(application);
-        this.user = SessionManager.getSessionManagerInstance(getApplication()).getUser();
-        this.messageListLiveData = new ListLiveData<>();
-        this.messageListLiveData.setValue(new ArrayList<>());
+        this.messageRepository = new MessageRepository(getApplication());
     }
 
     public void setFriend(Friend friend) {
         this.friend = friend;
-        fetchChat();
+        this.messages = messageRepository.getAllMessage(friend);
     }
 
     public Friend getFriend() {
         return friend;
     }
 
-    public ListLiveData<Message> getMessageList() {
-        return messageListLiveData;
+    public LiveData<List<Message>> getMessages() {
+        return messages;
     }
 
     public boolean setAllMessageToRead() {
@@ -51,48 +42,13 @@ public class MessageViewModel extends AndroidViewModel implements Comparable<Mes
         return false;
     }
 
-    private void fetchChat(){
-        FectchChatFromDB fectchChatFromDB = new FectchChatFromDB();
-        fectchChatFromDB.execute();
-    }
-
-    public void addMessage(Activity activity, String text) {
-         Message message = new Message(
-                 friend.getUsername(),
-                 user.getUserName(),
-                 friend.getUsername(),
-                 text,
-                 new Date());
-         PalaverEngine.getPalaverEngineInstance().handleSendMessage(
-                getApplication(),
-                activity,
-                friend,
-                message.getMessage());
-         messageListLiveData.add(message);
+    public void sendMessage(Activity activity, Message message) {
+         messageRepository.sendMessageService(activity, message);
     }
 
     @Override
     public int compareTo(MessageViewModel o) {
         return 0;
-    }
-
-    @SuppressLint("StaticFieldLeak")
-    private class FectchChatFromDB extends AsyncTask<Void, Void, List<Message>> {
-
-        @Override
-        protected List<Message> doInBackground(Void... voids) {
-            PalaverRoomDatabase palaverRoomDatabase = PalaverRoomDatabase.getDatabase(getApplication());
-            PalaverDao palaverDao = palaverRoomDatabase.palaverDao();
-
-            List<Message> messages;
-            messages = palaverDao.loadChat(friend.getUsername());
-            return messages;
-        }
-
-        @Override
-        protected void onPostExecute(List<Message> messages) {
-            messageListLiveData.addAll(messages);
-        }
     }
 
     @Override

@@ -3,7 +3,6 @@ package de.unidue.palaver.system.service;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -18,32 +17,26 @@ import java.util.Objects;
 import de.unidue.palaver.system.engine.SessionManager;
 
 import de.unidue.palaver.system.httpclient.JSONBuilder;
-import de.unidue.palaver.system.engine.PalaverEngine;
-import de.unidue.palaver.system.model.StackApiResponseDate;
 import de.unidue.palaver.system.model.Friend;
+import de.unidue.palaver.system.model.StackApiResponseDate;
 import de.unidue.palaver.system.model.Message;
 import de.unidue.palaver.system.model.User;
 import de.unidue.palaver.system.httpclient.Retrofit;
 import de.unidue.palaver.system.model.StringValue;
+
 import de.unidue.palaver.system.roomdatabase.PalaverDao;
 import de.unidue.palaver.system.roomdatabase.PalaverRoomDatabase;
+import de.unidue.palaver.ui.CustomToast;
 import retrofit2.Response;
 
 
 public class ServiceSendMessage extends Service {
     private static final String TAG= ServiceAddFriend.class.getSimpleName();
 
-    private User user;
-    private Message message;
-    private Friend friend;
-    private PalaverRoomDatabase palaverRoomDatabase;
-    private PalaverDao palaverDao;
-
-    public static void startIntent(Context applicationContext, Activity activity, Friend friend, Message message) {
-        Intent intent = new Intent(applicationContext, ServiceSendMessage.class);
+    public static void startIntent(Activity activity, Message message) {
+        Intent intent = new Intent(activity, ServiceSendMessage.class);
         Bundle bundle = new Bundle();
         bundle.putSerializable(StringValue.IntentKeyName.MESSAGE, message);
-        bundle.putSerializable(StringValue.IntentKeyName.FRIEND, friend);
         intent.putExtras(bundle);
         activity.startService(intent);
     }
@@ -56,13 +49,9 @@ public class ServiceSendMessage extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        message = (Message) Objects.requireNonNull(intent.getExtras()).getSerializable(StringValue.IntentKeyName.MESSAGE);
-        friend = (Friend) intent.getExtras().getSerializable(StringValue.IntentKeyName.FRIEND);
-        user = SessionManager.getSessionManagerInstance(getApplicationContext()).getUser();
-
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.execute();
-
+        Message message = (Message) intent.getExtras().getSerializable(StringValue.IntentKeyName.MESSAGE);
+        User user = SessionManager.getSessionManagerInstance(getApplicationContext()).getUser();
+        new SendMessageAsyncTask(user).execute(message);
         return START_STICKY;
     }
 
@@ -72,29 +61,31 @@ public class ServiceSendMessage extends Service {
         Log.i(TAG, StringValue.LogMessage.SERVICE_DESTROYED);
     }
 
+
     @SuppressLint("StaticFieldLeak")
-    public class SendMessage extends AsyncTask<Void, Void, Response<StackApiResponseDate>> {
+    public class SendMessageAsyncTask extends AsyncTask<Message, Void, Response<StackApiResponseDate>> {
+        User user;
+
+        SendMessageAsyncTask(User user){
+            this.user = user;
+        }
 
         @Override
-        protected Response<StackApiResponseDate> doInBackground(Void... myParams) {
-            palaverRoomDatabase = PalaverRoomDatabase.getDatabase(getApplicationContext());
-            palaverDao = palaverRoomDatabase.palaverDao();
+        protected Response<StackApiResponseDate> doInBackground(Message... messages) {
+            PalaverRoomDatabase palaverRoomDatabase = PalaverRoomDatabase.getDatabase(getApplicationContext());
+            PalaverDao palaverDao = palaverRoomDatabase.palaverDao();
+            Friend friend = new Friend(messages[0].getFriendUserName());
             Retrofit retrofit = new Retrofit();
             Response<StackApiResponseDate> response = null;
-            JSONBuilder.SendMessageBody body = new JSONBuilder.SendMessageBody(user, friend, message);
+            JSONBuilder.SendMessageBody body = new JSONBuilder.SendMessageBody(user,
+                    friend, messages[0]);
             try {
                 response = retrofit.sendMessage(body);
-                System.out.println("response date --------------------------- : ");
-                System.out.println(response.body().getDateTime().getDateTime());
                 assert response.body() != null;
                 if(response.body().getMessageType()==1){
-                    System.out.println("message date before set--------------------------- : ");
-                    System.out.println(message.getDate());
-                    message.setDate(response.body().getDateTime().getDateTime());
-                    System.out.println("message date after set--------------------------- : ");
-                    System.out.println(message.getDate());
-                    message.setFriendUserName(friend.getUsername());
-                    palaverDao.insert(message);
+                    messages[0].setDate(response.body().getDateTime().getDateTime());
+                    messages[0].setFriendUserName(friend.getUsername());
+                    palaverDao.insert(messages[0]);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -107,12 +98,12 @@ public class ServiceSendMessage extends Service {
         protected void onPostExecute(Response<StackApiResponseDate> s) {
             super.onPostExecute(s);
             if(s!=null){
+                assert s.body() != null;
                 if(s.body().getMessageType()!=1){
-                    PalaverEngine.getPalaverEngineInstance().getUiController().showToast(getApplicationContext(),
+                    CustomToast.makeText(getApplicationContext(),
                             "failed to send message");
                 }
             }
-            onDestroy();
         }
     }
 

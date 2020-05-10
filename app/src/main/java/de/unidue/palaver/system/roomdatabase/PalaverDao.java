@@ -17,7 +17,7 @@ import de.unidue.palaver.system.model.Message;
 
 
 @Dao
-public interface PalaverDao {
+public interface PalaverDao{
 
     @Insert (onConflict = OnConflictStrategy.REPLACE)
     void insert(Friend friend);
@@ -43,7 +43,7 @@ public interface PalaverDao {
 
     @Query("SELECT * From table_chat_data WHERE sender = :friendName " +
             "OR recipient = :friendName ORDER BY date_time ASC" )
-    List<Message> loadChat(String friendName);
+    LiveData<List<Message>> getMessages(String friendName);
 
     @Update
     void updateMessage(Message message);
@@ -62,4 +62,7 @@ public interface PalaverDao {
 
     @Update
     void update(Friend friend);
+
+    @Update
+    void update(Message message);
 }

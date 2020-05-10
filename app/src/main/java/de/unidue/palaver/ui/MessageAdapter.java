@@ -26,8 +26,9 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
     private LayoutInflater inflater;
     private Context context;
 
-    public MessageAdapter(Context context, List<Message> messages) {
+    MessageAdapter(Context context, List<Message> messages) {
         inflater = LayoutInflater.from(context);
+        this.context = context;
         this.messages = messages;
     }
     @NonNull
@@ -67,7 +68,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
         holder.setData(current);
     }
 
-    public void setMessages(List<Message> messages) {
+    void setMessages(List<Message> messages) {
         this.messages = messages;
         notifyDataSetChanged();
     }
@@ -78,6 +79,10 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
             return messages.size();
         }
         return 0;
+    }
+
+    void addMessage(Message message) {
+        this.messages.add(message);
     }
 
     static class MessageViewHolder extends RecyclerView.ViewHolder{

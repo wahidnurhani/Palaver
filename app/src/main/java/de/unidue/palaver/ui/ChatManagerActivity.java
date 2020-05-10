@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,6 +36,11 @@ public class ChatManagerActivity extends AppCompatActivity {
 
     public static boolean isVisibility() {
         return visibility;
+    }
+
+    public static void startActivity(Context context) {
+        Intent intent = new Intent(context, ChatManagerActivity.class);
+        context.startActivity(intent);
     }
 
     @Override

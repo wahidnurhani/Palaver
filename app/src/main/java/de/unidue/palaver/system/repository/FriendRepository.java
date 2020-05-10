@@ -65,6 +65,7 @@ public class FriendRepository {
          */
         @Override
         protected Void doInBackground(Friend... friends) {
+            palaverDao.insert(friends[0]);
             return null;
         }
     }

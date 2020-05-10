@@ -40,17 +40,6 @@ public class PalaverEngine implements IPalaverEngine {
         return uiController;
     }
 
-    @Override
-    public void handleSendMessage(Context applicationContext, Activity activity, Friend friend, String messageText) {
-        Message message = new Message(
-                friend.getUsername(),
-                SessionManager.getSessionManagerInstance(applicationContext).getUser().getUserName(),
-                friend.getUsername(),
-                messageText,
-                new Date());
-
-        ServiceSendMessage.startIntent(applicationContext, activity, friend, message);
-    }
 
     @Override
     public void handleRegisterRequest(Context applicationContext, Activity activity, User user) {

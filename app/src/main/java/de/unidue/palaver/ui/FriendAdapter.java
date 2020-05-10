@@ -11,7 +11,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
 import java.util.List;
 import de.unidue.palaver.R;
 import de.unidue.palaver.system.model.Friend;
@@ -20,7 +19,7 @@ import de.unidue.palaver.system.model.StringValue;
 
 public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendViewHolder> {
 
-    private List<Friend> friends = new ArrayList<>();
+    private List<Friend> friends;
     private LayoutInflater inflater;
     private Context context;
 
