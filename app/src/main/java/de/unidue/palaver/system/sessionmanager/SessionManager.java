@@ -70,7 +70,7 @@ public class SessionManager {
         sessionManagerInstance=null;
     }
 
-    public boolean chekLogin(){
+    public boolean checkLogin(){
         return this.isLoggedin();
     }
 

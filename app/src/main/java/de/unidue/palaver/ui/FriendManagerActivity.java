@@ -84,7 +84,6 @@ public class FriendManagerActivity extends AppCompatActivity {
 
         FloatingActionButton floatingActionButton = findViewById(R.id.friendManager_addChatFloatingButton);
         floatingActionButton.setOnClickListener(v -> {
-            CustomToast.makeText(getApplicationContext(), "test click");
             AddFriendDialog.startDialog(getApplicationContext(), this);
         });
 

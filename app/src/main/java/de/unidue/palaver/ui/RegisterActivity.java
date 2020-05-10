@@ -2,8 +2,10 @@ package de.unidue.palaver.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -47,23 +49,10 @@ public class RegisterActivity extends AppCompatActivity {
         TextView backToLoginTextView = findViewById(R.id.register_backToLogin);
 
         registerButton.setOnClickListener(view -> {
-
             if(validateUserInput()){
                 User user = new User(userNameEditText.getText().toString(),
                         passwordEditText.getText().toString());
-
-                Retrofit retrofit = new Retrofit();
-                try {
-                    Response<StackApiResponseList<String>> response = retrofit.register(user);
-                    assert response.body() != null;
-                    if (response.body().getMessageType()==1){
-                        CustomToast.makeText(getApplicationContext(), response.body().getInfo());
-                        LoginActivity.startActivity(RegisterActivity.this);
-                        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_rigt);
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                new RegisterAsyncTask().execute(user);
             }
         });
 
@@ -115,5 +104,54 @@ public class RegisterActivity extends AppCompatActivity {
     public void onBackPressed() {
         LoginActivity.startActivity(RegisterActivity.this);
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_rigt);
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    private class RegisterAsyncTask extends AsyncTask<User, Void, Response<StackApiResponseList<String>>> {
+        /**
+         * Override this method to perform a computation on a background thread. The
+         * specified parameters are the parameters passed to {@link #execute}
+         * by the caller of this task.
+         * <p>
+         * This method can call {@link #publishProgress} to publish updates
+         * on the UI thread.
+         *
+         * @param users The parameters of the task.
+         * @return A result, defined by the subclass of this task.
+         * @see #onPreExecute()
+         * @see #onPostExecute
+         * @see #publishProgress
+         */
+        @Override
+        protected Response<StackApiResponseList<String>> doInBackground(User... users) {
+            Retrofit retrofit = new Retrofit();
+            Response<StackApiResponseList<String>> response = null;
+            try {
+                response = retrofit.register(users[0]);
+                assert response.body() != null;
+                if (response.body().getMessageType()==1){
+                    return response;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return response;
+        }
+
+        @Override
+        protected void onPostExecute(Response<StackApiResponseList<String>> response) {
+            if (response!= null){
+                assert response.body() != null;
+                if (response.body().getMessageType()==1){
+                    CustomToast.makeText(getApplicationContext(), response.body().getInfo());
+                    LoginActivity.startActivity(RegisterActivity.this);
+                    overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_rigt);
+                } else {
+                    CustomToast.makeText(getApplicationContext(), response.body().getInfo());
+                }
+            } else {
+                CustomToast.makeText(getApplicationContext(), "connection failed");
+            }
+        }
     }
 }
