@@ -12,20 +12,20 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
         <activity
-            android:name=".ui.SettingsActivity"
+            android:name=".activity.SettingsActivity"
             android:label="@string/title_activity_settings" />
         <activity
-            android:name=".ui.ChatRoomActivity"
+            android:name=".activity.ChatRoomActivity"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
-        <activity android:name=".ui.FriendManagerActivity" />
-        <activity android:name=".ui.ChatManagerActivity" />
+        <activity android:name=".activity.FriendManagerActivity" />
+        <activity android:name=".activity.ChatManagerActivity" />
         <activity
-            android:name=".ui.RegisterActivity"
+            android:name=".activity.RegisterActivity"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".ui.LoginActivity"
+            android:name=".activity.LoginActivity"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".ui.SplashScreenActivity">
+        <activity android:name=".activity.SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -33,10 +33,10 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".system.service.ServiceFetchFriend" />
-        <service android:name=".system.service.ServiceAddFriend" />
-        <service android:name=".system.service.ServiceSendMessage" />
-        <service android:name=".system.service.ServicePopulateDB"/>
+        <service android:name=".service.ServiceFetchFriend" />
+        <service android:name=".service.ServiceAddFriend" />
+        <service android:name=".service.ServiceSendMessage" />
+        <service android:name=".service.ServicePopulateDB"/>
     </application>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"
         tools:ignore="ManifestOrder" />

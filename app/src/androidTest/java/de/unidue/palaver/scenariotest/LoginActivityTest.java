@@ -10,7 +10,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import de.unidue.palaver.R;
-import de.unidue.palaver.ui.LoginActivity;
+import de.unidue.palaver.activity.LoginActivity;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;

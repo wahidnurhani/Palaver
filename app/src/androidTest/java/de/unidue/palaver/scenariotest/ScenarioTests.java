@@ -10,7 +10,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import de.unidue.palaver.R;
-import de.unidue.palaver.ui.SplashScreenActivity;
+import de.unidue.palaver.activity.SplashScreenActivity;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;

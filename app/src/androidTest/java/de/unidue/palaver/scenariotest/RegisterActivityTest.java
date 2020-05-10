@@ -9,7 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import de.unidue.palaver.R;
-import de.unidue.palaver.ui.RegisterActivity;
+import de.unidue.palaver.activity.RegisterActivity;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;

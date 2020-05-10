@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:id="@+id/friend_recycler_view_container"
     android:background="@color/ic_palaver_launcher_background"
-    tools:context=".ui.FriendManagerActivity">
+    tools:context=".activity.FriendManagerActivity">
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/friendManager_addChatFloatingButton"
