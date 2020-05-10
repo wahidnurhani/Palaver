@@ -84,12 +84,14 @@ public class ChatManagerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_manager);
 
-        chatsViewModel = ViewModelProviders.of(this).get(ChatsViewModel.class);
-
         if(!SessionManager.getSessionManagerInstance(getApplicationContext()).checkLogin()){
-            chatsViewModel.handleLogoutRequest();
+            if(chatsViewModel!=null){
+                chatsViewModel.handleLogoutRequest();
+            }
             LoginActivity.startActivity(ChatManagerActivity.this);
         }
+
+        chatsViewModel = ViewModelProviders.of(this).get(ChatsViewModel.class);
 
         FloatingActionButton floatingActionButton = findViewById(R.id.chatManager_addChatFloatingButton);
         floatingActionButton.setOnClickListener(v -> {

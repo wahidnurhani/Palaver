@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 
 import de.unidue.palaver.R;
 import de.unidue.palaver.system.model.User;
+import de.unidue.palaver.system.service.ServicePopulateDB;
 
 public class SessionManager {
 
@@ -49,14 +50,9 @@ public class SessionManager {
         this.context = context;
     }
 
-    public void setUser(User user) {
-        editor.putString(KEY_USERNAME, user.getUserName());
-        editor.putString(KEY_PASSWORD, user.getUserName());
-        editor.commit();
-    }
-
     public void startSession(String userName, String password){
         createLoginSession(userName,password);
+        ServicePopulateDB.startIntent(getContext(), getUser());
     }
 
     public void changeUserPassword(String password){
@@ -81,6 +77,9 @@ public class SessionManager {
     public User getUser() {
         String username = pref.getString(KEY_USERNAME,"");
         String password = pref.getString(KEY_PASSWORD,"");
+        if(username.equals("")|| password.equals("")){
+            return null;
+        }
         return new User(username, password);
     }
 

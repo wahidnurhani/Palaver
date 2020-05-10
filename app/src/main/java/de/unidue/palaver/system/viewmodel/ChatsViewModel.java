@@ -48,6 +48,6 @@ public class ChatsViewModel extends AndroidViewModel {
 
     public void handleLogoutRequest() {
         SessionManager.getSessionManagerInstance(getApplication()).endSession();
-        chatRepository.cleanDatabase();
+        chatRepository.cleanData();
     }
 }

@@ -36,7 +36,7 @@
         <service android:name=".system.service.ServiceFetchFriend" />
         <service android:name=".system.service.ServiceAddFriend" />
         <service android:name=".system.service.ServiceSendMessage" />
-        <service android:name=".system.service.ServiceLogin"/>
+        <service android:name=".system.service.ServicePopulateDB"/>
     </application>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"
         tools:ignore="ManifestOrder" />

@@ -11,7 +11,7 @@ import de.unidue.palaver.system.model.Chat;
 import de.unidue.palaver.system.roomdatabase.PalaverDao;
 import de.unidue.palaver.system.roomdatabase.PalaverRoomDatabase;
 
-public class ChatRepository {
+public class ChatRepository implements ControlRepository{
     private PalaverDao palaverDao;
 
     public ChatRepository(Application application) {
@@ -23,7 +23,14 @@ public class ChatRepository {
         return palaverDao.getAllChat();
     }
 
-    public void cleanDatabase() {
+
+    @Override
+    public void populateData() {
+
+    }
+
+    @Override
+    public void cleanData() {
         new CleanDatabase(palaverDao).execute();
     }
 
