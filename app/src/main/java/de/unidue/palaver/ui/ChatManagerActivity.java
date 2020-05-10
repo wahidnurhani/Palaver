@@ -69,7 +69,7 @@ public class ChatManagerActivity extends AppCompatActivity {
         } else if(item.getItemId()==R.id.menu_setting){
             palaverEngine.handleOpenSettingRequest(getApplicationContext(), ChatManagerActivity.this);
         } else if(item.getItemId()==R.id.menu_addFriend){
-            palaverEngine.handleOpenAddFriendDialogRequest(getApplicationContext(), ChatManagerActivity.this);
+            AddFriendDialog.startDialog(getApplicationContext(), this);
         }
         return super.onOptionsItemSelected(item);
     }

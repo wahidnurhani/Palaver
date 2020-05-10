@@ -40,11 +40,6 @@ public class UIController {
         toast.show();
     }
 
-    public void openAddFriendDDialog(Context applicationContext, Activity activity) {
-        AddFriendDialog addFriendDialog = new AddFriendDialog(applicationContext, activity);
-        addFriendDialog.startDialog();
-    }
-
     public void openChatManagerActivity(Context context) {
         Intent intent = new Intent(context, ChatManagerActivity.class);
         context.startActivity(intent);

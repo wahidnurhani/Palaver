@@ -1,5 +1,6 @@
 package de.unidue.palaver.system.roomdatabase;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -31,14 +32,14 @@ public interface PalaverDao {
     void delete(Message message);
 
     @Query("SELECT * FROM table_friend")
-    List<Friend> loadAllFriend();
+    LiveData<List<Friend>> getAllFriend();
 
     @Query("SELECT * " +
             "FROM (select fk_friend, table_chat_data.data, date_time " +
             "from table_friend INNER JOIN table_chat_data " +
             "on fk_friend = friend_name order by date_time ASC) " +
             "GROUP By fk_friend ")
-    List <Chat> loadAllChat();
+    List <Chat> getAllChat();
 
     @Query("SELECT * From table_chat_data WHERE sender = :friendName " +
             "OR recipient = :friendName ORDER BY date_time ASC" )
@@ -54,8 +55,11 @@ public interface PalaverDao {
     Friend findUserByName(String friendUserName);
 
     @Query("DELETE FROM table_friend")
-    int deleteFriend();
+    int deleteAllFriend();
 
     @Query("DELETE FROM table_chat_data")
     int deleteAllChat();
+
+    @Update
+    void update(Friend friend);
 }

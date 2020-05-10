@@ -42,7 +42,7 @@ public class RoomDBTest {
     public void writeAndReadInList() {
         Friend friend = new Friend("haloo");
         palaverDao.insert(friend);
-        List<Friend> friends = palaverDao.loadAllFriend();
+        List<Friend> friends = palaverDao.getAllFriend();
         assertNotNull(friends);
 
         Message message = new Message("wahid", "jimmy", "hallo", "2016-02-12T17:02:38.663");
@@ -59,7 +59,7 @@ public class RoomDBTest {
         palaverDao.insert(friend);
         palaverDao.delete(friend);
 
-        assertEquals(0, palaverDao.loadAllFriend().size());
+        assertEquals(0, palaverDao.getAllFriend().size());
 
     }
 
@@ -68,7 +68,7 @@ public class RoomDBTest {
         Message message = new Message("wahid", "jimmy", "hallo", "2016-02-12T17:02:38.663");
         palaverDao.insert(message);
         palaverDao.delete(message);
-        assertEquals(0, palaverDao.loadAllChat().size());
+        assertEquals(0, palaverDao.getAllChat().size());
     }
 
 }

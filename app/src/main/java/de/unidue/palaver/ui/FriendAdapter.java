@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 import de.unidue.palaver.R;
 import de.unidue.palaver.system.model.Friend;
@@ -19,7 +20,7 @@ import de.unidue.palaver.system.model.StringValue;
 
 public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendViewHolder> {
 
-    private List<Friend> friends;
+    private List<Friend> friends = new ArrayList<>();
     private LayoutInflater inflater;
     private Context context;
 
@@ -60,6 +61,11 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
 
     void overrade(List<Friend> searchedList) {
         this.friends= searchedList;
+    }
+
+    public void setFriends(List<Friend> friends) {
+        this.friends = friends;
+        notifyDataSetChanged();
     }
 
     static class FriendViewHolder extends RecyclerView.ViewHolder{

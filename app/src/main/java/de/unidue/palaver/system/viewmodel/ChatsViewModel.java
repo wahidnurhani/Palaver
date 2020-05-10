@@ -61,7 +61,7 @@ public class ChatsViewModel extends AndroidViewModel {
 
         @Override
         protected List<Chat> doInBackground(Void... voids) {
-            List<Chat> result= palaverDao.loadAllChat();
+            List<Chat> result= palaverDao.getAllChat();
             List<Chat> returnValue = new ArrayList<>();
             for (Chat chat : result){
                 if(chat.getData()!=null){

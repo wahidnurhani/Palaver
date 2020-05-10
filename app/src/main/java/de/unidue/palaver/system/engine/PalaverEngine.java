@@ -84,15 +84,6 @@ public class PalaverEngine implements IPalaverEngine {
         //TODO
     }
 
-    public void handleAddFriendRequest(Context applicationContext, Activity activity, String username) {
-        ServiceAddFriend.startIntent(applicationContext, activity, username);
-    }
-
-
-    public void handleChangePasswordRequest(String newPassword){
-        //TODO change password to server . if it success then SessionManager handle the changed Password
-    }
-
     public void handleShowErrorDialogRequest(Context context, String message){
         Log.i(TAG, "Check uiController ShowErrorDdialog: "+ (uiController!=null));
         uiController.showErrorDialog(context, message);
@@ -113,10 +104,6 @@ public class PalaverEngine implements IPalaverEngine {
         uiController.openFriendManagerActivity(activity);
     }
 
-    public void handleOpenAddFriendDialogRequest(Context applicationContext, Activity activity) {
-        Log.i(TAG, "Check uiController open addFriend Dialog: "+ (uiController!=null));
-        uiController.openAddFriendDDialog(applicationContext, activity);
-    }
 
     public void handleOpenChatManagerActivityRequest(Activity activity) {
         Log.i(TAG, "Check uiController openChatManagerActivity: "+ (uiController!=null));

@@ -26,7 +26,7 @@ public class DatabaseCleaner {
             PalaverDao palaverDao = palaverRoomDatabase.palaverDao();
 
             palaverDao.deleteAllChat();
-            palaverDao.deleteFriend();
+            palaverDao.deleteAllFriend();
             return null;
         }
     }

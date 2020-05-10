@@ -22,6 +22,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.List;
 import java.util.Objects;
 
+import de.unidue.palaver.system.engine.PalaverEngine;
 import de.unidue.palaver.system.viewmodel.FriendViewModel;
 import de.unidue.palaver.R;
 import de.unidue.palaver.system.model.Friend;
@@ -35,17 +36,9 @@ public class FriendManagerActivity extends AppCompatActivity {
     private FriendViewModel friendViewModel;
     private FriendAdapter friendAdapter;
 
-    private BroadcastReceiver friendAddeddMessageReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            friendViewModel.fetchFriends();
-        }
-    };
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.search,menu);
-
         MenuItem menuItem = menu.findItem(R.id.search_menu);
         SearchView searchView = (SearchView) menuItem.getActionView();
 
@@ -69,7 +62,8 @@ public class FriendManagerActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == android.R.id.home){
-            friendViewModel.OpenChatManagerActivity(FriendManagerActivity.this);
+            Intent intent = new Intent(FriendManagerActivity.this, ChatManagerActivity.class);
+            startActivity(intent);
             overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_rigt);
         }
         return super.onOptionsItemSelected(item);
@@ -81,25 +75,22 @@ public class FriendManagerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_friend_manager);
 
         friendViewModel = ViewModelProviders.of(this).get(FriendViewModel.class);
-        final ListLiveData<Friend> friendsListLiveData = friendViewModel.getFriendsLiveData();
-
-
-        LocalBroadcastManager.getInstance(this).registerReceiver(friendAddeddMessageReceiver,
-                new IntentFilter(StringValue.IntentAction.BROADCAST_FRIENDADDED));
+        friendViewModel.getFriends().observe(this, friends -> friendAdapter.setFriends(friends));
 
         Objects.requireNonNull(getSupportActionBar()).setTitle(StringValue.TextAndLabel.SELECT_FRIEND);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         FloatingActionButton floatingActionButton = findViewById(R.id.friendManager_addChatFloatingButton);
-        floatingActionButton.setOnClickListener(v ->
-                friendViewModel.openAddFriendDialog(getApplicationContext(),
-                        FriendManagerActivity.this));
+        floatingActionButton.setOnClickListener(v -> {
+            CustomToast.makeText(getApplicationContext(), "test click");
+            AddFriendDialog.startDialog(getApplicationContext(), this);
+        });
 
         RecyclerView friendsRecycleView = findViewById(R.id.friendManager_recycleView);
 
         friendAdapter = new FriendAdapter(this,
-                friendsListLiveData.getValue());
+                friendViewModel.getFriends().getValue());
         friendsRecycleView.setAdapter(friendAdapter);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -111,7 +102,7 @@ public class FriendManagerActivity extends AppCompatActivity {
                 linearLayoutManager.getOrientation());
         friendsRecycleView.addItemDecoration(dividerItemDecoration);
 
-        friendsListLiveData.observe(this, friends -> friendAdapter.notifyDataSetChanged());
+
     }
 
     public static boolean isVisibility() {
@@ -133,8 +124,6 @@ public class FriendManagerActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        LocalBroadcastManager.getInstance(this).
-                unregisterReceiver(friendAddeddMessageReceiver);
         visibility = false;
     }
 }
