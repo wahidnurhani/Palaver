@@ -19,11 +19,11 @@ import de.unidue.palaver.system.engine.SessionManager;
 
 import de.unidue.palaver.system.httpclient.JSONBuilder;
 import de.unidue.palaver.system.engine.PalaverEngine;
+import de.unidue.palaver.system.model.StackApiResponseDate;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.Message;
 import de.unidue.palaver.system.model.User;
-import de.unidue.palaver.system.model.DataServerResponse;
-import de.unidue.palaver.system.httpclient.NewCommunicator;
+import de.unidue.palaver.system.httpclient.Retrofit;
 import de.unidue.palaver.system.model.StringValue;
 import de.unidue.palaver.system.roomdatabase.PalaverDao;
 import de.unidue.palaver.system.roomdatabase.PalaverRoomDatabase;
@@ -73,20 +73,27 @@ public class ServiceSendMessage extends Service {
     }
 
     @SuppressLint("StaticFieldLeak")
-    public class SendMessage extends AsyncTask<Void, Void, Response<DataServerResponse>> {
+    public class SendMessage extends AsyncTask<Void, Void, Response<StackApiResponseDate>> {
 
         @Override
-        protected Response<DataServerResponse> doInBackground(Void... myParams) {
+        protected Response<StackApiResponseDate> doInBackground(Void... myParams) {
             palaverRoomDatabase = PalaverRoomDatabase.getDatabase(getApplicationContext());
             palaverDao = palaverRoomDatabase.palaverDao();
-            NewCommunicator newCommunicator = new NewCommunicator();
-            Response<DataServerResponse> response = null;
+            Retrofit retrofit = new Retrofit();
+            Response<StackApiResponseDate> response = null;
             JSONBuilder.SendMessageBody body = new JSONBuilder.SendMessageBody(user, friend, message);
             try {
-                response = newCommunicator.sendMessage(body);
+                response = retrofit.sendMessage(body);
+                System.out.println("response date --------------------------- : ");
+                System.out.println(response.body().getDataDateTime().getDateTime());
                 assert response.body() != null;
                 if(response.body().getMessageType()==1){
+                    System.out.println("message date before set--------------------------- : ");
+                    System.out.println(message.getDate());
                     message.setDate(response.body().getDataDateTime().getDateTime());
+                    System.out.println("message date after set--------------------------- : ");
+                    System.out.println(message.getDate());
+                    message.setFriendUserName(friend.getUsername());
                     palaverDao.insert(message);
                 }
             } catch (IOException e) {
@@ -97,7 +104,7 @@ public class ServiceSendMessage extends Service {
 
 
         @Override
-        protected void onPostExecute(Response<DataServerResponse> s) {
+        protected void onPostExecute(Response<StackApiResponseDate> s) {
             super.onPostExecute(s);
             if(s!=null){
                 if(s.body().getMessageType()!=1){

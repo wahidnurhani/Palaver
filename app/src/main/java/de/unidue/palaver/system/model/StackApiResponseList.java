@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 
-public class DataServerResponseList<T> extends ServerResponse {
+public class StackApiResponseList<T> extends StackApiResponse {
 
     @SerializedName(StringValue.JSONKeyName.DATA)
     @Expose
@@ -15,13 +15,9 @@ public class DataServerResponseList<T> extends ServerResponse {
         return datas;
     }
 
-    public void setDatas(ArrayList<T> datas) {
-        this.datas = datas;
-    }
-
     @Override
     public String  toString() {
-        return "DataServerResponseList{" +
+        return "StackApiResponseList{" +
                 "datas=" + datas +
                 '}';
     }

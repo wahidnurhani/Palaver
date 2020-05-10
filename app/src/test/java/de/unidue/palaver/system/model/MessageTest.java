@@ -15,7 +15,7 @@ public class MessageTest {
     @Test
     public void getFriend() {
         Friend friend = new Friend("Test");
-        Message message = new Message(friend.getUsername(), "saya", "Hallo World", new Date());
+        Message message = new Message(friend.getUsername(), friend.getUsername(), "saya", "Hallo World", new Date());
         assertEquals("Test", message.getSender());
     }
 
@@ -23,7 +23,7 @@ public class MessageTest {
     @Test
     public void getMessage() {
         Friend friend = new Friend("Test");
-        Message message = new Message(friend.getUsername(), "saya", "Hallo World", new Date());
+        Message message = new Message(friend.getUsername(),friend.getUsername(), "saya", "Hallo World", new Date());
         assertEquals("Hallo World", message.getMessage());
     }
 

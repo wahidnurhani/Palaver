@@ -7,15 +7,14 @@ import android.util.Log;
 import java.io.IOException;
 import java.util.Date;
 
+import de.unidue.palaver.system.model.StackApiResponseList;
 import de.unidue.palaver.system.model.Message;
-import de.unidue.palaver.system.model.DataServerResponseList;
-import de.unidue.palaver.system.httpclient.NewCommunicator;
+import de.unidue.palaver.system.httpclient.Retrofit;
 import de.unidue.palaver.system.service.ServiceLogin;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.User;
 import de.unidue.palaver.system.roomdatabase.DatabaseCleaner;
 import de.unidue.palaver.system.service.ServiceAddFriend;
-import de.unidue.palaver.system.service.ServiceFetchAllChat;
 import de.unidue.palaver.system.service.ServiceSendMessage;
 import de.unidue.palaver.ui.LoginActivity;
 import retrofit2.Response;
@@ -43,17 +42,21 @@ public class PalaverEngine implements IPalaverEngine {
 
     @Override
     public void handleSendMessage(Context applicationContext, Activity activity, Friend friend, String messageText) {
-        Message message = new Message(SessionManager.getSessionManagerInstance(applicationContext).getUser().getUserName(),
-                friend.getUsername(), messageText, new Date());
+        Message message = new Message(
+                friend.getUsername(),
+                SessionManager.getSessionManagerInstance(applicationContext).getUser().getUserName(),
+                friend.getUsername(),
+                messageText,
+                new Date());
 
         ServiceSendMessage.startIntent(applicationContext, activity, friend, message);
     }
 
     @Override
     public void handleRegisterRequest(Context applicationContext, Activity activity, User user) {
-        NewCommunicator newCommunicator = new NewCommunicator();
+        Retrofit retrofit = new Retrofit();
         try {
-            Response<DataServerResponseList<String>> response = newCommunicator.register(user);
+            Response<StackApiResponseList<String>> response = retrofit.register(user);
             if (response.body().getMessageType()==1){
                 handleShowToastRequest(applicationContext, response.body().getInfo());
                 handleOpenLoginActivityRequest(activity);
@@ -88,10 +91,6 @@ public class PalaverEngine implements IPalaverEngine {
 
     public void handleChangePasswordRequest(String newPassword){
         //TODO change password to server . if it success then SessionManager handle the changed Password
-    }
-
-    public void handleFetchAllChatRequestWithService(Context applicationContext, Activity activity) {
-        ServiceFetchAllChat.startIntent(applicationContext, activity);
     }
 
     public void handleShowErrorDialogRequest(Context context, String message){

@@ -7,10 +7,13 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
+import de.unidue.palaver.system.model.Chat;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.Message;
 
-@Database(entities = {Friend.class, Message.class}, version = DBContract.DB_VERSION)
+@Database(entities = {Friend.class, Message.class},
+        version = DBContract.DB_VERSION,
+        exportSchema = false, views = {Chat.class})
 public abstract class PalaverRoomDatabase extends RoomDatabase {
 
     public abstract PalaverDao palaverDao();

@@ -46,7 +46,7 @@ public class ChatsViewModel extends AndroidViewModel {
     public List<Chat> search(String newText) {
         List<Chat> searched = new ArrayList<>();
         for (Chat chat: Objects.requireNonNull(chatListLiveData.getValue())){
-            if(chat.getFriend().getUsername().contains(newText)){
+            if(chat.getFk_friend().contains(newText)){
                 searched.add(chat);
             }
         }
@@ -64,7 +64,7 @@ public class ChatsViewModel extends AndroidViewModel {
             List<Chat> result= palaverDao.loadAllChat();
             List<Chat> returnValue = new ArrayList<>();
             for (Chat chat : result){
-                if(chat.getLastMessage()!=null){
+                if(chat.getData()!=null){
                     returnValue.add(chat);
                 }
             }

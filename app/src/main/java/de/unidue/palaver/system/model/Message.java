@@ -6,6 +6,7 @@ import android.annotation.SuppressLint;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
@@ -22,30 +23,35 @@ import de.unidue.palaver.system.roomdatabase.DBContract.TableMessage;
 public class Message implements Comparable<Message>, Serializable {
 
     @NonNull
+    @ColumnInfo(name = "fk_friend")
+    private String friendUserName;
+
+    @NonNull
     @SerializedName("Sender")
-    @ColumnInfo(name = TableMessage.COLUMN_CHAT_SENDER)
+    @ColumnInfo(name = TableMessage.COLUMN_MESSAGE_SENDER)
     private String sender;
 
+    @NonNull
     @SerializedName("Recipient")
-    @ColumnInfo(name = TableMessage.COLUMN_CHAT_RECIPIENT)
+    @ColumnInfo(name = TableMessage.COLUMN_MESSAGE_RECIPIENT)
     private String recipient;
 
+    @NonNull
     @SerializedName("Mimetype")
-    @ColumnInfo(name = TableMessage.COLUMN_CHAT_MIMETYPE)
+    @ColumnInfo(name = TableMessage.COLUMN_MESSAGE_MIMETYPE)
     private String mimeType;
 
     @NonNull
     @SerializedName("Data")
-    @ColumnInfo(name = TableMessage.COLUMN_CHAT_DATA)
+    @ColumnInfo(name = TableMessage.COLUMN_MESSAGE_DATA)
     private String message;
 
     @NonNull
     @PrimaryKey
-    @SerializedName("DataDateTime")
-    @ColumnInfo(name = TableMessage.COLUMN_CHAT_DATETIME)
+    @SerializedName("DateTime")
+    @ColumnInfo(name = TableMessage.COLUMN_MESSAGE_DATETIME)
     private String date;
 
-    public Message() { }
 
     public Message(String sender, String recipient, String message, String date) {
         this.sender = sender;
@@ -55,12 +61,23 @@ public class Message implements Comparable<Message>, Serializable {
         this.date = date;
     }
 
-    public Message(String sender, String recipient, String message, Date date) {
+    @Ignore
+    public Message(String friendUserName, String sender, String recipient, String message, Date date) {
+        this.friendUserName = friendUserName;
         this.sender = sender;
         this.recipient = recipient;
         this.mimeType= "text/plain";
         this.message = message;
         this.date = dateToString(date);
+    }
+
+    @NonNull
+    public String getFriendUserName() {
+        return friendUserName;
+    }
+
+    public void setFriendUserName(@NonNull String friendUserName) {
+        this.friendUserName = friendUserName;
     }
 
     @NonNull

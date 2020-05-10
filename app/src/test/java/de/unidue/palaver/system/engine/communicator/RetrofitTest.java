@@ -6,11 +6,11 @@ import java.io.IOException;
 import java.util.Date;
 
 import de.unidue.palaver.system.httpclient.JSONBuilder;
+import de.unidue.palaver.system.model.StackApiResponseList;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.Message;
+import de.unidue.palaver.system.model.StackApiResponseDate;
 import de.unidue.palaver.system.model.User;
-import de.unidue.palaver.system.model.DataServerResponseList;
-import de.unidue.palaver.system.model.DataServerResponse;
 import de.unidue.palaver.system.httpclient.PalaverPostAPI;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -31,15 +31,15 @@ public class RetrofitTest {
 
         PalaverPostAPI service = retrofit.create(PalaverPostAPI.class);
 
-        Call<DataServerResponseList<String>> call= service.validate(new User("1991", "1991"));
-        call.enqueue(new Callback<DataServerResponseList<String>>() {
+        Call<StackApiResponseList<String>> call= service.validate(new User("1991", "1991"));
+        call.enqueue(new Callback<StackApiResponseList<String>>() {
             @Override
-            public void onResponse(Call<DataServerResponseList<String>> call, Response<DataServerResponseList<String>> response) {
+            public void onResponse(Call<StackApiResponseList<String>> call, Response<StackApiResponseList<String>> response) {
                 System.out.println(response.body().toString());
             }
 
             @Override
-            public void onFailure(Call<DataServerResponseList<String>> call, Throwable t) {
+            public void onFailure(Call<StackApiResponseList<String>> call, Throwable t) {
                 System.out.println("failur");
             }
         });
@@ -55,8 +55,8 @@ public class RetrofitTest {
 
         PalaverPostAPI service = retrofit.create(PalaverPostAPI.class);
 
-        Call<DataServerResponseList<String>> call= service.getFriends(new User("test1991", "test1991"));
-        Response<DataServerResponseList<String>> response = call.execute();
+        Call<StackApiResponseList<String>> call= service.getFriends(new User("test1991", "test1991"));
+        Response<StackApiResponseList<String>> response = call.execute();
 
         System.out.println(response.body().getInfo());
 
@@ -78,9 +78,12 @@ public class RetrofitTest {
 
         PalaverPostAPI service = retrofit.create(PalaverPostAPI.class);
 
-        User.AndFriend userAndFriend = new User.AndFriend("gawang", "gawang", "bola");
-        Call<DataServerResponseList<String>> call= service.addFriend(userAndFriend);
-        Response<DataServerResponseList<String>> response = call.execute();
+        User user = new User("gawang", "gawang");
+        Friend friend = new Friend("bola");
+
+        JSONBuilder.UserAndFriend userAndFriend = new JSONBuilder.UserAndFriend(user, friend);
+        Call<StackApiResponseList<String>> call= service.addFriend(userAndFriend);
+        Response<StackApiResponseList<String>> response = call.execute();
 
         System.out.println(response.body().getInfo());
 
@@ -98,8 +101,8 @@ public class RetrofitTest {
         User user = new User("test1991", "test1991");
         Friend friend = new Friend("test1992");
         JSONBuilder.UserAndRecipient body = new JSONBuilder.UserAndRecipient(user, friend);
-        Call<DataServerResponseList<Message>> call= service.getMessage(body);
-        Response<DataServerResponseList<Message>> response = call.execute();
+        Call<StackApiResponseList<Message>> call= service.getMessage(body);
+        Response<StackApiResponseList<Message>> response = call.execute();
         System.out.println(response.body().getInfo());
 
         if(response!=null){
@@ -120,12 +123,12 @@ public class RetrofitTest {
         PalaverPostAPI service = retrofit.create(PalaverPostAPI.class);
         User user = new User("test1991", "test1991");
         Friend friend = new Friend("test1992");
-        Message message = new Message(user.getUserName(),
+        Message message = new Message(friend.getUsername(),user.getUserName(),
                 friend.getUsername(), "Hallot test retrofit", new Date());
 
         JSONBuilder.SendMessageBody body = new JSONBuilder.SendMessageBody(user, friend, message);
-        Call<DataServerResponse> call= service.sendMessage(body);
-        Response<DataServerResponse> response = call.execute();
+        Call<StackApiResponseDate> call= service.sendMessage(body);
+        Response<StackApiResponseDate> response = call.execute();
         System.out.println(response.body().getInfo());
 
         if(response!=null){

@@ -33,9 +33,12 @@ public interface PalaverDao {
     @Query("SELECT * FROM table_friend")
     List<Friend> loadAllFriend();
 
-    @Transaction
-    @Query("SELECT * FROM table_friend")
-    List<Chat> loadAllChat();
+    @Query("SELECT * " +
+            "FROM (select fk_friend, table_chat_data.data, date_time " +
+            "from table_friend INNER JOIN table_chat_data " +
+            "on fk_friend = friend_name order by date_time ASC) " +
+            "GROUP By fk_friend ")
+    List <Chat> loadAllChat();
 
     @Query("SELECT * From table_chat_data WHERE sender = :friendName " +
             "OR recipient = :friendName ORDER BY date_time ASC" )

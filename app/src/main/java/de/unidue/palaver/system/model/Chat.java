@@ -1,49 +1,35 @@
 package de.unidue.palaver.system.model;
 
-import androidx.room.Embedded;
-import androidx.room.Relation;
+import androidx.room.DatabaseView;
 
-import java.text.ParseException;
-import java.util.Collections;
-import java.util.List;
-
-import de.unidue.palaver.system.roomdatabase.DBContract;
-
+@DatabaseView("SELECT * " +
+        "FROM (select fk_friend, table_chat_data.data, date_time " +
+        "from table_friend INNER JOIN table_chat_data " +
+        "on fk_friend =friend_name order by date_time DESC) " +
+        "GROUP By fk_friend ")
 public class Chat implements Comparable<Chat>{
 
-    @Embedded public Friend friend;
-    @Relation(
-            parentColumn =DBContract.TableFriend.COLUMN_FRIEND_NAME,
-            entityColumn = DBContract.TableMessage.COLUMN_CHAT_SENDER
-    )
-    public List<Message> messages;
+    public String fk_friend;
+    public String data;
+    public String date_time;
 
-    public Message getLastMessage() {
-        if(messages.size()>0){
-            List<Message> messages1 = messages;
-            Collections.sort(messages1);
-            return messages1.get(messages.size()-1);
-        }
-        return null;
+    public String getFk_friend() {
+        return fk_friend;
     }
 
-    public Friend getFriend() {
-        return friend;
+    public String getData() {
+        return data;
+    }
+
+    public String getDate_time() {
+        return date_time;
     }
 
     @Override
     public int compareTo(Chat o) {
-        if(this.getLastMessage()!=null && o.getLastMessage()!=null){
-            return o.getLastMessage().getDate().compareTo(this.getLastMessage().getDate());
+        if(this.getData()!=null && o.getData()!=null){
+            return o.getDate_time().compareTo(this.getDate_time());
         }
         return 0;
-    }
-
-    @Override
-    public String toString() {
-        return "Chat{" +
-                "friend=" + friend +
-                ", messages=" + messages +
-                '}';
     }
 }

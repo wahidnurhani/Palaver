@@ -27,30 +27,6 @@ public class JSONBuilder {
             this.password = user.getPassword();
             this.friendUserName = friend.getUsername();
         }
-
-        public String getUsername() {
-            return username;
-        }
-
-        public void setUsername(String username) {
-            this.username = username;
-        }
-
-        public String getPassword() {
-            return password;
-        }
-
-        public void setPassword(String password) {
-            this.password = password;
-        }
-
-        public String getFriendUserName() {
-            return friendUserName;
-        }
-
-        public void setFriendUserName(String friendUserName) {
-            this.friendUserName = friendUserName;
-        }
     }
 
     public static class SendMessageBody {
@@ -137,30 +113,6 @@ public class JSONBuilder {
             this.username = user.getUserName();
             this.password = user.getPassword();
             this.friendUserName = friend.getUsername();
-        }
-
-        public String getUsername() {
-            return username;
-        }
-
-        public void setUsername(String username) {
-            this.username = username;
-        }
-
-        public String getPassword() {
-            return password;
-        }
-
-        public void setPassword(String password) {
-            this.password = password;
-        }
-
-        public String getFriendUserName() {
-            return friendUserName;
-        }
-
-        public void setFriendUserName(String friendUserName) {
-            this.friendUserName = friendUserName;
         }
     }
 }

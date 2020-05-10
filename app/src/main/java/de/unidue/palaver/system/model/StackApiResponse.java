@@ -3,7 +3,7 @@ package de.unidue.palaver.system.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class ServerResponse {
+public class StackApiResponse {
 
     @SerializedName(StringValue.JSONKeyName.MSG_TYPE)
     @Expose
@@ -17,21 +17,14 @@ public class ServerResponse {
         return messageType;
     }
 
-    public void setMessageType(int messageType) {
-        this.messageType = messageType;
-    }
-
     public String getInfo() {
         return info;
     }
 
-    public void setInfo(String info) {
-        this.info = info;
-    }
 
     @Override
     public String toString() {
-        return "ServerResponse{" +
+        return "StackApiResponse{" +
                 "messageType=" + messageType +
                 ", info='" + info + '\'' +
                 '}';

@@ -58,6 +58,7 @@ public class MessageViewModel extends AndroidViewModel implements Comparable<Mes
 
     public void addMessage(Activity activity, String text) {
          Message message = new Message(
+                 friend.getUsername(),
                  user.getUserName(),
                  friend.getUsername(),
                  text,

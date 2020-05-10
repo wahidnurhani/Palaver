@@ -16,6 +16,7 @@ import java.util.List;
 
 import de.unidue.palaver.R;
 import de.unidue.palaver.system.model.Chat;
+import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.StringValue;
 
 
@@ -45,7 +46,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
         holder.getCardView().setOnClickListener(v -> {
             Intent intent = new Intent(context, ChatRoomActivity.class);
             Bundle bundle = new Bundle();
-            bundle.putSerializable(StringValue.IntentKeyName.FRIEND, current.getFriend());
+            bundle.putSerializable(StringValue.IntentKeyName.FRIEND, new Friend(current.getFk_friend()));
             intent.putExtras(bundle);
             context.startActivity(intent);
         });
@@ -80,9 +81,9 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
         }
 
         void setData(Chat current, int position){
-            this.textViewName.setText(current.friend.getUsername());
-            if(current.getLastMessage()!= null){
-                this.textViewLastMessage.setText(current.getLastMessage().getMessage().trim());
+            this.textViewName.setText(current.fk_friend);
+            if(current.getData()!= null){
+                this.textViewLastMessage.setText(current.getData().trim());
             }
         }
     }

@@ -19,7 +19,7 @@ import de.unidue.palaver.system.roomdatabase.PalaverRoomDatabase;
 
 public class ServiceFetchFriend extends Service {
     private static final String TAG= ServiceFetchFriend.class.getSimpleName();
-    private Communicator communicator;
+    //private Communicator communicator;
     private PalaverDao palaverDao;
 
     public IBinder onBind(Intent intent) {
@@ -32,7 +32,7 @@ public class ServiceFetchFriend extends Service {
         palaverDao = palaverRoomDatabase.palaverDao();
         FetchAllFriendFromServer fetchAllFriendFromServer=new FetchAllFriendFromServer();
         fetchAllFriendFromServer.execute("initiate friend");
-        communicator = PalaverEngine.getPalaverEngineInstance().getCommunicator();
+        //communicator = PalaverEngine.getPalaverEngineInstance().getCommunicator();
         return START_STICKY;
     }
 
@@ -48,17 +48,17 @@ public class ServiceFetchFriend extends Service {
         @Override
         protected Void doInBackground(String... strings) {
             User user = SessionManager.getSessionManagerInstance(getApplicationContext()).getUser();
-            CommunicatorResult<Friend> communicatorResult = communicator.fetchFriends(user);
-
-            if(communicatorResult.getData().size()>0){
-                if(palaverDao.deleteFriend()==1){
-                    for(Friend friend : communicatorResult.getData()) {
-                        palaverDao.insert(friend);
-                    }
-                }
-                Intent intent = new Intent(StringValue.IntentAction.BROADCAST_ALL_FRIENDS_FETCHED);
-                LocalBroadcastManager.getInstance(ServiceFetchFriend.this).sendBroadcast(intent);
-            }
+//            CommunicatorResult<Friend> communicatorResult = communicator.fetchFriends(user);
+//
+//            if(communicatorResult.getData().size()>0){
+//                if(palaverDao.deleteFriend()==1){
+//                    for(Friend friend : communicatorResult.getData()) {
+//                        palaverDao.insert(friend);
+//                    }
+//                }
+//                Intent intent = new Intent(StringValue.IntentAction.BROADCAST_ALL_FRIENDS_FETCHED);
+//                LocalBroadcastManager.getInstance(ServiceFetchFriend.this).sendBroadcast(intent);
+//            }
             onDestroy();
             return null;
         }

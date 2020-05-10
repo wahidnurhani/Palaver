@@ -17,8 +17,8 @@ import java.io.IOException;
 import de.unidue.palaver.system.engine.SessionManager;
 import de.unidue.palaver.system.engine.PalaverEngine;
 import de.unidue.palaver.system.engine.UIController;
-import de.unidue.palaver.system.model.DataServerResponseList;
-import de.unidue.palaver.system.httpclient.NewCommunicator;
+import de.unidue.palaver.system.model.StackApiResponseList;
+import de.unidue.palaver.system.httpclient.Retrofit;
 import de.unidue.palaver.system.model.StringValue;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.User;
@@ -62,19 +62,19 @@ public class ServiceAddFriend extends Service {
     }
 
     @SuppressLint("StaticFieldLeak")
-    private class FetchAddFriend extends AsyncTask<Friend, Void, Response<DataServerResponseList<String>>> {
+    private class FetchAddFriend extends AsyncTask<Friend, Void, Response<StackApiResponseList<String>>> {
 
         @Override
-        protected Response<DataServerResponseList<String>> doInBackground(Friend... friends) {
+        protected Response<StackApiResponseList<String>> doInBackground(Friend... friends) {
             sessionManager = SessionManager.getSessionManagerInstance(getApplicationContext());
             User user = sessionManager.getUser();
             PalaverRoomDatabase palaverRoomDatabase = PalaverRoomDatabase.getDatabase(getApplicationContext());
             PalaverDao palaverDao = palaverRoomDatabase.palaverDao();
-            Response<DataServerResponseList<String>> response= null;
+            Response<StackApiResponseList<String>> response= null;
 
-            NewCommunicator newCommunicator = new NewCommunicator();
+            Retrofit retrofit = new Retrofit();
             try {
-                response = newCommunicator.addFriend(user, friends[0]);
+                response = retrofit.addFriend(user, friends[0]);
                 assert response.body() != null;
                 if(response.body().getMessageType()==1){
                     palaverDao.insert(friends[0]);
@@ -88,7 +88,7 @@ public class ServiceAddFriend extends Service {
         }
 
         @Override
-        protected void onPostExecute(Response<DataServerResponseList<String>> s) {
+        protected void onPostExecute(Response<StackApiResponseList<String>> s) {
             super.onPostExecute(s);
             if(s!=null){
                 assert s.body() != null;

@@ -18,11 +18,11 @@ import java.util.List;
 import de.unidue.palaver.system.engine.SessionManager;
 import de.unidue.palaver.system.httpclient.JSONBuilder;
 import de.unidue.palaver.system.engine.PalaverEngine;
+import de.unidue.palaver.system.model.StackApiResponseList;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.Message;
 import de.unidue.palaver.system.model.User;
-import de.unidue.palaver.system.model.DataServerResponseList;
-import de.unidue.palaver.system.httpclient.NewCommunicator;
+import de.unidue.palaver.system.httpclient.Retrofit;
 import de.unidue.palaver.system.roomdatabase.PalaverDao;
 import de.unidue.palaver.system.roomdatabase.PalaverRoomDatabase;
 import de.unidue.palaver.system.model.StringValue;
@@ -68,7 +68,7 @@ public class ServiceLogin extends Service {
     }
 
     @SuppressLint("StaticFieldLeak")
-    private class LoginProcessor extends AsyncTask<User, Void, Response<DataServerResponseList<String>>> {
+    private class LoginProcessor extends AsyncTask<User, Void, Response<StackApiResponseList<String>>> {
         /**
          * Override this method to perform a computation on a background thread. The
          * specified parameters are the parameters passed to {@link #execute}
@@ -84,13 +84,13 @@ public class ServiceLogin extends Service {
          * @see #publishProgress
          */
         @Override
-        protected Response<DataServerResponseList<String>> doInBackground(User... users) {
+        protected Response<StackApiResponseList<String>> doInBackground(User... users) {
 
-            NewCommunicator newCommunicator = new NewCommunicator();
+            Retrofit retrofit = new Retrofit();
 
-            Response<DataServerResponseList<String>> responseAuthenticate = null;
-            Response<DataServerResponseList<String>> responseFetchFriends;
-            Response<DataServerResponseList<Message>> responseFetchChat = null;
+            Response<StackApiResponseList<String>> responseAuthenticate = null;
+            Response<StackApiResponseList<String>> responseFetchFriends;
+            Response<StackApiResponseList<Message>> responseFetchChat = null;
 
 
             SessionManager sessionManager = SessionManager.getSessionManagerInstance(getApplicationContext());
@@ -100,13 +100,13 @@ public class ServiceLogin extends Service {
 
             try {
 
-                responseAuthenticate = newCommunicator.authenticate(users[0]);
+                responseAuthenticate = retrofit.authenticate(users[0]);
 
                 assert responseAuthenticate.body() != null;
                 if(responseAuthenticate.body().getMessageType()==1){
 
 
-                    responseFetchFriends =newCommunicator.fetchAllFriend(users[0]);
+                    responseFetchFriends = retrofit.fetchAllFriend(users[0]);
 
                     assert responseFetchFriends.body() != null;
                     if (responseFetchFriends.body().getMessageType()==1){
@@ -119,10 +119,11 @@ public class ServiceLogin extends Service {
 
                         for (Friend friend: friends){
                             JSONBuilder.UserAndRecipient body = new JSONBuilder.UserAndRecipient(users[0], friend);
-                            responseFetchChat = newCommunicator.getMessage(body);
+                            responseFetchChat = retrofit.getMessage(body);
 
-                            if(responseFetchChat!=null){
+                            if(responseFetchChat!=null && responseFetchChat.body().getDatas()!=null){
                                 for (Message message : responseFetchChat.body().getDatas()){
+                                    message.setFriendUserName(friend.getUsername());
                                     palaverDao.insert(message);
                                 }
                             }
@@ -145,7 +146,7 @@ public class ServiceLogin extends Service {
         }
 
         @Override
-        protected void onPostExecute(Response<DataServerResponseList<String>> dataServerResponseResponse) {
+        protected void onPostExecute(Response<StackApiResponseList<String>> dataServerResponseResponse) {
             if(dataServerResponseResponse!= null){
                 PalaverEngine palaverEngine = PalaverEngine.getPalaverEngineInstance();
                 assert dataServerResponseResponse.body() != null;
