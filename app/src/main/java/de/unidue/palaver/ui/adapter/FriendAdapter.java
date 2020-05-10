@@ -1,4 +1,4 @@
-package de.unidue.palaver.ui;
+package de.unidue.palaver.ui.adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +15,7 @@ import java.util.List;
 import de.unidue.palaver.R;
 import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.StringValue;
+import de.unidue.palaver.ui.ChatRoomActivity;
 
 
 public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendViewHolder> {
@@ -23,7 +24,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
     private LayoutInflater inflater;
     private Context context;
 
-    FriendAdapter(Context context, List<Friend> friends) {
+    public FriendAdapter(Context context, List<Friend> friends) {
         inflater = LayoutInflater.from(context);
         this.friends = friends;
         this.context = context;
@@ -58,11 +59,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
         return 0;
     }
 
-    void overrade(List<Friend> searchedList) {
-        this.friends= searchedList;
-    }
-
-    public void setFriends(List<Friend> friends) {
+    public void setItems(List<Friend> friends) {
         this.friends = friends;
         notifyDataSetChanged();
     }

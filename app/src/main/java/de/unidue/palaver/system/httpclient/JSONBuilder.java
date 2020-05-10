@@ -63,36 +63,12 @@ public class JSONBuilder {
             this.username = username;
         }
 
-        public String getRecipient() {
-            return recipient;
-        }
-
-        public void setRecipient(String recipient) {
-            this.recipient = recipient;
-        }
-
         public String getPassword() {
             return password;
         }
 
         public void setPassword(String password) {
             this.password = password;
-        }
-
-        public String getMimeType() {
-            return mimeType;
-        }
-
-        public void setMimeType(String mimeType) {
-            this.mimeType = mimeType;
-        }
-
-        public String getData() {
-            return data;
-        }
-
-        public void setData(String data) {
-            this.data = data;
         }
     }
 
@@ -113,6 +89,73 @@ public class JSONBuilder {
             this.username = user.getUserName();
             this.password = user.getPassword();
             this.friendUserName = friend.getUsername();
+        }
+    }
+
+    public class ChangePassWord {
+        @SerializedName("Username")
+        @Expose
+        private String username;
+
+        @SerializedName("Password")
+        @Expose
+        private String password;
+
+        @SerializedName("NewPassword")
+        @Expose
+        private String newPassword;
+
+        public ChangePassWord(User user, String newPassword) {
+            this.username= user.getUserName();
+            this.password= user.getPassword();
+            this.newPassword = newPassword;
+
+        }
+    }
+
+    public class PushToken {
+        @SerializedName("Username")
+        @Expose
+        private String username;
+
+        @SerializedName("Password")
+        @Expose
+        private String password;
+
+        @SerializedName("PushToken")
+        @Expose
+        private String token;
+
+        public PushToken(User user, String token) {
+            this.username = user.getUserName();
+            this.password = user.getPassword();
+            this.token = token;
+        }
+    }
+
+    public class GetMessageOffset {
+
+        @SerializedName("Username")
+        @Expose
+        private String username;
+
+        @SerializedName("Password")
+        @Expose
+        private String password;
+
+        @SerializedName("Recipient")
+        @Expose
+        private String friendUserName;
+
+        @SerializedName("Offset")
+        @Expose
+        private String offset;
+
+        public GetMessageOffset(User user, Friend friend, String offset) {
+            this.username = user.getUserName();
+            this.password = user.getPassword();
+            this.friendUserName = friend.getUsername();
+            this.offset = offset;
         }
     }
 }

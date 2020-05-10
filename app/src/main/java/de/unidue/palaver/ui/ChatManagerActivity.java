@@ -16,12 +16,10 @@ import android.widget.SearchView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.List;
-
 import de.unidue.palaver.R;
 import de.unidue.palaver.system.sessionmanager.SessionManager;
-import de.unidue.palaver.system.model.Chat;
 import de.unidue.palaver.system.viewmodel.ChatsViewModel;
+import de.unidue.palaver.ui.adapter.ChatAdapter;
 
 public class ChatManagerActivity extends AppCompatActivity {
     private static final String TAG = ChatManagerActivity.class.getSimpleName();
@@ -56,8 +54,7 @@ public class ChatManagerActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                List<Chat> searchedList= chatsViewModel.search(newText);
-                chatAdapter.overrade(searchedList);
+                chatAdapter.setItems(chatsViewModel.search(newText));
                 chatAdapter.notifyDataSetChanged();
                 return true;
             }
@@ -114,7 +111,7 @@ public class ChatManagerActivity extends AppCompatActivity {
                 linearLayoutManager.getOrientation());
         chatsRecyclerView.addItemDecoration(dividerItemDecoration);
 
-        chatsViewModel.getChats().observe(this, chats -> chatAdapter.setChats(chats));
+        chatsViewModel.getChats().observe(this, chats -> chatAdapter.setItems(chats));
 
     }
 

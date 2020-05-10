@@ -30,4 +30,16 @@ public interface PalaverPostAPI {
 
     @POST(StringValue.APICmd.SEND_MESSAGE)
     Call<StackApiResponseDate> sendMessage(@Body JSONBuilder.SendMessageBody body);
+
+    @POST(StringValue.APICmd.CHANGE_PASSWORD)
+    Call<StackApiResponseList<String>> changePassword(@Body JSONBuilder.ChangePassWord body);
+
+    @POST(StringValue.APICmd.PUSHTOKEN)
+    Call<StackApiResponseList<String>> pushToken(@Body JSONBuilder.PushToken body);
+
+    @POST(StringValue.APICmd.GET_MESSAGE_OFFSET)
+    Call<StackApiResponseList<Message>> getMessageOffset(@Body JSONBuilder.GetMessageOffset body);
+
+    @POST(StringValue.APICmd.REMOVE_FRIEND)
+    Call<StackApiResponseList<String>> removeFriend(@Body JSONBuilder.UserAndFriend userAndFriend);
 }

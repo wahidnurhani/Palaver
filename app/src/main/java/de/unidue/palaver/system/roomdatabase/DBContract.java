@@ -5,7 +5,7 @@ import android.provider.BaseColumns;
 public class DBContract {
 
     static final String DB_NAME = "palaver.db";
-    static final int DB_VERSION = 1;
+    static final int DB_VERSION = 2;
 
     public DBContract(){}
 

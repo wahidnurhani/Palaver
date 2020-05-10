@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -117,6 +118,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 assert responseAuthenticate.body() != null;
                 if(responseAuthenticate.body().getMessageType()==1){
+                    Log.i(TAG, "login Success");
                     sessionManager.startSession(users[0].getUserName(), users[0].getPassword());
                 }
             } catch (IOException e) {

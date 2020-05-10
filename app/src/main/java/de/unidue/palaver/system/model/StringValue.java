@@ -1,6 +1,5 @@
 package de.unidue.palaver.system.model;
 
-import android.content.Intent;
 
 public class StringValue {
 
@@ -60,10 +59,6 @@ public class StringValue {
         public static final String SENDER = "Sender";
     }
 
-    public static class System {
-        public static final String BASE_URL = "http://palaver.se.paluno.uni-due.de";
-    }
-
     public static class APICmd {
         public static final String REGISTER = "/api/user/register";
         public static final String VALIDATE = "/api/user/validate";
@@ -76,5 +71,6 @@ public class StringValue {
         public static final String GET_MESSAGE = "/api/message/get";
 
         public static final String BASE_URL = "http://palaver.se.paluno.uni-due.de";
+        public static final String GET_MESSAGE_OFFSET = "/api/message/getoffset";
     }
 }

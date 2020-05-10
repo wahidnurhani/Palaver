@@ -1,4 +1,4 @@
-package de.unidue.palaver.ui;
+package de.unidue.palaver.ui.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -26,7 +26,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
     private LayoutInflater inflater;
     private Context context;
 
-    MessageAdapter(Context context, List<Message> messages) {
+    public MessageAdapter(Context context, List<Message> messages) {
         inflater = LayoutInflater.from(context);
         this.context = context;
         this.messages = messages;
@@ -68,7 +68,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
         holder.setData(current);
     }
 
-    void setMessages(List<Message> messages) {
+    public void setMessages(List<Message> messages) {
         this.messages = messages;
         notifyDataSetChanged();
     }
@@ -81,7 +81,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
         return 0;
     }
 
-    void addMessage(Message message) {
+    public void addMessage(Message message) {
         this.messages.add(message);
     }
 

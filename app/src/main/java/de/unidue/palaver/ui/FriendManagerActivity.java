@@ -2,7 +2,6 @@ package de.unidue.palaver.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -17,13 +16,12 @@ import android.widget.SearchView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.List;
 import java.util.Objects;
 
 import de.unidue.palaver.system.viewmodel.FriendViewModel;
 import de.unidue.palaver.R;
-import de.unidue.palaver.system.model.Friend;
 import de.unidue.palaver.system.model.StringValue;
+import de.unidue.palaver.ui.adapter.FriendAdapter;
 
 
 public class FriendManagerActivity extends AppCompatActivity {
@@ -51,8 +49,7 @@ public class FriendManagerActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                List<Friend> searchedList= friendViewModel.search(newText);
-                friendAdapter.overrade(searchedList);
+                friendAdapter.setItems(friendViewModel.search(newText));
                 friendAdapter.notifyDataSetChanged();
                 return true;
             }
@@ -76,16 +73,15 @@ public class FriendManagerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_friend_manager);
 
         friendViewModel = ViewModelProviders.of(this).get(FriendViewModel.class);
-        friendViewModel.getFriends().observe(this, friends -> friendAdapter.setFriends(friends));
+        friendViewModel.getFriends().observe(this, friends -> friendAdapter.setItems(friends));
 
         Objects.requireNonNull(getSupportActionBar()).setTitle(StringValue.TextAndLabel.SELECT_FRIEND);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         FloatingActionButton floatingActionButton = findViewById(R.id.friendManager_addChatFloatingButton);
-        floatingActionButton.setOnClickListener(v -> {
-            AddFriendDialog.startDialog(getApplicationContext(), this);
-        });
+        floatingActionButton.setOnClickListener(v ->
+                AddFriendDialog.startDialog(getApplicationContext(), this));
 
         RecyclerView friendsRecycleView = findViewById(R.id.friendManager_recycleView);
 

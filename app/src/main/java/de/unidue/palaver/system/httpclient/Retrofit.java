@@ -51,15 +51,40 @@ public class Retrofit {
         return callListString.execute();
     }
 
+    public Response<StackApiResponseList<String>> removeFriend(User user, Friend friend)
+            throws IOException {
+        JSONBuilder.UserAndFriend userAndFriend = new JSONBuilder.UserAndFriend(user,friend);
+        callListString = service.removeFriend(userAndFriend);
+        return callListString.execute();
+    }
+
     public Response<StackApiResponseList<Message>> getMessage(JSONBuilder.UserAndRecipient body)
             throws IOException {
         Call<StackApiResponseList<Message>> call = service.getMessage(body);
         return call.execute();
     }
 
+    public Response<StackApiResponseList<Message>> getMessageOffset(JSONBuilder.GetMessageOffset body)
+            throws IOException {
+        Call<StackApiResponseList<Message>> call = service.getMessageOffset(body);
+        return call.execute();
+    }
+
     public Response<StackApiResponseDate> sendMessage(JSONBuilder.SendMessageBody body)
             throws IOException {
         Call<StackApiResponseDate> call = service.sendMessage(body);
+        return call.execute();
+    }
+
+    public Response<StackApiResponseList<String>> changePassword(JSONBuilder.ChangePassWord body)
+            throws IOException {
+        Call<StackApiResponseList<String>> call = service.changePassword(body);
+        return call.execute();
+    }
+
+    public Response<StackApiResponseList<String>> pushToken(JSONBuilder.PushToken body)
+            throws IOException {
+        Call<StackApiResponseList<String>> call = service.pushToken(body);
         return call.execute();
     }
 }

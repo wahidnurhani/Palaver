@@ -15,7 +15,7 @@ import de.unidue.palaver.system.sessionmanager.SessionManager;
 import de.unidue.palaver.system.model.StringValue;
 import de.unidue.palaver.system.service.ServiceAddFriend;
 
-public class AddFriendDialog {
+class AddFriendDialog {
 
     private AlertDialog alertDialog;
     private Context applicationContext;
@@ -30,14 +30,14 @@ public class AddFriendDialog {
         this.sessionManager = SessionManager.getSessionManagerInstance(applicationContext);
     }
 
-    public static void startDialog(Context applicationContext, Activity activity) {
+    static void startDialog(Context applicationContext, Activity activity) {
         if(addFriendDialogInstance == null){
             addFriendDialogInstance = new AddFriendDialog(applicationContext, activity);
         }
         addFriendDialogInstance.startDialog();
     }
 
-    public void startDialog(){
+    private void startDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         LayoutInflater inflater = (activity).getLayoutInflater();
         @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.dialog_add_friend, null);

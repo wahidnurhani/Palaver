@@ -1,5 +1,6 @@
 package de.unidue.palaver.system.viewmodel;
 
+import android.app.Activity;
 import android.app.Application;
 
 import androidx.lifecycle.AndroidViewModel;
@@ -24,7 +25,6 @@ public class FriendViewModel extends AndroidViewModel {
         friends = friendRepository.getAllFriends();
     }
 
-
     public LiveData<List<Friend>> getFriends() {
         return friends;
     }
@@ -46,8 +46,8 @@ public class FriendViewModel extends AndroidViewModel {
         friendRepository.insert(friend);
     }
 
-    public void remove(Friend friend){
-        friendRepository.remove(friend);
+    public void remove(Activity activity, Friend friend){
+        friendRepository.remove(activity, friend);
     }
 
     public void update(Friend friend){

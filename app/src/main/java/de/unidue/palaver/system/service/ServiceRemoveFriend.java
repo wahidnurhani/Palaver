@@ -14,26 +14,48 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import java.io.IOException;
 
-import de.unidue.palaver.system.sessionmanager.SessionManager;
-import de.unidue.palaver.system.model.StackApiResponseList;
 import de.unidue.palaver.system.httpclient.Retrofit;
-import de.unidue.palaver.system.model.StringValue;
 import de.unidue.palaver.system.model.Friend;
+import de.unidue.palaver.system.model.StackApiResponseList;
+import de.unidue.palaver.system.model.StringValue;
 import de.unidue.palaver.system.model.User;
 import de.unidue.palaver.system.roomdatabase.PalaverDao;
 import de.unidue.palaver.system.roomdatabase.PalaverRoomDatabase;
+import de.unidue.palaver.system.sessionmanager.SessionManager;
 import de.unidue.palaver.ui.CustomToast;
 import retrofit2.Response;
 
-public class ServiceAddFriend extends Service {
-    private static final String TAG= ServiceAddFriend.class.getSimpleName();
+@SuppressLint("Registered")
+public class ServiceRemoveFriend extends Service {
 
-    public static void startIntent(Context applicationContext, Activity activity, String username) {
-        Intent intent = new Intent(applicationContext, ServiceAddFriend.class);
-        intent.putExtra(StringValue.IntentKeyName.FRIEND, username.trim());
+
+    private static final String TAG= ServiceRemoveFriend.class.getSimpleName();
+
+    public static void startIntent(Context applicationContext, Activity activity, Friend friend) {
+        Intent intent = new Intent(applicationContext, ServiceRemoveFriend.class);
+        intent.putExtra(StringValue.IntentKeyName.FRIEND, friend.getUsername().trim());
         activity.startService(intent);
     }
-
+    /**
+     * Return the communication channel to the service.  May return null if
+     * clients can not bind to the service.  The returned
+     * {@link IBinder} is usually for a complex interface
+     * that has been <a href="{@docRoot}guide/components/aidl.html">described using
+     * aidl</a>.
+     *
+     * <p><em>Note that unlike other application components, calls on to the
+     * IBinder interface returned here may not happen on the main thread
+     * of the process</em>.  More information about the main thread can be found in
+     * <a href="{@docRoot}guide/topics/fundamentals/processes-and-threads.html">Processes and
+     * Threads</a>.</p>
+     *
+     * @param intent The Intent that was used to bind to this service,
+     *               as given to {@link Context#bindService
+     *               Context.bindService}.  Note that any extras that were included with
+     *               the Intent at that point will <em>not</em> be seen here.
+     * @return Return an IBinder through which clients can call on to the
+     * service.
+     */
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -42,10 +64,9 @@ public class ServiceAddFriend extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-
         String friendUsername = intent.getCharSequenceExtra(StringValue.IntentKeyName.FRIEND).toString();
-        FetchAddFriend fetchAddFriend= new FetchAddFriend();
-        fetchAddFriend.execute(new Friend(friendUsername));
+        Friend friend = new Friend(friendUsername);
+        new RemoveFriendAsyncTask().execute(friend);
         return START_STICKY;
     }
 
@@ -56,7 +77,7 @@ public class ServiceAddFriend extends Service {
     }
 
     @SuppressLint("StaticFieldLeak")
-    private class FetchAddFriend extends AsyncTask<Friend, Void, Response<StackApiResponseList<String>>> {
+    private class RemoveFriendAsyncTask extends AsyncTask<Friend, Void, Response<StackApiResponseList<String>>> {
 
         @Override
         protected Response<StackApiResponseList<String>> doInBackground(Friend... friends) {
@@ -68,10 +89,10 @@ public class ServiceAddFriend extends Service {
 
             Retrofit retrofit = new Retrofit();
             try {
-                response = retrofit.addFriend(user, friends[0]);
+                response = retrofit.removeFriend(user, friends[0]);
                 assert response.body() != null;
                 if(response.body().getMessageType()==1){
-                    palaverDao.insert(friends[0]);
+                    palaverDao.delete(friends[0]);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
