@@ -108,5 +108,6 @@ public class ChatRoomActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         ChatManagerActivity.startActivity(ChatRoomActivity.this);
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_rigt);
     }
 }
