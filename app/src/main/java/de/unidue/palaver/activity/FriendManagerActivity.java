@@ -18,10 +18,11 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.Objects;
 
+import de.unidue.palaver.dialogandtoast.AddFriendDialog;
 import de.unidue.palaver.viewmodel.FriendViewModel;
 import de.unidue.palaver.R;
 import de.unidue.palaver.model.StringValue;
-import de.unidue.palaver.activity.adapter.FriendAdapter;
+import de.unidue.palaver.adapter.FriendAdapter;
 
 
 public class FriendManagerActivity extends AppCompatActivity {

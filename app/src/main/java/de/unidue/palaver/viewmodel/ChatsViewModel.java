@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import de.unidue.palaver.repository.SessionManager;
+import de.unidue.palaver.sessionmanager.SessionManager;
 import de.unidue.palaver.model.Chat;
 import de.unidue.palaver.repository.ChatRepository;
 

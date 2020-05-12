@@ -12,19 +12,20 @@ import java.util.Objects;
 import de.unidue.palaver.model.Friend;
 import de.unidue.palaver.model.User;
 import de.unidue.palaver.repository.FriendRepository;
-import de.unidue.palaver.repository.SessionManager;
+import de.unidue.palaver.sessionmanager.SessionManager;
 
 public class FriendViewModel extends AndroidViewModel {
 
     private FriendRepository friendRepository;
     private LiveData<List<Friend>> friends;
+    private SessionManager sessionManager;
     private User user;
 
     public FriendViewModel(Application application) {
         super(application);
 
         friendRepository = new FriendRepository(application);
-        SessionManager sessionManager = SessionManager.getSessionManagerInstance(application);
+        sessionManager = SessionManager.getSessionManagerInstance(application);
         friends = friendRepository.getAllFriends();
         user = sessionManager.getUser();
     }

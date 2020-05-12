@@ -1,4 +1,4 @@
-package de.unidue.palaver.activity.adapter;
+package de.unidue.palaver.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import de.unidue.palaver.R;
-import de.unidue.palaver.repository.SessionManager;
+import de.unidue.palaver.sessionmanager.SessionManager;
 import de.unidue.palaver.model.Message;
 
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHolder>{

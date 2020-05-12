@@ -1,17 +1,15 @@
-package de.unidue.palaver.sessionmanager.communicator;
+package de.unidue.palaver.httpclient;
 
 import org.junit.Test;
 
 import java.io.IOException;
 import java.util.Date;
 
-import de.unidue.palaver.httpclient.JSONBuilder;
 import de.unidue.palaver.model.StackApiResponseList;
 import de.unidue.palaver.model.Friend;
 import de.unidue.palaver.model.Message;
 import de.unidue.palaver.model.StackApiResponseDate;
 import de.unidue.palaver.model.User;
-import de.unidue.palaver.httpclient.PalaverPostAPI;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -35,6 +33,7 @@ public class RetrofitTest {
         call.enqueue(new Callback<StackApiResponseList<String>>() {
             @Override
             public void onResponse(Call<StackApiResponseList<String>> call, Response<StackApiResponseList<String>> response) {
+                assert response.body() != null;
                 System.out.println(response.body().toString());
             }
 
@@ -85,6 +84,7 @@ public class RetrofitTest {
         Call<StackApiResponseList<String>> call= service.addFriend(userAndFriend);
         Response<StackApiResponseList<String>> response = call.execute();
 
+        assert response.body() != null;
         System.out.println(response.body().getInfo());
 
     }
@@ -103,12 +103,11 @@ public class RetrofitTest {
         JSONBuilder.UserAndRecipient body = new JSONBuilder.UserAndRecipient(user, friend);
         Call<StackApiResponseList<Message>> call= service.getMessage(body);
         Response<StackApiResponseList<Message>> response = call.execute();
-        System.out.println(response.body().getInfo());
 
-        if(response!=null){
-            for(Message message : response.body().getDatas()){
-                System.out.println(message.toString());
-            }
+        assert response.body() != null;
+        System.out.println(response.body().getInfo());
+        for(Message message : response.body().getDatas()){
+            System.out.println(message.toString());
         }
     }
 
@@ -129,11 +128,10 @@ public class RetrofitTest {
         JSONBuilder.SendMessageBody body = new JSONBuilder.SendMessageBody(user, friend, message);
         Call<StackApiResponseDate> call= service.sendMessage(body);
         Response<StackApiResponseDate> response = call.execute();
-        System.out.println(response.body().getInfo());
 
-        if(response!=null){
-            System.out.println(response.body().getDateTime().getDateTime());
-        }
+        assert response.body() != null;
+        System.out.println(response.body().getInfo());
+        System.out.println(response.body().getDateTime().getDateTime());
     }
 
 }

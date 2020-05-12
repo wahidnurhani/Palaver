@@ -42,58 +42,42 @@ public class FriendRepository {
         ServiceAddFriend.startIntent(application, username);
     }
 
-    public static class RemoveAllAsynctask extends AsyncTask<Void, Void, Void>{
+    int insert(Friend friend){
+        InsertAsyncTask insertAsyncTask = new InsertAsyncTask(palaverDao);
+        insertAsyncTask.execute(friend);
+        return insertAsyncTask.getReturnValue();
+    }
+
+    public static class InsertAsyncTask extends AsyncTask<Friend, Void, Integer> {
+        int returnValue;
 
         private PalaverDao palaverDao;
-        public RemoveAllAsynctask(PalaverDao palaverDao) {
+        InsertAsyncTask(PalaverDao palaverDao) {
             this.palaverDao = palaverDao;
+            this.returnValue = 1;
         }
 
-        /**
-         * Override this method to perform a computation on a background thread. The
-         * specified parameters are the parameters passed to {@link #execute}
-         * by the caller of this task.
-         * <p>
-         * This method can call {@link #publishProgress} to publish updates
-         * on the UI thread.
-         *
-         * @param voids The parameters of the task.
-         * @return A result, defined by the subclass of this task.
-         * @see #onPreExecute()
-         * @see #onPostExecute
-         * @see #publishProgress
-         */
+        int getReturnValue() {
+            return returnValue;
+        }
+
         @Override
-        protected Void doInBackground(Void... voids) {
-            palaverDao.deleteAllFriend();
-            return null;
+        protected Integer doInBackground(Friend... friends) {
+            returnValue = (int) palaverDao.insert(friends[0]);
+            return returnValue;
         }
     }
 
-    public static class UpdateAsynctask extends AsyncTask<Friend, Void, Void>{
-        private PalaverDao palaverDao;
+    public static class RemoveAllAsynctask extends AsyncTask<Void, Void, Void>{
 
-        public UpdateAsynctask(PalaverDao palaverDao) {
+        private PalaverDao palaverDao;
+        RemoveAllAsynctask(PalaverDao palaverDao) {
             this.palaverDao = palaverDao;
         }
 
-        /**
-         * Override this method to perform a computation on a background thread. The
-         * specified parameters are the parameters passed to {@link #execute}
-         * by the caller of this task.
-         * <p>
-         * This method can call {@link #publishProgress} to publish updates
-         * on the UI thread.
-         *
-         * @param friends The parameters of the task.
-         * @return A result, defined by the subclass of this task.
-         * @see #onPreExecute()
-         * @see #onPostExecute
-         * @see #publishProgress
-         */
         @Override
-        protected Void doInBackground(Friend... friends) {
-            palaverDao.update(friends[0]);
+        protected Void doInBackground(Void... voids) {
+            palaverDao.deleteAllFriend();
             return null;
         }
     }

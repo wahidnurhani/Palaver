@@ -13,14 +13,14 @@ import androidx.annotation.Nullable;
 import java.io.IOException;
 
 import de.unidue.palaver.roomdatabase.PalaverDB;
-import de.unidue.palaver.repository.SessionManager;
+import de.unidue.palaver.sessionmanager.SessionManager;
 import de.unidue.palaver.model.StackApiResponseList;
 import de.unidue.palaver.httpclient.Retrofit;
 import de.unidue.palaver.model.StringValue;
 import de.unidue.palaver.model.Friend;
 import de.unidue.palaver.model.User;
 import de.unidue.palaver.roomdatabase.PalaverDao;
-import de.unidue.palaver.activity.CustomToast;
+import de.unidue.palaver.dialogandtoast.CustomToast;
 import retrofit2.Response;
 
 public class ServiceAddFriend extends Service {

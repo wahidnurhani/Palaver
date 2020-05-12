@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProviders;
 import java.util.Objects;
 
 import de.unidue.palaver.R;
+import de.unidue.palaver.dialogandtoast.ErrorDialog;
 import de.unidue.palaver.model.StringValue;
 import de.unidue.palaver.model.User;
 import de.unidue.palaver.viewmodel.LoginRegisterViewModel;

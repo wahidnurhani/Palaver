@@ -1,4 +1,4 @@
-package de.unidue.palaver.activity;
+package de.unidue.palaver.dialogandtoast;
 import android.content.Context;
 import android.view.Gravity;
 import android.widget.Toast;

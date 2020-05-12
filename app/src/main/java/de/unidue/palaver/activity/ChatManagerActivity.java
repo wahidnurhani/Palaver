@@ -18,7 +18,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import de.unidue.palaver.R;
 import de.unidue.palaver.viewmodel.ChatsViewModel;
-import de.unidue.palaver.activity.adapter.ChatAdapter;
+import de.unidue.palaver.adapter.ChatAdapter;
 
 public class ChatManagerActivity extends AppCompatActivity {
     private static final String TAG = ChatManagerActivity.class.getSimpleName();

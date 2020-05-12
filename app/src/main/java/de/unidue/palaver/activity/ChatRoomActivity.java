@@ -15,13 +15,13 @@ import java.util.Date;
 import java.util.Objects;
 
 import de.unidue.palaver.R;
-import de.unidue.palaver.repository.SessionManager;
+import de.unidue.palaver.sessionmanager.SessionManager;
 import de.unidue.palaver.model.Message;
 import de.unidue.palaver.model.User;
 import de.unidue.palaver.viewmodel.MessageViewModel;
 import de.unidue.palaver.model.Friend;
 import de.unidue.palaver.model.StringValue;
-import de.unidue.palaver.activity.adapter.MessageAdapter;
+import de.unidue.palaver.adapter.MessageAdapter;
 
 public class ChatRoomActivity extends AppCompatActivity {
     public static String TAG = ChatRoomActivity.class.getSimpleName();

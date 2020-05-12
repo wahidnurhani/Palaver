@@ -1,4 +1,4 @@
-package de.unidue.palaver.activity.adapter;
+package de.unidue.palaver.adapter;
 
 import android.content.Context;
 import android.content.Intent;

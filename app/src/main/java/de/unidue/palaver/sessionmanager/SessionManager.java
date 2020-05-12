@@ -1,4 +1,4 @@
-package de.unidue.palaver.repository;
+package de.unidue.palaver.sessionmanager;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -11,7 +11,7 @@ import androidx.lifecycle.MutableLiveData;
 import java.io.IOException;
 
 import de.unidue.palaver.R;
-import de.unidue.palaver.activity.CustomToast;
+import de.unidue.palaver.dialogandtoast.CustomToast;
 import de.unidue.palaver.httpclient.Retrofit;
 import de.unidue.palaver.model.StackApiResponseList;
 import de.unidue.palaver.model.User;
@@ -29,6 +29,7 @@ public class SessionManager {
     private MutableLiveData<Boolean> loginStatus;
     private MutableLiveData<Boolean> registerStatus;
     private PalaverDao palaverDao;
+    private int PRIVATE_MODE;
 
     private static final String PREF_NAME = String.valueOf(R.string.palaver_sharedPreferences);
     private static final String KEY_IS_LOGIN = String.valueOf(R.string.is_log_in);
@@ -48,7 +49,7 @@ public class SessionManager {
     @SuppressLint("CommitPrefEdits")
     private SessionManager(Context application) {
         this.application = application;
-        int PRIVATE_MODE = 0;
+        this.PRIVATE_MODE = 0;
         this.pref = this.application.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
         this.editor= pref.edit();
         this.loginStatus = new MutableLiveData<>();

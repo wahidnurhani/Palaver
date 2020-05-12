@@ -15,9 +15,9 @@ import de.unidue.palaver.repository.MessageRepository;
 
 public class MessageViewModel extends AndroidViewModel implements Comparable<MessageViewModel>, Serializable {
 
+    private MessageRepository messageRepository;
     private Friend friend;
     private LiveData<List<Message>> messages;
-    private MessageRepository messageRepository;
 
     public MessageViewModel(Application application) {
         super(application);
