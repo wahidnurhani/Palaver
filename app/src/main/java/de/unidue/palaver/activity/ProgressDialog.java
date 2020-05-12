@@ -7,17 +7,17 @@ import android.view.LayoutInflater;
 
 import de.unidue.palaver.R;
 
-public class ProgressDialog {
+class ProgressDialog {
 
     private Activity context;
     private AlertDialog alertDialog;
 
-    public ProgressDialog(Activity context) {
+    ProgressDialog(Activity context) {
         this.context = context;
     }
 
     @SuppressLint("InflateParams")
-    public void startDialog(){
+    void startDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(context,R.style.ProgressDialog);
         LayoutInflater inflater = context.getLayoutInflater();
         builder.setView(inflater.inflate(R.layout.dialog_loading, null));
@@ -25,9 +25,26 @@ public class ProgressDialog {
 
         alertDialog = builder.create();
         alertDialog.show();
+
+        MaxProgressAction maxProgressAction = new MaxProgressAction();
+        maxProgressAction.start();
     }
 
-    public void dismissDialog(){
-        alertDialog.dismiss();
+    private class MaxProgressAction extends Thread{
+        public void run(){
+            try{
+                int TimeOut = 5;
+                sleep(1000 * TimeOut);
+            }catch(InterruptedException e){
+                e.printStackTrace();
+            }
+            dismissDialog();
+        }
+    }
+
+    void dismissDialog(){
+        if(alertDialog!=null){
+            alertDialog.dismiss();
+        }
     }
 }

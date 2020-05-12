@@ -11,29 +11,27 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import de.unidue.palaver.R;
-import de.unidue.palaver.sessionmanager.SessionManager;
 import de.unidue.palaver.model.StringValue;
-import de.unidue.palaver.service.ServiceAddFriend;
+import de.unidue.palaver.viewmodel.FriendViewModel;
 
 class AddFriendDialog {
 
     private AlertDialog alertDialog;
     private Context applicationContext;
     private Activity activity;
-    private SessionManager sessionManager;
+    private FriendViewModel friendViewModel;
     private EditText userNameEditText;
+    @SuppressLint("StaticFieldLeak")
     private static AddFriendDialog addFriendDialogInstance;
 
-    private AddFriendDialog(Context applicationContext, Activity activity) {
+    private AddFriendDialog(Context applicationContext, Activity activity, FriendViewModel friendViewModel) {
         this.applicationContext = applicationContext;
         this.activity = activity;
-        this.sessionManager = SessionManager.getSessionManagerInstance(applicationContext);
+        this.friendViewModel = friendViewModel;
     }
 
-    static void startDialog(Context applicationContext, Activity activity) {
-        if(addFriendDialogInstance == null){
-            addFriendDialogInstance = new AddFriendDialog(applicationContext, activity);
-        }
+    static void startDialog(Context applicationContext, Activity activity, FriendViewModel friendViewModel) {
+        addFriendDialogInstance = new AddFriendDialog(applicationContext, activity, friendViewModel);
         addFriendDialogInstance.startDialog();
     }
 
@@ -55,7 +53,7 @@ class AddFriendDialog {
         addButton.setOnClickListener(v -> {
             if(inputValid()){
                 String username = userNameEditText.getText().toString().trim();
-                ServiceAddFriend.startIntent(applicationContext, activity, username);
+                friendViewModel.addFriend(username);
                 dismiss();
             }
         });
@@ -68,10 +66,10 @@ class AddFriendDialog {
 
     private boolean inputValid() {
         String username = userNameEditText.getText().toString().trim();
-        if(username.equals("") || userNameEditText.getText()==null){
+        if(username.equals("") || userNameEditText.getText()==null) {
             CustomToast.makeText(applicationContext, StringValue.ErrorMessage.USERNAME_BLANK);
             return false;
-        } else if (username.equals(sessionManager.getUser().getUserName())){
+        } else if (username.equals(friendViewModel.getUser())){
             CustomToast.makeText(applicationContext, StringValue.ErrorMessage.ADD_OWN_ACCOUNT);
             return false;
         }

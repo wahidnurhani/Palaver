@@ -11,6 +11,7 @@ import java.util.List;
 import de.unidue.palaver.model.Friend;
 import de.unidue.palaver.roomdatabase.PalaverDao;
 import de.unidue.palaver.roomdatabase.PalaverRoomDatabase;
+import de.unidue.palaver.service.ServiceAddFriend;
 import de.unidue.palaver.service.ServiceRemoveFriend;
 
 public class FriendRepository {
@@ -30,12 +31,8 @@ public class FriendRepository {
         return friends;
     }
 
-    public void insert(Friend friend){
-        new InsertAsyntask(palaverDao).execute(friend);
-    }
-
-    public void remove(Activity activity, Friend friend){
-        ServiceRemoveFriend.startIntent(application, activity, friend);
+    public void remove(Friend friend){
+        ServiceRemoveFriend.startIntent(application, friend);
     }
 
     public void update(Friend friend){
@@ -46,32 +43,8 @@ public class FriendRepository {
         new RemoveAllAsynctask(palaverDao).execute();
     }
 
-    public static class InsertAsyntask extends AsyncTask<Friend, Void, Void>{
-        private PalaverDao palaverDao;
-
-        public InsertAsyntask(PalaverDao palaverDao) {
-            this.palaverDao = palaverDao;
-        }
-
-        /**
-         * Override this method to perform a computation on a background thread. The
-         * specified parameters are the parameters passed to {@link #execute}
-         * by the caller of this task.
-         * <p>
-         * This method can call {@link #publishProgress} to publish updates
-         * on the UI thread.
-         *
-         * @param friends The parameters of the task.
-         * @return A result, defined by the subclass of this task.
-         * @see #onPreExecute()
-         * @see #onPostExecute
-         * @see #publishProgress
-         */
-        @Override
-        protected Void doInBackground(Friend... friends) {
-            palaverDao.insert(friends[0]);
-            return null;
-        }
+    public void addFriend(String username) {
+        ServiceAddFriend.startIntent(application, username);
     }
 
     public static class RemoveAllAsynctask extends AsyncTask<Void, Void, Void>{

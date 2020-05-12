@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import java.util.Objects;
 
@@ -19,7 +20,6 @@ public class SplashScreenActivity extends AppCompatActivity {
         context.startActivity(intent);
     }
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +32,7 @@ public class SplashScreenActivity extends AppCompatActivity {
     private class SplashAction extends Thread{
         public void run(){
             try{
+                Log.i(TAG, "splass run");
                 int SPLASH_TIME_OUT = 2;
                 sleep(1000 * SPLASH_TIME_OUT);
             }catch(InterruptedException e){

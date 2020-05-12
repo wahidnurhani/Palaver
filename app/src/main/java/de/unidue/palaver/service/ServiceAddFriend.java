@@ -1,7 +1,6 @@
 package de.unidue.palaver.service;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -27,10 +26,10 @@ import retrofit2.Response;
 public class ServiceAddFriend extends Service {
     private static final String TAG= ServiceAddFriend.class.getSimpleName();
 
-    public static void startIntent(Context applicationContext, Activity activity, String username) {
+    public static void startIntent(Context applicationContext, String username) {
         Intent intent = new Intent(applicationContext, ServiceAddFriend.class);
         intent.putExtra(StringValue.IntentKeyName.FRIEND, username.trim());
-        activity.startService(intent);
+        applicationContext.startService(intent);
     }
 
     @Nullable

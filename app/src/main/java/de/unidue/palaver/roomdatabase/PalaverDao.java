@@ -30,10 +30,10 @@ public interface PalaverDao{
     @Delete
     int delete(Message message);
 
-    @Query("SELECT * FROM table_friend")
+    @Query("SELECT * FROM table_friend ORDER BY friend_name ASC")
     LiveData<List<Friend>> getAllFriend();
 
-    @Query("SELECT * FROM table_friend")
+    @Query("SELECT * FROM table_friend ORDER BY friend_name ASC")
     List<Friend> getAllFriendList();
 
 
@@ -41,7 +41,7 @@ public interface PalaverDao{
             "FROM (select fk_friend, table_chat_data.data, date_time " +
             "from table_friend INNER JOIN table_chat_data " +
             "on fk_friend = friend_name order by date_time ASC) " +
-            "GROUP By fk_friend ")
+            "GROUP By fk_friend ORDER BY date_time DESC")
     LiveData<List<Chat>> getAllChat();
 
     @Query("SELECT * From table_chat_data WHERE sender = :friendName " +

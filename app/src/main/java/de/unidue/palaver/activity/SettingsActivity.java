@@ -14,8 +14,6 @@ import de.unidue.palaver.roomdatabase.PalaverRoomDatabase;
 
 public class SettingsActivity extends AppCompatActivity {
 
-
-
     public static void startActivity(Context context) {
         Intent intent = new Intent(context, SettingsActivity.class);
         context.startActivity(intent);

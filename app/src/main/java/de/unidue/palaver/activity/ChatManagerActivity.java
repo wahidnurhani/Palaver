@@ -17,7 +17,6 @@ import android.widget.SearchView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import de.unidue.palaver.R;
-import de.unidue.palaver.sessionmanager.SessionManager;
 import de.unidue.palaver.viewmodel.ChatsViewModel;
 import de.unidue.palaver.activity.adapter.ChatAdapter;
 
@@ -70,8 +69,6 @@ public class ChatManagerActivity extends AppCompatActivity {
             LoginActivity.startActivity(ChatManagerActivity.this);
         } else if(item.getItemId()==R.id.menu_setting){
             SettingsActivity.startActivity(ChatManagerActivity.this);
-        } else if(item.getItemId()==R.id.menu_addFriend){
-            AddFriendDialog.startDialog(getApplicationContext(), this);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -81,14 +78,10 @@ public class ChatManagerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_manager);
 
-        if(!SessionManager.getSessionManagerInstance(getApplicationContext()).checkLogin()){
-            if(chatsViewModel!=null){
-                chatsViewModel.handleLogoutRequest();
-            }
+        chatsViewModel = ViewModelProviders.of(this).get(ChatsViewModel.class);
+        if(!chatsViewModel.getLoginStatus().getValue()){
             LoginActivity.startActivity(ChatManagerActivity.this);
         }
-
-        chatsViewModel = ViewModelProviders.of(this).get(ChatsViewModel.class);
 
         FloatingActionButton floatingActionButton = findViewById(R.id.chatManager_addChatFloatingButton);
         floatingActionButton.setOnClickListener(v -> {

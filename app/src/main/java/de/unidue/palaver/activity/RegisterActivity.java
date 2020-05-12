@@ -1,31 +1,29 @@
 package de.unidue.palaver.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProviders;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.io.IOException;
 import java.util.Objects;
 
 import de.unidue.palaver.R;
-import de.unidue.palaver.httpclient.Retrofit;
-import de.unidue.palaver.model.StackApiResponseList;
 import de.unidue.palaver.model.StringValue;
 import de.unidue.palaver.model.User;
-import retrofit2.Response;
+import de.unidue.palaver.viewmodel.LoginRegisterViewModel;
 
 public class RegisterActivity extends AppCompatActivity {
 
     private static final String TAG= RegisterActivity.class.getSimpleName();
     private static boolean visibility;
-
+    private LoginRegisterViewModel registerViewModel;
+    private ProgressDialog progressDialog;
     private EditText userNameEditText;
     private EditText passwordEditText;
     private EditText rePasswordEditText;
@@ -41,6 +39,15 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.activity_register);
+        progressDialog = new ProgressDialog(this);
+        registerViewModel = ViewModelProviders.of(this).get(LoginRegisterViewModel.class);
+        registerViewModel.getRegisterStatus().observe(this, aBoolean -> {
+            progressDialog.dismissDialog();
+            if(aBoolean.equals(true)){
+                Log.i(TAG, "Register success");
+                goToLogin();
+            }
+        });
 
         Button registerButton = findViewById(R.id.register_register_button);
         userNameEditText = findViewById(R.id.register_userName_editText);
@@ -52,7 +59,9 @@ public class RegisterActivity extends AppCompatActivity {
             if(validateUserInput()){
                 User user = new User(userNameEditText.getText().toString(),
                         passwordEditText.getText().toString());
-                new RegisterAsyncTask().execute(user);
+                registerViewModel.register(user);
+                progressDialog.startDialog();
+
             }
         });
 
@@ -102,56 +111,12 @@ public class RegisterActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        goToLogin();
+    }
+
+    public void goToLogin(){
         LoginActivity.startActivity(RegisterActivity.this);
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_rigt);
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private class RegisterAsyncTask extends AsyncTask<User, Void, Response<StackApiResponseList<String>>> {
-        /**
-         * Override this method to perform a computation on a background thread. The
-         * specified parameters are the parameters passed to {@link #execute}
-         * by the caller of this task.
-         * <p>
-         * This method can call {@link #publishProgress} to publish updates
-         * on the UI thread.
-         *
-         * @param users The parameters of the task.
-         * @return A result, defined by the subclass of this task.
-         * @see #onPreExecute()
-         * @see #onPostExecute
-         * @see #publishProgress
-         */
-        @Override
-        protected Response<StackApiResponseList<String>> doInBackground(User... users) {
-            Retrofit retrofit = new Retrofit();
-            Response<StackApiResponseList<String>> response = null;
-            try {
-                response = retrofit.register(users[0]);
-                assert response.body() != null;
-                if (response.body().getMessageType()==1){
-                    return response;
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return response;
-        }
-
-        @Override
-        protected void onPostExecute(Response<StackApiResponseList<String>> response) {
-            if (response!= null){
-                assert response.body() != null;
-                if (response.body().getMessageType()==1){
-                    CustomToast.makeText(getApplicationContext(), response.body().getInfo());
-                    LoginActivity.startActivity(RegisterActivity.this);
-                    overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_rigt);
-                } else {
-                    CustomToast.makeText(getApplicationContext(), response.body().getInfo());
-                }
-            } else {
-                CustomToast.makeText(getApplicationContext(), "connection failed");
-            }
-        }
-    }
 }

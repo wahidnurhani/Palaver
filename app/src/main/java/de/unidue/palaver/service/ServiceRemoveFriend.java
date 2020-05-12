@@ -1,7 +1,6 @@
 package de.unidue.palaver.service;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -30,10 +29,10 @@ public class ServiceRemoveFriend extends Service {
 
     private static final String TAG= ServiceRemoveFriend.class.getSimpleName();
 
-    public static void startIntent(Context applicationContext, Activity activity, Friend friend) {
+    public static void startIntent(Context applicationContext, Friend friend) {
         Intent intent = new Intent(applicationContext, ServiceRemoveFriend.class);
         intent.putExtra(StringValue.IntentKeyName.FRIEND, friend.getUsername().trim());
-        activity.startService(intent);
+        applicationContext.startService(intent);
     }
     /**
      * Return the communication channel to the service.  May return null if

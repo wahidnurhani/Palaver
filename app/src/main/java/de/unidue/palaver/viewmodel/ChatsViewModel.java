@@ -16,12 +16,20 @@ import de.unidue.palaver.repository.ChatRepository;
 public class ChatsViewModel extends AndroidViewModel {
 
     private ChatRepository chatRepository;
+    private SessionManager sessionManager;
     private LiveData<List<Chat>> chats;
+    private LiveData<Boolean> loginStatus;
 
     public ChatsViewModel(Application application) {
         super(application);
-        chatRepository = new ChatRepository(application);
+        this.chatRepository = new ChatRepository(application);
+        this.sessionManager = SessionManager.getSessionManagerInstance(application);
         this.chats = chatRepository.getChats();
+        this.loginStatus = sessionManager.getLoginStatus();
+    }
+
+    public LiveData<Boolean> getLoginStatus() {
+        return loginStatus;
     }
 
     public LiveData<List<Chat>> getChats() {
@@ -41,13 +49,13 @@ public class ChatsViewModel extends AndroidViewModel {
         return searched;
     }
 
+    public void handleLogoutRequest() {
+        sessionManager.endSession();
+    }
+
     @Override
     protected void onCleared() {
         super.onCleared();
     }
 
-    public void handleLogoutRequest() {
-        SessionManager.getSessionManagerInstance(getApplication()).endSession();
-        chatRepository.cleanData();
-    }
 }
