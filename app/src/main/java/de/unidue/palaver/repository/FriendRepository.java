@@ -1,6 +1,5 @@
 package de.unidue.palaver.repository;
 
-import android.app.Activity;
 import android.app.Application;
 import android.os.AsyncTask;
 
@@ -9,8 +8,8 @@ import androidx.lifecycle.LiveData;
 import java.util.List;
 
 import de.unidue.palaver.model.Friend;
+import de.unidue.palaver.roomdatabase.PalaverDB;
 import de.unidue.palaver.roomdatabase.PalaverDao;
-import de.unidue.palaver.roomdatabase.PalaverRoomDatabase;
 import de.unidue.palaver.service.ServiceAddFriend;
 import de.unidue.palaver.service.ServiceRemoveFriend;
 
@@ -22,8 +21,8 @@ public class FriendRepository {
 
     public FriendRepository(Application application) {
         this.application = application;
-        PalaverRoomDatabase palaverRoomDatabase = PalaverRoomDatabase.getDatabase(application);
-        palaverDao = palaverRoomDatabase.palaverDao();
+        PalaverDB palaverDB = PalaverDB.getDatabase(application);
+        palaverDao = palaverDB.palaverDao();
         friends = palaverDao.getAllFriend();
     }
 

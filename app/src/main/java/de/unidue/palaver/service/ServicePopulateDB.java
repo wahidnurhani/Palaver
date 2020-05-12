@@ -21,8 +21,8 @@ import de.unidue.palaver.model.Message;
 import de.unidue.palaver.model.StackApiResponseList;
 import de.unidue.palaver.model.StringValue;
 import de.unidue.palaver.model.User;
+import de.unidue.palaver.roomdatabase.PalaverDB;
 import de.unidue.palaver.roomdatabase.PalaverDao;
-import de.unidue.palaver.roomdatabase.PalaverRoomDatabase;
 import retrofit2.Response;
 
 @SuppressLint("Registered")
@@ -68,8 +68,8 @@ public class ServicePopulateDB extends Service {
         String username = intent.getCharSequenceExtra(StringValue.IntentKeyName.USERNAME).toString();
         String password = intent.getCharSequenceExtra(StringValue.IntentKeyName.PASSWORD).toString();
         User user = new User(username, password);
-        PalaverRoomDatabase palaverRoomDatabase = PalaverRoomDatabase.getDatabase(getApplicationContext());
-        PalaverDao palaverDao = palaverRoomDatabase.palaverDao();
+        PalaverDB palaverDB = PalaverDB.getDatabase(getApplicationContext());
+        PalaverDao palaverDao = palaverDB.palaverDao();
         new PopulateDBAsyncTask(palaverDao).execute(user);
 
         return  START_STICKY;

@@ -57,6 +57,7 @@ public class StringValue {
         public static final String MIME_TYPE_VALUE = "text/plain";
         public static final String DATE_TIME = "DateTime";
         public static final String SENDER = "Sender";
+        public static final String OFFSET = "Offset";
     }
 
     public static class APICmd {

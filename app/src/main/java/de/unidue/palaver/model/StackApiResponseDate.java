@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class StackApiResponseDate extends StackApiResponse {
 
-    @SerializedName("Data")
+    @SerializedName(StringValue.JSONKeyName.DATA)
     private DateTime dateTime;
 
     public DateTime getDateTime() {
@@ -20,7 +20,7 @@ public class StackApiResponseDate extends StackApiResponse {
 
     public class DateTime {
 
-        @SerializedName("DateTime")
+        @SerializedName(StringValue.JSONKeyName.DATE_TIME)
         private String dateTime;
 
         public String getDateTime() {

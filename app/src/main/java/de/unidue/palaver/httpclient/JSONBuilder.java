@@ -5,20 +5,21 @@ import com.google.gson.annotations.SerializedName;
 
 import de.unidue.palaver.model.Friend;
 import de.unidue.palaver.model.Message;
+import de.unidue.palaver.model.StringValue;
 import de.unidue.palaver.model.User;
 
 public class JSONBuilder {
 
     public static class UserAndRecipient {
-        @SerializedName("Username")
+        @SerializedName(StringValue.JSONKeyName.USERNAME)
         @Expose
         private String username;
 
-        @SerializedName("Password")
+        @SerializedName(StringValue.JSONKeyName.PASSWORD)
         @Expose
         private String password;
 
-        @SerializedName("Recipient")
+        @SerializedName(StringValue.JSONKeyName.RECIPIENT)
         @Expose
         private String friendUserName;
 
@@ -31,19 +32,19 @@ public class JSONBuilder {
 
     public static class SendMessageBody {
 
-        @SerializedName("Username")
+        @SerializedName(StringValue.JSONKeyName.USERNAME)
         private String username;
 
-        @SerializedName("Password")
+        @SerializedName(StringValue.JSONKeyName.PASSWORD)
         private String password;
 
-        @SerializedName("Recipient")
+        @SerializedName(StringValue.JSONKeyName.RECIPIENT)
         private String recipient;
 
-        @SerializedName("Mimetype")
+        @SerializedName(StringValue.JSONKeyName.MIME_TYPE)
         private String mimeType;
 
-        @SerializedName("Data")
+        @SerializedName(StringValue.JSONKeyName.DATA)
         private String data;
 
         public SendMessageBody(User user , Friend friend, Message message) {
@@ -73,15 +74,15 @@ public class JSONBuilder {
     }
 
     public static class UserAndFriend {
-        @SerializedName("Username")
+        @SerializedName(StringValue.JSONKeyName.USERNAME)
         @Expose
         private String username;
 
-        @SerializedName("Password")
+        @SerializedName(StringValue.JSONKeyName.PASSWORD)
         @Expose
         private String password;
 
-        @SerializedName("Friend")
+        @SerializedName(StringValue.JSONKeyName.FRIEND)
         @Expose
         private String friendUserName;
 
@@ -93,15 +94,15 @@ public class JSONBuilder {
     }
 
     public class ChangePassWord {
-        @SerializedName("Username")
+        @SerializedName(StringValue.JSONKeyName.USERNAME)
         @Expose
         private String username;
 
-        @SerializedName("Password")
+        @SerializedName(StringValue.JSONKeyName.PASSWORD)
         @Expose
         private String password;
 
-        @SerializedName("NewPassword")
+        @SerializedName(StringValue.JSONKeyName.NEWPASSWORD)
         @Expose
         private String newPassword;
 
@@ -114,15 +115,15 @@ public class JSONBuilder {
     }
 
     public class PushToken {
-        @SerializedName("Username")
+        @SerializedName(StringValue.JSONKeyName.USERNAME)
         @Expose
         private String username;
 
-        @SerializedName("Password")
+        @SerializedName(StringValue.JSONKeyName.PASSWORD)
         @Expose
         private String password;
 
-        @SerializedName("PushToken")
+        @SerializedName(StringValue.JSONKeyName.PUSH_TOKEN)
         @Expose
         private String token;
 
@@ -135,19 +136,19 @@ public class JSONBuilder {
 
     public class GetMessageOffset {
 
-        @SerializedName("Username")
+        @SerializedName(StringValue.JSONKeyName.USERNAME)
         @Expose
         private String username;
 
-        @SerializedName("Password")
+        @SerializedName(StringValue.JSONKeyName.PASSWORD)
         @Expose
         private String password;
 
-        @SerializedName("Recipient")
+        @SerializedName(StringValue.JSONKeyName.RECIPIENT)
         @Expose
         private String friendUserName;
 
-        @SerializedName("Offset")
+        @SerializedName(StringValue.JSONKeyName.OFFSET)
         @Expose
         private String offset;
 

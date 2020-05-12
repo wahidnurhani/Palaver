@@ -15,8 +15,8 @@ import de.unidue.palaver.activity.CustomToast;
 import de.unidue.palaver.httpclient.Retrofit;
 import de.unidue.palaver.model.StackApiResponseList;
 import de.unidue.palaver.model.User;
+import de.unidue.palaver.roomdatabase.PalaverDB;
 import de.unidue.palaver.roomdatabase.PalaverDao;
-import de.unidue.palaver.roomdatabase.PalaverRoomDatabase;
 import de.unidue.palaver.service.ServicePopulateDB;
 import retrofit2.Response;
 
@@ -53,7 +53,7 @@ public class SessionManager {
         this.editor= pref.edit();
         this.loginStatus = new MutableLiveData<>();
         this.registerStatus = new MutableLiveData<>();
-        this.palaverDao = PalaverRoomDatabase.getDatabase(application).palaverDao();
+        this.palaverDao = PalaverDB.getDatabase(application).palaverDao();
         this.loginStatus.setValue(pref.getBoolean(KEY_IS_LOGIN, false));
         this.registerStatus.setValue(false);
     }

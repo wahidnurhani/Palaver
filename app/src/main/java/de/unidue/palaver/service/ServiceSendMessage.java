@@ -25,7 +25,7 @@ import de.unidue.palaver.httpclient.Retrofit;
 import de.unidue.palaver.model.StringValue;
 
 import de.unidue.palaver.roomdatabase.PalaverDao;
-import de.unidue.palaver.roomdatabase.PalaverRoomDatabase;
+import de.unidue.palaver.roomdatabase.PalaverDB;
 import de.unidue.palaver.activity.CustomToast;
 import retrofit2.Response;
 
@@ -73,8 +73,8 @@ public class ServiceSendMessage extends Service {
 
         @Override
         protected Response<StackApiResponseDate> doInBackground(Message... messages) {
-            PalaverRoomDatabase palaverRoomDatabase = PalaverRoomDatabase.getDatabase(getApplicationContext());
-            PalaverDao palaverDao = palaverRoomDatabase.palaverDao();
+            PalaverDB palaverDB = PalaverDB.getDatabase(getApplicationContext());
+            PalaverDao palaverDao = palaverDB.palaverDao();
             Friend friend = new Friend(messages[0].getFriendUserName());
             Retrofit retrofit = new Retrofit();
             Response<StackApiResponseDate> response = null;

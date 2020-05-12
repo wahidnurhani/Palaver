@@ -10,8 +10,8 @@ import java.util.List;
 
 import de.unidue.palaver.model.Friend;
 import de.unidue.palaver.model.Message;
+import de.unidue.palaver.roomdatabase.PalaverDB;
 import de.unidue.palaver.roomdatabase.PalaverDao;
-import de.unidue.palaver.roomdatabase.PalaverRoomDatabase;
 import de.unidue.palaver.service.ServiceSendMessage;
 
 public class MessageRepository {
@@ -19,8 +19,8 @@ public class MessageRepository {
     private Friend friend;
 
     public MessageRepository(Application application){
-        PalaverRoomDatabase palaverRoomDatabase = PalaverRoomDatabase.getDatabase(application);
-        palaverDao = palaverRoomDatabase.palaverDao();
+        PalaverDB palaverDB = PalaverDB.getDatabase(application);
+        palaverDao = palaverDB.palaverDao();
     }
 
     public LiveData<List<Message>> getAllMessage(Friend friend){

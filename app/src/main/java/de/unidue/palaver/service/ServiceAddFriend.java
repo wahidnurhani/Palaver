@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 
 import java.io.IOException;
 
+import de.unidue.palaver.roomdatabase.PalaverDB;
 import de.unidue.palaver.sessionmanager.SessionManager;
 import de.unidue.palaver.model.StackApiResponseList;
 import de.unidue.palaver.httpclient.Retrofit;
@@ -19,7 +20,6 @@ import de.unidue.palaver.model.StringValue;
 import de.unidue.palaver.model.Friend;
 import de.unidue.palaver.model.User;
 import de.unidue.palaver.roomdatabase.PalaverDao;
-import de.unidue.palaver.roomdatabase.PalaverRoomDatabase;
 import de.unidue.palaver.activity.CustomToast;
 import retrofit2.Response;
 
@@ -60,8 +60,8 @@ public class ServiceAddFriend extends Service {
         protected Response<StackApiResponseList<String>> doInBackground(Friend... friends) {
             SessionManager sessionManager = SessionManager.getSessionManagerInstance(getApplicationContext());
             User user = sessionManager.getUser();
-            PalaverRoomDatabase palaverRoomDatabase = PalaverRoomDatabase.getDatabase(getApplicationContext());
-            PalaverDao palaverDao = palaverRoomDatabase.palaverDao();
+            PalaverDB palaverDB = PalaverDB.getDatabase(getApplicationContext());
+            PalaverDao palaverDao = palaverDB.palaverDao();
             Response<StackApiResponseList<String>> response= null;
 
             Retrofit retrofit = new Retrofit();

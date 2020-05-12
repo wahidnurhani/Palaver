@@ -130,7 +130,7 @@ public class Message implements Comparable<Message>, Serializable {
                 '}';
     }
 
-    public String dateToString(Date date){
+    private String dateToString(Date date){
         String pattern = "yyyy-MM-dd'T'hh:mm:ssZ";
         @SuppressLint("SimpleDateFormat") DateFormat dateFormat = new SimpleDateFormat(pattern);
         return dateFormat.format(date);

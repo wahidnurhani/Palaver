@@ -24,12 +24,12 @@ import static org.junit.Assert.*;
 public class RoomDBTest {
 
     private PalaverDao palaverDao;
-    private PalaverRoomDatabase db;
+    private PalaverDB db;
 
     @Before
     public void createDb() {
         Context context = ApplicationProvider.getApplicationContext();
-        db = Room.inMemoryDatabaseBuilder(context, PalaverRoomDatabase.class).build();
+        db = Room.inMemoryDatabaseBuilder(context, PalaverDB.class).build();
         palaverDao = db.palaverDao();
     }
 
