@@ -1,6 +1,5 @@
 package de.unidue.palaver.viewmodel;
 
-import android.app.Activity;
 import android.app.Application;
 
 import androidx.lifecycle.AndroidViewModel;
@@ -13,7 +12,7 @@ import java.util.Objects;
 import de.unidue.palaver.model.Friend;
 import de.unidue.palaver.model.User;
 import de.unidue.palaver.repository.FriendRepository;
-import de.unidue.palaver.sessionmanager.SessionManager;
+import de.unidue.palaver.repository.SessionManager;
 
 public class FriendViewModel extends AndroidViewModel {
 
@@ -53,10 +52,6 @@ public class FriendViewModel extends AndroidViewModel {
 
     public void remove(Friend friend){
         friendRepository.remove( friend);
-    }
-
-    public void update(Friend friend){
-        friendRepository.update(friend);
     }
 
     public void removeAll(){

@@ -13,7 +13,7 @@ import androidx.annotation.Nullable;
 import java.io.IOException;
 
 import de.unidue.palaver.roomdatabase.PalaverDB;
-import de.unidue.palaver.sessionmanager.SessionManager;
+import de.unidue.palaver.repository.SessionManager;
 import de.unidue.palaver.model.StackApiResponseList;
 import de.unidue.palaver.httpclient.Retrofit;
 import de.unidue.palaver.model.StringValue;

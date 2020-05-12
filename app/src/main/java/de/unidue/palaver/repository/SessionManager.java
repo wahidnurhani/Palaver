@@ -1,4 +1,4 @@
-package de.unidue.palaver.sessionmanager;
+package de.unidue.palaver.repository;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;

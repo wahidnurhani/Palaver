@@ -7,7 +7,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 import de.unidue.palaver.model.User;
-import de.unidue.palaver.sessionmanager.SessionManager;
+import de.unidue.palaver.repository.SessionManager;
 
 public class LoginRegisterViewModel extends AndroidViewModel {
 

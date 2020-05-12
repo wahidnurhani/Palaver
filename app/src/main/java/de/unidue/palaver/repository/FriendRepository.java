@@ -34,10 +34,6 @@ public class FriendRepository {
         ServiceRemoveFriend.startIntent(application, friend);
     }
 
-    public void update(Friend friend){
-        new UpdateAsynctask(palaverDao).execute(friend);
-    }
-
     public void removeAll(){
         new RemoveAllAsynctask(palaverDao).execute();
     }
