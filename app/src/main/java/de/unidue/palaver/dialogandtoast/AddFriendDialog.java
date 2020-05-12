@@ -14,7 +14,7 @@ import de.unidue.palaver.R;
 import de.unidue.palaver.model.StringValue;
 import de.unidue.palaver.viewmodel.FriendViewModel;
 
-class AddFriendDialog {
+public class AddFriendDialog {
 
     private AlertDialog alertDialog;
     private Context applicationContext;
@@ -30,7 +30,7 @@ class AddFriendDialog {
         this.friendViewModel = friendViewModel;
     }
 
-    static void startDialog(Context applicationContext, Activity activity, FriendViewModel friendViewModel) {
+    public static void startDialog(Context applicationContext, Activity activity, FriendViewModel friendViewModel) {
         addFriendDialogInstance = new AddFriendDialog(applicationContext, activity, friendViewModel);
         addFriendDialogInstance.startDialog();
     }
