@@ -24,11 +24,20 @@ import de.unidue.palaver.model.StringValue;
 import de.unidue.palaver.adapter.MessageAdapter;
 
 public class ChatRoomActivity extends AppCompatActivity {
-    public static String TAG = ChatRoomActivity.class.getSimpleName();
+    private static String TAG = ChatRoomActivity.class.getSimpleName();
+    private static boolean visible;
 
     private MessageViewModel messageViewModel;
     private User user;
-    private Friend friend;
+    private static Friend friend;
+
+    public static boolean isVisible() {
+        return visible;
+    }
+
+    public static Friend getFriend(){
+        return friend;
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -42,6 +51,7 @@ public class ChatRoomActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        visible=false;
         setContentView(R.layout.activity_chat_room);
         user = SessionManager.getSessionManagerInstance(getApplicationContext()).getUser();
 
@@ -99,11 +109,13 @@ public class ChatRoomActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        visible=true;
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        visible = false;
     }
 
     @Override

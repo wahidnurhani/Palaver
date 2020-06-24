@@ -134,4 +134,27 @@ public class RetrofitTest {
         System.out.println(response.body().getDateTime().getDateTime());
     }
 
+    @Test
+    public void retrofitGetMessageOffset() throws IOException {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(PalaverPostAPI.BASE_URL)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        PalaverPostAPI service = retrofit.create(PalaverPostAPI.class);
+        User user = new User("test1991", "test1991");
+        Friend friend = new Friend("test1992");
+        JSONBuilder.GetMessageOffset body = new JSONBuilder.GetMessageOffset(user, friend, "2020-06-24T17:32:31.1313024");
+        Call<StackApiResponseList<Message>> call= service.getMessageOffset(body);
+        Response<StackApiResponseList<Message>> response = call.execute();
+
+        assert response.body() != null;
+        System.out.println(response.body().getInfo());
+        for(Message message : response.body().getDatas()){
+            System.out.println(message.toString());
+        }
+
+    }
+
 }

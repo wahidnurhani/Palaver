@@ -93,7 +93,7 @@ public class JSONBuilder {
         }
     }
 
-    public class ChangePassWord {
+    public static class ChangePassWord {
         @SerializedName(StringValue.JSONKeyName.USERNAME)
         @Expose
         private String username;
@@ -114,7 +114,7 @@ public class JSONBuilder {
         }
     }
 
-    public class PushToken {
+    public static class PushToken {
         @SerializedName(StringValue.JSONKeyName.USERNAME)
         @Expose
         private String username;
@@ -134,7 +134,7 @@ public class JSONBuilder {
         }
     }
 
-    public class GetMessageOffset {
+    public static class GetMessageOffset {
 
         @SerializedName(StringValue.JSONKeyName.USERNAME)
         @Expose

@@ -1,5 +1,6 @@
 package de.unidue.palaver.repository;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Application;
 import android.os.AsyncTask;
@@ -10,13 +11,16 @@ import java.util.List;
 
 import de.unidue.palaver.model.Friend;
 import de.unidue.palaver.model.Message;
+import de.unidue.palaver.model.User;
 import de.unidue.palaver.roomdatabase.PalaverDB;
 import de.unidue.palaver.roomdatabase.PalaverDao;
+import de.unidue.palaver.service.ServiceFetchMessageOffset;
 import de.unidue.palaver.service.ServiceSendMessage;
 
 public class MessageRepository {
     private PalaverDao palaverDao;
     private Friend friend;
+    private LiveData<List<Message>> messages;
 
     public MessageRepository(Application application){
         PalaverDB palaverDB = PalaverDB.getDatabase(application);
@@ -25,11 +29,16 @@ public class MessageRepository {
 
     public LiveData<List<Message>> getAllMessage(Friend friend){
         this.friend = friend;
-        return palaverDao.getMessages(friend.getUsername());
+        this.messages = palaverDao.getMessages(friend.getUsername());
+        return messages;
     }
 
     public void sendMessageService(Activity activity, Message message){
         ServiceSendMessage.startIntent(activity, message);
+    }
+
+    public void fetchMessageOffset(Application application, User user, Friend friend){
+        new GetOffsetAsynctask(application, user, friend, palaverDao).execute();
     }
 
     public Friend getFriend() {
@@ -47,24 +56,37 @@ public class MessageRepository {
             this.palaverDao = palaverDao;
         }
 
-        /**
-         * Override this method to perform a computation on a background thread. The
-         * specified parameters are the parameters passed to {@link #execute}
-         * by the caller of this task.
-         * <p>
-         * This method can call {@link #publishProgress} to publish updates
-         * on the UI thread.
-         *
-         * @param messages The parameters of the task.
-         * @return A result, defined by the subclass of this task.
-         * @see #onPreExecute()
-         * @see #onPostExecute
-         * @see #publishProgress
-         */
         @Override
         protected Void doInBackground(Message... messages) {
             palaverDao.update(messages[0]);
             return null;
+        }
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    private class GetOffsetAsynctask extends AsyncTask<Void, Void, String>{
+        Application application;
+        User user;
+        Friend friend;
+        PalaverDao palaverDao;
+
+        GetOffsetAsynctask(Application application, User user, Friend friend, PalaverDao palaverDao) {
+            this.application = application;
+            this.user = user;
+            this.friend = friend;
+            this.palaverDao = palaverDao;
+        }
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            String offsetDb = palaverDao.getOffset(friend.getUsername());
+            String[] offset = offsetDb.split("\\+");
+            return offset[0];
+        }
+
+        @Override
+        protected void onPostExecute(String offset) {
+            ServiceFetchMessageOffset.startIntent(application, user, friend, offset);
         }
     }
 }

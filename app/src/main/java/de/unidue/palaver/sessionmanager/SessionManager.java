@@ -1,14 +1,23 @@
 package de.unidue.palaver.sessionmanager;
 import android.annotation.SuppressLint;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.work.Constraints;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import de.unidue.palaver.R;
 import de.unidue.palaver.dialogandtoast.CustomToast;
@@ -17,8 +26,12 @@ import de.unidue.palaver.model.StackApiResponseList;
 import de.unidue.palaver.model.User;
 import de.unidue.palaver.roomdatabase.PalaverDB;
 import de.unidue.palaver.roomdatabase.PalaverDao;
+import de.unidue.palaver.service.FirebaseCloudMessaging.FirebaseConstant;
 import de.unidue.palaver.service.ServicePopulateDB;
+import de.unidue.palaver.worker.PushTokenWorker;
 import retrofit2.Response;
+
+import static android.content.Context.NOTIFICATION_SERVICE;
 
 public class SessionManager {
     private static String TAG = SessionManager.class.getSimpleName();
@@ -28,6 +41,7 @@ public class SessionManager {
     private SharedPreferences.Editor editor;
     private MutableLiveData<Boolean> loginStatus;
     private MutableLiveData<Boolean> registerStatus;
+    private MutableLiveData<Boolean> passwordChanged;
     private PalaverDao palaverDao;
     private int PRIVATE_MODE;
 
@@ -35,6 +49,7 @@ public class SessionManager {
     private static final String KEY_IS_LOGIN = String.valueOf(R.string.is_log_in);
     private static final String KEY_USERNAME = String.valueOf(R.string.username);
     private static final String KEY_PASSWORD = String.valueOf(R.string.password);
+    private static final String KEY_PASSWORD_CHANGED = String.valueOf(R.string.passwordChanged);
 
     @SuppressLint("StaticFieldLeak")
     private static SessionManager sessionManagerInstance;
@@ -54,17 +69,31 @@ public class SessionManager {
         this.editor= pref.edit();
         this.loginStatus = new MutableLiveData<>();
         this.registerStatus = new MutableLiveData<>();
+        this.passwordChanged = new MutableLiveData<>();
         this.palaverDao = PalaverDB.getDatabase(application).palaverDao();
         this.loginStatus.setValue(pref.getBoolean(KEY_IS_LOGIN, false));
+        this.passwordChanged.setValue(pref.getBoolean(KEY_PASSWORD_CHANGED, false));
         this.registerStatus.setValue(false);
     }
 
     private void startSession(String userName, String password){
+        Log.i(TAG, "session started");
         editor.putBoolean(KEY_IS_LOGIN, true);
+        editor.putBoolean(KEY_PASSWORD_CHANGED, false);
         editor.putString(KEY_USERNAME, userName);
         editor.putString(KEY_PASSWORD, password);
         editor.commit();
         populateDB();
+
+        Constraints constraints = new Constraints.Builder()
+                .setRequiresCharging(false)
+                .build();
+
+        PeriodicWorkRequest refreshTokenWorkRequest = new PeriodicWorkRequest
+                .Builder(PushTokenWorker.class, 1, TimeUnit.HOURS)
+                .setConstraints(constraints).build();
+
+        WorkManager.getInstance(application).enqueue(refreshTokenWorkRequest);
     }
 
     private void populateDB(){
@@ -82,6 +111,10 @@ public class SessionManager {
 
     public LiveData<Boolean> getRegisterStatus() {
         return registerStatus;
+    }
+
+    public MutableLiveData<Boolean> getPasswordChanged() {
+        return passwordChanged;
     }
 
     public User getUser() {
@@ -103,7 +136,6 @@ public class SessionManager {
         new RegisterProcessor().execute(user);
     }
 
-
     private void resetRegisterStatus() {
         this.registerStatus.setValue(false);
     }
@@ -112,6 +144,8 @@ public class SessionManager {
         this.loginStatus.setValue(false);
     }
 
+    private void resetChangePasswordStatus(){ this.passwordChanged.setValue(false);}
+
     private void cleanData() {
         new CleanDatabase(palaverDao).execute();
     }
@@ -119,6 +153,7 @@ public class SessionManager {
     public void resetAll() {
         resetLoginStatus();
         resetRegisterStatus();
+        resetChangePasswordStatus();
         cleanData();
     }
 
@@ -154,6 +189,7 @@ public class SessionManager {
             assert stackApiResponseListResponse.body() != null;
             if(stackApiResponseListResponse.body().getMessageType()==1){
                 loginStatus.setValue(true);
+                passwordChanged.setValue(false);
             } else {
                 CustomToast.makeText(application, stackApiResponseListResponse.body().getInfo());
             }

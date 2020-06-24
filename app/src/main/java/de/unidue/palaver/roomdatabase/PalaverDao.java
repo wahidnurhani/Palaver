@@ -73,5 +73,8 @@ public interface PalaverDao{
     @Update
     int update(Message message);
 
+    @Query("SELECT date_time FROM table_chat_data WHERE fk_friend = :friend " +
+            "ORDER BY date_time DESC LIMIT 1")
+    String getOffset(String friend);
 
 }

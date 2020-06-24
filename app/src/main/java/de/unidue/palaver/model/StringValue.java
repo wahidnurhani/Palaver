@@ -27,6 +27,7 @@ public class StringValue {
         public static final String PASSWORD = "PASSWORD";
         public static final String MESSAGEREPOSITORY = "MESSAGEREPOSITORY";
         public static final String USER = "USER";
+        public static final String OFFSET = "OFFSET";
     }
 
     public static class IntentAction {
@@ -36,7 +37,8 @@ public class StringValue {
         public static final String BROADCAST_USER_REGISTERED = "registered_broadcast";
         public static final String BROADCAST_ALL_CHAT_FETCHED = "allChatfetched_broadcast";
         public static final String BROADCAST_LOGINRESULT = "loginResult_broadcast";
-        public static final String BROADCAST_STARTLOGIN = "loginStart_BroadCast";
+        public static final String BROADCAST_STARTLOGIN = "loginStart_broadCast";
+        public static final String BROADCAST_MESSAGE_RECEIVED = "message_received_broadcast";
     }
 
     public static class LogMessage {
