@@ -42,7 +42,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
     @Override
     public void onBindViewHolder(@NonNull ChatAdapter.ChatViewHolder holder, int position) {
         Chat current = chats.get(position);
-        holder.setData(current, position);
+        holder.setData(current);
 
         holder.getCardView().setOnClickListener(v -> {
             Intent intent = new Intent(context, ChatRoomActivity.class);
@@ -82,7 +82,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
             return cardView;
         }
 
-        void setData(Chat current, int position){
+        void setData(Chat current){
             this.textViewName.setText(current.fk_friend);
             if(current.getData()!= null){
                 this.textViewLastMessage.setText(current.getData().trim());

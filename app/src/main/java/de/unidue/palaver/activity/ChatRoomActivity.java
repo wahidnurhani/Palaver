@@ -1,20 +1,25 @@
 package de.unidue.palaver.activity;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import java.util.Date;
 import java.util.Objects;
 
 import de.unidue.palaver.R;
+import de.unidue.palaver.dialogandtoast.ExtrasDialog;
 import de.unidue.palaver.sessionmanager.SessionManager;
 import de.unidue.palaver.model.Message;
 import de.unidue.palaver.model.User;
@@ -90,6 +95,7 @@ public class ChatRoomActivity extends AppCompatActivity {
 
         EditText messageEditText = findViewById(R.id.chatRoom_editText_message);
         Button sendButton = findViewById(R.id.chatRoom_button_send);
+        ImageView sendExtras = findViewById(R.id.add_extras);
 
         sendButton.setOnClickListener(v -> {
             if (!messageEditText.getText().toString().equals("")){
@@ -104,6 +110,19 @@ public class ChatRoomActivity extends AppCompatActivity {
                 messageEditText.setText("");
             }
         });
+
+        sendExtras.setOnClickListener(v->
+                ExtrasDialog.startDialog(getApplicationContext(), this, messageViewModel));
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.i(TAG, "File Selected");
+
+        if(requestCode == ExtrasDialog.REQUEST_CODE && resultCode==RESULT_OK && data!=null){
+            //TODO
+        }
     }
 
     @Override

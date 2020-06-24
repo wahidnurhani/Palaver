@@ -59,4 +59,7 @@ public class MessageViewModel extends AndroidViewModel implements Comparable<Mes
         super.onCleared();
     }
 
+    public void showExtrasDialog() {
+
+    }
 }

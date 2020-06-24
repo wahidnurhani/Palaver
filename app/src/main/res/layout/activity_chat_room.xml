@@ -36,20 +36,26 @@
             android:layout_marginRight="15dp"
             android:weightSum="100">
 
+            <ImageView
+                android:id="@+id/add_extras"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:scaleType="center"
+                android:layout_weight="8"
+                android:adjustViewBounds="true"
+                android:src="@drawable/extra"/>
             <EditText
                 android:id="@+id/chatRoom_editText_message"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="88"
+                android:layout_weight="80"
                 android:background="@drawable/shape_round_edit_text"
                 android:ems="10"
-                android:hint="message"
+                android:hint="@string/message"
                 android:imeOptions="actionNext"
                 android:inputType="textMultiLine"
                 android:paddingStart="15dp"
-                android:paddingLeft="15dp"
                 android:paddingEnd="10dp"
-                android:paddingRight="10dp"
                 android:textColor="#FFFFFF"
                 android:textColorHint="#6DFFFFFF"
                 android:textSize="14sp" />
@@ -62,7 +68,7 @@
                 android:layout_marginLeft="5dp"
                 android:layout_weight="12"
                 android:background="@drawable/shape_round_button"
-                android:text="send"
+                android:text="@string/send"
                 android:textColor="#FFFFFF"
                 android:textSize="12sp" />
         </LinearLayout>

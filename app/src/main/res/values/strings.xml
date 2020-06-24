@@ -32,4 +32,8 @@
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <string name="passwordChanged">passwordChanged</string>
+    <string name="message">message</string>
+    <string name="send">send</string>
+    <string name="send_file">Send File</string>
+    <string name="share_location">Share Location</string>
 </resources>
