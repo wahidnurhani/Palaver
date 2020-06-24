@@ -65,7 +65,7 @@ public class MessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
-        User user = null;
+        User user;
         try{
             user = SessionManager.getSessionManagerInstance(getApplication()).getUser();
         }catch (Exception e){
@@ -86,6 +86,23 @@ public class MessagingService extends FirebaseMessagingService {
             messageRepository.fetchMessageOffset(getApplication(), user, new Friend(sender));
 
             notifyClient(sender, preview);
+        }
+    }
+
+    private void createNotificationChannel() {
+        Log.i(TAG, "notification channel created");
+
+        if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.O) {
+            android.app.NotificationManager notificationManager = (android.app.NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            NotificationChannel notificationChannel = new NotificationChannel(FirebaseConstant.CHANNEL_ID, FirebaseConstant.CHANNEL_NAME, android.app.NotificationManager.IMPORTANCE_HIGH);
+
+            notificationChannel.setDescription(FirebaseConstant.CHANNEL_DESCRIPTION);
+            notificationChannel.enableLights(true);
+            notificationChannel.setLightColor(Color.RED);
+            notificationChannel.enableVibration(true);
+            notificationChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 100});
+
+            notificationManager.createNotificationChannel(notificationChannel);
         }
     }
 
@@ -110,22 +127,4 @@ public class MessagingService extends FirebaseMessagingService {
             thread.start();
         }
     }
-
-    private void createNotificationChannel() {
-        Log.i(TAG, "notification channel created");
-
-        if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.O) {
-            android.app.NotificationManager notificationManager = (android.app.NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-            NotificationChannel notificationChannel = new NotificationChannel(FirebaseConstant.CHANNEL_ID, FirebaseConstant.CHANNEL_NAME, android.app.NotificationManager.IMPORTANCE_HIGH);
-
-            notificationChannel.setDescription(FirebaseConstant.CHANNEL_DESCRIPTION);
-            notificationChannel.enableLights(true);
-            notificationChannel.setLightColor(Color.RED);
-            notificationChannel.enableVibration(true);
-            notificationChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 100});
-
-            notificationManager.createNotificationChannel(notificationChannel);
-        }
-    }
-
 }

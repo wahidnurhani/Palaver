@@ -20,7 +20,6 @@
         </EditTextPreference>
 
 
-
     </PreferenceCategory>
 
     <PreferenceCategory app:title="App Setting">
@@ -28,9 +27,22 @@
             app:title="Automatic login"
             app:key="login_preference"
             android:summaryOn="always login"
-            android:summaryOff="always request login on start"
-            ></CheckBoxPreference>
+            android:summaryOff="always request login on start" />
 
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="Notification">
+        <CheckBoxPreference
+            app:title="Allow Notification"
+            app:key="notification_allow_preference"
+            android:summaryOn="notification enabled"
+            android:summaryOff="notification disabled" />
+
+        <CheckBoxPreference
+            app:title="Allow Vibration"
+            app:key="notification_vibration_preference"
+            android:summaryOn="vibration allowed"
+            android:summaryOff="vibration off" />
 
     </PreferenceCategory>
 

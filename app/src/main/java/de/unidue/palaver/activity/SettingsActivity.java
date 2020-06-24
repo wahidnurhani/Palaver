@@ -11,6 +11,7 @@ import androidx.preference.PreferenceFragmentCompat;
 
 import de.unidue.palaver.R;
 import de.unidue.palaver.roomdatabase.PalaverDB;
+import de.unidue.palaver.sessionmanager.SessionManager;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -50,5 +51,11 @@ public class SettingsActivity extends AppCompatActivity {
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             setPreferencesFromResource(R.xml.fragment_setting, rootKey);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
     }
 }

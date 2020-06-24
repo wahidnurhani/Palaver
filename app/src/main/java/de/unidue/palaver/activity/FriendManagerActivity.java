@@ -26,7 +26,6 @@ import de.unidue.palaver.adapter.FriendAdapter;
 
 
 public class FriendManagerActivity extends AppCompatActivity {
-    private static boolean visibility;
 
     private FriendViewModel friendViewModel;
     private FriendAdapter friendAdapter;
@@ -102,25 +101,18 @@ public class FriendManagerActivity extends AppCompatActivity {
 
     }
 
-    public static boolean isVisibility() {
-        return visibility;
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
-        visibility=true;
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        visibility = false;
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        visibility = false;
     }
 }

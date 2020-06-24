@@ -1,18 +1,13 @@
 package de.unidue.palaver.sessionmanager;
 import android.annotation.SuppressLint;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.work.Constraints;
-import androidx.work.OneTimeWorkRequest;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
@@ -26,12 +21,9 @@ import de.unidue.palaver.model.StackApiResponseList;
 import de.unidue.palaver.model.User;
 import de.unidue.palaver.roomdatabase.PalaverDB;
 import de.unidue.palaver.roomdatabase.PalaverDao;
-import de.unidue.palaver.service.FirebaseCloudMessaging.FirebaseConstant;
 import de.unidue.palaver.service.ServicePopulateDB;
 import de.unidue.palaver.worker.PushTokenWorker;
 import retrofit2.Response;
-
-import static android.content.Context.NOTIFICATION_SERVICE;
 
 public class SessionManager {
     private static String TAG = SessionManager.class.getSimpleName();

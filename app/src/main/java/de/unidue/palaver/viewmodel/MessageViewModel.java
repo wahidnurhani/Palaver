@@ -12,16 +12,19 @@ import java.util.List;
 import de.unidue.palaver.model.Message;
 import de.unidue.palaver.model.Friend;
 import de.unidue.palaver.repository.MessageRepository;
+import de.unidue.palaver.sessionmanager.SessionManager;
 
 public class MessageViewModel extends AndroidViewModel implements Comparable<MessageViewModel>, Serializable {
 
     private MessageRepository messageRepository;
     private Friend friend;
+    private SessionManager sessionManager;
     private LiveData<List<Message>> messages;
 
     public MessageViewModel(Application application) {
         super(application);
         this.messageRepository = new MessageRepository(getApplication());
+        this.sessionManager = SessionManager.getSessionManagerInstance(application);
     }
 
     public void setFriend(Friend friend) {
@@ -55,4 +58,5 @@ public class MessageViewModel extends AndroidViewModel implements Comparable<Mes
     protected void onCleared() {
         super.onCleared();
     }
+
 }

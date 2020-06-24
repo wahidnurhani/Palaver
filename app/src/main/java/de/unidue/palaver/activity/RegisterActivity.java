@@ -22,7 +22,6 @@ import de.unidue.palaver.viewmodel.LoginRegisterViewModel;
 public class RegisterActivity extends AppCompatActivity {
 
     private static final String TAG= RegisterActivity.class.getSimpleName();
-    private static boolean visibility;
     private LoginRegisterViewModel registerViewModel;
     private ProgressDialog progressDialog;
     private EditText userNameEditText;
@@ -94,20 +93,15 @@ public class RegisterActivity extends AppCompatActivity {
         return !Character.isDigit(c[0]);
     }
 
-    public static boolean isVisibility() {
-        return visibility;
-    }
 
     @Override
     protected void onResume() {
         super.onResume();
-        visibility = true;
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        visibility=false;
     }
 
     @Override

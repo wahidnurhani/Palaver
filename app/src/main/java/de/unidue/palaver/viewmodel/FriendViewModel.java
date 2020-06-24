@@ -67,4 +67,5 @@ public class FriendViewModel extends AndroidViewModel {
     public void addFriend(String username) {
         friendRepository.addFriend(username);
     }
+
 }

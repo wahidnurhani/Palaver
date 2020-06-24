@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.SearchView;
@@ -26,11 +27,6 @@ public class ChatManagerActivity extends AppCompatActivity {
     private ChatsViewModel chatsViewModel;
     private ChatAdapter chatAdapter;
 
-    private static boolean visibility;
-
-    public static boolean isVisibility() {
-        return visibility;
-    }
 
     public static void startActivity(Context context) {
         Intent intent = new Intent(context, ChatManagerActivity.class);
@@ -85,7 +81,7 @@ public class ChatManagerActivity extends AppCompatActivity {
 
         FloatingActionButton floatingActionButton = findViewById(R.id.chatManager_addChatFloatingButton);
         floatingActionButton.setOnClickListener(v -> {
-
+            Log.i(TAG, "Floating Action Button Pressed");
             FriendManagerActivity.startActivity(ChatManagerActivity.this);
             overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
         });
@@ -111,7 +107,6 @@ public class ChatManagerActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        visibility=true;
     }
 
     @Override
@@ -121,7 +116,6 @@ public class ChatManagerActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        visibility=false;
     }
 
     @Override
