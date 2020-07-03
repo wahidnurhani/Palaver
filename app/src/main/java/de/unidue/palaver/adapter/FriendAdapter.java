@@ -40,7 +40,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
     @Override
     public void onBindViewHolder(@NonNull FriendViewHolder holder, int position) {
         Friend current = friends.get(position);
-        holder.setData(current, position);
+        holder.setData(current);
 
         holder.getCardView().setOnClickListener(v -> {
             Intent intent = new Intent(context, ChatRoomActivity.class);
@@ -75,7 +75,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
             name = itemView.findViewById(R.id.friend_textview);
     }
 
-        void setData(Friend current, int position) {
+        void setData(Friend current) {
               this.name.setText(current.getUsername());
         }
 

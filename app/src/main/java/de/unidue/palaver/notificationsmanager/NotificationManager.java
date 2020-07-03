@@ -26,11 +26,12 @@ public class NotificationManager extends Application {
     private Context context;
     @SuppressLint("StaticFieldLeak")
     private static NotificationManager notificationManagerInstance;
-    private SessionManager sessionManager;
+    private de.unidue.palaver.sessionmanager.PreferenceManager preferenceManager;
 
     public NotificationManager(Context context) {
         this.context = context;
-        sessionManager = SessionManager.getSessionManagerInstance(getApplicationContext());
+        preferenceManager = SessionManager
+                .getSessionManagerInstance(getApplicationContext()).getPreferenceManager();
     }
 
     public static NotificationManager getInstance(Context context) {
@@ -43,7 +44,7 @@ public class NotificationManager extends Application {
     public void displayNotification(String sender, String preview){
         NotificationCompat.Builder notificationBuilder;
 
-        if(sessionManager.getAllowVibrationPreference()){
+        if(preferenceManager.getAllowVibrationPreference()){
             notificationBuilder = new NotificationCompat.Builder(context, FirebaseConstant.CHANNEL_ID)
                     .setSmallIcon(R.drawable.palaver_logo)
                     .setAutoCancel(true)
@@ -73,8 +74,7 @@ public class NotificationManager extends Application {
 
         android.app.NotificationManager notificationManager = (android.app.NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        boolean notificationSetting = sharedPreferences.getBoolean("notification", true);
+        boolean notificationSetting = preferenceManager.getAllowNotificationPreference();
 
         if(notificationManager!=null){
             if(notificationSetting){

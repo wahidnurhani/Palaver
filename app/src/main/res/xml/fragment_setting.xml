@@ -34,7 +34,7 @@
     <PreferenceCategory app:title="Notification">
         <CheckBoxPreference
             app:title="Allow Notification"
-            app:key="notification_allow_preference"
+            app:key="notification"
             android:summaryOn="notification enabled"
             android:summaryOff="notification disabled" />
 

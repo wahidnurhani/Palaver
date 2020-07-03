@@ -13,6 +13,6 @@ public class PreferenceContract {
 
     public static final CharSequence KEY_CHANGE_PASSWORD = "password";
     public static final String KEY_AUTO_LOGIN= "auto_login_preference";
-    public static final String KEY_ALLOW_NOTIFICATION = "notification_allow_preference";
+    public static final String KEY_ALLOW_NOTIFICATION = "notification";
     public static final String KEY_ALLOW_VIBRATION ="notification_vibration_preference";
 }

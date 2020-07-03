@@ -10,6 +10,7 @@ import android.util.Log;
 import java.util.Objects;
 
 import de.unidue.palaver.R;
+import de.unidue.palaver.sessionmanager.PreferenceManager;
 import de.unidue.palaver.sessionmanager.SessionManager;
 
 public class SecondSplashActivity extends AppCompatActivity {
@@ -31,10 +32,11 @@ public class SecondSplashActivity extends AppCompatActivity {
     }
 
     private class SplashAction extends Thread{
-        private SessionManager sessionManager;
+        private PreferenceManager preferenceManager;
 
         public SplashAction() {
-            this.sessionManager = SessionManager.getSessionManagerInstance(getApplicationContext());
+            this.preferenceManager = SessionManager
+                    .getSessionManagerInstance(getApplicationContext()).getPreferenceManager();
         }
 
         public void run(){
@@ -45,7 +47,7 @@ public class SecondSplashActivity extends AppCompatActivity {
             }catch(InterruptedException e){
                 e.printStackTrace();
             }
-            Log.i(TAG, sessionManager.getAutoLoginPreference()+"");
+            Log.i(TAG, preferenceManager.getAutoLoginPreference()+"");
             ChatManagerActivity.startActivity(SecondSplashActivity.this);
             SecondSplashActivity.this.finish();
         }

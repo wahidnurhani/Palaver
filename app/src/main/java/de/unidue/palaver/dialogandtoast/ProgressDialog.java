@@ -1,4 +1,4 @@
-package de.unidue.palaver.activity;
+package de.unidue.palaver.dialogandtoast;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -7,17 +7,17 @@ import android.view.LayoutInflater;
 
 import de.unidue.palaver.R;
 
-class ProgressDialog {
+public class ProgressDialog {
 
     private Activity context;
     private AlertDialog alertDialog;
 
-    ProgressDialog(Activity context) {
+    public ProgressDialog(Activity context) {
         this.context = context;
     }
 
     @SuppressLint("InflateParams")
-    void startDialog(){
+    public void startDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(context,R.style.ProgressDialog);
         LayoutInflater inflater = context.getLayoutInflater();
         builder.setView(inflater.inflate(R.layout.dialog_loading, null));
@@ -42,7 +42,7 @@ class ProgressDialog {
         }
     }
 
-    void dismissDialog(){
+    public void dismissDialog(){
         if(alertDialog!=null){
             alertDialog.dismiss();
         }

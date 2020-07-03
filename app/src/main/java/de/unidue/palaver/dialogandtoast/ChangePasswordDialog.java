@@ -7,9 +7,6 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
-
 import de.unidue.palaver.R;
 import de.unidue.palaver.model.StringValue;
 import de.unidue.palaver.sessionmanager.SessionManager;

@@ -18,12 +18,11 @@ import de.unidue.palaver.R;
 import de.unidue.palaver.dialogandtoast.ChangePasswordDialog;
 import de.unidue.palaver.roomdatabase.PalaverDB;
 import de.unidue.palaver.sessionmanager.PreferenceContract;
+import de.unidue.palaver.sessionmanager.PreferenceManager;
 import de.unidue.palaver.sessionmanager.SessionManager;
 
 public class SettingsActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener{
     private static String TAG = SettingsActivity.class.getSimpleName();
-    private SessionManager sessionManager;
-    private LiveData<Boolean> passwordChanged;
 
     public static void startActivity(Context context) {
         Intent intent = new Intent(context, SettingsActivity.class);
@@ -43,16 +42,7 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_activity);
-        sessionManager = SessionManager.getSessionManagerInstance(getApplicationContext());
-        passwordChanged = sessionManager.getPasswordChanged();
 
-        passwordChanged.observe(this, aBoolean -> {
-            if(aBoolean==true){
-                sessionManager.cleanData();
-                sessionManager.endSession();
-                SplashScreenActivity.startActivity(SettingsActivity.this);
-            }
-        });
         PalaverDB.getDatabase(getApplicationContext());
 
         getSupportFragmentManager()
@@ -68,7 +58,9 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
     @Override
     protected void onResume() {
         super.onResume();
-        sessionManager.getPref().registerOnSharedPreferenceChangeListener(this);
+        SessionManager.getSessionManagerInstance(getApplicationContext())
+                .getPreferenceManager()
+                .registerSharedPreference(this);
     }
 
     @Override
@@ -83,11 +75,22 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
 
     public static class SettingsFragment extends PreferenceFragmentCompat {
         private SessionManager sessionManager;
+        private PreferenceManager preferenceManager;
+        private LiveData<Boolean> passwordChanged;
 
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             setPreferencesFromResource(R.xml.fragment_setting, rootKey);
             sessionManager = SessionManager.getSessionManagerInstance(getActivity().getApplicationContext());
+            preferenceManager = sessionManager.getPreferenceManager();
+            passwordChanged = sessionManager.getPasswordChanged();
+
+            passwordChanged.observe(this, aBoolean -> {
+                if(aBoolean){
+                    sessionManager.endSession();
+                    SplashScreenActivity.startActivity(getActivity());
+                }
+            });
 
             Preference preferenceUsername = findPreference(PreferenceContract.KEY_USERNAME);
             preferenceUsername.setSummary(sessionManager.getUser().getUserName());
@@ -99,31 +102,28 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
             });
 
             CheckBoxPreference checkBoxPreferenceAutoLogin = findPreference(PreferenceContract.KEY_AUTO_LOGIN);
-            checkBoxPreferenceAutoLogin.setChecked(sessionManager.getAutoLoginPreference());
+            checkBoxPreferenceAutoLogin.setChecked(preferenceManager.getAutoLoginPreference());
             checkBoxPreferenceAutoLogin.setOnPreferenceChangeListener((preference, newValue) -> {
                 boolean checked = Boolean.parseBoolean(newValue.toString());
-                sessionManager.setAutoLoginPreference(checked);
-                Log.i(TAG, "Auto Login : "+ sessionManager.getAutoLoginPreference()+"");
+                preferenceManager.setAutoLoginPreference(checked);
+                Log.i(TAG, "Auto Login : "+ preferenceManager.getAutoLoginPreference()+"");
                 return true;
             });
             CheckBoxPreference checkBoxPreferenceAllowNotification = findPreference(PreferenceContract.KEY_ALLOW_NOTIFICATION);
-            checkBoxPreferenceAllowNotification.setChecked(sessionManager.getAllowNotificationPreference());
+            checkBoxPreferenceAllowNotification.setChecked(preferenceManager.getAllowNotificationPreference());
             checkBoxPreferenceAllowNotification.setOnPreferenceChangeListener((preference, newValue) -> {
                 boolean checked = Boolean.parseBoolean(newValue.toString());
-                sessionManager.setAllowNotificationPreference(checked);
-                Log.i(TAG, "Notification : "+sessionManager.getAllowNotificationPreference()+"");
+                preferenceManager.setAllowNotificationPreference(checked);
+                Log.i(TAG, "Notification : "+preferenceManager.getAllowNotificationPreference()+"");
                 return true;
             });
             CheckBoxPreference checkBoxPreferenceAllowVibration = findPreference(PreferenceContract.KEY_ALLOW_VIBRATION);
-            checkBoxPreferenceAllowVibration.setChecked(sessionManager.getAllowVibrationPreference());
-            checkBoxPreferenceAllowNotification.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    boolean checked = Boolean.parseBoolean(newValue.toString());
-                    sessionManager.setAllowVibrationPreference(checked);
-                    Log.i(TAG, "Vibration : "+ sessionManager.getAllowVibrationPreference()+"");
-                    return true;
-                }
+            checkBoxPreferenceAllowVibration.setChecked(preferenceManager.getAllowVibrationPreference());
+            checkBoxPreferenceAllowNotification.setOnPreferenceChangeListener((preference, newValue) -> {
+                boolean checked = Boolean.parseBoolean(newValue.toString());
+                preferenceManager.setAllowVibrationPreference(checked);
+                Log.i(TAG, "Vibration : "+ preferenceManager.getAllowVibrationPreference()+"");
+                return true;
             });
         }
     }

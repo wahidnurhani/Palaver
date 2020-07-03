@@ -24,6 +24,7 @@ import de.unidue.palaver.model.StringValue;
 import de.unidue.palaver.model.User;
 import de.unidue.palaver.notificationsmanager.NotificationManager;
 import de.unidue.palaver.repository.MessageRepository;
+import de.unidue.palaver.sessionmanager.PreferenceManager;
 import de.unidue.palaver.sessionmanager.SessionManager;
 import retrofit2.Response;
 
@@ -33,7 +34,7 @@ import static java.lang.Thread.sleep;
 public class MessagingService extends FirebaseMessagingService {
 
     private static final String TAG= MessagingService.class.getSimpleName();
-    private SessionManager sessionManager;
+    private PreferenceManager preferenceManager;
 
     @Override
     public void onNewToken(@NonNull String s) {
@@ -116,11 +117,12 @@ public class MessagingService extends FirebaseMessagingService {
             Intent intent = new Intent(StringValue.IntentAction.BROADCAST_MESSAGE_RECEIVED);
             intent.putExtra("INTENT_SENDER_USERNAME", sender);
             LocalBroadcastManager.getInstance(MessagingService.this).sendBroadcast(intent);
-            sessionManager = SessionManager.getSessionManagerInstance(getApplicationContext());
+            preferenceManager = SessionManager
+                    .getSessionManagerInstance(getApplicationContext()).getPreferenceManager();
             Thread thread = new Thread(() -> {
                 try{
                     sleep(0);
-                    if(sessionManager.getAllowNotificationPreference()){
+                    if(preferenceManager.getAllowNotificationPreference()){
                         NotificationManager.getInstance(getApplicationContext()).displayNotification(sender, preview);
                     }
                 }catch(InterruptedException e){

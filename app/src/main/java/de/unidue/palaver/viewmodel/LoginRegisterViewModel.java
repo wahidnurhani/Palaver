@@ -39,6 +39,6 @@ public class LoginRegisterViewModel extends AndroidViewModel {
     }
 
     public void reset() {
-        sessionManager.resetAll();
+        sessionManager.endSession();
     }
 }

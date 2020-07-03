@@ -24,7 +24,6 @@ public class DBContract {
         public static final String COLUMN_MESSAGE_RECIPIENT = "recipient";
         public static final String COLUMN_MESSAGE_MIMETYPE = "mimetype";
         public static final String COLUMN_MESSAGE_DATA = "data";
-        public static final String COLUMN_MESSAGE_ISREAD ="isread";
         public static final String COLUMN_MESSAGE_DATETIME = "date_time";
 
     }

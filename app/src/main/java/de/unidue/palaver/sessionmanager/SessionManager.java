@@ -1,7 +1,6 @@
 package de.unidue.palaver.sessionmanager;
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -28,9 +27,8 @@ import retrofit2.Response;
 public class SessionManager {
     private static String TAG = SessionManager.class.getSimpleName();
 
-    private SharedPreferences pref;
+    private PreferenceManager preferenceManager;
     private Context application;
-    private SharedPreferences.Editor editor;
     private MutableLiveData<Boolean> loginStatus;
     private MutableLiveData<Boolean> registerStatus;
     private MutableLiveData<Boolean> passwordChanged;
@@ -49,49 +47,17 @@ public class SessionManager {
     @SuppressLint("CommitPrefEdits")
     private SessionManager(Context application) {
         this.application = application;
-        this.pref = this.application.getSharedPreferences(PreferenceContract.PREF_NAME,
-                PreferenceContract.PRIVATE_MODE);
-        this.editor= pref.edit();
+
+        this.preferenceManager = new PreferenceManager(application);
         this.loginStatus = new MutableLiveData<>();
         this.registerStatus = new MutableLiveData<>();
         this.passwordChanged = new MutableLiveData<>();
         this.palaverDao = PalaverDB.getDatabase(application).palaverDao();
-        this.loginStatus.setValue(pref.getBoolean(PreferenceContract.KEY_IS_LOGIN, false));
-        this.passwordChanged.setValue(pref.getBoolean(PreferenceContract.KEY_PASSWORD_CHANGED, false));
+        this.loginStatus.setValue(preferenceManager.getPref()
+                .getBoolean(PreferenceContract.KEY_IS_LOGIN, false));
+        this.passwordChanged.setValue(preferenceManager.getPref()
+                .getBoolean(PreferenceContract.KEY_PASSWORD_CHANGED, false));
         this.registerStatus.setValue(false);
-    }
-
-    private void startSession(String userName, String password){
-        Log.i(TAG, "session started");
-        editor.putBoolean(PreferenceContract.KEY_IS_LOGIN, true);
-        editor.putBoolean(PreferenceContract.KEY_PASSWORD_CHANGED, false);
-        editor.putString(PreferenceContract.KEY_USERNAME, userName);
-        editor.putString(PreferenceContract.KEY_PASSWORD, password);
-        editor.commit();
-        populateDB();
-
-        Constraints constraints = new Constraints.Builder()
-                .setRequiresCharging(false)
-                .build();
-
-        PeriodicWorkRequest refreshTokenWorkRequest = new PeriodicWorkRequest
-                .Builder(PushTokenWorker.class, 1, TimeUnit.HOURS)
-                .setConstraints(constraints).build();
-
-        WorkManager.getInstance(application).enqueue(refreshTokenWorkRequest);
-    }
-
-    public SharedPreferences getPref() {
-        return pref;
-    }
-
-    private void populateDB(){
-        ServicePopulateDB.startIntent(application, getUser());
-    }
-
-    private void changeUserPassword(String password){
-        editor.putString(PreferenceContract.KEY_PASSWORD, password);
-        editor.commit();
     }
 
     public LiveData<Boolean> getLoginStatus() {
@@ -107,81 +73,58 @@ public class SessionManager {
     }
 
     public User getUser() {
-        String username = pref.getString(PreferenceContract.KEY_USERNAME,"");
-        String password = pref.getString(PreferenceContract.KEY_PASSWORD,"");
-        assert username != null;
-        assert password != null;
-        if(username.equals("")|| password.equals("")){
-            return null;
-        }
-        return new User(username, password);
+        return preferenceManager.getUser();
+    }
+
+    public PreferenceManager getPreferenceManager() {
+        return preferenceManager;
     }
 
     public void login(User user) {
         new LoginProcessor().execute(user);
     }
 
+    private void startSession(String userName, String password){
+        Log.i(TAG, "session started");
+        preferenceManager.handleStartSession(userName, password);
+        populateDB();
+        initPushTokenWorkManager();
+    }
+
+    private void initPushTokenWorkManager() {
+        Constraints constraints = new Constraints.Builder()
+                .setRequiresCharging(false)
+                .build();
+        PeriodicWorkRequest refreshTokenWorkRequest = new PeriodicWorkRequest
+                .Builder(PushTokenWorker.class, 1, TimeUnit.HOURS)
+                .setConstraints(constraints).build();
+        WorkManager.getInstance(application).enqueue(refreshTokenWorkRequest);
+    }
+
+    private void populateDB(){
+        ServicePopulateDB.startIntent(application, getUser());
+    }
+
     public void register(User user) {
         new RegisterProcessor().execute(user);
-    }
-
-    private void resetRegisterStatus() {
-        this.registerStatus.setValue(false);
-    }
-
-    private void resetLoginStatus() {
-        this.loginStatus.setValue(false);
-    }
-
-    private void resetChangePasswordStatus(){ this.passwordChanged.setValue(false);}
-
-    public void cleanData() {
-        new CleanDatabase(palaverDao).execute();
-    }
-
-    public void resetAll() {
-        resetLoginStatus();
-        resetRegisterStatus();
-        resetChangePasswordStatus();
-        cleanData();
-    }
-
-    public void endSession(){
-        editor.clear();
-        editor.commit();
-        resetAll();
-    }
-
-    public boolean getAutoLoginPreference() {
-        return pref.getBoolean(PreferenceContract.KEY_AUTO_LOGIN, true);
-    }
-
-    public void setAutoLoginPreference(boolean checked) {
-        editor.putBoolean(PreferenceContract.KEY_AUTO_LOGIN, checked);
-        editor.commit();
-    }
-
-    public boolean getAllowNotificationPreference() {
-        return pref.getBoolean(PreferenceContract.KEY_ALLOW_NOTIFICATION, true);
-    }
-
-    public void setAllowNotificationPreference(boolean checked) {
-        editor.putBoolean(PreferenceContract.KEY_ALLOW_NOTIFICATION, checked);
-        editor.commit();
-    }
-
-    public boolean getAllowVibrationPreference() {
-        return pref.getBoolean(PreferenceContract.KEY_ALLOW_VIBRATION, true);
-    }
-
-    public void setAllowVibrationPreference(boolean checked) {
-        editor.putBoolean(PreferenceContract.KEY_ALLOW_VIBRATION, checked);
-        editor.commit();
     }
 
     public void changePassword(String newPassword) {
         new ChangePasswordProcessor(getUser(), newPassword).execute();
     }
+
+    public void endSession(){
+        preferenceManager.handleEndSession();
+        this.loginStatus.setValue(false);
+        this.registerStatus.setValue(false);
+        this.passwordChanged.setValue(false);
+        cleanData();
+    }
+
+    public void cleanData() {
+        new CleanDatabase(palaverDao).execute();
+    }
+
 
     @SuppressLint("StaticFieldLeak")
     private class LoginProcessor extends AsyncTask<User, Void, Response<StackApiResponseList<String>>> {
@@ -270,8 +213,7 @@ public class SessionManager {
                 responseChangePassword = retrofit.changePassword(new JSONBuilder.ChangePassWord(user, newPassword));
                 assert responseChangePassword.body() != null;
                 if(responseChangePassword.body().getMessageType()==1){
-                    editor.putString(PreferenceContract.KEY_PASSWORD, newPassword);
-                    editor.commit();
+                    preferenceManager.setNewPassword(newPassword);
                     Log.i(TAG, "change password success");
                 }
             } catch (IOException e) {

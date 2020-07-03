@@ -21,23 +21,14 @@ public class StringValue {
 
     public static class IntentKeyName {
         public static final String FRIEND = "INTENT_FRIEND";
-        public static final String BROADCAST_FRIENDADDED_MESSAGE_RESULT = "INTENT_ADDFRIEND_RESULT";
         public static final String MESSAGE = "INTENT_MESSAGE";
         public static final String USERNAME = "USERNAME";
         public static final String PASSWORD = "PASSWORD";
-        public static final String MESSAGEREPOSITORY = "MESSAGEREPOSITORY";
         public static final String USER = "USER";
         public static final String OFFSET = "OFFSET";
     }
 
     public static class IntentAction {
-        public static final String BROADCAST_FRIENDADDED = "friendadded_broadcast";
-        public static final String BROADCAST_AUTHENTIFICATED = "authentificated_broadcast";
-        public static final String BROADCAST_ALL_FRIENDS_FETCHED = "friendfetched_broadcast";
-        public static final String BROADCAST_USER_REGISTERED = "registered_broadcast";
-        public static final String BROADCAST_ALL_CHAT_FETCHED = "allChatfetched_broadcast";
-        public static final String BROADCAST_LOGINRESULT = "loginResult_broadcast";
-        public static final String BROADCAST_STARTLOGIN = "loginStart_broadCast";
         public static final String BROADCAST_MESSAGE_RECEIVED = "message_received_broadcast";
     }
 

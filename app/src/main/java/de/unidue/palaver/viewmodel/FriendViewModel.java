@@ -55,10 +55,6 @@ public class FriendViewModel extends AndroidViewModel {
         friendRepository.remove( friend);
     }
 
-    public void removeAll(){
-        friendRepository.removeAll();
-    }
-
     @Override
     protected void onCleared() {
         super.onCleared();
