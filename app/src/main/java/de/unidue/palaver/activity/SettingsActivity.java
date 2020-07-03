@@ -9,12 +9,13 @@ import android.view.MenuItem;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
 import androidx.preference.CheckBoxPreference;
-import androidx.preference.EditTextPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
 import de.unidue.palaver.R;
+import de.unidue.palaver.dialogandtoast.ChangePasswordDialog;
 import de.unidue.palaver.roomdatabase.PalaverDB;
 import de.unidue.palaver.sessionmanager.PreferenceContract;
 import de.unidue.palaver.sessionmanager.SessionManager;
@@ -22,6 +23,7 @@ import de.unidue.palaver.sessionmanager.SessionManager;
 public class SettingsActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener{
     private static String TAG = SettingsActivity.class.getSimpleName();
     private SessionManager sessionManager;
+    private LiveData<Boolean> passwordChanged;
 
     public static void startActivity(Context context) {
         Intent intent = new Intent(context, SettingsActivity.class);
@@ -42,7 +44,15 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_activity);
         sessionManager = SessionManager.getSessionManagerInstance(getApplicationContext());
+        passwordChanged = sessionManager.getPasswordChanged();
 
+        passwordChanged.observe(this, aBoolean -> {
+            if(aBoolean==true){
+                sessionManager.cleanData();
+                sessionManager.endSession();
+                SplashScreenActivity.startActivity(SettingsActivity.this);
+            }
+        });
         PalaverDB.getDatabase(getApplicationContext());
 
         getSupportFragmentManager()
@@ -82,7 +92,11 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
             Preference preferenceUsername = findPreference(PreferenceContract.KEY_USERNAME);
             preferenceUsername.setSummary(sessionManager.getUser().getUserName());
 
-            EditTextPreference editTextPreferenceChangePassword = findPreference(PreferenceContract.KEY_CHANGE_PASSWORD);
+            Preference editTextPreferenceChangePassword = findPreference(PreferenceContract.KEY_CHANGE_PASSWORD);
+            editTextPreferenceChangePassword.setOnPreferenceClickListener(preference -> {
+                ChangePasswordDialog.startDialog(getContext().getApplicationContext(), getActivity());
+                return true;
+            });
 
             CheckBoxPreference checkBoxPreferenceAutoLogin = findPreference(PreferenceContract.KEY_AUTO_LOGIN);
             checkBoxPreferenceAutoLogin.setChecked(sessionManager.getAutoLoginPreference());

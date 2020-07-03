@@ -36,4 +36,7 @@
     <string name="send">send</string>
     <string name="send_file">Send File</string>
     <string name="share_location">Share Location</string>
+    <string name="changePassword">Change Password</string>
+    <string name="newPassword">new password</string>
+    <string name="change">Change</string>
 </resources>

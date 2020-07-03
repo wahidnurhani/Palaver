@@ -7,7 +7,6 @@ import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.preference.Preference;
 import androidx.work.Constraints;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
@@ -15,8 +14,8 @@ import androidx.work.WorkManager;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-import de.unidue.palaver.R;
 import de.unidue.palaver.dialogandtoast.CustomToast;
+import de.unidue.palaver.httpclient.JSONBuilder;
 import de.unidue.palaver.httpclient.Retrofit;
 import de.unidue.palaver.model.StackApiResponseList;
 import de.unidue.palaver.model.User;
@@ -36,9 +35,6 @@ public class SessionManager {
     private MutableLiveData<Boolean> registerStatus;
     private MutableLiveData<Boolean> passwordChanged;
     private PalaverDao palaverDao;
-
-
-
 
     @SuppressLint("StaticFieldLeak")
     private static SessionManager sessionManagerInstance;
@@ -139,7 +135,7 @@ public class SessionManager {
 
     private void resetChangePasswordStatus(){ this.passwordChanged.setValue(false);}
 
-    private void cleanData() {
+    public void cleanData() {
         new CleanDatabase(palaverDao).execute();
     }
 
@@ -181,6 +177,10 @@ public class SessionManager {
     public void setAllowVibrationPreference(boolean checked) {
         editor.putBoolean(PreferenceContract.KEY_ALLOW_VIBRATION, checked);
         editor.commit();
+    }
+
+    public void changePassword(String newPassword) {
+        new ChangePasswordProcessor(getUser(), newPassword).execute();
     }
 
     @SuppressLint("StaticFieldLeak")
@@ -245,6 +245,48 @@ public class SessionManager {
                 registerStatus.setValue(true);
             } else {
                 registerStatus.setValue(false);
+                CustomToast.makeText(application,stackApiResponseListResponse.body().getInfo());
+            }
+        }
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    private class ChangePasswordProcessor extends AsyncTask<Void, Void, Response<StackApiResponseList<String>>> {
+        private User user;
+        private String newPassword;
+
+        public ChangePasswordProcessor(User user, String newPassword) {
+            this.user = user;
+            this.newPassword= newPassword;
+        }
+
+        @Override
+        protected Response<StackApiResponseList<String>> doInBackground(Void... voids) {
+
+            Retrofit retrofit = new Retrofit();
+
+            Response<StackApiResponseList<String>> responseChangePassword = null;
+            try {
+                responseChangePassword = retrofit.changePassword(new JSONBuilder.ChangePassWord(user, newPassword));
+                assert responseChangePassword.body() != null;
+                if(responseChangePassword.body().getMessageType()==1){
+                    editor.putString(PreferenceContract.KEY_PASSWORD, newPassword);
+                    editor.commit();
+                    Log.i(TAG, "change password success");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return responseChangePassword;
+        }
+
+        @Override
+        protected void onPostExecute(Response<StackApiResponseList<String>> stackApiResponseListResponse) {
+            assert stackApiResponseListResponse.body() != null;
+            if(stackApiResponseListResponse.body().getMessageType()==1){
+                passwordChanged.setValue(true);
+                CustomToast.makeText(application,stackApiResponseListResponse.body().getInfo());
+            } else {
                 CustomToast.makeText(application,stackApiResponseListResponse.body().getInfo());
             }
         }

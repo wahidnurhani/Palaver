@@ -14,10 +14,10 @@
             >
         </Preference>
 
-        <EditTextPreference
+        <Preference
             app:title="Change Password"
             app:key="password">
-        </EditTextPreference>
+        </Preference>
 
 
     </PreferenceCategory>

@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 
@@ -77,6 +78,7 @@ public class NotificationManager extends Application {
 
         if(notificationManager!=null){
             if(notificationSetting){
+                Log.i(TAG, "notify");
                 notificationManager.notify(1, notificationBuilder.build());
             }
         }
