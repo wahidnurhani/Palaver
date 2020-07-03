@@ -69,7 +69,6 @@ public class SessionManager {
 
     private void startSession(String userName, String password){
         Log.i(TAG, "session started");
-
         editor.putBoolean(KEY_IS_LOGIN, true);
         editor.putBoolean(KEY_PASSWORD_CHANGED, false);
         editor.putString(KEY_USERNAME, userName);
@@ -168,6 +167,15 @@ public class SessionManager {
         editor.commit();
     }
 
+    public boolean getAllowNotificationPreference() {
+        return pref.getBoolean(PreferenceContract.KEY_ALLOW_NOTIFICATION, true);
+    }
+
+    public void setAllowNotificationPreference(boolean checked) {
+        editor.putBoolean(PreferenceContract.KEY_ALLOW_NOTIFICATION, checked);
+        editor.commit();
+    }
+
     @SuppressLint("StaticFieldLeak")
     private class LoginProcessor extends AsyncTask<User, Void, Response<StackApiResponseList<String>>> {
 
@@ -196,6 +204,7 @@ public class SessionManager {
                 loginStatus.setValue(true);
                 passwordChanged.setValue(false);
             } else {
+                loginStatus.setValue(false);
                 CustomToast.makeText(application, stackApiResponseListResponse.body().getInfo());
             }
         }
@@ -227,8 +236,10 @@ public class SessionManager {
             assert stackApiResponseListResponse.body() != null;
             if(stackApiResponseListResponse.body().getMessageType()==1){
                 registerStatus.setValue(true);
+            } else {
+                registerStatus.setValue(false);
+                CustomToast.makeText(application,stackApiResponseListResponse.body().getInfo());
             }
-            CustomToast.makeText(application,stackApiResponseListResponse.body().getInfo());
         }
     }
 

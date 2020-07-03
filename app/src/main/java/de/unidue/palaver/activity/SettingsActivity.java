@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.CheckBoxPreference;
+import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
 import de.unidue.palaver.R;
@@ -83,6 +84,14 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
                 boolean checked = Boolean.parseBoolean(newValue.toString());
                 sessionManager.setAutoLoginPreference(checked);
                 Log.i(TAG, sessionManager.getAutoLoginPreference()+"");
+                return true;
+            });
+            CheckBoxPreference checkBoxPreferenceAllowNotification = findPreference(PreferenceContract.KEY_ALLOW_NOTIFICATION);
+            checkBoxPreferenceAllowNotification.setChecked(sessionManager.getAllowNotificationPreference());
+            checkBoxPreferenceAllowNotification.setOnPreferenceChangeListener((preference, newValue) -> {
+                boolean checked = Boolean.parseBoolean(newValue.toString());
+                sessionManager.setAllowNotificationPreference(checked);
+                Log.i(TAG, sessionManager.getAllowNotificationPreference()+"");
                 return true;
             });
         }

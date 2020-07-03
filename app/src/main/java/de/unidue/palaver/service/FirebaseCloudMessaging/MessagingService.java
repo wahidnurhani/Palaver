@@ -33,6 +33,7 @@ import static java.lang.Thread.sleep;
 public class MessagingService extends FirebaseMessagingService {
 
     private static final String TAG= MessagingService.class.getSimpleName();
+    private SessionManager sessionManager;
 
     @Override
     public void onNewToken(@NonNull String s) {
@@ -115,11 +116,13 @@ public class MessagingService extends FirebaseMessagingService {
             Intent intent = new Intent(StringValue.IntentAction.BROADCAST_MESSAGE_RECEIVED);
             intent.putExtra("INTENT_SENDER_USERNAME", sender);
             LocalBroadcastManager.getInstance(MessagingService.this).sendBroadcast(intent);
-
+            sessionManager = SessionManager.getSessionManagerInstance(getApplicationContext());
             Thread thread = new Thread(() -> {
                 try{
                     sleep(0);
-                    NotificationManager.getInstance(getApplicationContext()).displayNotification(sender, preview);
+                    if(sessionManager.getAllowNotificationPreference()){
+                        NotificationManager.getInstance(getApplicationContext()).displayNotification(sender, preview);
+                    }
                 }catch(InterruptedException e){
                     e.printStackTrace();
                 }
