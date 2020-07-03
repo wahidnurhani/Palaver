@@ -17,7 +17,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
-public class RetrofitTest {
+public class RetrofitHttpClientTest {
 
     @Test
     public void retrofitLoginTest(){
@@ -120,8 +120,8 @@ public class RetrofitTest {
                 .build();
 
         PalaverPostAPI service = retrofit.create(PalaverPostAPI.class);
-        User user = new User("test1991", "test1991");
-        Friend friend = new Friend("test1992");
+        User user = new User("test1992", "test1992");
+        Friend friend = new Friend("test1991");
         Message message = new Message(friend.getUsername(),user.getUserName(),
                 friend.getUsername(), "Hallot test retrofit", new Date());
 

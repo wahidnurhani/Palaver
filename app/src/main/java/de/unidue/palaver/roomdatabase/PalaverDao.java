@@ -52,12 +52,6 @@ public interface PalaverDao{
             "OR recipient = :friendName ORDER BY date_time ASC" )
     List<Message> getMessagesList(String friendName);
 
-    @Update
-    int updateMessage(Message message);
-
-    @Update
-    int updateMessages(Message... messages);
-
     @Query("SELECT * FROM table_friend WHERE friend_name = :friendUserName")
     Friend findUserByName(String friendUserName);
 
@@ -66,12 +60,6 @@ public interface PalaverDao{
 
     @Query("DELETE FROM table_chat_data")
     int deleteAllChat();
-
-    @Update
-    int update(Friend friend);
-
-    @Update
-    int update(Message message);
 
     @Query("SELECT date_time FROM table_chat_data WHERE fk_friend = :friend " +
             "ORDER BY date_time DESC LIMIT 1")

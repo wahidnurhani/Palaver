@@ -1,7 +1,6 @@
 package de.unidue.palaver.viewmodel;
 
 import android.app.Application;
-import android.content.Context;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
@@ -24,10 +23,6 @@ public class SettingViewModel extends AndroidViewModel {
         passwordChanged = sessionManager.getPasswordChanged();
     }
 
-    public PreferenceManager getPreferenceManager() {
-        return preferenceManager;
-    }
-
     public LiveData<Boolean> getPasswordChanged() {
         return passwordChanged;
     }
@@ -40,8 +35,8 @@ public class SettingViewModel extends AndroidViewModel {
         return sessionManager.getUser().getUserName();
     }
 
-    public void handleChangePasswordRequest(Context applicationContext, FragmentActivity activity) {
-        ChangePasswordDialog.startDialog(applicationContext, activity);
+    public void handleChangePasswordRequest(FragmentActivity activity) {
+        ChangePasswordDialog.startDialog(getApplication(), activity);
     }
 
     public boolean getAutoLoginPreference() {

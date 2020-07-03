@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import java.io.IOException;
 import java.util.Objects;
 
+import de.unidue.palaver.httpclient.IHttpClient;
 import de.unidue.palaver.sessionmanager.SessionManager;
 
 import de.unidue.palaver.httpclient.JSONBuilder;
@@ -21,7 +22,7 @@ import de.unidue.palaver.model.Friend;
 import de.unidue.palaver.model.StackApiResponseDate;
 import de.unidue.palaver.model.Message;
 import de.unidue.palaver.model.User;
-import de.unidue.palaver.httpclient.Retrofit;
+import de.unidue.palaver.httpclient.RetrofitHttpClient;
 import de.unidue.palaver.model.StringValue;
 
 import de.unidue.palaver.roomdatabase.PalaverDao;
@@ -76,12 +77,12 @@ public class ServiceSendMessage extends Service {
             PalaverDB palaverDB = PalaverDB.getDatabase(getApplicationContext());
             PalaverDao palaverDao = palaverDB.palaverDao();
             Friend friend = new Friend(messages[0].getFriendUserName());
-            Retrofit retrofit = new Retrofit();
+            IHttpClient retrofitHttpClient = new RetrofitHttpClient();
             Response<StackApiResponseDate> response = null;
             JSONBuilder.SendMessageBody body = new JSONBuilder.SendMessageBody(user,
                     friend, messages[0]);
             try {
-                response = retrofit.sendMessage(body);
+                response = retrofitHttpClient.sendMessage(body);
                 assert response.body() != null;
                 if(response.body().getMessageType()==1){
                     messages[0].setDate(response.body().getDateTime().getDateTime());

@@ -14,8 +14,9 @@ import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import de.unidue.palaver.dialogandtoast.CustomToast;
+import de.unidue.palaver.httpclient.IHttpClient;
 import de.unidue.palaver.httpclient.JSONBuilder;
-import de.unidue.palaver.httpclient.Retrofit;
+import de.unidue.palaver.httpclient.RetrofitHttpClient;
 import de.unidue.palaver.model.StackApiResponseList;
 import de.unidue.palaver.model.User;
 import de.unidue.palaver.roomdatabase.PalaverDB;
@@ -24,7 +25,7 @@ import de.unidue.palaver.service.ServicePopulateDB;
 import de.unidue.palaver.worker.PushTokenWorker;
 import retrofit2.Response;
 
-public class SessionManager {
+public class SessionManager implements ISessionManager{
     private static String TAG = SessionManager.class.getSimpleName();
 
     private PreferenceManager preferenceManager;
@@ -53,10 +54,8 @@ public class SessionManager {
         this.registerStatus = new MutableLiveData<>();
         this.passwordChanged = new MutableLiveData<>();
         this.palaverDao = PalaverDB.getDatabase(application).palaverDao();
-        this.loginStatus.setValue(preferenceManager.getPref()
-                .getBoolean(PreferenceContract.KEY_IS_LOGIN, false));
-        this.passwordChanged.setValue(preferenceManager.getPref()
-                .getBoolean(PreferenceContract.KEY_PASSWORD_CHANGED, false));
+        this.loginStatus.setValue(preferenceManager.getIsLogin());
+        this.passwordChanged.setValue(preferenceManager.getPasswordChanged());
         this.registerStatus.setValue(false);
     }
 
@@ -73,18 +72,20 @@ public class SessionManager {
     }
 
     public User getUser() {
-        return preferenceManager.getUser();
+        return new User(preferenceManager.getUserName(), preferenceManager.getPassword());
     }
 
     public PreferenceManager getPreferenceManager() {
         return preferenceManager;
     }
 
+    @Override
     public void login(User user) {
         new LoginProcessor().execute(user);
     }
 
-    private void startSession(String userName, String password){
+    @Override
+    public void startSession(String userName, String password){
         Log.i(TAG, "session started");
         preferenceManager.handleStartSession(userName, password);
         populateDB();
@@ -101,30 +102,34 @@ public class SessionManager {
         WorkManager.getInstance(application).enqueue(refreshTokenWorkRequest);
     }
 
-    private void populateDB(){
+    @Override
+    public void populateDB(){
         ServicePopulateDB.startIntent(application, getUser());
     }
 
+    @Override
     public void register(User user) {
         new RegisterProcessor().execute(user);
     }
 
+    @Override
     public void changePassword(String newPassword) {
         new ChangePasswordProcessor(getUser(), newPassword).execute();
     }
 
+    @Override
     public void endSession(){
-        preferenceManager.handleEndSession();
+        this.preferenceManager.handleEndSession();
         this.loginStatus.setValue(false);
         this.registerStatus.setValue(false);
         this.passwordChanged.setValue(false);
         cleanData();
     }
 
+    @Override
     public void cleanData() {
         new CleanDatabase(palaverDao).execute();
     }
-
 
     @SuppressLint("StaticFieldLeak")
     private class LoginProcessor extends AsyncTask<User, Void, Response<StackApiResponseList<String>>> {
@@ -132,10 +137,10 @@ public class SessionManager {
         @Override
         protected Response<StackApiResponseList<String>> doInBackground(User... users) {
 
-            Retrofit retrofit = new Retrofit();
+            IHttpClient retrofitHttpClient = new RetrofitHttpClient();
             Response<StackApiResponseList<String>> responseAuthenticate = null;
             try {
-                responseAuthenticate = retrofit.authenticate(users[0]);
+                responseAuthenticate = retrofitHttpClient.authenticate(users[0]);
                 assert responseAuthenticate.body() != null;
                 if(responseAuthenticate.body().getMessageType()==1){
                     Log.i(TAG, "login Success");
@@ -166,11 +171,11 @@ public class SessionManager {
         @Override
         protected Response<StackApiResponseList<String>> doInBackground(User... users) {
 
-            Retrofit retrofit = new Retrofit();
+            IHttpClient retrofitHttpClient = new RetrofitHttpClient();
 
             Response<StackApiResponseList<String>> responseAuthenticate = null;
             try {
-                responseAuthenticate = retrofit.register(users[0]);
+                responseAuthenticate = retrofitHttpClient.register(users[0]);
                 assert responseAuthenticate.body() != null;
                 if(responseAuthenticate.body().getMessageType()==1){
                     Log.i(TAG, "register Success");
@@ -206,11 +211,11 @@ public class SessionManager {
         @Override
         protected Response<StackApiResponseList<String>> doInBackground(Void... voids) {
 
-            Retrofit retrofit = new Retrofit();
+            IHttpClient retrofitHttpClient = new RetrofitHttpClient();
 
             Response<StackApiResponseList<String>> responseChangePassword = null;
             try {
-                responseChangePassword = retrofit.changePassword(new JSONBuilder.ChangePassWord(user, newPassword));
+                responseChangePassword = retrofitHttpClient.changePassword(new JSONBuilder.ChangePassWord(user, newPassword));
                 assert responseChangePassword.body() != null;
                 if(responseChangePassword.body().getMessageType()==1){
                     preferenceManager.setNewPassword(newPassword);

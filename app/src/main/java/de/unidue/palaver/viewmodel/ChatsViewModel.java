@@ -9,13 +9,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import de.unidue.palaver.repository.Repository;
 import de.unidue.palaver.sessionmanager.SessionManager;
 import de.unidue.palaver.model.Chat;
 import de.unidue.palaver.repository.ChatRepository;
 
 public class ChatsViewModel extends AndroidViewModel {
 
-    private ChatRepository chatRepository;
+    private Repository chatRepository;
     private SessionManager sessionManager;
     private LiveData<List<Chat>> chats;
     private LiveData<Boolean> loginStatus;
@@ -24,7 +25,7 @@ public class ChatsViewModel extends AndroidViewModel {
         super(application);
         this.chatRepository = new ChatRepository(application);
         this.sessionManager = SessionManager.getSessionManagerInstance(application);
-        this.chats = chatRepository.getChats();
+        this.chats = chatRepository.getLiveData();
         this.loginStatus = sessionManager.getLoginStatus();
     }
 

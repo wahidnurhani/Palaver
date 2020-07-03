@@ -7,7 +7,7 @@ import android.content.SharedPreferences;
 import de.unidue.palaver.activity.SettingsActivity;
 import de.unidue.palaver.model.User;
 
-public class PreferenceManager {
+public class PreferenceManager implements IPreferenceManager{
 
     private Context application;
     private SharedPreferences pref;
@@ -22,26 +22,11 @@ public class PreferenceManager {
     }
 
     public void handleStartSession(String userName, String password) {
-        editor.putBoolean(PreferenceContract.KEY_IS_LOGIN, true);
-        editor.putBoolean(PreferenceContract.KEY_PASSWORD_CHANGED, false);
-        editor.putString(PreferenceContract.KEY_USERNAME, userName);
-        editor.putString(PreferenceContract.KEY_PASSWORD, password);
+        setPasswordChanged(false);
+        setIsLogin(true);
+        setUserName(userName);
+        setPassword(password);
         editor.commit();
-    }
-
-    public SharedPreferences getPref() {
-        return pref;
-    }
-
-    public User getUser() {
-        String username = pref.getString(PreferenceContract.KEY_USERNAME,"");
-        String password = pref.getString(PreferenceContract.KEY_PASSWORD,"");
-        assert username != null;
-        assert password != null;
-        if(username.equals("")|| password.equals("")){
-            return null;
-        }
-        return new User(username, password);
     }
 
     public void handleEndSession() {
@@ -49,39 +34,92 @@ public class PreferenceManager {
         editor.commit();
     }
 
+    @Override
+    public void setUserName(String userName){
+        editor.putString(PreferenceContract.KEY_USERNAME, userName);
+        editor.commit();
+    }
+
+    @Override
+    public String getUserName(){
+        return pref.getString(PreferenceContract.KEY_USERNAME,"");
+    }
+
+    @Override
+    public void setPassword(String password) {
+        editor.putString(PreferenceContract.KEY_PASSWORD, password);
+        editor.commit();
+    }
+
+    @Override
+    public String getPassword(){
+        return pref.getString(PreferenceContract.KEY_PASSWORD,"");
+    }
+
+    @Override
+    public Boolean getIsLogin() {
+        return pref.getBoolean(PreferenceContract.KEY_IS_LOGIN, false);
+    }
+
+    @Override
+    public void setIsLogin(boolean isLogin){
+        editor.putBoolean(PreferenceContract.KEY_IS_LOGIN, isLogin);
+        editor.commit();
+    }
+
+    @Override
     public void setAutoLoginPreference(boolean checked) {
         editor.putBoolean(PreferenceContract.KEY_AUTO_LOGIN, checked);
         editor.commit();
     }
 
+    @Override
     public boolean getAutoLoginPreference() {
         return pref.getBoolean(PreferenceContract.KEY_AUTO_LOGIN, true);
     }
 
+    @Override
     public boolean getAllowNotificationPreference() {
         return pref.getBoolean(PreferenceContract.KEY_ALLOW_NOTIFICATION, true);
     }
 
+    @Override
     public void setAllowNotificationPreference(boolean checked) {
         editor.putBoolean(PreferenceContract.KEY_ALLOW_NOTIFICATION, checked);
         editor.commit();
     }
 
+    @Override
     public boolean getAllowVibrationPreference() {
         return pref.getBoolean(PreferenceContract.KEY_ALLOW_VIBRATION, true);
     }
 
+    @Override
     public void setAllowVibrationPreference(boolean checked) {
         editor.putBoolean(PreferenceContract.KEY_ALLOW_VIBRATION, checked);
         editor.commit();
     }
 
+    @Override
     public void setNewPassword(String newPassword) {
         editor.putString(PreferenceContract.KEY_PASSWORD, newPassword);
         editor.commit();
     }
 
+    @Override
+    public Boolean getPasswordChanged() {
+        return pref.getBoolean(PreferenceContract.KEY_PASSWORD_CHANGED, false);
+    }
+
+    @Override
+    public void setPasswordChanged(boolean b) {
+        editor.putBoolean(PreferenceContract.KEY_PASSWORD_CHANGED, b);
+    }
+
+    @Override
     public void registerSharedPreference(SettingsActivity settingsActivity) {
         pref.registerOnSharedPreferenceChangeListener(settingsActivity);
     }
+
+
 }

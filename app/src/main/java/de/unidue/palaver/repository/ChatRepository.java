@@ -4,21 +4,32 @@ import android.app.Application;
 
 import androidx.lifecycle.LiveData;
 
-import java.util.List;
-
-import de.unidue.palaver.model.Chat;
 import de.unidue.palaver.roomdatabase.PalaverDB;
 import de.unidue.palaver.roomdatabase.PalaverDao;
 
-public class ChatRepository{
+public class ChatRepository implements Repository{
+
     private PalaverDao palaverDao;
+    private LiveData chats;
 
     public ChatRepository(Application application) {
         PalaverDB palaverDB = PalaverDB.getDatabase(application);
-        palaverDao = palaverDB.palaverDao();
+        this.palaverDao = palaverDB.palaverDao();
+        this.chats = palaverDao.getAllChat();
     }
 
-    public LiveData<List<Chat>> getChats() {
-        return palaverDao.getAllChat();
+    @Override
+    public LiveData getLiveData() {
+        return chats;
     }
+
+    @Override
+    public void add(Object o) {
+    }
+
+    @Override
+    public void delete(Object o) {
+    }
+
+
 }

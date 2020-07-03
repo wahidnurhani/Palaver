@@ -29,7 +29,7 @@ public class FriendRepositoryTest {
     public void getAllFriends() {
         context = ApplicationProvider.getApplicationContext();
         friendRepository = new FriendRepository((Application) context);
-        assertNotNull(friendRepository.getAllFriends());
+        assertNotNull(friendRepository.getLiveData());
     }
 
     @Test

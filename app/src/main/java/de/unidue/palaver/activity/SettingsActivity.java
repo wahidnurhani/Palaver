@@ -101,7 +101,7 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
 
             Preference editTextPreferenceChangePassword = findPreference(PreferenceContract.KEY_CHANGE_PASSWORD);
             editTextPreferenceChangePassword.setOnPreferenceClickListener(preference -> {
-                settingViewModel.handleChangePasswordRequest(getActivity().getApplicationContext(), getActivity());
+                settingViewModel.handleChangePasswordRequest( getActivity());
                 return true;
             });
 

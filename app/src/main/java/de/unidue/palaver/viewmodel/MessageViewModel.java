@@ -19,11 +19,11 @@ public class MessageViewModel extends AndroidViewModel implements Comparable<Mes
     private Friend friend;
     private LiveData<List<Message>> messages;
 
-    public MessageViewModel(Application application, Friend friend) {
+    public MessageViewModel(Application application, Activity activity, Friend friend) {
         super(application);
         this.friend = friend;
-        this.messageRepository = new MessageRepository(getApplication());
-        messages = messageRepository.getAllMessage(friend);
+        this.messageRepository = new MessageRepository(getApplication(), activity, friend);
+        this.messages = messageRepository.getLiveData();
     }
 
     public Friend getFriend() {
@@ -39,8 +39,8 @@ public class MessageViewModel extends AndroidViewModel implements Comparable<Mes
         return false;
     }
 
-    public void sendMessage(Activity activity, Message message) {
-         messageRepository.sendMessageService(activity, message);
+    public void sendMessage(Message message) {
+         messageRepository.add(message);
     }
 
     @Override

@@ -26,7 +26,7 @@ public class FriendViewModel extends AndroidViewModel {
 
         friendRepository = new FriendRepository(application);
         sessionManager = SessionManager.getSessionManagerInstance(application);
-        friends = friendRepository.getAllFriends();
+        friends = friendRepository.getLiveData();
         user = sessionManager.getUser();
     }
 
@@ -52,7 +52,7 @@ public class FriendViewModel extends AndroidViewModel {
     }
 
     public void remove(Friend friend){
-        friendRepository.remove( friend);
+        friendRepository.delete(friend);
     }
 
     @Override
@@ -61,7 +61,7 @@ public class FriendViewModel extends AndroidViewModel {
     }
 
     public void addFriend(String username) {
-        friendRepository.addFriend(username);
+        friendRepository.add(new Friend(username));
     }
 
 }

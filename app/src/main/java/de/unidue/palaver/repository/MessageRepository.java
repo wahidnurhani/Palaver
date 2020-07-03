@@ -7,8 +7,6 @@ import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
 
-import java.util.List;
-
 import de.unidue.palaver.model.Friend;
 import de.unidue.palaver.model.Message;
 import de.unidue.palaver.model.User;
@@ -17,24 +15,41 @@ import de.unidue.palaver.roomdatabase.PalaverDao;
 import de.unidue.palaver.service.ServiceFetchMessageOffset;
 import de.unidue.palaver.service.ServiceSendMessage;
 
-public class MessageRepository {
+public class MessageRepository implements Repository{
     private PalaverDao palaverDao;
     private Friend friend;
-    private LiveData<List<Message>> messages;
+    private Activity activity;
+    private LiveData messages;
 
-    public MessageRepository(Application application){
+    public MessageRepository(Application application, Activity activity, Friend friend){
+        this.friend = friend;
         PalaverDB palaverDB = PalaverDB.getDatabase(application);
-        palaverDao = palaverDB.palaverDao();
+        this.activity = activity;
+        this.palaverDao = palaverDB.palaverDao();
+        this.messages =  palaverDao.getMessages(friend.getUsername());
     }
 
-    public LiveData<List<Message>> getAllMessage(Friend friend){
+    public MessageRepository(Application application, Friend friend) {
         this.friend = friend;
+        PalaverDB palaverDB = PalaverDB.getDatabase(application);
+        this.palaverDao = palaverDB.palaverDao();
         this.messages = palaverDao.getMessages(friend.getUsername());
+    }
+
+    @Override
+    public LiveData getLiveData() {
         return messages;
     }
 
-    public void sendMessageService(Activity activity, Message message){
-        ServiceSendMessage.startIntent(activity, message);
+    @Override
+    public void add(Object o) {
+        if(o instanceof Message){
+            ServiceSendMessage.startIntent(activity, (Message) o);
+        }
+    }
+
+    @Override
+    public void delete(Object o) {
     }
 
     public void fetchMessageOffset(Application application, User user, Friend friend){
@@ -45,26 +60,9 @@ public class MessageRepository {
         return friend;
     }
 
-    public void update(Message message){
-        new UpdateAsynctask(palaverDao).execute(message);
-    }
-
-    public static class UpdateAsynctask extends AsyncTask<Message, Void, Void>{
-        private PalaverDao palaverDao;
-
-        UpdateAsynctask(PalaverDao palaverDao) {
-            this.palaverDao = palaverDao;
-        }
-
-        @Override
-        protected Void doInBackground(Message... messages) {
-            palaverDao.update(messages[0]);
-            return null;
-        }
-    }
 
     @SuppressLint("StaticFieldLeak")
-    private class GetOffsetAsynctask extends AsyncTask<Void, Void, String>{
+    private static class GetOffsetAsynctask extends AsyncTask<Void, Void, String>{
         Application application;
         User user;
         Friend friend;

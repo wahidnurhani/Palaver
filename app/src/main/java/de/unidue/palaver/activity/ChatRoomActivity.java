@@ -3,7 +3,6 @@ package de.unidue.palaver.activity;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -66,7 +65,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         friend = (Friend) Objects.requireNonNull(getIntent().
                 getExtras()).getSerializable(StringValue.IntentKeyName.FRIEND);
 
-        viewModelProviderFactory = new ViewModelProviderFactory(getApplication(), friend);
+        viewModelProviderFactory = new ViewModelProviderFactory(getApplication(), this, friend);
         messageViewModel = new ViewModelProvider(this,
                 viewModelProviderFactory).get(MessageViewModel.class);
 
@@ -110,7 +109,7 @@ public class ChatRoomActivity extends AppCompatActivity {
                         messageText, new Date());
 
                 messageAdapter.addMessage(message);
-                messageViewModel.sendMessage(this, message);
+                messageViewModel.sendMessage(message);
                 messageEditText.setText("");
             }
         });

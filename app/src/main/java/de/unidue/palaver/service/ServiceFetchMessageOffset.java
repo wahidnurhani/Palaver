@@ -12,8 +12,9 @@ import android.util.Log;
 import java.io.IOException;
 import java.util.Objects;
 
+import de.unidue.palaver.httpclient.IHttpClient;
 import de.unidue.palaver.httpclient.JSONBuilder;
-import de.unidue.palaver.httpclient.Retrofit;
+import de.unidue.palaver.httpclient.RetrofitHttpClient;
 import de.unidue.palaver.model.Friend;
 import de.unidue.palaver.model.Message;
 import de.unidue.palaver.model.StackApiResponseList;
@@ -71,11 +72,11 @@ public class ServiceFetchMessageOffset extends Service {
 
         @Override
         protected Void doInBackground(Friend... friends) {
-            Retrofit retrofit = new Retrofit();
+            IHttpClient retrofitHttpClient = new RetrofitHttpClient();
             Response<StackApiResponseList<Message>> response;
             JSONBuilder.GetMessageOffset body = new JSONBuilder.GetMessageOffset(user, friends[0], offset);
             try {
-                response = retrofit.getMessageOffset(body);
+                response = retrofitHttpClient.getMessageOffset(body);
                 assert response != null;
                 if(response.body().getMessageType()==1){
                     for(Message message : response.body().getDatas()){

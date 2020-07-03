@@ -5,43 +5,43 @@ import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
 
-import java.util.List;
-
 import de.unidue.palaver.model.Friend;
 import de.unidue.palaver.roomdatabase.PalaverDB;
 import de.unidue.palaver.roomdatabase.PalaverDao;
 import de.unidue.palaver.service.ServiceAddFriend;
 import de.unidue.palaver.service.ServiceRemoveFriend;
 
-public class FriendRepository {
+public class FriendRepository implements Repository{
 
     private PalaverDao palaverDao;
-    private LiveData<List<Friend>> friends;
+    private LiveData friends;
     private Application application;
 
     public FriendRepository(Application application) {
         this.application = application;
         PalaverDB palaverDB = PalaverDB.getDatabase(application);
-        palaverDao = palaverDB.palaverDao();
-        friends = palaverDao.getAllFriend();
+        this.palaverDao = palaverDB.palaverDao();
+        this.friends = palaverDao.getAllFriend();
     }
 
-    public LiveData<List<Friend>> getAllFriends(){
+    @Override
+    public LiveData getLiveData() {
         return friends;
     }
 
-    public void remove(Friend friend){
-        ServiceRemoveFriend.startIntent(application, friend);
+    @Override
+    public void add(Object o) {
+        if(o instanceof Friend){
+            ServiceAddFriend.startIntent(application, ((Friend) o).getUsername());
+        }
     }
 
-    public void removeAll(){
-        new RemoveAllAsynctask(palaverDao).execute();
+    @Override
+    public void delete(Object o) {
+        if(o instanceof Friend){
+            ServiceRemoveFriend.startIntent(application, (Friend) o);
+        }
     }
-
-    public void addFriend(String username) {
-        ServiceAddFriend.startIntent(application, username);
-    }
-
     int insert(Friend friend){
         InsertAsyncTask insertAsyncTask = new InsertAsyncTask(palaverDao);
         insertAsyncTask.execute(friend);
@@ -67,19 +67,4 @@ public class FriendRepository {
             return returnValue;
         }
     }
-
-    public static class RemoveAllAsynctask extends AsyncTask<Void, Void, Void>{
-
-        private PalaverDao palaverDao;
-        RemoveAllAsynctask(PalaverDao palaverDao) {
-            this.palaverDao = palaverDao;
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            palaverDao.deleteAllFriend();
-            return null;
-        }
-    }
-
 }

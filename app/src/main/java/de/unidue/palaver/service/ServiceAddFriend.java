@@ -12,10 +12,11 @@ import androidx.annotation.Nullable;
 
 import java.io.IOException;
 
+import de.unidue.palaver.httpclient.IHttpClient;
 import de.unidue.palaver.roomdatabase.PalaverDB;
 import de.unidue.palaver.sessionmanager.SessionManager;
 import de.unidue.palaver.model.StackApiResponseList;
-import de.unidue.palaver.httpclient.Retrofit;
+import de.unidue.palaver.httpclient.RetrofitHttpClient;
 import de.unidue.palaver.model.StringValue;
 import de.unidue.palaver.model.Friend;
 import de.unidue.palaver.model.User;
@@ -64,9 +65,9 @@ public class ServiceAddFriend extends Service {
             PalaverDao palaverDao = palaverDB.palaverDao();
             Response<StackApiResponseList<String>> response= null;
 
-            Retrofit retrofit = new Retrofit();
+            IHttpClient retrofitHttpClient = new RetrofitHttpClient();
             try {
-                response = retrofit.addFriend(user, friends[0]);
+                response = retrofitHttpClient.addFriend(user, friends[0]);
                 assert response.body() != null;
                 if(response.body().getMessageType()==1){
                     palaverDao.insert(friends[0]);

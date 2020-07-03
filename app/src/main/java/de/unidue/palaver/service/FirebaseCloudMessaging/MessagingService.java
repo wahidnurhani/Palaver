@@ -16,8 +16,9 @@ import java.io.IOException;
 import java.util.Map;
 
 import de.unidue.palaver.activity.ChatRoomActivity;
+import de.unidue.palaver.httpclient.IHttpClient;
 import de.unidue.palaver.httpclient.JSONBuilder;
-import de.unidue.palaver.httpclient.Retrofit;
+import de.unidue.palaver.httpclient.RetrofitHttpClient;
 import de.unidue.palaver.model.Friend;
 import de.unidue.palaver.model.StackApiResponseList;
 import de.unidue.palaver.model.StringValue;
@@ -50,10 +51,10 @@ public class MessagingService extends FirebaseMessagingService {
             if(body!=null){
                 JSONBuilder.PushToken finalBody = body;
                 Thread thread = new Thread(() -> {
-                    Retrofit retrofit = new Retrofit();
+                    IHttpClient retrofitHttpClient = new RetrofitHttpClient();
 
                     try {
-                        Response<StackApiResponseList<String>> response = retrofit.pushToken(finalBody);
+                        Response<StackApiResponseList<String>> response = retrofitHttpClient.pushToken(finalBody);
                         Log.i(TAG, response.message()+" : "+response.body().getInfo());
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -84,7 +85,7 @@ public class MessagingService extends FirebaseMessagingService {
         Log.i(TAG, "data sender:"+sender);
 
         if(user!=null){
-            MessageRepository messageRepository = new MessageRepository(getApplication());
+            MessageRepository messageRepository = new MessageRepository(getApplication(), new Friend(sender));
             messageRepository.fetchMessageOffset(getApplication(), user, new Friend(sender));
 
             notifyClient(sender, preview);
