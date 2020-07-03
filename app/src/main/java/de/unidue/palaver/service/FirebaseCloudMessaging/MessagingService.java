@@ -123,7 +123,7 @@ public class MessagingService extends FirebaseMessagingService {
                 try{
                     sleep(0);
                     if(preferenceManager.getAllowNotificationPreference()){
-                        NotificationManager.getInstance(getApplicationContext()).displayNotification(sender, preview);
+                        NotificationManager.getInstance(getApplication()).displayNotification(sender, preview);
                     }
                 }catch(InterruptedException e){
                     e.printStackTrace();

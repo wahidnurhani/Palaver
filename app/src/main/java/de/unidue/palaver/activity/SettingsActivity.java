@@ -10,16 +10,17 @@ import android.view.MenuItem;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.CheckBoxPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
 import de.unidue.palaver.R;
-import de.unidue.palaver.dialogandtoast.ChangePasswordDialog;
 import de.unidue.palaver.roomdatabase.PalaverDB;
 import de.unidue.palaver.sessionmanager.PreferenceContract;
-import de.unidue.palaver.sessionmanager.PreferenceManager;
 import de.unidue.palaver.sessionmanager.SessionManager;
+import de.unidue.palaver.viewmodel.SettingViewModel;
+import de.unidue.palaver.viewmodel.ViewModelProviderFactory;
 
 public class SettingsActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener{
     private static String TAG = SettingsActivity.class.getSimpleName();
@@ -74,55 +75,58 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
     }
 
     public static class SettingsFragment extends PreferenceFragmentCompat {
-        private SessionManager sessionManager;
-        private PreferenceManager preferenceManager;
+        private ViewModelProviderFactory viewModelProviderFactory;
+        private SettingViewModel settingViewModel;
         private LiveData<Boolean> passwordChanged;
 
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             setPreferencesFromResource(R.xml.fragment_setting, rootKey);
-            sessionManager = SessionManager.getSessionManagerInstance(getActivity().getApplicationContext());
-            preferenceManager = sessionManager.getPreferenceManager();
-            passwordChanged = sessionManager.getPasswordChanged();
+
+            viewModelProviderFactory = new ViewModelProviderFactory(getActivity().getApplication());
+            settingViewModel = new ViewModelProvider(this, viewModelProviderFactory)
+                    .get(SettingViewModel.class);
+            passwordChanged = settingViewModel.getPasswordChanged();
 
             passwordChanged.observe(this, aBoolean -> {
                 if(aBoolean){
-                    sessionManager.endSession();
+                    settingViewModel.handlePasswordChanged();
+
                     SplashScreenActivity.startActivity(getActivity());
                 }
             });
 
             Preference preferenceUsername = findPreference(PreferenceContract.KEY_USERNAME);
-            preferenceUsername.setSummary(sessionManager.getUser().getUserName());
+            preferenceUsername.setSummary(settingViewModel.getUserName());
 
             Preference editTextPreferenceChangePassword = findPreference(PreferenceContract.KEY_CHANGE_PASSWORD);
             editTextPreferenceChangePassword.setOnPreferenceClickListener(preference -> {
-                ChangePasswordDialog.startDialog(getContext().getApplicationContext(), getActivity());
+                settingViewModel.handleChangePasswordRequest(getActivity().getApplicationContext(), getActivity());
                 return true;
             });
 
             CheckBoxPreference checkBoxPreferenceAutoLogin = findPreference(PreferenceContract.KEY_AUTO_LOGIN);
-            checkBoxPreferenceAutoLogin.setChecked(preferenceManager.getAutoLoginPreference());
+            checkBoxPreferenceAutoLogin.setChecked(settingViewModel.getAutoLoginPreference());
             checkBoxPreferenceAutoLogin.setOnPreferenceChangeListener((preference, newValue) -> {
                 boolean checked = Boolean.parseBoolean(newValue.toString());
-                preferenceManager.setAutoLoginPreference(checked);
-                Log.i(TAG, "Auto Login : "+ preferenceManager.getAutoLoginPreference()+"");
+                settingViewModel.setAutoLoginPreference(checked);
+                Log.i(TAG, "Auto Login : "+ settingViewModel.getAutoLoginPreference()+"");
                 return true;
             });
             CheckBoxPreference checkBoxPreferenceAllowNotification = findPreference(PreferenceContract.KEY_ALLOW_NOTIFICATION);
-            checkBoxPreferenceAllowNotification.setChecked(preferenceManager.getAllowNotificationPreference());
+            checkBoxPreferenceAllowNotification.setChecked(settingViewModel.getAllowNotificationPreference());
             checkBoxPreferenceAllowNotification.setOnPreferenceChangeListener((preference, newValue) -> {
                 boolean checked = Boolean.parseBoolean(newValue.toString());
-                preferenceManager.setAllowNotificationPreference(checked);
-                Log.i(TAG, "Notification : "+preferenceManager.getAllowNotificationPreference()+"");
+                settingViewModel.setAllowNotification(checked);
+                Log.i(TAG, "Notification : "+settingViewModel.getAllowNotificationPreference()+"");
                 return true;
             });
             CheckBoxPreference checkBoxPreferenceAllowVibration = findPreference(PreferenceContract.KEY_ALLOW_VIBRATION);
-            checkBoxPreferenceAllowVibration.setChecked(preferenceManager.getAllowVibrationPreference());
+            checkBoxPreferenceAllowVibration.setChecked(settingViewModel.getAllowVibrationPreference());
             checkBoxPreferenceAllowNotification.setOnPreferenceChangeListener((preference, newValue) -> {
                 boolean checked = Boolean.parseBoolean(newValue.toString());
-                preferenceManager.setAllowVibrationPreference(checked);
-                Log.i(TAG, "Vibration : "+ preferenceManager.getAllowVibrationPreference()+"");
+                settingViewModel.setAllowVibrationPreference(checked);
+                Log.i(TAG, "Vibration : "+ settingViewModel.getAllowVibrationPreference()+"");
                 return true;
             });
         }

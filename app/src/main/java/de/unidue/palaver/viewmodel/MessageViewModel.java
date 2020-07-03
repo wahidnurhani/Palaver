@@ -19,14 +19,11 @@ public class MessageViewModel extends AndroidViewModel implements Comparable<Mes
     private Friend friend;
     private LiveData<List<Message>> messages;
 
-    public MessageViewModel(Application application) {
+    public MessageViewModel(Application application, Friend friend) {
         super(application);
-        this.messageRepository = new MessageRepository(getApplication());
-    }
-
-    public void setFriend(Friend friend) {
         this.friend = friend;
-        this.messages = messageRepository.getAllMessage(friend);
+        this.messageRepository = new MessageRepository(getApplication());
+        messages = messageRepository.getAllMessage(friend);
     }
 
     public Friend getFriend() {

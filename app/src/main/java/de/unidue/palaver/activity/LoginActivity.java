@@ -9,7 +9,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import java.util.Objects;
 
@@ -19,12 +19,14 @@ import de.unidue.palaver.dialogandtoast.ProgressDialog;
 import de.unidue.palaver.model.StringValue;
 import de.unidue.palaver.model.User;
 import de.unidue.palaver.viewmodel.LoginRegisterViewModel;
+import de.unidue.palaver.viewmodel.ViewModelProviderFactory;
 
 public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = LoginActivity.class.getSimpleName();
     private ProgressDialog progressDialog;
     private EditText userNameEditText, passwordEditText;
+    private ViewModelProviderFactory viewModelProviderFactory;
     private LoginRegisterViewModel loginViewModel;
 
     public static void startActivity(Context context) {
@@ -38,7 +40,10 @@ public class LoginActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.activity_login);
         progressDialog = new ProgressDialog(this);
-        loginViewModel = ViewModelProviders.of(this).get(LoginRegisterViewModel.class);
+
+        viewModelProviderFactory = new ViewModelProviderFactory(getApplication());
+        loginViewModel = new ViewModelProvider(this, viewModelProviderFactory)
+                .get(LoginRegisterViewModel.class);
         loginViewModel.getLoginStatus().observe(this, aBoolean -> {
             if(progressDialog!=null){
                 progressDialog.dismissDialog();

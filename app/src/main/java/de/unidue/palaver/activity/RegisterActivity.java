@@ -1,7 +1,7 @@
 package de.unidue.palaver.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Context;
 import android.content.Intent;
@@ -19,10 +19,12 @@ import de.unidue.palaver.dialogandtoast.ProgressDialog;
 import de.unidue.palaver.model.StringValue;
 import de.unidue.palaver.model.User;
 import de.unidue.palaver.viewmodel.LoginRegisterViewModel;
+import de.unidue.palaver.viewmodel.ViewModelProviderFactory;
 
 public class RegisterActivity extends AppCompatActivity {
 
     private static final String TAG= RegisterActivity.class.getSimpleName();
+    private ViewModelProviderFactory viewModelProviderFactory;
     private LoginRegisterViewModel registerViewModel;
     private ProgressDialog progressDialog;
     private EditText userNameEditText;
@@ -41,7 +43,10 @@ public class RegisterActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.activity_register);
         progressDialog = new ProgressDialog(this);
-        registerViewModel = ViewModelProviders.of(this).get(LoginRegisterViewModel.class);
+
+        viewModelProviderFactory = new ViewModelProviderFactory(getApplication());
+        registerViewModel = new ViewModelProvider(this, viewModelProviderFactory)
+                .get(LoginRegisterViewModel.class);
         registerViewModel.getRegisterStatus().observe(this, aBoolean -> {
             progressDialog.dismissDialog();
             if(aBoolean.equals(true)){

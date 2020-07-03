@@ -2,6 +2,7 @@ package de.unidue.palaver.activity;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -27,11 +28,13 @@ import de.unidue.palaver.viewmodel.MessageViewModel;
 import de.unidue.palaver.model.Friend;
 import de.unidue.palaver.model.StringValue;
 import de.unidue.palaver.adapter.MessageAdapter;
+import de.unidue.palaver.viewmodel.ViewModelProviderFactory;
 
 public class ChatRoomActivity extends AppCompatActivity {
     private static String TAG = ChatRoomActivity.class.getSimpleName();
     private static boolean visible;
 
+    private ViewModelProviderFactory viewModelProviderFactory;
     private MessageViewModel messageViewModel;
     private User user;
     private static Friend friend;
@@ -63,8 +66,9 @@ public class ChatRoomActivity extends AppCompatActivity {
         friend = (Friend) Objects.requireNonNull(getIntent().
                 getExtras()).getSerializable(StringValue.IntentKeyName.FRIEND);
 
-        messageViewModel = ViewModelProviders.of(this).get(MessageViewModel.class);
-        messageViewModel.setFriend(friend);
+        viewModelProviderFactory = new ViewModelProviderFactory(getApplication(), friend);
+        messageViewModel = new ViewModelProvider(this,
+                viewModelProviderFactory).get(MessageViewModel.class);
 
         Objects.requireNonNull(getSupportActionBar()).setTitle(messageViewModel.getFriend().getUsername());
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);

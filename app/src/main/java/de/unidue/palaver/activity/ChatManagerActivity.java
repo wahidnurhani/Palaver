@@ -1,7 +1,7 @@
 package de.unidue.palaver.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,12 +20,14 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import de.unidue.palaver.R;
 import de.unidue.palaver.viewmodel.ChatsViewModel;
 import de.unidue.palaver.adapter.ChatAdapter;
+import de.unidue.palaver.viewmodel.ViewModelProviderFactory;
 
 public class ChatManagerActivity extends AppCompatActivity {
     private static final String TAG = ChatManagerActivity.class.getSimpleName();
 
     private ChatsViewModel chatsViewModel;
     private ChatAdapter chatAdapter;
+    private ViewModelProviderFactory viewModelProviderFactory;
 
 
     public static void startActivity(Context context) {
@@ -74,7 +76,8 @@ public class ChatManagerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_manager);
 
-        chatsViewModel = ViewModelProviders.of(this).get(ChatsViewModel.class);
+        viewModelProviderFactory = new ViewModelProviderFactory(getApplication());
+        chatsViewModel = new ViewModelProvider(this, viewModelProviderFactory).get(ChatsViewModel.class);
         if(!chatsViewModel.getLoginStatus().getValue()){
             LoginActivity.startActivity(ChatManagerActivity.this);
         }

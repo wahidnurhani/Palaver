@@ -31,7 +31,7 @@ public class NotificationManager extends Application {
     public NotificationManager(Context context) {
         this.context = context;
         preferenceManager = SessionManager
-                .getSessionManagerInstance(getApplicationContext()).getPreferenceManager();
+                .getSessionManagerInstance(context).getPreferenceManager();
     }
 
     public static NotificationManager getInstance(Context context) {

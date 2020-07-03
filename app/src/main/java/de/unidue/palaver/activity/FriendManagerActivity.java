@@ -1,7 +1,7 @@
 package de.unidue.palaver.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -23,10 +23,12 @@ import de.unidue.palaver.viewmodel.FriendViewModel;
 import de.unidue.palaver.R;
 import de.unidue.palaver.model.StringValue;
 import de.unidue.palaver.adapter.FriendAdapter;
+import de.unidue.palaver.viewmodel.ViewModelProviderFactory;
 
 
 public class FriendManagerActivity extends AppCompatActivity {
 
+    private ViewModelProviderFactory viewModelProviderFactory;
     private FriendViewModel friendViewModel;
     private FriendAdapter friendAdapter;
 
@@ -72,7 +74,9 @@ public class FriendManagerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friend_manager);
 
-        friendViewModel = ViewModelProviders.of(this).get(FriendViewModel.class);
+        viewModelProviderFactory = new ViewModelProviderFactory(getApplication());
+        friendViewModel = new ViewModelProvider(this, viewModelProviderFactory)
+                .get(FriendViewModel.class);
         friendViewModel.getFriends().observe(this, friends -> friendAdapter.setItems(friends));
 
         Objects.requireNonNull(getSupportActionBar()).setTitle(StringValue.TextAndLabel.SELECT_FRIEND);
