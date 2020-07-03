@@ -44,7 +44,7 @@ public class LoginActivity extends AppCompatActivity {
             }
             if(aBoolean.equals(true)){
                 Log.i(TAG, "login success");
-                SplashScreenActivity.startActivity(LoginActivity.this);
+                SecondSplashActivity.startActivity(LoginActivity.this);
             }
         });
 

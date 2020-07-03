@@ -35,9 +35,8 @@ public class SessionManager {
     private MutableLiveData<Boolean> registerStatus;
     private MutableLiveData<Boolean> passwordChanged;
     private PalaverDao palaverDao;
-    private int PRIVATE_MODE;
 
-    private static final String PREF_NAME = String.valueOf(R.string.palaver_sharedPreferences);
+
     private static final String KEY_IS_LOGIN = String.valueOf(R.string.is_log_in);
     private static final String KEY_USERNAME = String.valueOf(R.string.username);
     private static final String KEY_PASSWORD = String.valueOf(R.string.password);
@@ -56,8 +55,8 @@ public class SessionManager {
     @SuppressLint("CommitPrefEdits")
     private SessionManager(Context application) {
         this.application = application;
-        this.PRIVATE_MODE = 0;
-        this.pref = this.application.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
+        this.pref = this.application.getSharedPreferences(PreferenceContract.PREF_NAME,
+                PreferenceContract.PRIVATE_MODE);
         this.editor= pref.edit();
         this.loginStatus = new MutableLiveData<>();
         this.registerStatus = new MutableLiveData<>();
@@ -70,6 +69,7 @@ public class SessionManager {
 
     private void startSession(String userName, String password){
         Log.i(TAG, "session started");
+
         editor.putBoolean(KEY_IS_LOGIN, true);
         editor.putBoolean(KEY_PASSWORD_CHANGED, false);
         editor.putString(KEY_USERNAME, userName);
@@ -86,6 +86,10 @@ public class SessionManager {
                 .setConstraints(constraints).build();
 
         WorkManager.getInstance(application).enqueue(refreshTokenWorkRequest);
+    }
+
+    public SharedPreferences getPref() {
+        return pref;
     }
 
     private void populateDB(){
@@ -153,6 +157,15 @@ public class SessionManager {
         editor.clear();
         editor.commit();
         resetAll();
+    }
+
+    public boolean getAutoLoginPreference() {
+        return pref.getBoolean(PreferenceContract.KEY_AUTO_LOGIN, true);
+    }
+
+    public void setAutoLoginPreference(boolean checked) {
+        editor.putBoolean(PreferenceContract.KEY_AUTO_LOGIN, checked);
+        editor.commit();
     }
 
     @SuppressLint("StaticFieldLeak")

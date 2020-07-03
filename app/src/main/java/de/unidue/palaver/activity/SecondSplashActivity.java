@@ -12,12 +12,12 @@ import java.util.Objects;
 import de.unidue.palaver.R;
 import de.unidue.palaver.sessionmanager.SessionManager;
 
-public class SplashScreenActivity extends AppCompatActivity {
+public class SecondSplashActivity extends AppCompatActivity {
 
     private static final String TAG = SplashScreenActivity.class.getSimpleName();
 
     public static void startActivity(Context context) {
-        Intent intent = new Intent(context, SplashScreenActivity.class);
+        Intent intent = new Intent(context, SecondSplashActivity.class);
         context.startActivity(intent);
     }
 
@@ -46,12 +46,8 @@ public class SplashScreenActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             Log.i(TAG, sessionManager.getAutoLoginPreference()+"");
-            if(sessionManager.getAutoLoginPreference()){
-                ChatManagerActivity.startActivity(SplashScreenActivity.this);
-            } else {
-                LoginActivity.startActivity(SplashScreenActivity.this);
-            }
-            SplashScreenActivity.this.finish();
+            ChatManagerActivity.startActivity(SecondSplashActivity.this);
+            SecondSplashActivity.this.finish();
         }
     }
 }

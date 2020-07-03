@@ -25,7 +25,7 @@
     <PreferenceCategory app:title="App Setting">
         <CheckBoxPreference
             app:title="Automatic login"
-            app:key="login_preference"
+            app:key="auto_login_preference"
             android:summaryOn="always login"
             android:summaryOff="always request login on start" />
 

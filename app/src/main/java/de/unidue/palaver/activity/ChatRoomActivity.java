@@ -70,24 +70,24 @@ public class ChatRoomActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        RecyclerView messageRecycleview = findViewById(R.id.chatRoom_recycleView);
+        RecyclerView messageRecyclerview = findViewById(R.id.chatRoom_recycleView);
         MessageAdapter messageAdapter = new MessageAdapter(this,
                 messageViewModel.getMessages().getValue());
-        messageRecycleview.setAdapter(messageAdapter);
+        messageRecyclerview.setAdapter(messageAdapter);
         messageViewModel.getMessages().observe(this, messages -> {
             messageAdapter.setMessages(messages);
-            messageRecycleview.scrollToPosition(messageAdapter.getItemCount()-1);
+            messageRecyclerview.scrollToPosition(messageAdapter.getItemCount()-1);
         });
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        messageRecycleview.setLayoutManager(linearLayoutManager);
-        messageRecycleview.setItemAnimator(new DefaultItemAnimator());
-        messageRecycleview.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
+        messageRecyclerview.setLayoutManager(linearLayoutManager);
+        messageRecyclerview.setItemAnimator(new DefaultItemAnimator());
+        messageRecyclerview.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
             if(bottom < oldBottom){
-                messageRecycleview.post(() ->{
+                messageRecyclerview.post(() ->{
                     if(messageAdapter.getItemCount()!=0){
-                        messageRecycleview.smoothScrollToPosition(messageAdapter.getItemCount()-1);
+                        messageRecyclerview.smoothScrollToPosition(messageAdapter.getItemCount()-1);
                     }
                 });
             }

@@ -58,4 +58,7 @@ public class ChatsViewModel extends AndroidViewModel {
         super.onCleared();
     }
 
+    public boolean autoLoginPreference() {
+        return sessionManager.getAutoLoginPreference();
+    }
 }
