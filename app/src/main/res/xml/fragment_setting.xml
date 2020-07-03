@@ -10,13 +10,13 @@
         <Preference
             app:title="Username"
             app:summary="@string/username"
+            android:key="username"
             >
         </Preference>
 
         <EditTextPreference
             app:title="Change Password"
-            app:key="@string/password">
-
+            app:key="password">
         </EditTextPreference>
 
 

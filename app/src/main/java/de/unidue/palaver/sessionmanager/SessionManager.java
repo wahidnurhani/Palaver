@@ -7,6 +7,7 @@ import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.preference.Preference;
 import androidx.work.Constraints;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
@@ -37,10 +38,7 @@ public class SessionManager {
     private PalaverDao palaverDao;
 
 
-    private static final String KEY_IS_LOGIN = String.valueOf(R.string.is_log_in);
-    private static final String KEY_USERNAME = String.valueOf(R.string.username);
-    private static final String KEY_PASSWORD = String.valueOf(R.string.password);
-    private static final String KEY_PASSWORD_CHANGED = String.valueOf(R.string.passwordChanged);
+
 
     @SuppressLint("StaticFieldLeak")
     private static SessionManager sessionManagerInstance;
@@ -62,17 +60,17 @@ public class SessionManager {
         this.registerStatus = new MutableLiveData<>();
         this.passwordChanged = new MutableLiveData<>();
         this.palaverDao = PalaverDB.getDatabase(application).palaverDao();
-        this.loginStatus.setValue(pref.getBoolean(KEY_IS_LOGIN, false));
-        this.passwordChanged.setValue(pref.getBoolean(KEY_PASSWORD_CHANGED, false));
+        this.loginStatus.setValue(pref.getBoolean(PreferenceContract.KEY_IS_LOGIN, false));
+        this.passwordChanged.setValue(pref.getBoolean(PreferenceContract.KEY_PASSWORD_CHANGED, false));
         this.registerStatus.setValue(false);
     }
 
     private void startSession(String userName, String password){
         Log.i(TAG, "session started");
-        editor.putBoolean(KEY_IS_LOGIN, true);
-        editor.putBoolean(KEY_PASSWORD_CHANGED, false);
-        editor.putString(KEY_USERNAME, userName);
-        editor.putString(KEY_PASSWORD, password);
+        editor.putBoolean(PreferenceContract.KEY_IS_LOGIN, true);
+        editor.putBoolean(PreferenceContract.KEY_PASSWORD_CHANGED, false);
+        editor.putString(PreferenceContract.KEY_USERNAME, userName);
+        editor.putString(PreferenceContract.KEY_PASSWORD, password);
         editor.commit();
         populateDB();
 
@@ -96,7 +94,7 @@ public class SessionManager {
     }
 
     private void changeUserPassword(String password){
-        editor.putString(KEY_PASSWORD, password);
+        editor.putString(PreferenceContract.KEY_PASSWORD, password);
         editor.commit();
     }
 
@@ -113,8 +111,8 @@ public class SessionManager {
     }
 
     public User getUser() {
-        String username = pref.getString(KEY_USERNAME,"");
-        String password = pref.getString(KEY_PASSWORD,"");
+        String username = pref.getString(PreferenceContract.KEY_USERNAME,"");
+        String password = pref.getString(PreferenceContract.KEY_PASSWORD,"");
         assert username != null;
         assert password != null;
         if(username.equals("")|| password.equals("")){
@@ -173,6 +171,15 @@ public class SessionManager {
 
     public void setAllowNotificationPreference(boolean checked) {
         editor.putBoolean(PreferenceContract.KEY_ALLOW_NOTIFICATION, checked);
+        editor.commit();
+    }
+
+    public boolean getAllowVibrationPreference() {
+        return pref.getBoolean(PreferenceContract.KEY_ALLOW_VIBRATION, true);
+    }
+
+    public void setAllowVibrationPreference(boolean checked) {
+        editor.putBoolean(PreferenceContract.KEY_ALLOW_VIBRATION, checked);
         editor.commit();
     }
 

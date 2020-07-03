@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.CheckBoxPreference;
+import androidx.preference.EditTextPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
@@ -78,12 +79,17 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
             setPreferencesFromResource(R.xml.fragment_setting, rootKey);
             sessionManager = SessionManager.getSessionManagerInstance(getActivity().getApplicationContext());
 
+            Preference preferenceUsername = findPreference(PreferenceContract.KEY_USERNAME);
+            preferenceUsername.setSummary(sessionManager.getUser().getUserName());
+
+            EditTextPreference editTextPreferenceChangePassword = findPreference(PreferenceContract.KEY_CHANGE_PASSWORD);
+
             CheckBoxPreference checkBoxPreferenceAutoLogin = findPreference(PreferenceContract.KEY_AUTO_LOGIN);
             checkBoxPreferenceAutoLogin.setChecked(sessionManager.getAutoLoginPreference());
             checkBoxPreferenceAutoLogin.setOnPreferenceChangeListener((preference, newValue) -> {
                 boolean checked = Boolean.parseBoolean(newValue.toString());
                 sessionManager.setAutoLoginPreference(checked);
-                Log.i(TAG, sessionManager.getAutoLoginPreference()+"");
+                Log.i(TAG, "Auto Login : "+ sessionManager.getAutoLoginPreference()+"");
                 return true;
             });
             CheckBoxPreference checkBoxPreferenceAllowNotification = findPreference(PreferenceContract.KEY_ALLOW_NOTIFICATION);
@@ -91,8 +97,19 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
             checkBoxPreferenceAllowNotification.setOnPreferenceChangeListener((preference, newValue) -> {
                 boolean checked = Boolean.parseBoolean(newValue.toString());
                 sessionManager.setAllowNotificationPreference(checked);
-                Log.i(TAG, sessionManager.getAllowNotificationPreference()+"");
+                Log.i(TAG, "Notification : "+sessionManager.getAllowNotificationPreference()+"");
                 return true;
+            });
+            CheckBoxPreference checkBoxPreferenceAllowVibration = findPreference(PreferenceContract.KEY_ALLOW_VIBRATION);
+            checkBoxPreferenceAllowVibration.setChecked(sessionManager.getAllowVibrationPreference());
+            checkBoxPreferenceAllowNotification.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    boolean checked = Boolean.parseBoolean(newValue.toString());
+                    sessionManager.setAllowVibrationPreference(checked);
+                    Log.i(TAG, "Vibration : "+ sessionManager.getAllowVibrationPreference()+"");
+                    return true;
+                }
             });
         }
     }

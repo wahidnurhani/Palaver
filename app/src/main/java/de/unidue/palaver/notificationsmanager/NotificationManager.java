@@ -16,6 +16,7 @@ import de.unidue.palaver.activity.ChatRoomActivity;
 import de.unidue.palaver.model.Friend;
 import de.unidue.palaver.model.StringValue;
 import de.unidue.palaver.service.FirebaseCloudMessaging.FirebaseConstant;
+import de.unidue.palaver.sessionmanager.SessionManager;
 
 public class NotificationManager extends Application {
 
@@ -24,9 +25,11 @@ public class NotificationManager extends Application {
     private Context context;
     @SuppressLint("StaticFieldLeak")
     private static NotificationManager notificationManagerInstance;
+    private SessionManager sessionManager;
 
     public NotificationManager(Context context) {
         this.context = context;
+        sessionManager = SessionManager.getSessionManagerInstance(getApplicationContext());
     }
 
     public static NotificationManager getInstance(Context context) {
@@ -37,12 +40,25 @@ public class NotificationManager extends Application {
     }
 
     public void displayNotification(String sender, String preview){
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, FirebaseConstant.CHANNEL_ID)
-                .setSmallIcon(R.drawable.palaver_logo)
-                .setAutoCancel(true)
-                .setContentTitle("PALAVER")
-                .setContentText(sender+" : "+preview)
-                .setPriority(NotificationCompat.PRIORITY_HIGH);
+        NotificationCompat.Builder notificationBuilder;
+
+        if(sessionManager.getAllowVibrationPreference()){
+            notificationBuilder = new NotificationCompat.Builder(context, FirebaseConstant.CHANNEL_ID)
+                    .setSmallIcon(R.drawable.palaver_logo)
+                    .setAutoCancel(true)
+                    .setVibrate(new long[]{0, 250, 100, 250})
+                    .setContentTitle("PALAVER")
+                    .setContentText(sender+" : "+preview)
+                    .setPriority(NotificationCompat.PRIORITY_HIGH);
+        } else {
+            notificationBuilder = new NotificationCompat.Builder(context, FirebaseConstant.CHANNEL_ID)
+                    .setSmallIcon(R.drawable.palaver_logo)
+                    .setAutoCancel(true)
+                    .setContentTitle("PALAVER")
+                    .setContentText(sender+" : "+preview)
+                    .setPriority(NotificationCompat.PRIORITY_HIGH);
+        }
+
 
         Friend friend = new Friend(sender);
         Intent intent = new Intent(context, ChatRoomActivity.class);
