@@ -39,4 +39,6 @@
     <string name="changePassword">Change Password</string>
     <string name="newPassword">new password</string>
     <string name="change">Change</string>
+    <string name="showMessage">Show Message</string>
+    <string name="removeFriend">Delete Friend</string>
 </resources>

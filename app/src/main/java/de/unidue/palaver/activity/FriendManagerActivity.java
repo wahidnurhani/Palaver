@@ -1,6 +1,7 @@
 package de.unidue.palaver.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -10,15 +11,21 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 import de.unidue.palaver.dialogandtoast.AddFriendDialog;
+import de.unidue.palaver.model.Friend;
 import de.unidue.palaver.viewmodel.FriendViewModel;
 import de.unidue.palaver.R;
 import de.unidue.palaver.model.StringValue;
@@ -27,9 +34,11 @@ import de.unidue.palaver.viewmodel.ViewModelProviderFactory;
 
 
 public class FriendManagerActivity extends AppCompatActivity {
+    public static final String TAG = FriendManagerActivity.class.getSimpleName();
 
     private ViewModelProviderFactory viewModelProviderFactory;
     private FriendViewModel friendViewModel;
+    private RecyclerView friendsRecycleView;
     private FriendAdapter friendAdapter;
 
     public static void startActivity(Context context) {
@@ -70,6 +79,27 @@ public class FriendManagerActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        View selectedView =friendsRecycleView.getChildAt(item.getGroupId());
+        TextView textView = selectedView.findViewById(R.id.friend_textview);
+        Friend friend = new Friend(textView.getText().toString());
+
+        Log.i(TAG, "selected : "+ friend.getUsername());
+
+        if(item.getItemId()==R.id.menu_remove_friend){
+            friendViewModel.remove(friend);
+        } else {
+            Intent intent = new Intent(FriendManagerActivity.this, ChatRoomActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(StringValue.IntentKeyName.FRIEND, friend);
+            intent.putExtras(bundle);
+            startActivity(intent);
+        }
+
+        return super.onContextItemSelected(item);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friend_manager);
@@ -87,7 +117,7 @@ public class FriendManagerActivity extends AppCompatActivity {
         floatingActionButton.setOnClickListener(v ->
                 AddFriendDialog.startDialog(getApplication(), this, friendViewModel));
 
-        RecyclerView friendsRecycleView = findViewById(R.id.friendManager_recycleView);
+        friendsRecycleView = findViewById(R.id.friendManager_recycleView);
 
         friendAdapter = new FriendAdapter(this,
                 friendViewModel.getFriends().getValue());
@@ -102,7 +132,7 @@ public class FriendManagerActivity extends AppCompatActivity {
                 linearLayoutManager.getOrientation());
         friendsRecycleView.addItemDecoration(dividerItemDecoration);
 
-
+        registerForContextMenu(friendsRecycleView);
     }
 
     @Override

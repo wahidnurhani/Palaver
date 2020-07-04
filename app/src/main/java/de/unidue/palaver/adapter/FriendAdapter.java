@@ -1,8 +1,10 @@
 package de.unidue.palaver.adapter;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,7 +66,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
         notifyDataSetChanged();
     }
 
-    static class FriendViewHolder extends RecyclerView.ViewHolder{
+    static class FriendViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
 
         private View cardView;
         private TextView name;
@@ -73,7 +75,9 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
             super(itemView);
             cardView = itemView.findViewById(R.id.friend_cardHolder);
             name = itemView.findViewById(R.id.friend_textview);
-    }
+
+            itemView.setOnCreateContextMenuListener(this);
+        }
 
         void setData(Friend current) {
               this.name.setText(current.getUsername());
@@ -81,6 +85,13 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
 
         View getCardView() {
             return cardView;
+        }
+
+        @Override
+        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+            menu.setHeaderTitle("Select action for "+((TextView)v.findViewById(R.id.friend_textview)).getText());
+            menu.add(this.getAdapterPosition(), R.id.menu_show_message, 1, "Show Message");
+            menu.add(this.getAdapterPosition(), R.id.menu_remove_friend, 2, "Delete Friend");
         }
     }
 }

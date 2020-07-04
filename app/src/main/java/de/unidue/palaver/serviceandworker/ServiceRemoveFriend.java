@@ -27,7 +27,6 @@ import retrofit2.Response;
 @SuppressLint("Registered")
 public class ServiceRemoveFriend extends Service {
 
-
     private static final String TAG= ServiceRemoveFriend.class.getSimpleName();
 
     public static void startIntent(Context applicationContext, Friend friend) {
