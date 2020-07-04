@@ -44,8 +44,6 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_activity);
 
-        PalaverDB.getDatabase(getApplicationContext());
-
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.settings, new SettingsFragment())
@@ -59,7 +57,7 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
     @Override
     protected void onResume() {
         super.onResume();
-        SessionManager.getSessionManagerInstance(getApplicationContext())
+        SessionManager.getSessionManagerInstance(getApplication())
                 .getPreferenceManager()
                 .registerSharedPreference(this);
     }

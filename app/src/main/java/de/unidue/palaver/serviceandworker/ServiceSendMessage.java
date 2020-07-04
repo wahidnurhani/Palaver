@@ -1,4 +1,4 @@
-package de.unidue.palaver.service;
+package de.unidue.palaver.serviceandworker;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -52,7 +52,7 @@ public class ServiceSendMessage extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Message message = (Message) Objects.requireNonNull(intent.getExtras()).
                 getSerializable(StringValue.IntentKeyName.MESSAGE);
-        User user = SessionManager.getSessionManagerInstance(getApplicationContext()).getUser();
+        User user = SessionManager.getSessionManagerInstance(getApplication()).getUser();
         new SendMessageAsyncTask(user).execute(message);
         return START_STICKY;
     }
@@ -74,7 +74,7 @@ public class ServiceSendMessage extends Service {
 
         @Override
         protected Response<StackApiResponseDate> doInBackground(Message... messages) {
-            PalaverDB palaverDB = PalaverDB.getDatabase(getApplicationContext());
+            PalaverDB palaverDB = PalaverDB.getDatabase(getApplication());
             PalaverDao palaverDao = palaverDB.palaverDao();
             Friend friend = new Friend(messages[0].getFriendUserName());
             IHttpClient retrofitHttpClient = new RetrofitHttpClient();

@@ -2,6 +2,7 @@ package de.unidue.palaver.dialogandtoast;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.widget.ImageView;
@@ -21,13 +22,13 @@ public class ExtrasDialog extends CustomDialog{
 
     public static int REQUEST_CODE = 2011;
 
-    public ExtrasDialog(Context applicationContext, Activity activity, MessageViewModel messageViewModel) {
-        super(applicationContext, activity);
+    public ExtrasDialog(Application application, Activity activity, MessageViewModel messageViewModel) {
+        super(application, activity);
         this.messageViewModel = messageViewModel;
     }
 
-    public static void startDialog(Context applicationContext, ChatRoomActivity activity, MessageViewModel messageViewModel) {
-        extrasDialogInstance = new ExtrasDialog(applicationContext, activity, messageViewModel);
+    public static void startDialog(Application application, ChatRoomActivity activity, MessageViewModel messageViewModel) {
+        extrasDialogInstance = new ExtrasDialog(application, activity, messageViewModel);
         extrasDialogInstance.startDialog();
     }
 

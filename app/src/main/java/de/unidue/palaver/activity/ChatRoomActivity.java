@@ -60,7 +60,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         visible=false;
         setContentView(R.layout.activity_chat_room);
-        user = SessionManager.getSessionManagerInstance(getApplicationContext()).getUser();
+        user = SessionManager.getSessionManagerInstance(getApplication()).getUser();
 
         friend = (Friend) Objects.requireNonNull(getIntent().
                 getExtras()).getSerializable(StringValue.IntentKeyName.FRIEND);
@@ -74,7 +74,8 @@ public class ChatRoomActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         RecyclerView messageRecyclerview = findViewById(R.id.chatRoom_recycleView);
-        MessageAdapter messageAdapter = new MessageAdapter(this,
+        MessageAdapter messageAdapter = new MessageAdapter(getApplication(),
+                messageViewModel.getUser(),
                 messageViewModel.getMessages().getValue());
         messageRecyclerview.setAdapter(messageAdapter);
         messageViewModel.getMessages().observe(this, messages -> {
@@ -115,7 +116,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         });
 
         sendExtras.setOnClickListener(v->
-                ExtrasDialog.startDialog(getApplicationContext(), this, messageViewModel));
+                ExtrasDialog.startDialog(getApplication(), this, messageViewModel));
     }
 
     @Override

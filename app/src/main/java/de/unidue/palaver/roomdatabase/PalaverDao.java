@@ -6,7 +6,6 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
-import androidx.room.Update;
 
 import java.util.List;
 
@@ -52,14 +51,11 @@ public interface PalaverDao{
             "OR recipient = :friendName ORDER BY date_time ASC" )
     List<Message> getMessagesList(String friendName);
 
-    @Query("SELECT * FROM table_friend WHERE friend_name = :friendUserName")
-    Friend findUserByName(String friendUserName);
-
     @Query("DELETE FROM table_friend")
-    int deleteAllFriend();
+    void deleteAllFriend();
 
     @Query("DELETE FROM table_chat_data")
-    int deleteAllChat();
+    void deleteAllChat();
 
     @Query("SELECT date_time FROM table_chat_data WHERE fk_friend = :friend " +
             "ORDER BY date_time DESC LIMIT 1")

@@ -36,7 +36,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         private PreferenceManager preferenceManager;
         public SplashAction() {
             this.preferenceManager= SessionManager
-                    .getSessionManagerInstance(getApplicationContext()).getPreferenceManager();
+                    .getSessionManagerInstance(getApplication()).getPreferenceManager();
 
         }
 

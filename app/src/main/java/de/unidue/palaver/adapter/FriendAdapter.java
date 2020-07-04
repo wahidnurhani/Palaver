@@ -1,6 +1,6 @@
 package de.unidue.palaver.adapter;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -22,12 +22,12 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
 
     private List<Friend> friends;
     private LayoutInflater inflater;
-    private Context context;
+    private Activity activity;
 
-    public FriendAdapter(Context context, List<Friend> friends) {
-        inflater = LayoutInflater.from(context);
+    public FriendAdapter(Activity activity, List<Friend> friends) {
+        inflater = LayoutInflater.from(activity);
         this.friends = friends;
-        this.context = context;
+        this.activity = activity;
     }
 
     @NonNull
@@ -43,11 +43,11 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.FriendView
         holder.setData(current);
 
         holder.getCardView().setOnClickListener(v -> {
-            Intent intent = new Intent(context, ChatRoomActivity.class);
+            Intent intent = new Intent(activity, ChatRoomActivity.class);
             Bundle bundle = new Bundle();
             bundle.putSerializable(StringValue.IntentKeyName.FRIEND, current);
             intent.putExtras(bundle);
-            context.startActivity(intent);
+            activity.startActivity(intent);
         });
     }
 

@@ -36,7 +36,7 @@ public class SecondSplashActivity extends AppCompatActivity {
 
         public SplashAction() {
             this.preferenceManager = SessionManager
-                    .getSessionManagerInstance(getApplicationContext()).getPreferenceManager();
+                    .getSessionManagerInstance(getApplication()).getPreferenceManager();
         }
 
         public void run(){

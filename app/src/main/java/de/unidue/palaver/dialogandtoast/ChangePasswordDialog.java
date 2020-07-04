@@ -2,6 +2,7 @@ package de.unidue.palaver.dialogandtoast;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
@@ -19,13 +20,13 @@ public class ChangePasswordDialog extends CustomDialog {
     @SuppressLint("StaticFieldLeak")
     private static ChangePasswordDialog changePasswordDialogInstance;
 
-    public ChangePasswordDialog(Context applicationContext, Activity activity) {
-        super(applicationContext, activity);
-        this.sessionManager = SessionManager.getSessionManagerInstance(getApplicationContext());
+    public ChangePasswordDialog(Application application, Activity activity) {
+        super(application, activity);
+        this.sessionManager = SessionManager.getSessionManagerInstance( getApplication());
     }
 
-    public static void startDialog(Context applicationContext, Activity activity){
-        changePasswordDialogInstance = new ChangePasswordDialog(applicationContext, activity);
+    public static void startDialog(Application application, Activity activity){
+        changePasswordDialogInstance = new ChangePasswordDialog(application, activity);
         changePasswordDialogInstance.startDialog();
     }
 
@@ -62,10 +63,10 @@ public class ChangePasswordDialog extends CustomDialog {
         String newPassword = newPasswordEditText.getText().toString();
         String rePassword = rePasswordEditText.getText().toString();
         if ( newPassword.equals("") || rePassword.equals("")){
-            CustomToast.makeText(getApplicationContext(), StringValue.ErrorMessage.USERNAME_PASSWORD_BLANK);
+            CustomToast.makeText(getApplication(), StringValue.ErrorMessage.USERNAME_PASSWORD_BLANK);
             return false;
         }else if (!newPassword.equals(rePassword)) {
-            CustomToast.makeText(getApplicationContext(), StringValue.ErrorMessage.PASSWORD_DON_T_MATCH_EACH_OTHER);
+            CustomToast.makeText(getApplication(), StringValue.ErrorMessage.PASSWORD_DON_T_MATCH_EACH_OTHER);
             return false;
         }
         return true;

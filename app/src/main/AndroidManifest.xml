@@ -11,7 +11,7 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity android:name=".activity.SecondSplashActivity"></activity>
+        <activity android:name=".activity.SecondSplashActivity" />
         <activity android:name=".activity.MapViewActivity" />
         <activity
             android:name=".activity.SettingsActivity"
@@ -35,11 +35,11 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".service.ServiceFetchMessageOffset" />
-        <service android:name=".service.ServiceAddFriend" />
-        <service android:name=".service.ServiceSendMessage" />
-        <service android:name=".service.ServicePopulateDB" />
-        <service android:name=".service.FirebaseCloudMessaging.MessagingService">
+        <service android:name=".serviceandworker.ServiceFetchMessageOffset" />
+        <service android:name=".serviceandworker.ServiceAddFriend" />
+        <service android:name=".serviceandworker.ServiceSendMessage" />
+        <service android:name=".serviceandworker.ServicePopulateDB" />
+        <service android:name=".serviceandworker.FirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>

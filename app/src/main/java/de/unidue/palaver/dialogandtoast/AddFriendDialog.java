@@ -2,6 +2,7 @@ package de.unidue.palaver.dialogandtoast;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
@@ -18,13 +19,13 @@ public class AddFriendDialog extends CustomDialog{
     @SuppressLint("StaticFieldLeak")
     private static AddFriendDialog addFriendDialogInstance;
 
-    private AddFriendDialog(Context applicationContext, Activity activity, FriendViewModel friendViewModel) {
-        super(applicationContext, activity);
+    private AddFriendDialog(Application application, Activity activity, FriendViewModel friendViewModel) {
+        super(application, activity);
         this.friendViewModel = friendViewModel;
     }
 
-    public static void startDialog(Context applicationContext, Activity activity, FriendViewModel friendViewModel) {
-        addFriendDialogInstance = new AddFriendDialog(applicationContext, activity, friendViewModel);
+    public static void startDialog(Application application, Activity activity, FriendViewModel friendViewModel) {
+        addFriendDialogInstance = new AddFriendDialog(application, activity, friendViewModel);
         addFriendDialogInstance.startDialog();
     }
 
@@ -54,10 +55,10 @@ public class AddFriendDialog extends CustomDialog{
     private boolean inputValid() {
         String username = userNameEditText.getText().toString().trim();
         if(username.equals("") || userNameEditText.getText()==null) {
-            CustomToast.makeText(getApplicationContext(), StringValue.ErrorMessage.USERNAME_BLANK);
+            CustomToast.makeText(getApplication(), StringValue.ErrorMessage.USERNAME_BLANK);
             return false;
         } else if (username.equals(friendViewModel.getUser().getUserName())){
-            CustomToast.makeText(getApplicationContext(), StringValue.ErrorMessage.ADD_OWN_ACCOUNT);
+            CustomToast.makeText(getApplication(), StringValue.ErrorMessage.ADD_OWN_ACCOUNT);
             return false;
         }
         return true;

@@ -1,6 +1,6 @@
 package de.unidue.palaver.adapter;
 
-import android.content.Context;
+import android.app.Application;
 import android.graphics.Color;
 import android.os.Build;
 import android.view.LayoutInflater;
@@ -17,18 +17,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import de.unidue.palaver.R;
-import de.unidue.palaver.sessionmanager.SessionManager;
+import de.unidue.palaver.model.User;
 import de.unidue.palaver.model.Message;
 
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHolder>{
 
     private List<Message> messages;
     private LayoutInflater inflater;
-    private Context context;
+    private User user;
 
-    public MessageAdapter(Context context, List<Message> messages) {
-        inflater = LayoutInflater.from(context);
-        this.context = context;
+    public MessageAdapter(Application activity, User user, List<Message> messages) {
+        this.inflater = LayoutInflater.from(activity);
+        this.user = user;
         this.messages = messages;
     }
     @NonNull
@@ -49,7 +49,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 
         RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)containerLinearLayout.getLayoutParams();
 
-        if (current.getSender().equals(SessionManager.getSessionManagerInstance(context).getUser().getUserName())){
+        if (current.getSender().equals(user.getUserName())){
             params.removeRule(RelativeLayout.ALIGN_PARENT_END);
             params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
             containerLinearLayout.setLayoutParams(params);

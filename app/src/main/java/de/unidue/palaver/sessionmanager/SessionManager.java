@@ -1,6 +1,6 @@
 package de.unidue.palaver.sessionmanager;
 import android.annotation.SuppressLint;
-import android.content.Context;
+import android.app.Application;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -21,15 +21,15 @@ import de.unidue.palaver.model.StackApiResponseList;
 import de.unidue.palaver.model.User;
 import de.unidue.palaver.roomdatabase.PalaverDB;
 import de.unidue.palaver.roomdatabase.PalaverDao;
-import de.unidue.palaver.service.ServicePopulateDB;
-import de.unidue.palaver.worker.PushTokenWorker;
+import de.unidue.palaver.serviceandworker.ServicePopulateDB;
+import de.unidue.palaver.serviceandworker.WorkerPushToken;
 import retrofit2.Response;
 
 public class SessionManager implements ISessionManager{
     private static String TAG = SessionManager.class.getSimpleName();
 
     private PreferenceManager preferenceManager;
-    private Context application;
+    private Application application;
     private MutableLiveData<Boolean> loginStatus;
     private MutableLiveData<Boolean> registerStatus;
     private MutableLiveData<Boolean> passwordChanged;
@@ -38,7 +38,7 @@ public class SessionManager implements ISessionManager{
     @SuppressLint("StaticFieldLeak")
     private static SessionManager sessionManagerInstance;
 
-    public static SessionManager getSessionManagerInstance(Context application){
+    public static SessionManager getSessionManagerInstance(Application application){
         if (sessionManagerInstance==null){
             sessionManagerInstance= new SessionManager(application);
         }
@@ -46,9 +46,8 @@ public class SessionManager implements ISessionManager{
     }
 
     @SuppressLint("CommitPrefEdits")
-    private SessionManager(Context application) {
+    private SessionManager(Application application) {
         this.application = application;
-
         this.preferenceManager = new PreferenceManager(application);
         this.loginStatus = new MutableLiveData<>();
         this.registerStatus = new MutableLiveData<>();
@@ -97,7 +96,7 @@ public class SessionManager implements ISessionManager{
                 .setRequiresCharging(false)
                 .build();
         PeriodicWorkRequest refreshTokenWorkRequest = new PeriodicWorkRequest
-                .Builder(PushTokenWorker.class, 1, TimeUnit.HOURS)
+                .Builder(WorkerPushToken.class, 1, TimeUnit.HOURS)
                 .setConstraints(constraints).build();
         WorkManager.getInstance(application).enqueue(refreshTokenWorkRequest);
     }

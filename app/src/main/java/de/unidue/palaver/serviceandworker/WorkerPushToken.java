@@ -1,4 +1,4 @@
-package de.unidue.palaver.worker;
+package de.unidue.palaver.serviceandworker;
 
 import android.content.Context;
 import android.util.Log;
@@ -11,13 +11,11 @@ import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.Objects;
 
-import de.unidue.palaver.service.FirebaseCloudMessaging.MessagingService;
 
+public class WorkerPushToken extends Worker {
+    private static String TAG = WorkerPushToken.class.getSimpleName();
 
-public class PushTokenWorker extends Worker {
-    private static String TAG = PushTokenWorker.class.getSimpleName();
-
-    public PushTokenWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
+    public WorkerPushToken(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
     }
 
@@ -28,8 +26,8 @@ public class PushTokenWorker extends Worker {
 
         FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(task -> {
             Log.i(TAG, "Token generated: "+task.getResult().getToken());
-            MessagingService messagingService = new MessagingService();
-            messagingService.onNewToken(Objects.requireNonNull(task.getResult()).getToken());
+            FirebaseMessagingService firebaseMessagingService = new FirebaseMessagingService();
+            firebaseMessagingService.onNewToken(Objects.requireNonNull(task.getResult()).getToken());
         });
 
         return Result.success();

@@ -2,9 +2,13 @@ package de.unidue.palaver.notificationsmanager;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
+import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -14,12 +18,17 @@ import de.unidue.palaver.R;
 import de.unidue.palaver.activity.ChatRoomActivity;
 import de.unidue.palaver.model.Friend;
 import de.unidue.palaver.model.StringValue;
-import de.unidue.palaver.service.FirebaseCloudMessaging.FirebaseConstant;
 import de.unidue.palaver.sessionmanager.SessionManager;
 
 public class NotificationManager extends Application implements INotificationManager{
 
     private static final String TAG= NotificationManager.class.getSimpleName();
+    public static final String APP_NAME = "Palaver";
+
+    public static final String CHANNEL_ID= "palaverChannelId";
+    public static final String CHANNEL_NAME= "Palaver";
+    public static final String CHANNEL_DESCRIPTION= "Messaging App";
+    public static final int NotificationID=2011;
 
     private Context context;
     @SuppressLint("StaticFieldLeak")
@@ -29,7 +38,7 @@ public class NotificationManager extends Application implements INotificationMan
     public NotificationManager(Context context) {
         this.context = context;
         preferenceManager = SessionManager
-                .getSessionManagerInstance(context).getPreferenceManager();
+                .getSessionManagerInstance((Application) context).getPreferenceManager();
     }
 
     public static NotificationManager getInstance(Context context) {
@@ -40,22 +49,48 @@ public class NotificationManager extends Application implements INotificationMan
     }
 
     @Override
+    public void onCreate() {
+        super.onCreate();
+        createNotificationChannel();
+    }
+
+    @Override
+    public void createNotificationChannel() {
+        Log.i(TAG, "notification channel created");
+
+        if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.O) {
+            android.app.NotificationManager notificationManager = (android.app.NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID,
+                    CHANNEL_NAME, android.app.NotificationManager.IMPORTANCE_HIGH);
+
+            notificationChannel.setDescription(CHANNEL_DESCRIPTION);
+            notificationChannel.enableLights(true);
+            notificationChannel.setLightColor(Color.RED);
+            notificationChannel.enableVibration(true);
+            notificationChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+            notificationChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 100});
+
+            notificationManager.createNotificationChannel(notificationChannel);
+        }
+    }
+
+    @Override
     public void displayNotification(String sender, String preview){
         NotificationCompat.Builder notificationBuilder;
 
         if(preferenceManager.getAllowVibrationPreference()){
-            notificationBuilder = new NotificationCompat.Builder(context, FirebaseConstant.CHANNEL_ID)
-                    .setSmallIcon(R.drawable.palaver_logo)
+            notificationBuilder = new NotificationCompat.Builder(context, CHANNEL_ID)
+                    .setSmallIcon(R.drawable.palaver_logo_2)
                     .setAutoCancel(true)
                     .setVibrate(new long[]{0, 250, 100, 250})
-                    .setContentTitle("PALAVER")
+                    .setContentTitle(APP_NAME)
                     .setContentText(sender+" : "+preview)
                     .setPriority(NotificationCompat.PRIORITY_HIGH);
         } else {
-            notificationBuilder = new NotificationCompat.Builder(context, FirebaseConstant.CHANNEL_ID)
-                    .setSmallIcon(R.drawable.palaver_logo)
+            notificationBuilder = new NotificationCompat.Builder(context, CHANNEL_ID)
+                    .setSmallIcon(R.drawable.palaver_logo_2)
                     .setAutoCancel(true)
-                    .setContentTitle("PALAVER")
+                    .setContentTitle(APP_NAME)
                     .setContentText(sender+" : "+preview)
                     .setPriority(NotificationCompat.PRIORITY_HIGH);
         }
@@ -78,7 +113,7 @@ public class NotificationManager extends Application implements INotificationMan
         if(notificationManager!=null){
             if(notificationSetting){
                 Log.i(TAG, "notify");
-                notificationManager.notify(1, notificationBuilder.build());
+                notificationManager.notify(NotificationID, notificationBuilder.build());
             }
         }
     }

@@ -77,7 +77,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private boolean validateUserInput() {
         if (userNameEditText.getText().toString().equals("") || passwordEditText.getText().toString().equals("")){
-            ErrorDialog.show(LoginActivity.this,
+            ErrorDialog.show(getApplication(),
                     StringValue.ErrorMessage.USERNAME_PASSWORD_BLANK);
             return false;
         }

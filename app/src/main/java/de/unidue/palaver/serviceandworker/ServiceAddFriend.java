@@ -1,4 +1,4 @@
-package de.unidue.palaver.service;
+package de.unidue.palaver.serviceandworker;
 
 import android.annotation.SuppressLint;
 import android.app.Service;
@@ -59,9 +59,9 @@ public class ServiceAddFriend extends Service {
 
         @Override
         protected Response<StackApiResponseList<String>> doInBackground(Friend... friends) {
-            SessionManager sessionManager = SessionManager.getSessionManagerInstance(getApplicationContext());
+            SessionManager sessionManager = SessionManager.getSessionManagerInstance(getApplication());
             User user = sessionManager.getUser();
-            PalaverDB palaverDB = PalaverDB.getDatabase(getApplicationContext());
+            PalaverDB palaverDB = PalaverDB.getDatabase(getApplication());
             PalaverDao palaverDao = palaverDB.palaverDao();
             Response<StackApiResponseList<String>> response= null;
 

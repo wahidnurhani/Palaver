@@ -1,4 +1,4 @@
-package de.unidue.palaver.service;
+package de.unidue.palaver.serviceandworker;
 
 import android.annotation.SuppressLint;
 import android.app.Service;

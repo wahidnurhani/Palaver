@@ -85,7 +85,7 @@ public class FriendManagerActivity extends AppCompatActivity {
 
         FloatingActionButton floatingActionButton = findViewById(R.id.friendManager_addChatFloatingButton);
         floatingActionButton.setOnClickListener(v ->
-                AddFriendDialog.startDialog(getApplicationContext(), this, friendViewModel));
+                AddFriendDialog.startDialog(getApplication(), this, friendViewModel));
 
         RecyclerView friendsRecycleView = findViewById(R.id.friendManager_recycleView);
 

@@ -1,15 +1,9 @@
-package de.unidue.palaver.service.FirebaseCloudMessaging;
+package de.unidue.palaver.serviceandworker;
 
-import android.app.NotificationChannel;
-import android.content.Intent;
-import android.graphics.Color;
-import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 import java.io.IOException;
@@ -21,7 +15,7 @@ import de.unidue.palaver.httpclient.JSONBuilder;
 import de.unidue.palaver.httpclient.RetrofitHttpClient;
 import de.unidue.palaver.model.Friend;
 import de.unidue.palaver.model.StackApiResponseList;
-import de.unidue.palaver.model.StringValue;
+
 import de.unidue.palaver.model.User;
 import de.unidue.palaver.notificationsmanager.NotificationManager;
 import de.unidue.palaver.repository.MessageRepository;
@@ -32,9 +26,9 @@ import retrofit2.Response;
 import static java.lang.Thread.sleep;
 
 
-public class MessagingService extends FirebaseMessagingService {
+public class FirebaseMessagingService extends com.google.firebase.messaging.FirebaseMessagingService {
 
-    private static final String TAG= MessagingService.class.getSimpleName();
+    private static final String TAG= FirebaseMessagingService.class.getSimpleName();
     private PreferenceManager preferenceManager;
 
     @Override
@@ -75,51 +69,23 @@ public class MessagingService extends FirebaseMessagingService {
             user = null;
         }
 
-        createNotificationChannel();
-
         Log.i(TAG, "message received ");
 
         Map data = remoteMessage.getData();
         final String sender = (String) data.get("sender");
         final String preview = (String) data.get("preview");
-        Log.i(TAG, "data sender:"+sender);
 
         if(user!=null){
             MessageRepository messageRepository = new MessageRepository(getApplication(), new Friend(sender));
             messageRepository.fetchMessageOffset(getApplication(), user, new Friend(sender));
-
             notifyClient(sender, preview);
         }
     }
 
-    private void createNotificationChannel() {
-        Log.i(TAG, "notification channel created");
-
-        if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.O) {
-            android.app.NotificationManager notificationManager = (android.app.NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-            NotificationChannel notificationChannel = new NotificationChannel(FirebaseConstant.CHANNEL_ID, FirebaseConstant.CHANNEL_NAME, android.app.NotificationManager.IMPORTANCE_HIGH);
-
-            notificationChannel.setDescription(FirebaseConstant.CHANNEL_DESCRIPTION);
-            notificationChannel.enableLights(true);
-            notificationChannel.setLightColor(Color.RED);
-            notificationChannel.enableVibration(true);
-            notificationChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 100});
-
-            notificationManager.createNotificationChannel(notificationChannel);
-        }
-    }
-
     public void notifyClient(String sender, String preview) {
-        if(ChatRoomActivity.isVisible() && ChatRoomActivity.getFriend().getUsername().equals(sender)){
-            Intent intent2 = new Intent(StringValue.IntentAction.BROADCAST_MESSAGE_RECEIVED);
-            intent2.putExtra("INTENT_SENDER_USERNAME", sender);
-            LocalBroadcastManager.getInstance(MessagingService.this).sendBroadcast(intent2);
-        }else{
-            Intent intent = new Intent(StringValue.IntentAction.BROADCAST_MESSAGE_RECEIVED);
-            intent.putExtra("INTENT_SENDER_USERNAME", sender);
-            LocalBroadcastManager.getInstance(MessagingService.this).sendBroadcast(intent);
+        if(!ChatRoomActivity.isVisible() || !ChatRoomActivity.getFriend().getUsername().equals(sender)){
             preferenceManager = SessionManager
-                    .getSessionManagerInstance(getApplicationContext()).getPreferenceManager();
+                    .getSessionManagerInstance(getApplication()).getPreferenceManager();
             Thread thread = new Thread(() -> {
                 try{
                     sleep(0);

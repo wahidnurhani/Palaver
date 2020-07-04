@@ -12,8 +12,8 @@ public class ProgressDialog {
     private Activity context;
     private AlertDialog alertDialog;
 
-    public ProgressDialog(Activity context) {
-        this.context = context;
+    public ProgressDialog(Activity activity) {
+        this.context = activity;
     }
 
     @SuppressLint("InflateParams")

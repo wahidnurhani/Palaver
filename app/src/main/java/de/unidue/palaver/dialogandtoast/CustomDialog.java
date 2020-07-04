@@ -2,7 +2,7 @@ package de.unidue.palaver.dialogandtoast;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
+import android.app.Application;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -11,11 +11,11 @@ public class CustomDialog {
     private AlertDialog.Builder builder;
     private LayoutInflater inflater;
     private View view;
-    private Context applicationContext;
+    private Application application;
     private Activity activity;
 
-    public CustomDialog(Context applicationContext, Activity activity) {
-        this.applicationContext = applicationContext;
+    public CustomDialog(Application application, Activity activity) {
+        this.application = application;
         this.activity = activity;
     }
 
@@ -33,8 +33,8 @@ public class CustomDialog {
         alertDialog.show();
     }
 
-    public Context getApplicationContext() {
-        return applicationContext;
+    public Application getApplication() {
+        return application;
     }
 
     public Activity getActivity() {

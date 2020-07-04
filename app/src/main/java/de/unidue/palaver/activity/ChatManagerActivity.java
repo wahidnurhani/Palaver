@@ -29,7 +29,6 @@ public class ChatManagerActivity extends AppCompatActivity {
     private ChatAdapter chatAdapter;
     private ViewModelProviderFactory viewModelProviderFactory;
 
-
     public static void startActivity(Context context) {
         Intent intent = new Intent(context, ChatManagerActivity.class);
         context.startActivity(intent);

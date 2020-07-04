@@ -8,8 +8,8 @@ import androidx.lifecycle.LiveData;
 import de.unidue.palaver.model.Friend;
 import de.unidue.palaver.roomdatabase.PalaverDB;
 import de.unidue.palaver.roomdatabase.PalaverDao;
-import de.unidue.palaver.service.ServiceAddFriend;
-import de.unidue.palaver.service.ServiceRemoveFriend;
+import de.unidue.palaver.serviceandworker.ServiceAddFriend;
+import de.unidue.palaver.serviceandworker.ServiceRemoveFriend;
 
 public class FriendRepository implements Repository{
 

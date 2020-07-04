@@ -12,8 +12,8 @@ import de.unidue.palaver.model.Message;
 import de.unidue.palaver.model.User;
 import de.unidue.palaver.roomdatabase.PalaverDB;
 import de.unidue.palaver.roomdatabase.PalaverDao;
-import de.unidue.palaver.service.ServiceFetchMessageOffset;
-import de.unidue.palaver.service.ServiceSendMessage;
+import de.unidue.palaver.serviceandworker.ServiceFetchMessageOffset;
+import de.unidue.palaver.serviceandworker.ServiceSendMessage;
 
 public class MessageRepository implements Repository{
     private PalaverDao palaverDao;
