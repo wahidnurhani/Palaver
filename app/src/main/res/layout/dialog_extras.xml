@@ -41,7 +41,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="clip_horizontal|center|center_horizontal"
                 android:text="@string/send_file"
-                android:textColor="@color/colorSuperDark" />
+                android:textColor="@color/colorChatBackgroud" />
         </LinearLayout>
 
         <LinearLayout
@@ -66,7 +66,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="clip_horizontal|center"
                 android:text="@string/share_location"
-                android:textColor="@color/colorSuperDark" />
+                android:textColor="@color/colorChatBackgroud" />
         </LinearLayout>
 
 

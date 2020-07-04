@@ -4,30 +4,33 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Intent;
+import android.os.Bundle;
 import android.widget.ImageView;
 
+import de.unidue.palaver.LocationTrackerService;
 import de.unidue.palaver.R;
 import de.unidue.palaver.activity.ChatRoomActivity;
-import de.unidue.palaver.viewmodel.MessageViewModel;
+import de.unidue.palaver.model.PalaverLocation;
+import de.unidue.palaver.model.StringValue;
 
 public class ExtrasDialog extends CustomDialog{
 
-    private MessageViewModel messageViewModel;
     @SuppressLint("StaticFieldLeak")
     private static ExtrasDialog extrasDialogInstance;
     private ImageView fileImageView;
     private ImageView locationImageView;
 
 
-    public static int REQUEST_CODE = 2011;
+    public static final int FILE_REQUEST_CODE = 2012;
+    public static final int LOCATION_REQUEST_CODE = 2013;
 
-    public ExtrasDialog(Application application, Activity activity, MessageViewModel messageViewModel) {
+
+    public ExtrasDialog(Application application, Activity activity) {
         super(application, activity);
-        this.messageViewModel = messageViewModel;
     }
 
-    public static void startDialog(Application application, ChatRoomActivity activity, MessageViewModel messageViewModel) {
-        extrasDialogInstance = new ExtrasDialog(application, activity, messageViewModel);
+    public static void startDialog(Application application, ChatRoomActivity activity) {
+        extrasDialogInstance = new ExtrasDialog(application, activity);
         extrasDialogInstance.startDialog();
     }
 
@@ -43,11 +46,24 @@ public class ExtrasDialog extends CustomDialog{
             intent.setAction(Intent.ACTION_GET_CONTENT);
             intent.addCategory(Intent.CATEGORY_OPENABLE);
             intent.setType("*/*");
-            getActivity().startActivityForResult(intent, REQUEST_CODE);
+            getActivity().startActivityForResult(intent, FILE_REQUEST_CODE);
         });
 
         locationImageView.setOnClickListener(v->{
-            //TODO
+            dismiss();
+            Intent intent = new Intent();
+            Bundle bundle = new Bundle();
+            LocationTrackerService locationTrackerService = new LocationTrackerService(getApplication());
+
+            double lat = locationTrackerService.getLatitude();
+            double lon = locationTrackerService.getLongitude();
+
+            PalaverLocation palaverLocation = new PalaverLocation(lat, lon);
+
+            bundle.putSerializable(StringValue.IntentKeyName.LOCATION, palaverLocation);
+            intent.putExtras(bundle);
+            getActivity().startActivityForResult(intent, LOCATION_REQUEST_CODE);
+
         });
 
         show();

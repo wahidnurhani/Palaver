@@ -5,9 +5,12 @@ import de.unidue.palaver.model.StackApiResponseList;
 import de.unidue.palaver.model.Message;
 import de.unidue.palaver.model.User;
 import de.unidue.palaver.model.StringValue;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 
 public interface PalaverPostAPI {
 

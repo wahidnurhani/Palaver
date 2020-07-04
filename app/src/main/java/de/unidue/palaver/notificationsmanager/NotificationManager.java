@@ -54,6 +54,7 @@ public class NotificationManager extends Application implements INotificationMan
         createNotificationChannel();
     }
 
+
     @Override
     public void createNotificationChannel() {
         Log.i(TAG, "notification channel created");

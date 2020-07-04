@@ -19,7 +19,7 @@
         android:layout_marginTop="40dp"
 
         android:text="@string/close"
-        android:textColor="@color/colorSuperDark"
+        android:textColor="@color/colorChatBackgroud"
         android:textColorHint="#90FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/addFriend_addButton"
@@ -34,7 +34,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
         android:text="@string/add"
-        android:textColor="@color/colorSuperDark"
+        android:textColor="@color/colorChatBackgroud"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/addFriend_editText" />
 
@@ -46,9 +46,9 @@
         android:hint="@string/username"
         android:importantForAutofill="no"
         android:inputType="textPersonName"
-        android:textColor="@color/colorSuperDark"
+        android:textColor="@color/colorChatBackgroud"
         android:textColorHint="#8F727874"
-        android:backgroundTint="@color/colorSuperDark"
+        android:backgroundTint="@color/colorChatBackgroud"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -61,7 +61,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/add_friend"
-        android:textColor="@color/colorSuperDark"
+        android:textColor="@color/colorChatBackgroud"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

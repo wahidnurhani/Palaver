@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -15,11 +16,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import java.io.File;
 import java.util.Date;
 import java.util.Objects;
 
 import de.unidue.palaver.R;
 import de.unidue.palaver.dialogandtoast.ExtrasDialog;
+import de.unidue.palaver.model.PalaverLocation;
 import de.unidue.palaver.sessionmanager.SessionManager;
 import de.unidue.palaver.model.Message;
 import de.unidue.palaver.model.User;
@@ -116,7 +119,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         });
 
         sendExtras.setOnClickListener(v->
-                ExtrasDialog.startDialog(getApplication(), this, messageViewModel));
+                ExtrasDialog.startDialog(getApplication(), this));
     }
 
     @Override
@@ -124,10 +127,22 @@ public class ChatRoomActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         Log.i(TAG, "File Selected");
 
-        if(requestCode == ExtrasDialog.REQUEST_CODE && resultCode==RESULT_OK && data!=null){
-            //TODO
+        if(requestCode == ExtrasDialog.FILE_REQUEST_CODE && resultCode==RESULT_OK && data!=null){
+            Uri fileUri = data.getData();
+            File file = new File(fileUri.getPath());
+            String fileName = file.getName();
+            String path = file.getPath();
+
+            //TODO sendFile
+
+        } else if(requestCode == ExtrasDialog.LOCATION_REQUEST_CODE && resultCode==RESULT_OK && data!=null){
+            PalaverLocation palaverLocation = (PalaverLocation) data.getExtras()
+                    .getSerializable(StringValue.IntentKeyName.LOCATION);
+
+            //TODO SendLocation
         }
     }
+
 
     @Override
     protected void onResume() {
