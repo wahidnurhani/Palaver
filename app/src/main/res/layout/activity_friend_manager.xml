@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/friend_recycler_view_container"
-    android:background="@color/ic_palaver_launcher_background"
+    android:background="@color/colorWhite"
     tools:context=".activity.FriendManagerActivity">
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

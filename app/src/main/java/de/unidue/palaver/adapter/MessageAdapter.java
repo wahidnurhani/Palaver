@@ -61,7 +61,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
             params.removeRule(RelativeLayout.ALIGN_PARENT_RIGHT);
             containerLinearLayout.setLayoutParams(params);
 
-            chatItemTextView.setTextColor(Color.WHITE);
+            chatItemTextView.setTextColor(Color.BLACK);
             containerLinearLayout.setBackgroundResource(R.drawable.shape_round_message_in);
         }
 

@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorChatBackgroud">
+    android:background="@color/colorWhite">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -41,14 +41,14 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:scaleType="center"
-                android:layout_weight="8"
+                android:layout_weight="10"
                 android:adjustViewBounds="true"
-                android:src="@drawable/extra"/>
+                android:src="@drawable/extra_black"/>
             <EditText
                 android:id="@+id/chatRoom_editText_message"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="80"
+                android:layout_weight="76"
                 android:background="@drawable/shape_round_edit_text"
                 android:ems="10"
                 android:hint="@string/message"
@@ -56,9 +56,9 @@
                 android:inputType="textMultiLine"
                 android:paddingStart="15dp"
                 android:paddingEnd="10dp"
-                android:textColor="#FFFFFF"
+                android:textColor="@color/colorSuperDark"
                 android:textColorHint="#6DFFFFFF"
-                android:textSize="14sp" />
+                android:textSize="16sp" />
 
             <Button
                 android:id="@+id/chatRoom_button_send"
@@ -66,11 +66,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:layout_marginLeft="5dp"
-                android:layout_weight="12"
+                android:layout_weight="14"
                 android:background="@drawable/shape_round_button"
                 android:text="@string/send"
                 android:textColor="#FFFFFF"
-                android:textSize="12sp" />
+                android:textSize="16sp" />
         </LinearLayout>
 
     </LinearLayout>

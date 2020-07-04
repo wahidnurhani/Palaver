@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/chats_cardView"
-    app:cardBackgroundColor="@color/colorPrimaryDark">
+    app:cardBackgroundColor="@color/colorWhite">
 
 
     <LinearLayout
@@ -23,8 +23,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:padding="5dp"
-            android:textColor="#FFFEFE"
-            android:textSize="5pt" />
+            android:textColor="@color/colorSuperDark"
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/chat_list_message"
@@ -33,8 +33,8 @@
 
             android:layout_marginBottom="5dp"
             android:padding="5dp"
-            android:textColor="#FFFFFF"
-            android:textSize="4pt" />
+            android:textColor="@color/colorSuperDark"
+            android:textSize="12sp" />
     </LinearLayout>
 
 

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/friend_cardHolder"
-    app:cardBackgroundColor="@color/colorPrimaryDark">
+    app:cardBackgroundColor="@color/colorWhite">
 
 
     <TextView
@@ -13,8 +13,8 @@
         android:layout_height="wrap_content"
         android:paddingTop="15dp"
         android:paddingBottom="15dp"
-        android:textColor="#FFFEFE"
-        android:textSize="5pt" />
+        android:textColor="@color/colorSuperDark"
+        android:textSize="16sp" />
 
 
 </androidx.cardview.widget.CardView>
