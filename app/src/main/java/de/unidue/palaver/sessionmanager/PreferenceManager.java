@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import de.unidue.palaver.activity.SettingsActivity;
-import de.unidue.palaver.model.User;
 
 public class PreferenceManager implements IPreferenceManager{
 

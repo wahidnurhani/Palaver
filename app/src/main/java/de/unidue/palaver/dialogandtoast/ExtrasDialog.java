@@ -3,7 +3,6 @@ package de.unidue.palaver.dialogandtoast;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Application;
-import android.content.Context;
 import android.content.Intent;
 import android.widget.ImageView;
 

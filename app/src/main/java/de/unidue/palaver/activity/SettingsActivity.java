@@ -16,7 +16,6 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
 import de.unidue.palaver.R;
-import de.unidue.palaver.roomdatabase.PalaverDB;
 import de.unidue.palaver.sessionmanager.PreferenceContract;
 import de.unidue.palaver.sessionmanager.SessionManager;
 import de.unidue.palaver.viewmodel.SettingViewModel;
