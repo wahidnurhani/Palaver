@@ -25,11 +25,12 @@ public class AddFriendDialog extends CustomDialog{
 
     public static void startDialog(Application application, Activity activity, FriendViewModel friendViewModel) {
         addFriendDialogInstance = new AddFriendDialog(application, activity, friendViewModel);
-        addFriendDialogInstance.startDialog();
+        addFriendDialogInstance.initAndShowDialog();
     }
 
-    private void startDialog(){
-        init(R.layout.dialog_add_friend);
+    @Override
+    protected void initAndShowDialog(){
+        inflateLayout(R.layout.dialog_add_friend);
 
         userNameEditText = getView().findViewById(R.id.addFriend_editText);
         userNameEditText.setImeOptions(EditorInfo.IME_ACTION_NEXT);

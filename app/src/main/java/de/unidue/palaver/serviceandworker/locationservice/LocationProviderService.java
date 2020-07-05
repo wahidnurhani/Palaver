@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.ResultReceiver;
-import android.text.TextUtils;
 import android.util.Log;
 
 import androidx.annotation.Nullable;

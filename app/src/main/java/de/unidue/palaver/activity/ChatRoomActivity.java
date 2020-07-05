@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
+import android.app.Application;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -31,6 +33,7 @@ import java.util.Objects;
 
 import de.unidue.palaver.R;
 import de.unidue.palaver.dialogandtoast.ExtrasDialog;
+import de.unidue.palaver.dialogandtoast.SendLocationDialog;
 import de.unidue.palaver.model.PalaverLocation;
 import de.unidue.palaver.serviceandworker.locationservice.LocationServiceConstant;
 import de.unidue.palaver.sessionmanager.SessionManager;
@@ -75,7 +78,6 @@ public class ChatRoomActivity extends AppCompatActivity {
         visible=false;
         setContentView(R.layout.activity_chat_room);
 
-        locationResultReceiver = new LocationResultReceiver(new Handler());
         addressResultReceiver = new AddressResultReceiver(new Handler());
 
         user = SessionManager.getSessionManagerInstance(getApplication()).getUser();
@@ -86,6 +88,12 @@ public class ChatRoomActivity extends AppCompatActivity {
         viewModelProviderFactory = new ViewModelProviderFactory(getApplication(), this, friend);
         messageViewModel = new ViewModelProvider(this,
                 viewModelProviderFactory).get(MessageViewModel.class);
+
+        locationResultReceiver = new LocationResultReceiver(
+                getApplication(),
+                ChatRoomActivity.this,
+                messageViewModel,
+                new Handler());
 
         Objects.requireNonNull(getSupportActionBar()).setTitle(messageViewModel.getFriend().getUsername());
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
@@ -196,7 +204,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastLocationRequest);
     }
 
-    private class AddressResultReceiver extends ResultReceiver{
+    private static class AddressResultReceiver extends ResultReceiver{
         String address;
 
         public AddressResultReceiver(Handler handler) {
@@ -213,11 +221,19 @@ public class ChatRoomActivity extends AppCompatActivity {
         }
     }
 
-    private class LocationResultReceiver extends ResultReceiver{
+    private static class LocationResultReceiver extends ResultReceiver{
         PalaverLocation palaverLocation;
+        private Application application;
+        private Activity activity;
+        private MessageViewModel messageViewModel;
 
-        public LocationResultReceiver(Handler handler) {
+
+
+        public LocationResultReceiver(Application application, Activity activity, MessageViewModel messageViewModel, Handler handler) {
             super(handler);
+            this.application = application;
+            this.activity = activity;
+            this.messageViewModel = messageViewModel;
         }
 
         @Override
@@ -228,6 +244,8 @@ public class ChatRoomActivity extends AppCompatActivity {
             if(resultCode == LocationServiceConstant.SUCCESS_RESULT){
                 palaverLocation = (PalaverLocation) resultData.getSerializable(LocationServiceConstant.RESULT_DATA_LOCATION_KEY);
                 Log.i(TAG, palaverLocation.toString());
+                SendLocationDialog.startDialog(application,
+                        activity, palaverLocation, messageViewModel);
             }
         }
     }

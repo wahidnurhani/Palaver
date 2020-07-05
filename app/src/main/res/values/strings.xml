@@ -42,4 +42,6 @@
     <string name="showMessage">Show Message</string>
     <string name="removeFriend">Delete Friend</string>
     <string name="item">Item</string>
+    <string name="send_location">Send Location</string>
+    <string name="cancel">Cancel</string>
 </resources>

@@ -26,11 +26,12 @@ public class ChangePasswordDialog extends CustomDialog {
 
     public static void startDialog(Application application, Activity activity){
         changePasswordDialogInstance = new ChangePasswordDialog(application, activity);
-        changePasswordDialogInstance.startDialog();
+        changePasswordDialogInstance.initAndShowDialog();
     }
 
-    private void startDialog() {
-        init(R.layout.dialog_change_password);
+    @Override
+    protected void initAndShowDialog() {
+        inflateLayout(R.layout.dialog_change_password);
 
         newPasswordEditText = getView().findViewById(R.id.changePassword_editText);
         newPasswordEditText.setImeOptions(EditorInfo.IME_ACTION_NEXT);

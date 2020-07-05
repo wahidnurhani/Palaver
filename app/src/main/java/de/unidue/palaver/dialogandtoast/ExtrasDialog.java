@@ -41,11 +41,12 @@ public class ExtrasDialog extends CustomDialog{
 
     public static void startDialog(Context applicationContext, ChatRoomActivity activity, Friend friend) {
         extrasDialogInstance = new ExtrasDialog(applicationContext, activity, friend);
-        extrasDialogInstance.startDialog();
+        extrasDialogInstance.initAndShowDialog();
     }
 
-    private void startDialog(){
-        init(R.layout.dialog_extras);
+    @Override
+    public void initAndShowDialog(){
+        inflateLayout(R.layout.dialog_extras);
 
         fileImageView = getView().findViewById(R.id.file_extras);
         locationImageView = getView().findViewById(R.id.location_extras);

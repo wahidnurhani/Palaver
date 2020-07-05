@@ -6,7 +6,7 @@ import android.app.Application;
 import android.view.LayoutInflater;
 import android.view.View;
 
-public class CustomDialog {
+public abstract class CustomDialog {
     private AlertDialog alertDialog;
     private AlertDialog.Builder builder;
     private LayoutInflater inflater;
@@ -19,7 +19,7 @@ public class CustomDialog {
         this.activity = activity;
     }
 
-    public void init(int layout){
+    public void inflateLayout(int layout){
         builder = new AlertDialog.Builder(activity);
         inflater = (activity).getLayoutInflater();
         view = inflater.inflate(layout, null);
@@ -48,4 +48,6 @@ public class CustomDialog {
     public void dismiss(){
         alertDialog.dismiss();
     }
+
+    protected abstract void initAndShowDialog();
 }
