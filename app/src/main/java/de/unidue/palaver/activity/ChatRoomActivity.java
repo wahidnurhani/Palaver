@@ -4,15 +4,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 
 import android.net.Uri;
@@ -51,6 +47,7 @@ public class ChatRoomActivity extends AppCompatActivity {
     private ResultReceiver locationResultReceiver;
     private User user;
     private static Friend friend;
+
     public static boolean isVisible() {
         return visible;
     }
@@ -134,10 +131,7 @@ public class ChatRoomActivity extends AppCompatActivity {
             }
         });
 
-        sendExtras.setOnClickListener(v -> ExtrasDialog.startDialog(getApplicationContext(), ChatRoomActivity.this));
-
-        LocalBroadcastManager.getInstance(this)
-                .registerReceiver(broadcastLocationRequest, new IntentFilter(StringValue.IntentAction.LOCATION_PERMITION));
+        sendExtras.setOnClickListener(v -> ExtrasDialog.startDialog(getApplicationContext(), ChatRoomActivity.this, messageViewModel, locationResultReceiver));
     }
 
     @Override
@@ -181,18 +175,5 @@ public class ChatRoomActivity extends AppCompatActivity {
     public void onBackPressed() {
         ChatManagerActivity.startActivity(ChatRoomActivity.this);
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_rigt);
-    }
-
-    private BroadcastReceiver broadcastLocationRequest = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            messageViewModel.fetchLocation(locationResultReceiver);
-        }
-    };
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastLocationRequest);
     }
 }

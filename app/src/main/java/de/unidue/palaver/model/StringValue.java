@@ -27,7 +27,7 @@ public class StringValue {
         public static final String USER = "USER";
         public static final String OFFSET = "OFFSET";
         public static final String LOCATION = "LOCATION";
-        public static final String LOCATION_PERMITION_VALUE = "LOCATION_PERMITION_VALUE";
+        public static final String LOCATION_PERMISSION_VALUE = "LOCATION_PERMITION_VALUE";
     }
 
     public static class IntentAction {
