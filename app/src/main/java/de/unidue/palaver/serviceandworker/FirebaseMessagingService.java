@@ -1,4 +1,8 @@
 package de.unidue.palaver.serviceandworker;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.graphics.Color;
+import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -58,6 +62,26 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         }
     }
 
+    public void createNotificationChannel() {
+        Log.i(TAG, "notification channel created");
+
+        if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.O) {
+            android.app.NotificationManager notificationManager = (android.app.NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            NotificationChannel notificationChannel = new NotificationChannel(NotificationManager.CHANNEL_ID,
+                    NotificationManager.CHANNEL_NAME, android.app.NotificationManager.IMPORTANCE_HIGH);
+
+            notificationChannel.setDescription(NotificationManager.CHANNEL_DESCRIPTION);
+            notificationChannel.enableLights(true);
+            notificationChannel.setLightColor(Color.RED);
+            notificationChannel.enableVibration(true);
+            notificationChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+            notificationChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 100});
+
+            notificationManager.createNotificationChannel(notificationChannel);
+        }
+    }
+
+
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
@@ -68,6 +92,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
             user = null;
         }
 
+        createNotificationChannel();
         Log.i(TAG, "message received ");
 
         Map data = remoteMessage.getData();
@@ -98,6 +123,22 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
                 });
                 thread.start();
             }
+        } else {
+            preferenceManager = SessionManager
+                    .getSessionManagerInstance(getApplication()).getPreferenceManager();
+            Thread thread = new Thread(() -> {
+                try{
+                    sleep(0);
+                    if(preferenceManager.getAllowNotificationPreference()){
+                        NotificationManager.getInstance(getApplicationContext()).displayNotification(sender, preview);
+                    }
+                }catch(InterruptedException e){
+                    e.printStackTrace();
+                }
+            });
+            thread.start();
+
+
         }
     }
 }

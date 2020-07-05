@@ -1,7 +1,6 @@
 package de.unidue.palaver.adapter;
 
 import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -89,7 +88,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 
         holder.getTextView().setOnClickListener(v -> {
             String text = holder.getLocationUrl();
-            if(text.contains("https://maps.google.com/?q=")){
+            if(text!=null && text.contains("https://maps.google.com/?q=")){
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(text));
                 activity.startActivity(intent);
             }
@@ -143,15 +142,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
                 Log.i(TAG, "contains location");
                 Address address = new LocationParser(applicationContext, data).getAddress();
                 if(address!= null){
-                    StringBuilder stringBuilder = new StringBuilder();
-                    stringBuilder.append("Location :").append("\n")
-                            .append(address.getAddressLine(0)).append("\n")
-                            .append(" ").append("\n")
-                            .append(address.getLatitude()).append(", ").append(address.getLongitude())
-                            .append("\n").append(" ").append("\n")
-                            .append(data);
-
-                    this.textView.setText(stringBuilder.toString());
+                    this.textView.setText(formatLocation(address, data));
                 } else {
                     this.textView.setText(data);
                 }
@@ -159,6 +150,17 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
                 this.textView.setText(data);
             }
         }
+
+        String formatLocation(Address address, String data){
+            return "Location :" + "\n" +
+                    address.getAddressLine(0) + "\n" +
+                    " " + "\n" +
+                    address.getLatitude() + ", " + address.getLongitude() +
+                    "\n" + " " + "\n" +
+                    data;
+        }
     }
+
+
 }
 

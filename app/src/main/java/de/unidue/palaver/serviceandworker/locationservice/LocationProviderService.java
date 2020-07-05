@@ -59,7 +59,10 @@ public class LocationProviderService extends Service {
                                     Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
                                     List<Address> addresses = null;
                                     try {
-                                        addresses = geocoder.getFromLocation(latestLocation.getLatitude(), latestLocation.getLongitude(), 1);
+                                        addresses = geocoder.getFromLocation(
+                                                latestLocation.getLatitude(),
+                                                latestLocation.getLongitude(),
+                                                1);
                                     } catch (Exception e){
                                         e.printStackTrace();
                                     }

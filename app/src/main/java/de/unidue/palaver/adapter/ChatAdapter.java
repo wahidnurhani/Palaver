@@ -1,5 +1,6 @@
 package de.unidue.palaver.adapter;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -82,10 +83,16 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
             return cardView;
         }
 
+        @SuppressLint("SetTextI18n")
         void setData(Chat current){
             this.textViewName.setText(current.fk_friend);
             if(current.getData()!= null){
-                this.textViewLastMessage.setText(current.getData().trim());
+                String data = current.getData().trim();
+                if(data.contains("https://maps.google.com/?q=")){
+                    this.textViewLastMessage.setText("Location :");
+                } else{
+                    this.textViewLastMessage.setText(current.getData().trim());
+                }
             }
         }
     }
