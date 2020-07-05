@@ -1,15 +1,24 @@
 package de.unidue.palaver.activity;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.ResultReceiver;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Button;
@@ -23,6 +32,7 @@ import java.util.Objects;
 import de.unidue.palaver.R;
 import de.unidue.palaver.dialogandtoast.ExtrasDialog;
 import de.unidue.palaver.model.PalaverLocation;
+import de.unidue.palaver.serviceandworker.locationservice.LocationServiceConstant;
 import de.unidue.palaver.sessionmanager.SessionManager;
 import de.unidue.palaver.model.Message;
 import de.unidue.palaver.model.User;
@@ -38,13 +48,14 @@ public class ChatRoomActivity extends AppCompatActivity {
 
     private ViewModelProviderFactory viewModelProviderFactory;
     private MessageViewModel messageViewModel;
+    private EditText messageEditText;
+    private ResultReceiver addressResultReceiver;
+    private ResultReceiver locationResultReceiver;
     private User user;
     private static Friend friend;
-
     public static boolean isVisible() {
         return visible;
     }
-
     public static Friend getFriend(){
         return friend;
     }
@@ -63,6 +74,10 @@ public class ChatRoomActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         visible=false;
         setContentView(R.layout.activity_chat_room);
+
+        locationResultReceiver = new LocationResultReceiver(new Handler());
+        addressResultReceiver = new AddressResultReceiver(new Handler());
+
         user = SessionManager.getSessionManagerInstance(getApplication()).getUser();
 
         friend = (Friend) Objects.requireNonNull(getIntent().
@@ -100,7 +115,7 @@ public class ChatRoomActivity extends AppCompatActivity {
             }
         });
 
-        EditText messageEditText = findViewById(R.id.chatRoom_editText_message);
+        messageEditText = findViewById(R.id.chatRoom_editText_message);
         Button sendButton = findViewById(R.id.chatRoom_button_send);
         ImageView sendExtras = findViewById(R.id.add_extras);
 
@@ -118,31 +133,25 @@ public class ChatRoomActivity extends AppCompatActivity {
             }
         });
 
-        sendExtras.setOnClickListener(v->
-                ExtrasDialog.startDialog(getApplication(), this));
+        sendExtras.setOnClickListener(v -> ExtrasDialog.startDialog(getApplicationContext(), ChatRoomActivity.this, friend));
+
+        LocalBroadcastManager.getInstance(this)
+                .registerReceiver(broadcastLocationRequest, new IntentFilter(StringValue.IntentAction.LOCATION_PERMITION));
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.i(TAG, "File Selected");
+        Log.i(TAG, "result");
 
         if(requestCode == ExtrasDialog.FILE_REQUEST_CODE && resultCode==RESULT_OK && data!=null){
             Uri fileUri = data.getData();
             File file = new File(fileUri.getPath());
-            String fileName = file.getName();
-            String path = file.getPath();
+            Log.i(TAG, "file name : "+ file.getName());
 
             //TODO sendFile
-
-        } else if(requestCode == ExtrasDialog.LOCATION_REQUEST_CODE && resultCode==RESULT_OK && data!=null){
-            PalaverLocation palaverLocation = (PalaverLocation) data.getExtras()
-                    .getSerializable(StringValue.IntentKeyName.LOCATION);
-
-            //TODO SendLocation
         }
     }
-
 
     @Override
     protected void onResume() {
@@ -160,5 +169,66 @@ public class ChatRoomActivity extends AppCompatActivity {
     public void onBackPressed() {
         ChatManagerActivity.startActivity(ChatRoomActivity.this);
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_rigt);
+    }
+
+    private BroadcastReceiver broadcastLocationRequest = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.i(TAG, "Broadcast received");
+            messageViewModel.fetchLocation(locationResultReceiver);
+        }
+    };
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode==ExtrasDialog.LOCATION_REQUEST_CODE && grantResults.length>0){
+            if(grantResults[0]== PackageManager.PERMISSION_GRANTED){
+                Log.i(TAG, "location Permission granted after request");
+                messageViewModel.fetchLocation(locationResultReceiver);
+            }
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastLocationRequest);
+    }
+
+    private class AddressResultReceiver extends ResultReceiver{
+        String address;
+
+        public AddressResultReceiver(Handler handler) {
+            super(handler);
+        }
+
+        @Override
+        protected void onReceiveResult(int resultCode, Bundle resultData) {
+            super.onReceiveResult(resultCode, resultData);
+
+            if(resultCode == LocationServiceConstant.SUCCESS_RESULT){
+                address = resultData.getString(LocationServiceConstant.RESULT_DATA_ADDRESS_KEY);
+            }
+        }
+    }
+
+    private class LocationResultReceiver extends ResultReceiver{
+        PalaverLocation palaverLocation;
+
+        public LocationResultReceiver(Handler handler) {
+            super(handler);
+        }
+
+        @Override
+        protected void onReceiveResult(int resultCode, Bundle resultData) {
+            super.onReceiveResult(resultCode, resultData);
+            Log.i(TAG, "receiver active");
+
+            if(resultCode == LocationServiceConstant.SUCCESS_RESULT){
+                palaverLocation = (PalaverLocation) resultData.getSerializable(LocationServiceConstant.RESULT_DATA_LOCATION_KEY);
+                Log.i(TAG, palaverLocation.toString());
+            }
+        }
     }
 }

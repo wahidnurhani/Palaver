@@ -36,7 +36,6 @@ public class RegisterActivity extends AppCompatActivity {
         context.startActivity(intent);
     }
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

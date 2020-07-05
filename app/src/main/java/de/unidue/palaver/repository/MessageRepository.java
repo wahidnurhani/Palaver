@@ -3,10 +3,15 @@ package de.unidue.palaver.repository;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Application;
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.ResultReceiver;
 
 import androidx.lifecycle.LiveData;
 
+import de.unidue.palaver.activity.ChatRoomActivity;
+import de.unidue.palaver.serviceandworker.locationservice.LocationProviderService;
 import de.unidue.palaver.model.Friend;
 import de.unidue.palaver.model.Message;
 import de.unidue.palaver.model.User;
@@ -14,6 +19,7 @@ import de.unidue.palaver.roomdatabase.PalaverDB;
 import de.unidue.palaver.roomdatabase.PalaverDao;
 import de.unidue.palaver.serviceandworker.ServiceFetchMessageOffset;
 import de.unidue.palaver.serviceandworker.ServiceSendMessage;
+import de.unidue.palaver.serviceandworker.locationservice.LocationServiceConstant;
 
 public class MessageRepository implements Repository{
     private PalaverDao palaverDao;
@@ -58,6 +64,12 @@ public class MessageRepository implements Repository{
 
     public Friend getFriend() {
         return friend;
+    }
+
+    public void fetchLocation(ResultReceiver locationResultReceiver) {
+        Intent intent = new Intent(activity, LocationProviderService.class);
+        intent.putExtra(LocationServiceConstant.RECEIVER_KEY, locationResultReceiver);
+        activity.startService(intent);
     }
 
 

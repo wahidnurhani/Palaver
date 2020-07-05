@@ -2,6 +2,7 @@ package de.unidue.palaver.viewmodel;
 
 import android.app.Activity;
 import android.app.Application;
+import android.os.ResultReceiver;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
@@ -44,13 +45,12 @@ public class MessageViewModel extends AndroidViewModel implements Comparable<Mes
         return messages;
     }
 
-    public boolean setAllMessageToRead() {
-        //TODO
-        return false;
-    }
-
     public void sendMessage(Message message) {
          messageRepository.add(message);
+    }
+
+    public void fetchLocation(ResultReceiver locationResultReceiver) {
+        messageRepository.fetchLocation(locationResultReceiver);
     }
 
     @Override
