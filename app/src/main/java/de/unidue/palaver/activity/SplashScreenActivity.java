@@ -1,6 +1,9 @@
 package de.unidue.palaver.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
+import androidx.work.WorkRequest;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +13,7 @@ import android.util.Log;
 import java.util.Objects;
 
 import de.unidue.palaver.R;
+import de.unidue.palaver.serviceandworker.WorkerPushToken;
 import de.unidue.palaver.sessionmanager.PreferenceManager;
 import de.unidue.palaver.sessionmanager.SessionManager;
 
@@ -28,6 +32,8 @@ public class SplashScreenActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.activity_splash_screen);
         SplashAction splashAction = new SplashAction();
+        WorkRequest initAndPushFirstToken = new OneTimeWorkRequest.Builder(WorkerPushToken.class).build();
+        WorkManager.getInstance(getApplicationContext()).enqueue(initAndPushFirstToken);
         splashAction.start();
     }
 
@@ -49,7 +55,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             Log.i(TAG, preferenceManager.getAutoLoginPreference()+"");
-            if(preferenceManager.getAutoLoginPreference()){
+            if(preferenceManager.getAutoLoginPreference() && preferenceManager.getIsLogin()){
                 ChatManagerActivity.startActivity(SplashScreenActivity.this);
             } else {
                 LoginActivity.startActivity(SplashScreenActivity.this);

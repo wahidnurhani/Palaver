@@ -51,7 +51,7 @@ public class NotificationManager extends Application implements INotificationMan
     @Override
     public void onCreate() {
         super.onCreate();
-        //createNotificationChannel();
+        createNotificationChannel();
     }
 
 

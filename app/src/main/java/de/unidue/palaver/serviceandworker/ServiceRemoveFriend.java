@@ -72,6 +72,7 @@ public class ServiceRemoveFriend extends Service {
                 assert response.body() != null;
                 if(response.body().getMessageType()==1){
                     palaverDao.delete(friends[0]);
+                    palaverDao.clearMessage(friends[0].getUsername());
                 }
             } catch (IOException e) {
                 e.printStackTrace();

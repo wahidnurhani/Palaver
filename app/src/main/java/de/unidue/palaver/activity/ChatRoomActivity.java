@@ -9,8 +9,6 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.Activity;
-import android.app.Application;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -32,10 +30,8 @@ import java.util.Date;
 import java.util.Objects;
 
 import de.unidue.palaver.R;
+import de.unidue.palaver.activity.resultreceiver.GetLocationResultReceiver;
 import de.unidue.palaver.dialogandtoast.ExtrasDialog;
-import de.unidue.palaver.dialogandtoast.SendLocationDialog;
-import de.unidue.palaver.model.PalaverLocation;
-import de.unidue.palaver.serviceandworker.locationservice.LocationServiceConstant;
 import de.unidue.palaver.sessionmanager.SessionManager;
 import de.unidue.palaver.model.Message;
 import de.unidue.palaver.model.User;
@@ -52,7 +48,6 @@ public class ChatRoomActivity extends AppCompatActivity {
     private ViewModelProviderFactory viewModelProviderFactory;
     private MessageViewModel messageViewModel;
     private EditText messageEditText;
-    private ResultReceiver addressResultReceiver;
     private ResultReceiver locationResultReceiver;
     private User user;
     private static Friend friend;
@@ -78,8 +73,6 @@ public class ChatRoomActivity extends AppCompatActivity {
         visible=false;
         setContentView(R.layout.activity_chat_room);
 
-        addressResultReceiver = new AddressResultReceiver(new Handler());
-
         user = SessionManager.getSessionManagerInstance(getApplication()).getUser();
 
         friend = (Friend) Objects.requireNonNull(getIntent().
@@ -100,7 +93,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         RecyclerView messageRecyclerview = findViewById(R.id.chatRoom_recycleView);
-        MessageAdapter messageAdapter = new MessageAdapter(getApplication(),
+        MessageAdapter messageAdapter = new MessageAdapter(getApplicationContext(),this,
                 messageViewModel.getUser(),
                 messageViewModel.getMessages().getValue());
         messageRecyclerview.setAdapter(messageAdapter);
@@ -141,7 +134,7 @@ public class ChatRoomActivity extends AppCompatActivity {
             }
         });
 
-        sendExtras.setOnClickListener(v -> ExtrasDialog.startDialog(getApplicationContext(), ChatRoomActivity.this, friend));
+        sendExtras.setOnClickListener(v -> ExtrasDialog.startDialog(getApplicationContext(), ChatRoomActivity.this));
 
         LocalBroadcastManager.getInstance(this)
                 .registerReceiver(broadcastLocationRequest, new IntentFilter(StringValue.IntentAction.LOCATION_PERMITION));
@@ -158,6 +151,17 @@ public class ChatRoomActivity extends AppCompatActivity {
             Log.i(TAG, "file name : "+ file.getName());
 
             //TODO sendFile
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode==ExtrasDialog.LOCATION_REQUEST_CODE && grantResults.length>0){
+            if(grantResults[0]== PackageManager.PERMISSION_GRANTED){
+                Log.i(TAG, "location Permission granted after request");
+                messageViewModel.fetchLocation(locationResultReceiver);
+            }
         }
     }
 
@@ -187,65 +191,8 @@ public class ChatRoomActivity extends AppCompatActivity {
     };
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode==ExtrasDialog.LOCATION_REQUEST_CODE && grantResults.length>0){
-            if(grantResults[0]== PackageManager.PERMISSION_GRANTED){
-                Log.i(TAG, "location Permission granted after request");
-                messageViewModel.fetchLocation(locationResultReceiver);
-            }
-        }
-    }
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
         LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastLocationRequest);
-    }
-
-    private static class AddressResultReceiver extends ResultReceiver{
-        String address;
-
-        public AddressResultReceiver(Handler handler) {
-            super(handler);
-        }
-
-        @Override
-        protected void onReceiveResult(int resultCode, Bundle resultData) {
-            super.onReceiveResult(resultCode, resultData);
-
-            if(resultCode == LocationServiceConstant.SUCCESS_RESULT){
-                address = resultData.getString(LocationServiceConstant.RESULT_DATA_ADDRESS_KEY);
-            }
-        }
-    }
-
-    private static class GetLocationResultReceiver extends ResultReceiver{
-        PalaverLocation palaverLocation;
-        private Application application;
-        private Activity activity;
-        private MessageViewModel messageViewModel;
-
-
-
-        public GetLocationResultReceiver(Application application, Activity activity, MessageViewModel messageViewModel, Handler handler) {
-            super(handler);
-            this.application = application;
-            this.activity = activity;
-            this.messageViewModel = messageViewModel;
-        }
-
-        @Override
-        protected void onReceiveResult(int resultCode, Bundle resultData) {
-            super.onReceiveResult(resultCode, resultData);
-            Log.i(TAG, "receiver active");
-
-            if(resultCode == LocationServiceConstant.SUCCESS_RESULT){
-                palaverLocation = (PalaverLocation) resultData.getSerializable(LocationServiceConstant.RESULT_DATA_LOCATION_KEY);
-                Log.i(TAG, palaverLocation.toString());
-                SendLocationDialog.startDialog(application,
-                        activity, palaverLocation, messageViewModel);
-            }
-        }
     }
 }

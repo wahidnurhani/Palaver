@@ -119,6 +119,4 @@ public class PreferenceManager implements IPreferenceManager{
     public void registerSharedPreference(SettingsActivity settingsActivity) {
         pref.registerOnSharedPreferenceChangeListener(settingsActivity);
     }
-
-
 }

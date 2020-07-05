@@ -61,4 +61,6 @@ public interface PalaverDao{
             "ORDER BY date_time DESC LIMIT 1")
     String getOffset(String friend);
 
+    @Query("DELETE FROM table_chat_data WHERE fk_friend=:friend")
+    void clearMessage(String friend);
 }

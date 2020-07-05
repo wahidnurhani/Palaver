@@ -1,9 +1,4 @@
 package de.unidue.palaver.serviceandworker;
-
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.graphics.Color;
-import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -74,7 +69,6 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         }
 
         Log.i(TAG, "message received ");
-        createNotificationChannel();
 
         Map data = remoteMessage.getData();
         final String sender = (String) data.get("sender");
@@ -84,24 +78,6 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
             MessageRepository messageRepository = new MessageRepository(getApplicationContext(), new Friend(sender));
             messageRepository.fetchMessageOffset(getApplicationContext(), user, new Friend(sender));
             notifyClient(sender, preview);
-        }
-    }
-
-    public void createNotificationChannel() {
-        Log.i(TAG, "notification channel created");
-
-        if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.O) {
-            android.app.NotificationManager notificationManager = (android.app.NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-            NotificationChannel notificationChannel = new NotificationChannel(NotificationManager.CHANNEL_ID,
-                    NotificationManager.CHANNEL_NAME, android.app.NotificationManager.IMPORTANCE_HIGH);
-
-            notificationChannel.setDescription(NotificationManager.CHANNEL_DESCRIPTION);
-            notificationChannel.enableLights(true);
-            notificationChannel.setLightColor(Color.RED);
-            notificationChannel.enableVibration(true);
-            notificationChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 100});
-
-            notificationManager.createNotificationChannel(notificationChannel);
         }
     }
 

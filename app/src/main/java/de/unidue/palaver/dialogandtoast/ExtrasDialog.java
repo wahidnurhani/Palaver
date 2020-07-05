@@ -15,13 +15,10 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import de.unidue.palaver.R;
 import de.unidue.palaver.activity.ChatRoomActivity;
-import de.unidue.palaver.model.Friend;
-import de.unidue.palaver.model.PalaverLocation;
 import de.unidue.palaver.model.StringValue;
 
 public class ExtrasDialog extends CustomDialog{
     public static final String TAG = ExtrasDialog.class.getSimpleName();
-    private PalaverLocation palaverLocation;
 
     @SuppressLint("StaticFieldLeak")
     private static ExtrasDialog extrasDialogInstance;
@@ -34,13 +31,13 @@ public class ExtrasDialog extends CustomDialog{
     public static final int LOCATION_REQUEST_CODE = 2013;
 
 
-    public ExtrasDialog(Context applicationContext, Activity activity, Friend friend) {
+    public ExtrasDialog(Context applicationContext, Activity activity) {
         super((Application) applicationContext, activity);
         this.applicationContext = applicationContext;
     }
 
-    public static void startDialog(Context applicationContext, ChatRoomActivity activity, Friend friend) {
-        extrasDialogInstance = new ExtrasDialog(applicationContext, activity, friend);
+    public static void startDialog(Context applicationContext, ChatRoomActivity activity) {
+        extrasDialogInstance = new ExtrasDialog(applicationContext, activity);
         extrasDialogInstance.initAndShowDialog();
     }
 
