@@ -89,7 +89,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         messageViewModel = new ViewModelProvider(this,
                 viewModelProviderFactory).get(MessageViewModel.class);
 
-        locationResultReceiver = new LocationResultReceiver(
+        locationResultReceiver = new GetLocationResultReceiver(
                 getApplication(),
                 ChatRoomActivity.this,
                 messageViewModel,
@@ -182,7 +182,6 @@ public class ChatRoomActivity extends AppCompatActivity {
     private BroadcastReceiver broadcastLocationRequest = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.i(TAG, "Broadcast received");
             messageViewModel.fetchLocation(locationResultReceiver);
         }
     };
@@ -221,7 +220,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         }
     }
 
-    private static class LocationResultReceiver extends ResultReceiver{
+    private static class GetLocationResultReceiver extends ResultReceiver{
         PalaverLocation palaverLocation;
         private Application application;
         private Activity activity;
@@ -229,7 +228,7 @@ public class ChatRoomActivity extends AppCompatActivity {
 
 
 
-        public LocationResultReceiver(Application application, Activity activity, MessageViewModel messageViewModel, Handler handler) {
+        public GetLocationResultReceiver(Application application, Activity activity, MessageViewModel messageViewModel, Handler handler) {
             super(handler);
             this.application = application;
             this.activity = activity;

@@ -62,16 +62,15 @@ public class ExtrasDialog extends CustomDialog{
 
         locationImageView.setOnClickListener(v->{
 
+            dismiss();
             if (ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(getActivity(),
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                         ExtrasDialog.LOCATION_REQUEST_CODE);
             } else {
                 Intent intent = new Intent(StringValue.IntentAction.LOCATION_PERMITION);
-                intent.putExtra(StringValue.IntentKeyName.LOCATION_PERMITION_VALUE, 1);
                 LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent);
             }
-            dismiss();
         });
         show();
     }

@@ -54,6 +54,7 @@ public class SendLocationDialog extends CustomDialog {
         Button sendButton = getView().findViewById(R.id.sendLocation_Button);
 
         sendButton.setOnClickListener(v -> {
+            dismiss();
             Message message = new Message(
                     messageViewModel.getFriend().getUsername(),
                     messageViewModel.getUser().getUserName(),
@@ -63,7 +64,6 @@ public class SendLocationDialog extends CustomDialog {
 
             );
             messageViewModel.sendMessage(message);
-            dismiss();
         });
 
         cancelButton.setOnClickListener(v -> dismiss());

@@ -28,7 +28,7 @@ public class NotificationManager extends Application implements INotificationMan
     public static final String CHANNEL_ID= "palaverChannelId";
     public static final String CHANNEL_NAME= "Palaver";
     public static final String CHANNEL_DESCRIPTION= "Messaging App";
-    public static final int NotificationID=2011;
+    public static final int NotificationID=1;
 
     private Context context;
     @SuppressLint("StaticFieldLeak")
@@ -51,7 +51,7 @@ public class NotificationManager extends Application implements INotificationMan
     @Override
     public void onCreate() {
         super.onCreate();
-        createNotificationChannel();
+        //createNotificationChannel();
     }
 
 

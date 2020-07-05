@@ -29,8 +29,8 @@ public class ServiceFetchMessageOffset extends Service {
 
     public static void startIntent(Context context, User user, Friend friend, String offset) {
         Intent intent = new Intent(context, ServiceFetchMessageOffset.class);
-        intent.putExtra(StringValue.IntentKeyName.OFFSET, offset);
         Bundle bundle = new Bundle();
+        bundle.putSerializable(StringValue.IntentKeyName.OFFSET, offset);
         bundle.putSerializable(StringValue.IntentKeyName.USER, user);
         bundle.putSerializable(StringValue.IntentKeyName.FRIEND, friend);
         intent.putExtras(bundle);
@@ -46,7 +46,7 @@ public class ServiceFetchMessageOffset extends Service {
         PalaverDao palaverDao = PalaverDB.getDatabase(getApplicationContext()).palaverDao();
         User user = (User) Objects.requireNonNull(intent.getExtras()).getSerializable(StringValue.IntentKeyName.USER);
         Friend friend = (Friend) intent.getExtras().getSerializable(StringValue.IntentKeyName.FRIEND);
-        String offset = (String) intent.getCharSequenceExtra(StringValue.IntentKeyName.OFFSET);
+        String offset = (String) intent.getExtras().getSerializable(StringValue.IntentKeyName.OFFSET);
         new FetchMessageOffset(palaverDao, user, offset).execute(friend);
 
         return START_STICKY;

@@ -2,7 +2,6 @@ package de.unidue.palaver.repository;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -10,7 +9,6 @@ import android.os.ResultReceiver;
 
 import androidx.lifecycle.LiveData;
 
-import de.unidue.palaver.activity.ChatRoomActivity;
 import de.unidue.palaver.serviceandworker.locationservice.LocationProviderService;
 import de.unidue.palaver.model.Friend;
 import de.unidue.palaver.model.Message;
@@ -27,17 +25,17 @@ public class MessageRepository implements Repository{
     private Activity activity;
     private LiveData messages;
 
-    public MessageRepository(Application application, Activity activity, Friend friend){
+    public MessageRepository(Context applicationContext, Activity activity, Friend friend){
         this.friend = friend;
-        PalaverDB palaverDB = PalaverDB.getDatabase(application);
+        PalaverDB palaverDB = PalaverDB.getDatabase(applicationContext);
         this.activity = activity;
         this.palaverDao = palaverDB.palaverDao();
         this.messages =  palaverDao.getMessages(friend.getUsername());
     }
 
-    public MessageRepository(Application application, Friend friend) {
+    public MessageRepository(Context applicationContext, Friend friend) {
         this.friend = friend;
-        PalaverDB palaverDB = PalaverDB.getDatabase(application);
+        PalaverDB palaverDB = PalaverDB.getDatabase(applicationContext);
         this.palaverDao = palaverDB.palaverDao();
         this.messages = palaverDao.getMessages(friend.getUsername());
     }
@@ -58,8 +56,8 @@ public class MessageRepository implements Repository{
     public void delete(Object o) {
     }
 
-    public void fetchMessageOffset(Application application, User user, Friend friend){
-        new GetOffsetAsynctask(application, user, friend, palaverDao).execute();
+    public void fetchMessageOffset(Context applicationContext, User user, Friend friend){
+        new GetOffsetAsynctask(applicationContext, user, friend, palaverDao).execute();
     }
 
     public Friend getFriend() {
@@ -75,13 +73,13 @@ public class MessageRepository implements Repository{
 
     @SuppressLint("StaticFieldLeak")
     private static class GetOffsetAsynctask extends AsyncTask<Void, Void, String>{
-        Application application;
+        Context applicationContext;
         User user;
         Friend friend;
         PalaverDao palaverDao;
 
-        GetOffsetAsynctask(Application application, User user, Friend friend, PalaverDao palaverDao) {
-            this.application = application;
+        GetOffsetAsynctask(Context applicationContext, User user, Friend friend, PalaverDao palaverDao) {
+            this.applicationContext = applicationContext;
             this.user = user;
             this.friend = friend;
             this.palaverDao = palaverDao;
@@ -96,7 +94,7 @@ public class MessageRepository implements Repository{
 
         @Override
         protected void onPostExecute(String offset) {
-            ServiceFetchMessageOffset.startIntent(application, user, friend, offset);
+            ServiceFetchMessageOffset.startIntent(applicationContext, user, friend, offset);
         }
     }
 }
