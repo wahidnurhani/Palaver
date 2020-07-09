@@ -70,4 +70,9 @@ public class StringValue {
         public static final String BASE_URL = "http://palaver.se.paluno.uni-due.de";
         public static final String GET_MESSAGE_OFFSET = "/api/message/getoffset";
     }
+
+    public class ContenType {
+        public static final String FILE = "FILE";
+        public static final String LOCATION = "LOCATION";
+    }
 }

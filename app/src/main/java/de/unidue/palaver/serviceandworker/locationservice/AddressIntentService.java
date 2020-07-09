@@ -29,8 +29,8 @@ public class AddressIntentService extends IntentService {
     protected void onHandleIntent(@Nullable Intent intent) {
         if(intent!=null){
             String err="";
-            resultReceiver = intent.getParcelableExtra(LocationServiceConstant.RECEIVER_KEY);
-            PalaverLocation palaverLocation = intent.getParcelableExtra(LocationServiceConstant.LOCATION_DATA_EXTRA_KEY);
+            resultReceiver = intent.getParcelableExtra(LocationAndFileServiceConstant.RECEIVER_KEY);
+            PalaverLocation palaverLocation = intent.getParcelableExtra(LocationAndFileServiceConstant.LOCATION_DATA_EXTRA_KEY);
 
             if(palaverLocation!=null){
                 Geocoder geocoder = new Geocoder(this, Locale.getDefault());
@@ -42,7 +42,7 @@ public class AddressIntentService extends IntentService {
                     err = e.getMessage();
                 }
                 if(addresses == null || addresses.isEmpty()){
-                    deliverToReceiver(LocationServiceConstant.FAILURE_RESULT, err);
+                    deliverToReceiver(LocationAndFileServiceConstant.FAILURE_RESULT, err);
                 } else {
                     Address address = addresses.get(0);
                     List<String> addressesFragment = new ArrayList<>();
@@ -50,7 +50,7 @@ public class AddressIntentService extends IntentService {
                         addressesFragment.add(address.getAddressLine(i));
                     }
                     deliverToReceiver(
-                            LocationServiceConstant.SUCCESS_RESULT,
+                            LocationAndFileServiceConstant.SUCCESS_RESULT,
                             TextUtils.join(Objects.requireNonNull(System.getProperty("line.separator")),
                                     addressesFragment));
                 }
@@ -60,7 +60,7 @@ public class AddressIntentService extends IntentService {
 
     private void deliverToReceiver(int resultCode, String address){
         Bundle bundle = new Bundle();
-        bundle.putString(LocationServiceConstant.RESULT_DATA_ADDRESS_KEY, address);
+        bundle.putString(LocationAndFileServiceConstant.RESULT_DATA_ADDRESS_KEY, address);
         resultReceiver.send(resultCode, bundle);
     }
 }

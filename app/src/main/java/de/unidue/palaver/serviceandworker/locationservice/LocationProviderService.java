@@ -31,7 +31,7 @@ public class LocationProviderService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        resultReceiver = intent.getParcelableExtra(LocationServiceConstant.RECEIVER_KEY);
+        resultReceiver = intent.getParcelableExtra(LocationAndFileServiceConstant.RECEIVER_KEY);
         fetchLocation();
         return START_STICKY;
     }
@@ -82,8 +82,8 @@ public class LocationProviderService extends Service {
     private void deliverToReceiver(PalaverLocation palaverLocation){
         if(palaverLocation != null){
             Bundle bundle = new Bundle();
-            bundle.putSerializable(LocationServiceConstant.RESULT_DATA_LOCATION_KEY, palaverLocation);
-            resultReceiver.send(LocationServiceConstant.SUCCESS_RESULT, bundle);
+            bundle.putSerializable(LocationAndFileServiceConstant.RESULT_DATA_LOCATION_KEY, palaverLocation);
+            resultReceiver.send(LocationAndFileServiceConstant.SUCCESS_RESULT, bundle);
         }
     }
 

@@ -1,7 +1,7 @@
 package de.unidue.palaver.serviceandworker.locationservice;
 
-public class LocationServiceConstant {
-    public static final int SUCCESS_RESULT = 0;
+public class LocationAndFileServiceConstant {
+    public static final int SUCCESS_RESULT = 1;
     public static final int FAILURE_RESULT = 0;
 
     public static final String RESULT_DATA_LOCATION_KEY = "RESULT_DATA_LOCATION_KEY";

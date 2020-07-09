@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
 
-import de.unidue.palaver.serviceandworker.locationservice.LocationServiceConstant;
+import de.unidue.palaver.serviceandworker.locationservice.LocationAndFileServiceConstant;
 
 public class AddressResultReceiver extends ResultReceiver {
     String address;
@@ -17,8 +17,8 @@ public class AddressResultReceiver extends ResultReceiver {
     protected void onReceiveResult(int resultCode, Bundle resultData) {
         super.onReceiveResult(resultCode, resultData);
 
-        if(resultCode == LocationServiceConstant.SUCCESS_RESULT){
-            address = resultData.getString(LocationServiceConstant.RESULT_DATA_ADDRESS_KEY);
+        if(resultCode == LocationAndFileServiceConstant.SUCCESS_RESULT){
+            address = resultData.getString(LocationAndFileServiceConstant.RESULT_DATA_ADDRESS_KEY);
         }
     }
 }

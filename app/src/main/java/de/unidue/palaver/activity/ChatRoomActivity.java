@@ -21,12 +21,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-import java.io.File;
 import java.util.Date;
 import java.util.Objects;
 
 import de.unidue.palaver.R;
-import de.unidue.palaver.activity.resultreceiver.GetLocationResultReceiver;
+import de.unidue.palaver.activity.resultreceiver.FileResultReceiver;
+import de.unidue.palaver.activity.resultreceiver.LocationResultReceiver;
 import de.unidue.palaver.dialogandtoast.ExtrasDialog;
 import de.unidue.palaver.sessionmanager.SessionManager;
 import de.unidue.palaver.model.Message;
@@ -44,7 +44,7 @@ public class ChatRoomActivity extends AppCompatActivity {
     private ViewModelProviderFactory viewModelProviderFactory;
     private MessageViewModel messageViewModel;
     private EditText messageEditText;
-    private ResultReceiver locationResultReceiver;
+    private ResultReceiver locationResultReceiver, fileResultReceiver;
     private User user;
     private static Friend friend;
 
@@ -79,7 +79,13 @@ public class ChatRoomActivity extends AppCompatActivity {
         messageViewModel = new ViewModelProvider(this,
                 viewModelProviderFactory).get(MessageViewModel.class);
 
-        locationResultReceiver = new GetLocationResultReceiver(
+        locationResultReceiver = new LocationResultReceiver(
+                getApplication(),
+                ChatRoomActivity.this,
+                messageViewModel,
+                new Handler());
+
+        fileResultReceiver = new FileResultReceiver(
                 getApplication(),
                 ChatRoomActivity.this,
                 messageViewModel,
@@ -141,10 +147,8 @@ public class ChatRoomActivity extends AppCompatActivity {
 
         if(requestCode == ExtrasDialog.FILE_REQUEST_CODE && resultCode==RESULT_OK && data!=null){
             Uri fileUri = data.getData();
-            File file = new File(fileUri.getPath());
-            Log.i(TAG, "file name : "+ file.getName());
-
-            //TODO sendFile
+            Log.i(TAG, "file name : "+ fileUri.getPath());
+            messageViewModel.fetchData(fileResultReceiver, fileUri);
         }
     }
 
