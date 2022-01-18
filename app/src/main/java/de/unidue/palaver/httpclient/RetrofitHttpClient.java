@@ -96,5 +96,4 @@ public class RetrofitHttpClient implements IHttpClient{
         Call<StackApiResponseList<String>> call = service.pushToken(body);
         return call.execute();
     }
-
 }

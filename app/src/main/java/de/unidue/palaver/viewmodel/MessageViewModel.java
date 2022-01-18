@@ -74,8 +74,9 @@ public class MessageViewModel extends AndroidViewModel implements Comparable<Mes
     }
 
     public void fetchData(ResultReceiver fileResultReceiver, Uri fileUri) {
-        String filePath = fileUri.getPath();
-        File file = new File(filePath);
+        String path = fileUri.getPath();
+        path = path.substring(path.indexOf(":")+1);
+        File file = new File(path);
 
         if (file != null){
             Bundle bundle = new Bundle();
@@ -84,11 +85,11 @@ public class MessageViewModel extends AndroidViewModel implements Comparable<Mes
         }
     }
 
-    public static String getBinaryBase64FromPath(String path) {
+
+    public static String getBinaryBase64FromPath(File file) {
         String base64 = "";
         try {
-            File file = new File(path);
-            byte[] buffer = new byte[(int) file.length() + 50];
+            byte[] buffer = new byte[(int) file.length() + 100];
             @SuppressWarnings("resource")
             int length = new FileInputStream(file).read(buffer);
             base64 = Base64.encodeToString(buffer, 0, length,
@@ -114,7 +115,7 @@ public class MessageViewModel extends AndroidViewModel implements Comparable<Mes
                 friend.getUsername(),
                 user.getUserName(),
                 friend.getUsername(),
-                getBinaryBase64FromPath(file.getPath()),
+                getBinaryBase64FromPath(file),
                 new Date()
         );
         Log.i(TAG, "Binary : "+message.getMessage());

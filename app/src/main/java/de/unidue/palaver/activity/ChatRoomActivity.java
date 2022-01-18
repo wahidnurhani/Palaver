@@ -143,11 +143,9 @@ public class ChatRoomActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.i(TAG, "result");
 
         if(requestCode == ExtrasDialog.FILE_REQUEST_CODE && resultCode==RESULT_OK && data!=null){
-            Uri fileUri = data.getData();
-            Log.i(TAG, "file name : "+ fileUri.getPath());
+            final Uri fileUri = data.getData();
             messageViewModel.fetchData(fileResultReceiver, fileUri);
         }
     }

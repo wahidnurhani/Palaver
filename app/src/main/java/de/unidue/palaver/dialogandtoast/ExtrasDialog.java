@@ -55,7 +55,7 @@ public class ExtrasDialog extends CustomDialog{
         fileImageView.setOnClickListener(v->{
             dismiss();
             Intent intent = new Intent();
-            intent.setAction(Intent.ACTION_GET_CONTENT);
+            intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
             intent.addCategory(Intent.CATEGORY_OPENABLE);
             intent.setType("*/*");
             getActivity().startActivityForResult(intent, FILE_REQUEST_CODE);
@@ -75,6 +75,4 @@ public class ExtrasDialog extends CustomDialog{
         });
         show();
     }
-
-
 }
